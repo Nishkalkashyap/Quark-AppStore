@@ -9,6 +9,7 @@ import { Divider, AppBar, Tabs, Tab, makeStyles } from '@material-ui/core';
 import { default as MaterialLink } from '@material-ui/core/Link';
 import { ROUTES } from '../../data/routes';
 import { Link } from 'react-router-dom';
+import { UploadButton } from '../common';
 
 const AccountPage = (props: basePropType) => {
     const user = props.firebase.auth.currentUser as firebase.User;
@@ -30,6 +31,7 @@ const AccountPage = (props: basePropType) => {
                         {user.displayName || 'Chuck Norris'}
                     </Typography>
                     <Divider style={{ margin: '10px 0px 30px 0px' }} />
+                    <UploadButton></UploadButton>
                     <EditProfile></EditProfile>
                     <MaterialLink variant="body2" color="error" href="#" onClick={props.firebase.doSignOut} style={{ display: 'block' }}>
                         Sign Out
@@ -66,10 +68,10 @@ function TabContainer(props: { children: React.ReactNode; }) {
 }
 
 const AppBarStyles: StandardProperties = {
-    backgroundColor : 'transparent',
-    color : '#000000',
-    boxShadow : 'none',
-    borderBottom : 'solid 1px var(--border-color)'
+    backgroundColor: 'transparent',
+    color: '#000000',
+    boxShadow: 'none',
+    borderBottom: 'solid 1px var(--border-color)'
 }
 
 const SubContainer: StandardProperties = {
