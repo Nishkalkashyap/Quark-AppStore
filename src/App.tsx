@@ -18,7 +18,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 
 const Routing = () => (
-  <div>
+  <React.Fragment>
     <Route path={ROUTES.LANDING} component={Landing} exact />
     <Route path={ROUTES.DASHBOARD} component={Dashboard} />
     <Route path={ROUTES.ACCOUNT} component={Account} />
@@ -28,7 +28,7 @@ const Routing = () => (
     <Route path={ROUTES.SIGN_IN} component={SignInPage} />
     <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
     <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-  </div>
+  </React.Fragment>
 )
 const StupidTypescript: any = withRouter(withFirebase(Sidebar));
 

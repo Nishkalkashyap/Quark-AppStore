@@ -15,7 +15,9 @@ export const withAuthorization = (Component: any) => {
                 authUser => {
                     if (!authUser) {
                         this.props.history.push(ROUTES.SIGN_IN);
+                        return;
                     }
+                    this.forceUpdate();
                 },
             );
         }
@@ -25,9 +27,15 @@ export const withAuthorization = (Component: any) => {
         }
 
         render() {
-            return (
-                <Component {...this.props} />
-            );
+            if (this.props.firebase.auth.currentUser) {
+                return (
+                    <Component {...this.props} />
+                );
+            } else {
+                return (
+                    <div></div>
+                );
+            }
         }
     }
 
