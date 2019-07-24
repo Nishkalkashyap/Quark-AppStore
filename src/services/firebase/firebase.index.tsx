@@ -10,7 +10,7 @@ const config = {
     storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
     messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
     appId: process.env.REACT_APP_ID
-}
+};
 
 export class Firebase {
 
@@ -39,3 +39,9 @@ export class Firebase {
 }
 
 export const FirebaseContext = React.createContext<Firebase>(null as any);
+
+export const withFirebase = (Component: any) => (props: any) => (
+    <FirebaseContext.Consumer>
+        {firebase => <Component {...props} firebase={firebase} />}
+    </FirebaseContext.Consumer>
+);
