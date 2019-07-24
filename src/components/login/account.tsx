@@ -7,10 +7,9 @@ import withAuthorization from './routeGuard';
 
 const AccountPage = () => (
     <div>
-        <h1>Account Page</h1>
+        <h1>Account</h1>
 
-        <h2>Reset Password</h2>
-        <PasswordForgetForm />
+        <h2>Change Password</h2>
         <PasswordChangeForm />
     </div>
 );
