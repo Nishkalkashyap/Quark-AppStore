@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { ROUTES } from '../../data/routes';
 import { Firebase, withFirebase } from '../../services/firebase/firebase.index';
+import { default as MaterialLink } from '@material-ui/core/Link';
 
 const SignUpPage = () => (
     <div>
@@ -102,10 +103,14 @@ class SignUpFormBase extends Component<basePropType> {
     }
 }
 
+const Tabbb = MaterialLink as any;
 const SignUpLink = () => (
-    <p>
-        Don't have an account? <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
-    </p>
+    // <p>
+    //     Don't have an account? <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
+    // </p>
+    <Tabbb variant="body2" to={ROUTES.SIGN_UP} component={Link}>
+        Don't have an account? Sign Up
+    </Tabbb>
 );
 
 const SignUpForm = withRouter(withFirebase(SignUpFormBase));
