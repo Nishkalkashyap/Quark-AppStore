@@ -43,7 +43,6 @@ class SignUpFormBase extends Component<basePropType> {
                 this.props.history.push(ROUTES.LANDING);
             })
             .catch(error => {
-                console.log(error);
                 this.setState({ error });
             });
 
