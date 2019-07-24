@@ -2,11 +2,11 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { withFirebase } from './../../services/firebase/firebase.index';
 import { ROUTES } from '../../data/routes';
-import { T } from './signup';
+import { basePropType } from './signup';
 
 // const condition = (authUser: firebase.User) => !!authUser;
 export const withAuthorization = (Component: any) => {
-    class WithAuthorization extends React.Component<T> {
+    class WithAuthorization extends React.Component<basePropType> {
 
         listener!: firebase.Unsubscribe;
 

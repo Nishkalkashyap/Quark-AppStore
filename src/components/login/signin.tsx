@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
-import { SignUpLink, T } from './signup';
+import { SignUpLink, basePropType } from './signup';
 import { withFirebase } from './../../services/firebase/firebase.index';
 import { ROUTES } from '../../data/routes';
 import { PasswordForgetLink } from './passwordForget';
@@ -21,8 +21,8 @@ const INITIAL_STATE = {
     error: { message: null },
 };
 
-class SignInFormBase extends Component<T> {
-    constructor(props: T) {
+class SignInFormBase extends Component<basePropType> {
+    constructor(props: basePropType) {
         super(props);
 
         this.state = { ...INITIAL_STATE };

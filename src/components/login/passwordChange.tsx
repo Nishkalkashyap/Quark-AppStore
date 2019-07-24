@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withFirebase } from './../../services/firebase/firebase.index';
-import { T } from './signup';
+import { basePropType } from './signup';
 
 const INITIAL_STATE = {
     passwordOne: '',
@@ -10,8 +10,8 @@ const INITIAL_STATE = {
     },
 };
 
-class PasswordChangeForm extends Component<T> {
-    constructor(props: T) {
+class PasswordChangeForm extends Component<basePropType> {
+    constructor(props: basePropType) {
         super(props);
 
         this.state = { ...INITIAL_STATE };

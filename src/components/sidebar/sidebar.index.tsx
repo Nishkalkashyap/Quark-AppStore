@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { StandardProperties } from 'csstype';
 import logo from './../../logo.svg';
-import { T } from '../login/signup';
+import { basePropType } from '../login/signup';
 import { FirebaseContext } from '../../services/firebase/firebase.index';
 import { ROUTES } from '../../data/routes';
 
@@ -12,9 +12,9 @@ interface SidebarItems {
     clickRoute: string;
 }
 
-export default class Sidebar extends Component<T> {
+export default class Sidebar extends Component<basePropType> {
 
-    constructor(props: T) {
+    constructor(props: basePropType) {
         super(props);
         this.props.firebase.auth.onAuthStateChanged((e) => {
             this.forceUpdate();

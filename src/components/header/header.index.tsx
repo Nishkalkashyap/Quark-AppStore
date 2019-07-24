@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { StandardProperties } from 'csstype';
 import logo from './../../assets/logo.svg';
+import { withFirebase } from '../../services/firebase/firebase.index';
+import { basePropType } from '../login/signup';
 
-export default class Header extends Component {
+class Header extends Component<basePropType> {
     render() {
         return (
             <div style={HeaderStyle}>
@@ -12,6 +14,8 @@ export default class Header extends Component {
         )
     }
 }
+
+export default withFirebase(Header);
 
 const HeaderStyle: StandardProperties = {
     color: 'black',

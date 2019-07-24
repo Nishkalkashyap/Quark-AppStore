@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { withFirebase } from './../../services/firebase/firebase.index';
 import { ROUTES } from '../../data/routes';
-import { T } from './signup';
+import { basePropType } from './signup';
 
 const PasswordForgetPage = () => (
     <div>
@@ -19,8 +19,8 @@ const INITIAL_STATE = {
     },
 };
 
-class PasswordForgetFormBase extends Component<T> {
-    constructor(props: T) {
+class PasswordForgetFormBase extends Component<basePropType> {
+    constructor(props: basePropType) {
         super(props);
 
         this.state = { ...INITIAL_STATE };

@@ -19,10 +19,10 @@ const INITIAL_STATE = {
     error: { message: null },
 };
 
-export interface T { firebase: Firebase, history: { push: (path: string) => void } }
+export interface basePropType { firebase: Firebase, history: { push: (path: string) => void } }
 // export interface T { firebase: Firebase}
-class SignUpFormBase extends Component<T> {
-    constructor(props: T) {
+class SignUpFormBase extends Component<basePropType> {
+    constructor(props: basePropType) {
         super(props);
         this.state = { ...INITIAL_STATE };
     }
