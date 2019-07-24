@@ -15,6 +15,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { withSnackbar } from 'notistack';
 
 const SignInPage = () => <SignInForm />;
 
@@ -50,6 +51,7 @@ class SignInFormBase extends Component<basePropType> {
             })
             .catch(error => {
                 this.setState({ error });
+                this.props.enqueueSnackbar(error.message, { variant: 'error' });
             });
 
         event.preventDefault();
@@ -156,7 +158,6 @@ const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof IN
                             <SignUpLink></SignUpLink>
                         </Grid>
                     </Grid>
-                    {error && <p>{error.message}</p>}
                 </form>
             </div>
         </Container>
@@ -188,7 +189,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const SignInForm = withRouter(withFirebase(SignInFormBase));
+const SignInForm = withRouter(withFirebase(withSnackbar(SignInFormBase as any)));
 
 export default SignInPage;
 

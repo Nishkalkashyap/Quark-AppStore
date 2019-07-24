@@ -13,6 +13,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { WithSnackbarProps, withSnackbar } from 'notistack'
 
 
 const SignUpPage = () => <SignUpForm />
@@ -24,7 +25,7 @@ const INITIAL_STATE = {
     error: { message: null },
 };
 
-export interface basePropType { firebase: Firebase, history: { push: (path: string) => void } }
+export interface basePropType { firebase: Firebase, history: { push: (path: string) => void }, enqueueSnackbar: WithSnackbarProps['enqueueSnackbar'] }
 class SignUpFormBase extends Component<basePropType> {
     constructor(props: basePropType) {
         super(props);
@@ -44,6 +45,7 @@ class SignUpFormBase extends Component<basePropType> {
             })
             .catch(error => {
                 this.setState({ error });
+                this.props.enqueueSnackbar(error.message, { variant: 'error' });
             });
 
         event.preventDefault();
@@ -219,7 +221,6 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
                             </StupidTypescript>
                         </Grid>
                     </Grid>
-                    {error && <p>{error.message}</p>}
                 </form>
             </div>
         </Container>
@@ -233,8 +234,7 @@ const SignUpLink = () => (
     </StupidTypescript>
 );
 
-const SignUpForm = withRouter(withFirebase(SignUpFormBase));
+const SignUpForm = withRouter(withFirebase(withSnackbar(SignUpFormBase as any)));
 
-export default SignUpPage;
-
-export { SignUpForm, SignUpLink };
+export default (SignUpPage);
+export { SignUpLink };

@@ -4,10 +4,13 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Firebase, FirebaseContext } from './services/firebase/firebase.index';
+import { SnackbarProvider } from 'notistack';
 
 ReactDOM.render(
     <FirebaseContext.Provider value={new Firebase()}>
-        <App />
+        <SnackbarProvider maxSnack={5}>
+            <App />
+        </SnackbarProvider>
     </FirebaseContext.Provider>,
     document.getElementById('root'));
 
