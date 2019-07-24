@@ -26,7 +26,7 @@ export default class Sidebar extends Component<T> {
             label: 'Dashboard',
             icon: logo,
             private: false,
-            clickRoute: ROUTES.LANDING
+            clickRoute: ROUTES.DASHBOARD
         },
         {
             label: 'Account',
