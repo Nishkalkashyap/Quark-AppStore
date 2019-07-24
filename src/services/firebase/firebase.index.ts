@@ -23,7 +23,6 @@ const INITIAL_STATE = {
 export class Firebase {
 
     constructor() {
-        console.log(config);
         app.initializeApp(config);
         this.auth = app.auth();
     }
@@ -48,8 +47,5 @@ export class Firebase {
         }
     }
 }
-
-// const base = new Firebase();
-// base
 
 export const FirebaseContext = React.createContext<Firebase>(null as any);
