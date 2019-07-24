@@ -1,7 +1,6 @@
 import React from 'react';
 import { withFirebase } from '../../services/firebase/firebase.index';
 import withAuthorization from './routeGuard';
-import SignOutButton from './signout';
 import { basePropType } from './signup';
 import logo from './../../assets/logo.svg';
 import { StandardProperties } from 'csstype';
@@ -90,7 +89,7 @@ const ImageStyle: StandardProperties = {
 
 const StupidTypescript = MaterialLink as any;
 const EditProfile = () => (
-    <StupidTypescript variant="body2" to={ROUTES.SIGN_UP} component={Link}>
+    <StupidTypescript variant="body2" to={ROUTES.EditProfile} component={Link}>
         Edit Profile
     </StupidTypescript>
 );

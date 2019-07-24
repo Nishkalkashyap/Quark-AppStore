@@ -8,6 +8,7 @@ export const ROUTES = {
     LANDING: '/',
     DASHBOARD: '/dashboard',
     SIGN_UP: '/signup',
+    EditProfile: '/edit-profile',
     SIGN_IN: '/signin',
     PASSWORD_FORGET: '/forgot-password',
     ACCOUNT: '/account',

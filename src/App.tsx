@@ -11,6 +11,7 @@ import { ROUTES } from './data/routes';
 import SignUpPage from './components/login/signup';
 import SignInPage from './components/login/signin';
 import Account from './components/login/account';
+import EditProfilePage from './components/login/editProfile';
 import PasswordForgetPage from './components/login/passwordForget';
 import { withFirebase } from './services/firebase/firebase.index';
 
@@ -22,6 +23,7 @@ const Routing = () => (
     <Route path={ROUTES.LANDING} component={Landing} exact />
     <Route path={ROUTES.DASHBOARD} component={Dashboard} />
     <Route path={ROUTES.ACCOUNT} component={Account} />
+    <Route path={ROUTES.EditProfile} component={EditProfilePage} />
     {/* <PrivateRoute path={ROUTES.LANDING} component={Landing} exact />
     <PrivateRoute path={ROUTES.DASHBOARD} component={Dashboard} />
     <PrivateRoute path={ROUTES.ACCOUNT} component={Account} /> */}
