@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { ROUTES } from '../../data/routes';
-import { FirebaseContext, Firebase, withFirebase } from '../../services/firebase/firebase.index';
+import { Firebase, withFirebase } from '../../services/firebase/firebase.index';
 
 const SignUpPage = () => (
     <div>
@@ -35,7 +35,7 @@ class SignUpFormBase extends Component<T> {
             .doCreateUserWithEmailAndPassword(email, passwordOne)
             .then(authUser => {
                 this.setState({ ...INITIAL_STATE });
-                // this.props.history.push(ROUTES.HOME);
+                (this.props as any).history.push(ROUTES.LANDING);
             })
             .catch(error => {
                 this.setState({ error });
