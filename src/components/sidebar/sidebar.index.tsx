@@ -20,7 +20,7 @@ export default class Sidebar extends Component {
                 {this.icons.map((item) => {
                     return (
                         <div className="logo">
-                            <img src={item.icon} alt={item.label} />
+                            <img src={item.icon} alt={item.label} style={{ marginTop: '20px' }} />
                         </div>
                     )
                 })}

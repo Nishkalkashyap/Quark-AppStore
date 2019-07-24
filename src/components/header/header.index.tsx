@@ -6,8 +6,8 @@ export default class Header extends Component {
     render() {
         return (
             <div style={HeaderStyle}>
-                <img src={logo} alt="logo" style={{ maxWidth: '35px', marginLeft : '20px' }} />
-                <h1 style={{ margin: '7px 10px 0px 10px', 'height' : '100%', verticalAlign : 'middle' }}>Dashboard</h1>
+                <img src={logo} alt="logo" style={InageStyles} />
+                <h3 style={{ margin: '0px 10px 0px 10px', verticalAlign: 'middle', fontSize: '1.3rem' }}>Dashboard</h3>
             </div>
         )
     }
@@ -15,8 +15,16 @@ export default class Header extends Component {
 
 const HeaderStyle: StandardProperties = {
     color: 'black',
-    display : 'flex',
-    alignItems : 'center',
-    height : '56px',
-    borderBottom: `1px solid var(--border-color)`
+    display: 'flex',
+    alignItems: 'center',
+    height: '56px',
+    borderBottom: `1px solid var(--border-color)`,
+    cursor: 'pointer'
+}
+
+const InageStyles: StandardProperties = {
+    maxWidth: '35.2px',
+    marginLeft: '24px',
+    // marginRight: '24px',
+    // borderRight: `1px solid var(--border-color)`,
 }
