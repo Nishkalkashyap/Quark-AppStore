@@ -19,7 +19,8 @@ const INITIAL_STATE = {
     error: { message: null },
 };
 
-export interface T { firebase: Firebase }
+// export interface T { firebase: Firebase, history: { push: (path: string) => void } }
+export interface T { firebase: Firebase}
 class SignUpFormBase extends Component<T> {
     constructor(props: T) {
         super(props);
@@ -35,6 +36,7 @@ class SignUpFormBase extends Component<T> {
             .doCreateUserWithEmailAndPassword(email, passwordOne)
             .then(authUser => {
                 this.setState({ ...INITIAL_STATE });
+                // this.props.history.push(ROUTES.LANDING);
                 (this.props as any).history.push(ROUTES.LANDING);
             })
             .catch(error => {

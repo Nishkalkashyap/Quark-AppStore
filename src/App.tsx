@@ -4,37 +4,43 @@ import Header from './components/header/header.index';
 import Sidebar from './components/sidebar/sidebar.index';
 import PrivateRoute from './components/private-route';
 import Dashboard from './components/dashboard/dashboard.index';
-// import LoginOrRegister from './components/login/login.index';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, withRouter } from 'react-router-dom';
 import { ROUTES } from './data/routes';
 
 import SignUpPage from './components/login/signup';
 import SignInPage from './components/login/signin';
+import Account from './components/login/account';
 import PasswordForgetPage from './components/login/passwordForget';
+import { FirebaseContext, withFirebase } from './services/firebase/firebase.index';
 
 const Routing = () => (
-  <Router>
-    <div>
-      <PrivateRoute path={ROUTES.LANDING} component={Dashboard} />
-      <PrivateRoute path={ROUTES.ACCOUNT} component={Dashboard} />
-      <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-      <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-      <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-    </div>
-  </Router>
+  <div>
+    <PrivateRoute path={ROUTES.LANDING} component={Dashboard} />
+    <PrivateRoute path={ROUTES.ACCOUNT} component={Account} />
+    <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+    <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
+    <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+  </div>
 )
+const SideBarrrrrrrrrr: any = withRouter((Sidebar as any));
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <Header></Header>
-      <div style={{ flexGrow: 1, display: 'flex' }}>
-        <Sidebar></Sidebar>
-        <div style={{ flexGrow: 1 }}>
-          <Routing></Routing>
+    <Router>
+      <div className="App">
+        <Header></Header>
+        <div style={{ flexGrow: 1, display: 'flex' }}>
+          <FirebaseContext.Consumer>
+            {(firebase) => (
+              <SideBarrrrrrrrrr firebase={firebase}></SideBarrrrrrrrrr>
+            )}
+          </FirebaseContext.Consumer>
+          <div style={{ flexGrow: 1 }}>
+            <Routing></Routing>
+          </div>
         </div>
       </div>
-    </div>
+    </Router>
   );
 }
 

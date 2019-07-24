@@ -29,6 +29,7 @@ class SignInFormBase extends Component<T> {
 
         this.props.firebase.auth.onAuthStateChanged((e) => {
             if (e) {
+                // (this.props).history.push(ROUTES.LANDING);
                 (this.props as any).history.push(ROUTES.LANDING);
                 return;
             }
@@ -44,7 +45,7 @@ class SignInFormBase extends Component<T> {
             .doSignInWithEmailAndPassword(email, password)
             .then(() => {
                 this.setState({ ...INITIAL_STATE });
-                // (this.props as any).history.push(ROUTES.LANDING);
+                // (this.props).history.push(ROUTES.LANDING);
             })
             .catch(error => {
                 this.setState({ error });
