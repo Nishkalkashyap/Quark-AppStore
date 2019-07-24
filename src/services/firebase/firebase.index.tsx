@@ -1,6 +1,8 @@
 import React from 'react';
 import app from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/storage';
+import 'firebase/firestore';
 
 const config = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -17,9 +19,13 @@ export class Firebase {
     constructor() {
         app.initializeApp(config);
         this.auth = app.auth();
+        this.storage = app.storage();
+        this.firestore = app.firestore();
     }
 
     auth: app.auth.Auth;
+    storage: app.storage.Storage;
+    firestore: app.firestore.Firestore;
 
     doCreateUserWithEmailAndPassword = (email: string, password: string) =>
         this.auth.createUserWithEmailAndPassword(email, password);

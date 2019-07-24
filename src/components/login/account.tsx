@@ -83,7 +83,7 @@ const ImageStyle: StandardProperties = {
     // maxWidth: '250px',
     width: '100%',
     borderRadius: '5px',
-    backgroundColor: 'rgba(0,0,0,0.12)',
+    backgroundColor: 'rgba(0,0,0,0.06)',
     marginBottom: '15px'
 }
 
