@@ -14,6 +14,9 @@ import Account from './components/login/account';
 import PasswordForgetPage from './components/login/passwordForget';
 import { withFirebase } from './services/firebase/firebase.index';
 
+import { ThemeProvider } from '@material-ui/styles';
+import { createMuiTheme } from '@material-ui/core';
+
 const Routing = () => (
   <div>
     <Route path={ROUTES.LANDING} component={Landing} exact />
@@ -27,20 +30,29 @@ const Routing = () => (
     <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
   </div>
 )
-const SideBarrrrrrrrrr: any = withRouter(withFirebase(Sidebar));
+const StupidTypescript: any = withRouter(withFirebase(Sidebar));
+
+const theme = createMuiTheme({
+  palette: {
+    primary: { main: '#055af9' }
+  },
+});
+
 
 const App: React.FC = () => {
   return (
     <Router>
-      <div className="App">
-        <Header></Header>
-        <div style={{ flexGrow: 1, display: 'flex' }}>
-          <SideBarrrrrrrrrr ></SideBarrrrrrrrrr>
-          <div style={{ flexGrow: 1 }}>
-            <Routing></Routing>
+      <ThemeProvider theme={theme}>
+        <div className="App">
+          <Header></Header>
+          <div style={{ flexGrow: 1, display: 'flex' }}>
+            <StupidTypescript ></StupidTypescript>
+            <div style={{ flexGrow: 1 }}>
+              <Routing></Routing>
+            </div>
           </div>
         </div>
-      </div>
+      </ThemeProvider>
     </Router>
   );
 }
