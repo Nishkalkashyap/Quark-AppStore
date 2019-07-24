@@ -10,7 +10,6 @@ const AccountPage = () => (
     <div>
         <h1>Account</h1>
 
-        <h2>Change Password</h2>
         <PasswordChangeForm />
         <SignOutButton></SignOutButton>
     </div>
