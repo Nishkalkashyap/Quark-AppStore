@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { withRouter, Link } from 'react-router-dom';
-import { ROUTES } from '../../data/routes';
+import { withRouter } from 'react-router-dom';
 import { Firebase, withFirebase } from '../../services/firebase/firebase.index';
-import { default as MaterialLink } from '@material-ui/core/Link';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -31,12 +29,17 @@ class EditProfileBase extends Component<basePropType> {
     constructor(props: basePropType) {
         super(props);
         this.state = { ...INITIAL_STATE };
+
+        const name = this.props.firebase.auth.currentUser!.displayName;
+        this.state.name = name || '';
     }
 
     state: typeof INITIAL_STATE;
 
     onSubmit = (event: any) => {
         const { name, bio, location, site } = this.state;
+
+        // this.props.firebase.auth.currentUser!.updateProfile()
 
         // this.props.firebase
         //     .doCreateUserWithEmailAndPassword(email, passwordOne)
@@ -111,7 +114,6 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
                         <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
-                                required
                                 fullWidth
                                 id="name"
                                 label="Name"
@@ -124,11 +126,13 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
                         <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
-                                required
                                 fullWidth
                                 id="bio"
                                 label="Bio"
                                 name="bio"
+
+                                multiline
+                                rows="4"
 
                                 value={bio}
                                 onChange={obj.onChange}
@@ -137,7 +141,6 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
                         <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
-                                required
                                 fullWidth
                                 id="location"
                                 label="Location"
@@ -150,7 +153,6 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
                         <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
-                                required
                                 fullWidth
                                 id="site"
                                 label="Site"
