@@ -4,7 +4,7 @@ import logo from './../../logo.svg';
 import { basePropType } from '../login/signup';
 import { Firebase } from '../../services/firebase/firebase.index';
 import { ROUTES } from '../../data/routes';
-import { Avatar, makeStyles } from '@material-ui/core';
+import { Avatar, makeStyles, IconButton } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
@@ -21,6 +21,9 @@ const useStyles = makeStyles(theme => ({
             backgroundColor: theme.palette.common.white,
         },
     },
+    button: {
+        margin: theme.spacing(1)
+      },
     avatar: {
         margin: theme.spacing(1),
         color: theme.palette.primary.main,
@@ -56,35 +59,6 @@ export default class Sidebar extends Component<basePropType> {
         return (
             <SidebarElement firebase={this.props.firebase} props={this.props}></SidebarElement>
         )
-        // return (
-        //     <FirebaseContext.Consumer>
-        //         {(firebase) => {
-        //             const classes = useStyles();
-        //             return (
-        //                 <div style={SidebarContainerStyle}>
-        //                     {icons.map((item) => {
-        //                         if (item.private && !firebase.auth.currentUser) {
-        //                             return null;
-        //                         }
-
-        //                         return (
-        //                             <div className="logo" key={item.label} title={item.label} onClick={() => {
-        //                                 if (item.clickRoute) {
-        //                                     (this.props).history.push(item.clickRoute);
-        //                                 }
-        //                             }}>
-        //                                 <Avatar className={classes.avatar}>
-        //                                     {item.icon}
-        //                                 </Avatar>
-        //                                 {/* <img src={item.icon} alt={item.label} style={{ marginTop: '20px' }} /> */}
-        //                             </div>
-        //                         )
-        //                     })}
-        //                 </div>
-        //             )
-        //         }}
-        //     </FirebaseContext.Consumer>
-        // )
     }
 }
 
@@ -104,9 +78,9 @@ const SidebarElement = (obj: { firebase: Firebase, props: any }) => {
                             (obj.props).history.push(item.clickRoute);
                         }
                     }}>
-                        <Avatar className={classes.avatar}>
+                        <IconButton className={classes.avatar}>
                             {item.icon}
-                        </Avatar>
+                        </IconButton>
                         {/* <img src={item.icon} alt={item.label} style={{ marginTop: '20px' }} /> */}
                     </div>
                 )
@@ -119,7 +93,7 @@ const SidebarContainerStyle: StandardProperties = {
     display: 'flex',
     flexDirection: 'column',
     flexWrap: 'nowrap',
-    width: '56px',
+    width: '66px',
     height: '100%',
     borderRight: `1px solid var(--border-color)`
 }
