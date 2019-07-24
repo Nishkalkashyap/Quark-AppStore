@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { withFirebase } from './../../services/firebase/firebase.index';
 import { ROUTES } from '../../data/routes';
 import { basePropType } from './signup';
+import { default as MaterialLink } from '@material-ui/core/Link';
 
 const PasswordForgetPage = () => (
     <div>
@@ -71,10 +72,14 @@ class PasswordForgetFormBase extends Component<basePropType> {
     }
 }
 
+const Tabbb = MaterialLink as any;
 const PasswordForgetLink = () => (
-    <p>
-        <Link to={ROUTES.PASSWORD_FORGET}>Forgot Password?</Link>
-    </p>
+    // <p>
+    //     <Link to={ROUTES.PASSWORD_FORGET}>Forgot Password?</Link>
+    // </p>
+    <Tabbb variant="body2" to={ROUTES.PASSWORD_FORGET} component={Link}>
+        Forgot Password?
+    </Tabbb>
 );
 
 export default PasswordForgetPage;
