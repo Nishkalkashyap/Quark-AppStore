@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { withFirebase } from './../../services/firebase/firebase.index';
 import { ROUTES } from '../../data/routes';
-import { basePropType } from './signup';
+import { basePropType, SignUpLink } from './signup';
 import { default as MaterialLink } from '@material-ui/core/Link';
 import { TextField, Button, makeStyles, Container, CssBaseline, Avatar, Typography } from '@material-ui/core';
 import { withSnackbar } from 'notistack';
@@ -141,6 +141,7 @@ const ForgotPasswordElement = (obj: { onSubmit: any, onChange: any, state: typeo
                     >
                         Send password reset email
                     </Button>
+                    <SignUpLink></SignUpLink>
                 </form>
             </div>
         </Container>
