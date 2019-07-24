@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     },
     button: {
         margin: theme.spacing(1)
-      },
+    },
     avatar: {
         margin: theme.spacing(1),
         color: theme.palette.primary.main,
