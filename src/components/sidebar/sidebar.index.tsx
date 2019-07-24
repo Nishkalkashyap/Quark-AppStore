@@ -19,7 +19,7 @@ export default class Sidebar extends Component {
             <div style={SidebarContainerStyle}>
                 {this.icons.map((item) => {
                     return (
-                        <div className="logo">
+                        <div className="logo sfdsf" key={item.icon}>
                             <img src={item.icon} alt={item.label} style={{ marginTop: '20px' }} />
                         </div>
                     )

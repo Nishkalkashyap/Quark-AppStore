@@ -1,9 +1,10 @@
-import React from 'react'
+import React from 'react';
+import './index.scss';
 
 export default function LoginOrRegister() {
     return (
         <div>
-
+            LOGIN COMPONENT
         </div>
     )
 }
@@ -11,7 +12,7 @@ export default function LoginOrRegister() {
 function Login() {
     return (
         <div>
-            
+
         </div>
     )
 }
