@@ -4,14 +4,21 @@ import Header from './components/header/header.index';
 import Sidebar from './components/sidebar/sidebar.index';
 import PrivateRoute from './components/private-route';
 import Dashboard from './components/dashboard/dashboard.index';
-import LoginOrRegister from './components/login/login.index';
+// import LoginOrRegister from './components/login/login.index';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { ROUTES } from './data/routes';
+
+import SignUpPage from './components/login/signup';
+import SignInPage from './components/login/signin';
+import PasswordForgetPage from './components/login/passwordForget';
 
 const Routing = () => (
   <Router>
     <div>
       <PrivateRoute path="/" component={Dashboard} />
-      <Route path="/login" component={LoginOrRegister} />
+      <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+      <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
+      <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
     </div>
   </Router>
 )

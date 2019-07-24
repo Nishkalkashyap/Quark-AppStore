@@ -12,22 +12,12 @@ const config = {
     appId: process.env.REACT_APP_ID
 }
 
-const INITIAL_STATE = {
-    username: '',
-    email: '',
-    passwordOne: '',
-    passwordTwo: '',
-    error: null,
-};
-
 export class Firebase {
 
     constructor() {
         app.initializeApp(config);
         this.auth = app.auth();
     }
-
-    state = { ...INITIAL_STATE };
 
     auth: app.auth.Auth;
 

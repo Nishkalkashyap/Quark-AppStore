@@ -1,13 +1,14 @@
 import React from 'react';
 import './index.scss';
-import {FirebaseContext} from './../../services/firebase/firebase.index'
+import { FirebaseContext } from './../../services/firebase/firebase.index'
 
 export default function LoginOrRegister() {
     return (
         <FirebaseContext.Consumer>
             {
-                (firebase)=>(
+                (firebase) => (
                     <div>
+
                     </div>
                 )
             }

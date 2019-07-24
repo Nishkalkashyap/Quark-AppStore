@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Redirect, } from 'react-router-dom';
-// import { data } from './../data/data.index';
-import { FirebaseContext } from './../services/firebase/firebase.index'
+import { FirebaseContext } from './../services/firebase/firebase.index';
+import { ROUTES } from './../data/routes';
 
 export default function PrivateRoute({ component: Component, ...rest }: any) {
     return (
@@ -11,7 +11,7 @@ export default function PrivateRoute({ component: Component, ...rest }: any) {
                     <Route {...rest} render={(props) => {
                         return (
                             firebase.auth.currentUser === null ?
-                                <Redirect to="/login" /> :
+                                <Redirect to={ROUTES.SIGN_IN} /> :
                                 <Component {...props} />
                         )
                     }} />
