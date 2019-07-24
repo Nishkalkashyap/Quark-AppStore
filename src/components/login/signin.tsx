@@ -47,6 +47,7 @@ class SignInFormBase extends Component<basePropType> {
             .doSignInWithEmailAndPassword(email, password)
             .then(() => {
                 this.setState({ ...INITIAL_STATE });
+                this.props.enqueueSnackbar('Signing in', { variant: 'success' });
                 // (this.props).history.push(ROUTES.LANDING);
             })
             .catch(error => {
