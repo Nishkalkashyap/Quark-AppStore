@@ -13,6 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { WithSnackbarProps, withSnackbar } from 'notistack'
 import withAuthorization from './routeGuard';
+import { getProfilePath } from '../../data/paths';
 
 
 const EditProfilePage = () => <EditProfile />
@@ -34,23 +35,41 @@ class EditProfileBase extends Component<basePropType> {
         this.state.name = name || '';
     }
 
+    componentDidMount() {
+        const currentUser = this.props.firebase.auth.currentUser!;
+        this.props.firebase.firestore.doc(getProfilePath(currentUser)).get()
+            .then((val) => {
+                const data = (val.data() || {}) as any;
+                Object.keys(data).map((key) => {
+                    this.setState({ [key]: data[key] })
+                });
+            }).catch((err) => {
+                console.error(err);
+                this.props.enqueueSnackbar('Failed to fetch profile', { variant: 'error' });
+            });
+    }
+
     state: typeof INITIAL_STATE;
 
     onSubmit = (event: any) => {
         const { name, bio, location, site } = this.state;
 
-        // this.props.firebase.auth.currentUser!.updateProfile()
+        const currentUser = this.props.firebase.auth.currentUser!;
+        const promises = [
+            currentUser.updateProfile({
+                displayName: name
+            }),
+            this.props.firebase.firestore.doc(getProfilePath(currentUser)).set({
+                name, bio, location, site
+            })
+        ];
 
-        // this.props.firebase
-        //     .doCreateUserWithEmailAndPassword(email, passwordOne)
-        //     .then(authUser => {
-        //         this.setState({ ...INITIAL_STATE });
-        //         this.props.history.push(ROUTES.LANDING);
-        //     })
-        //     .catch(error => {
-        //         this.setState({ error });
-        //         this.props.enqueueSnackbar(error.message, { variant: 'error' });
-        //     });
+        Promise.all(promises).then((val) => {
+            this.props.enqueueSnackbar('Updated profile', { variant: 'success' });
+        }).catch((err) => {
+            console.error(err);
+            this.props.enqueueSnackbar('Failed to update profile', { variant: 'error' });
+        });
 
         event.preventDefault();
     }
