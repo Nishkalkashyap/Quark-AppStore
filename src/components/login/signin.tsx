@@ -93,7 +93,7 @@ class SignInFormBase extends Component<basePropType> {
 const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof INITIAL_STATE }) => {
     const classes = useStyles();
     const { email, password, error } = obj.state;
-    const isInvalid = password === '' || email === '';
+    const isInvalid = password === '' || email === '' || password.length < 8;
 
     return (
         <Container component="main" maxWidth="xs">
