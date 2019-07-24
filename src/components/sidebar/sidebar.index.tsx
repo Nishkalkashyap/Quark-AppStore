@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { StandardProperties } from 'csstype';
 import logo from './../../logo.svg';
+import { T } from '../login/signup';
 
 interface SidebarItems {
     label: string;
@@ -8,6 +9,10 @@ interface SidebarItems {
 }
 
 export default class Sidebar extends Component {
+
+    // constructor(props?: T) {
+    //     // super();
+    // }
 
     icons: SidebarItems[] = [{
         label: 'Dashboard',

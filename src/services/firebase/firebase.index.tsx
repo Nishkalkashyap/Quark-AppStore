@@ -31,10 +31,11 @@ export class Firebase {
 
     doPasswordReset = (email: string) => this.auth.sendPasswordResetEmail(email);
 
-    doPasswordUpdate = (password: string) => {
+    doPasswordUpdate = (password: string): Promise<void> => {
         if (this.auth.currentUser) {
-            this.auth.currentUser.updatePassword(password);
+            return this.auth.currentUser.updatePassword(password);
         }
+        return Promise.resolve();
     }
 }
 

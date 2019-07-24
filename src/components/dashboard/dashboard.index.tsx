@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { Component } from 'react'
 
-export default function Dashboard() {
-    return (
-        <div>
-                DASHBARD
-        </div>
-    )
+export default class Dashboard extends Component {
+    render() {
+        return (
+            <div>
+                Dashboard
+            </div>
+        )
+    }
 }
+

@@ -9,6 +9,7 @@ export const ROUTES = {
     SIGN_UP: '/signup',
     SIGN_IN: '/signin',
     PASSWORD_FORGET: '/forgot-password',
+    ACCOUNT: '/account',
 }
 // type Route = {
 //     [key in allRoutes]: {

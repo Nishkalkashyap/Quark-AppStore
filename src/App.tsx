@@ -15,7 +15,8 @@ import PasswordForgetPage from './components/login/passwordForget';
 const Routing = () => (
   <Router>
     <div>
-      <PrivateRoute path="/" component={Dashboard} />
+      <PrivateRoute path={ROUTES.LANDING} component={Dashboard} />
+      <PrivateRoute path={ROUTES.ACCOUNT} component={Dashboard} />
       <Route path={ROUTES.SIGN_IN} component={SignInPage} />
       <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
       <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />

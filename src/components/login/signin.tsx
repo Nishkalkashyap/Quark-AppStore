@@ -4,11 +4,13 @@ import { withRouter } from 'react-router-dom';
 import { SignUpLink, T } from './signup';
 import { withFirebase } from './../../services/firebase/firebase.index';
 import { ROUTES } from '../../data/routes';
+import { PasswordForgetLink } from './passwordForget';
 
 const SignInPage = () => (
     <div>
         <h1>SignIn</h1>
         <SignInForm />
+        <PasswordForgetLink />
         <SignUpLink />
     </div>
 );
@@ -24,6 +26,13 @@ class SignInFormBase extends Component<T> {
         super(props);
 
         this.state = { ...INITIAL_STATE };
+
+        this.props.firebase.auth.onAuthStateChanged((e) => {
+            if (e) {
+                (this.props as any).history.push(ROUTES.LANDING);
+                return;
+            }
+        });
     }
 
     state: typeof INITIAL_STATE;
@@ -35,7 +44,7 @@ class SignInFormBase extends Component<T> {
             .doSignInWithEmailAndPassword(email, password)
             .then(() => {
                 this.setState({ ...INITIAL_STATE });
-                (this.props as any).history.push(ROUTES.LANDING);
+                // (this.props as any).history.push(ROUTES.LANDING);
             })
             .catch(error => {
                 this.setState({ error });
