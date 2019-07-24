@@ -49,8 +49,7 @@ export default class Sidebar extends Component<T> {
                             return (
                                 <div className="logo" key={item.label} title={item.label} onClick={() => {
                                     if (item.clickRoute) {
-                                        console.log(this.props);
-                                        (this.props as any).history.push(item.clickRoute);
+                                        (this.props).history.push(item.clickRoute);
                                     }
                                 }}>
                                     <img src={item.icon} alt={item.label} style={{ marginTop: '20px' }} />

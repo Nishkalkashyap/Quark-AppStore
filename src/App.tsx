@@ -22,7 +22,7 @@ const Routing = () => (
     <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
   </div>
 )
-const SideBarrrrrrrrrr: any = withRouter((Sidebar as any));
+const SideBarrrrrrrrrr: any = withRouter(withFirebase(Sidebar));
 
 const App: React.FC = () => {
   return (
@@ -30,11 +30,7 @@ const App: React.FC = () => {
       <div className="App">
         <Header></Header>
         <div style={{ flexGrow: 1, display: 'flex' }}>
-          <FirebaseContext.Consumer>
-            {(firebase) => (
-              <SideBarrrrrrrrrr firebase={firebase}></SideBarrrrrrrrrr>
-            )}
-          </FirebaseContext.Consumer>
+          <SideBarrrrrrrrrr ></SideBarrrrrrrrrr>
           <div style={{ flexGrow: 1 }}>
             <Routing></Routing>
           </div>
