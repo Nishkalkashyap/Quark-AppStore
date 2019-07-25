@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { UploadButton } from '../common';
 import CreateProject from './create-project';
 import { withSnackbar } from 'notistack';
+import CustomPaginationActionsTable from './projects-list';
 
 const AccountPage = (props: basePropType) => {
     const user = props.firebase.auth.currentUser as firebase.User;
@@ -47,7 +48,10 @@ const AccountPage = (props: basePropType) => {
                                 <Tab label="Create Project" />
                             </Tabs>
                         </AppBar>
-                        {value === 0 && <TabContainer>Projects</TabContainer>}
+                        {value === 0 &&
+                            <TabContainer>
+                                <CustomPaginationActionsTable></CustomPaginationActionsTable>
+                            </TabContainer>}
                         {value === 1 &&
                             <TabContainer>
                                 <CreateProject {...props}></CreateProject>
