@@ -10,6 +10,7 @@
     "@types/react": "16.8.23",
     "@types/react-dom": "16.8.5",
     "firebase": "^6.3.1",
+    "lodash": "^4.17.15",
     "notistack": "^0.8.9",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -39,6 +40,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.136",
     "@types/react-router-dom": "^4.3.4",
     "node-sass": "^4.12.0"
   }

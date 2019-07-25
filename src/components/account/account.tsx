@@ -1,7 +1,7 @@
 import React from 'react';
 import { withFirebase } from '../../services/firebase/firebase.index';
-import withAuthorization from './routeGuard';
-import { basePropType } from './signup';
+import withAuthorization from '../login/routeGuard';
+import { basePropType } from '../login/signup';
 import logo from './../../assets/logo.svg';
 import { StandardProperties } from 'csstype';
 import Typography from '@material-ui/core/Typography/Typography';
@@ -10,6 +10,8 @@ import { default as MaterialLink } from '@material-ui/core/Link';
 import { ROUTES } from '../../data/routes';
 import { Link } from 'react-router-dom';
 import { UploadButton } from '../common';
+import CreateProject from './create-project';
+import { withSnackbar } from 'notistack';
 
 const AccountPage = (props: basePropType) => {
     const user = props.firebase.auth.currentUser as firebase.User;
@@ -42,9 +44,15 @@ const AccountPage = (props: basePropType) => {
                         <AppBar position="static" style={AppBarStyles}>
                             <Tabs value={value} onChange={handleChange}>
                                 <Tab label="Projects" />
+                                <Tab label="Create Project" />
                             </Tabs>
                         </AppBar>
                         {value === 0 && <TabContainer>Projects</TabContainer>}
+                        {value === 1 &&
+                            <TabContainer>
+                                <CreateProject {...props}></CreateProject>
+                            </TabContainer>
+                        }
                     </div>
                 </div>
             </div>
@@ -96,4 +104,4 @@ const EditProfile = () => (
     </StupidTypescript>
 );
 
-export default withAuthorization(withFirebase(AccountPage));
+export default withAuthorization(withFirebase(withSnackbar(AccountPage as any)));

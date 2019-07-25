@@ -10,7 +10,7 @@ import { ROUTES } from './data/routes';
 
 import SignUpPage from './components/login/signup';
 import SignInPage from './components/login/signin';
-import Account from './components/login/account';
+import Account from './components/account/account';
 import EditProfilePage from './components/login/editProfile';
 import PasswordForgetPage from './components/login/passwordForget';
 import { withFirebase } from './services/firebase/firebase.index';
