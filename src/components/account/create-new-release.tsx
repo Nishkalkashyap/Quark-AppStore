@@ -7,25 +7,36 @@ import { withSnackbar } from 'notistack';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import { useStyles } from '../login/signin';
 import { StandardProperties } from 'csstype';
-// import DropToUpload from 'react-drop-to-upload';
 const DropToUpload = require('react-drop-to-upload').default;
 
+const filesToUploa: FilesToUpload = {};
 const INITIAL_STATE = {
-    notes: ''
+    notes: '',
+    filesToUpload: filesToUploa
 }
 
+type FilesToUpload = { [key: string]: { buffer: ArrayBuffer, file: File } };
 const LocalComponent = (props: basePropType) => {
 
     const [state, setState] = useState(INITIAL_STATE);
 
     const classes = useStyles();
     const onSubmit = (event: any) => {
-        console.log('On Submit');
         event.preventDefault();
     }
 
     const onChange = (event: any) => {
-        setState({ notes: event.target.value });
+        setState({ ...state, notes: event.target.value });
+        console.log(state);
+    }
+
+    const addFiles = (ftu: FilesToUpload) => {
+        setState({ ...state, filesToUpload: ftu });
+    }
+
+    function isDisabled() {
+        // return state.notes == '' || !filesToUpload['md.md']
+        return state.notes == '';
     }
 
     return (
@@ -56,14 +67,14 @@ const LocalComponent = (props: basePropType) => {
 
                         onChange={onChange}
                     />
-                    <DropZone />
+                    <DropZone addFiles={addFiles as any} />
                     <Button
                         type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        disabled={!!!state.notes.length}
+                        disabled={!!isDisabled()}
                     >
                         Publish
                     </Button>
@@ -73,7 +84,7 @@ const LocalComponent = (props: basePropType) => {
     )
 }
 
-const DropZone = () => {
+const DropZone = (obj: { addFiles: Function }) => {
     const style: StandardProperties = {
         minHeight: '100px',
         display: 'flex',
@@ -83,16 +94,19 @@ const DropZone = () => {
         boxShadow: 'none'
     }
 
-    const onDrop = (e: File[], p: any) => {
-        // console.log('Dropped', e, p);
-    }
-
     const onDropArrayBuffer = (buffers: ArrayBuffer[], files: File[]) => {
-        console.log(buffers, files);
+        const filesToUpload: FilesToUpload = {};
+        files.map((file, index) => {
+            filesToUpload[file.name] = {
+                file,
+                buffer: buffers[index]
+            }
+        });
+        obj.addFiles(filesToUpload);
     }
 
     return (
-        <DropToUpload style={style} onDrop={onDrop} onDropArrayBuffer={onDropArrayBuffer}>
+        <DropToUpload style={style} onDropArrayBuffer={onDropArrayBuffer}>
             Drop file here to upload
         </DropToUpload>
     )
