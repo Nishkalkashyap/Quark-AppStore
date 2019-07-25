@@ -5,6 +5,7 @@ import { Container, CssBaseline, Avatar, Typography, TextField, Button } from '@
 import FiberNewIcon from '@material-ui/icons/FiberNew';
 import { getProjectPath } from '../../data/paths';
 import { handleFirebaseError, getRandomId } from '../../util';
+import firebase from 'firebase';
 
 const INITIAL_STATE = {
     projectName: '',
@@ -22,7 +23,8 @@ export default class CreateProject extends Component<basePropType> {
     onSubmit = (event: any) => {
         //    ...
         const random = getRandomId();
-        this.props.firebase.firestore.doc(getProjectPath(this.props.firebase.auth.currentUser!.uid, random)).set({ ...this.state }).then(() => {
+        const createdAt = firebase.firestore.FieldValue.serverTimestamp();
+        this.props.firebase.firestore.doc(getProjectPath(this.props.firebase.auth.currentUser!.uid, random)).set({ ...this.state, createdAt }).then(() => {
             this.props.enqueueSnackbar('Project created', { variant: 'success' });
         })
             .catch((err) => {
