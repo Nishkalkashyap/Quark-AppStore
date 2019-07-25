@@ -8,6 +8,7 @@ import { withSnackbar } from 'notistack';
 import { ReleaseItem, ProjectData } from '../../interfaces';
 import { Button, Container, Typography } from '@material-ui/core';
 import { useStyles } from '../login/signin';
+import { ROUTES, POST_SLUG } from '../../data/routes';
 
 export class PP extends Component<basePropType & { projectId: string, userID: string }> {
     constructor(props: basePropType & { projectId: string, userID: string }) {
@@ -50,15 +51,28 @@ export class PP extends Component<basePropType & { projectId: string, userID: st
         return (
             <div>
                 <MetaData {...this.state} />
-                <MaterialComponent {...this.state} />
+                <MaterialComponent {...this} />
             </div>
         )
     }
 }
 
-const MaterialComponent = (state: typeof PP['prototype']['state']) => {
-    if (state.isCurrentUser) {
-        return (<CreateReleaseButton />)
+const MetaData = ((state: typeof PP['prototype']['state']) => {
+    return (
+        <Container component="main" maxWidth="md">
+            <Typography component="h1" variant="h3">
+                {state.metaData.projectName}
+            </Typography>
+            <Typography component="h6">
+                {state.metaData.description}
+            </Typography>
+        </Container>
+    )
+});
+
+const MaterialComponent = (context: typeof PP['prototype']) => {
+    if (context.state.isCurrentUser) {
+        return (<CreateReleaseButton {...context as any} />)
     }
 
     const ReleaseList = () => {
@@ -76,20 +90,7 @@ const MaterialComponent = (state: typeof PP['prototype']['state']) => {
     )
 }
 
-const MetaData = ((state: typeof PP['prototype']['state']) => {
-    return (
-        <Container component="main" maxWidth="md">
-            <Typography component="h1" variant="h3">
-                {state.metaData.projectName}
-            </Typography>
-            <Typography component="h6">
-                {state.metaData.description}
-            </Typography>
-        </Container>
-    )
-});
-
-const CreateReleaseButton = (() => {
+const CreateReleaseButton = ((context: typeof PP['prototype']) => {
     const classes = useStyles();
     return (
         <Container component="main" maxWidth="sm">
@@ -99,6 +100,7 @@ const CreateReleaseButton = (() => {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
+                onClick={() => context.props.history.push(`${ROUTES.Project}/${context.props.match.params.userId}/${context.props.match.params.projectId}/${POST_SLUG.NewRelease}`)}
             >
                 Create new release
         </Button>

@@ -6,7 +6,7 @@ import Sidebar from './components/sidebar/sidebar.index';
 import Dashboard from './components/dashboard/dashboard.index';
 import Landing from './components/dashboard/landing';
 import { BrowserRouter as Router, Route, withRouter } from 'react-router-dom';
-import { ROUTES } from './data/routes';
+import { ROUTES, SLUGS, POST_SLUG } from './data/routes';
 
 import SignUpPage from './components/login/signup';
 import SignInPage from './components/login/signin';
@@ -34,8 +34,8 @@ const Routing = () => (
     <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
     <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
     
-    <Route path={ROUTES.NewRelease} component={CreateNewRelease} exact />
-    <Route path={ROUTES.Project} component={ViewProjectPage} exact />
+    <Route path={`${ROUTES.NewRelease}/${SLUGS.NewRelease}/${POST_SLUG.NewRelease}`} component={CreateNewRelease} exact />
+    <Route path={`${ROUTES.Project}/${SLUGS.Project}`} component={ViewProjectPage} exact />
     {/* <Route path="*" component={NotFoundComponent} /> */}
   </React.Fragment>
 )

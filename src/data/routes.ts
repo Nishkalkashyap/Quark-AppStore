@@ -12,8 +12,17 @@ export const ROUTES = {
     SIGN_IN: '/signin',
     PASSWORD_FORGET: '/forgot-password',
     ACCOUNT: '/account',
-    Project: '/project/:userId/:projectId',
-    NewRelease: '/project/:userId/:projectId/create-release',
+    Project: '/project',
+    NewRelease: '/project',
+}
+
+export const SLUGS = {
+    Project: ':userId/:projectId',
+    NewRelease: ':userId/:projectId'
+}
+
+export const POST_SLUG = {
+    NewRelease: 'create-release'
 }
 // type Route = {
 //     [key in allRoutes]: {
