@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { basePropType } from '../login/signup';
-import { getProjectReleaseCollectionPath } from '../../data/paths';
+import { getProjectReleaseCollectionPath, getProjectPath } from '../../data/paths';
 import { handleFirebaseError } from '../../util';
 import { withFirebase } from '../../services/firebase/firebase.index';
 import withAuthorization from '../login/routeGuard';
 import { withSnackbar } from 'notistack';
-import { ReleaseItem } from '../../interfaces';
-import { Button, Container } from '@material-ui/core';
+import { ReleaseItem, ProjectData } from '../../interfaces';
+import { Button, Container, Typography } from '@material-ui/core';
 import { useStyles } from '../login/signin';
 
 export class PP extends Component<basePropType & { projectId: string, userID: string }> {
@@ -21,8 +21,15 @@ export class PP extends Component<basePropType & { projectId: string, userID: st
 
         this.state.isCurrentUser = currentUser.uid === userId;
 
-        this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId))
-            .get().then((val) => {
+        this.props.firebase.firestore.doc(getProjectPath(userId, projectId)).get()
+            .then((val) => {
+                this.setState({ metaData: val.data() });
+            }).catch((err) => {
+                handleFirebaseError(props, err, 'Failed to fetch project data');
+            });
+
+        this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId)).get()
+            .then((val) => {
                 this.setState({ releases: val.docs });
             }).catch((err) => {
                 handleFirebaseError(props, err, 'Failed to fetch project releases');
@@ -31,12 +38,18 @@ export class PP extends Component<basePropType & { projectId: string, userID: st
 
     state = {
         releases: [] as ReleaseItem[],
-        isCurrentUser: false
+        isCurrentUser: false,
+        metaData: {} as ProjectData
     }
 
 
     render() {
-        return (<MaterialComponent {...this.state} />)
+        return (
+            <div>
+                <MetaData {...this.state} />
+                <MaterialComponent {...this.state} />
+            </div>
+        )
     }
 }
 
@@ -48,7 +61,7 @@ const MaterialComponent = (state: typeof PP['prototype']['state']) => {
     const ReleaseList = () => {
         return (
             <Container component="main" maxWidth="xs">
-                
+
             </Container>
         )
     };
@@ -60,10 +73,23 @@ const MaterialComponent = (state: typeof PP['prototype']['state']) => {
     )
 }
 
+const MetaData = ((state: typeof PP['prototype']['state']) => {
+    return (
+        <Container component="main" maxWidth="md">
+            <Typography component="h1" variant="h3">
+                {state.metaData.projectName}
+            </Typography>
+            <Typography component="h6">
+                {state.metaData.description}
+            </Typography>
+        </Container>
+    )
+});
+
 const CreateReleaseButton = (() => {
     const classes = useStyles();
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="sm">
             <Button
                 type="submit"
                 fullWidth

@@ -13,7 +13,7 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser';
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import { basePropType } from '../login/editProfile';
 import { getProjectsCollectionPath } from '../../data/paths';
 import { handleFirebaseError } from '../../util';
@@ -175,7 +175,7 @@ export default function CustomPaginationActionsTable(props: basePropType) {
                                 <TableCell>{row.description}</TableCell>
                                 <TableCell>
                                     <IconButton className={classes.button} aria-label="Open" onClick={() => openProject(row)}>
-                                        <OpenInBrowserIcon></OpenInBrowserIcon>
+                                        <OpenInNewIcon></OpenInNewIcon>
                                     </IconButton>
                                 </TableCell>
                             </TableRow>
