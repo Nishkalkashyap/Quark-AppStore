@@ -15,8 +15,11 @@ const DropToUpload = require('react-drop-to-upload').default;
 const filesToUploa: FilesToUpload = {};
 const INITIAL_STATE = {
     notes: '',
-    filesToUpload: filesToUploa
+    filesToUpload: filesToUploa,
+    uploadSize: 0
 }
+
+const FILE_UPLOAD_LIMIT = 20000000;
 
 type FilesToUpload = { [key: string]: { buffer: ArrayBuffer, file: File } };
 const LocalComponent = (props: basePropType) => {
@@ -35,19 +38,47 @@ const LocalComponent = (props: basePropType) => {
     }
 
     const addFiles = (ftu: FilesToUpload) => {
-        const finalObject = merge({}, state, { filesToUpload: ftu });
+
+        const nonRequiredFiles = Object.keys(ftu).filter((key) => {
+            return !key.endsWith('.qrk');
+        });
+
+
+        if (nonRequiredFiles.length) {
+            nonRequiredFiles.map((file) => {
+                delete ftu[file];
+            });
+            props.enqueueSnackbar('You can only upload *.qrk, *.build.qrk, package.json and *.ino file', { variant: 'error' });
+            props.enqueueSnackbar('Some files were removed', { variant: 'error' });
+        }
+
+        const finalObject: typeof INITIAL_STATE = merge(state, { filesToUpload: ftu });
+
+        let size = 0;
+        Object.keys(finalObject.filesToUpload).map((key) => {
+            size = size + finalObject.filesToUpload[key].file.size;
+        });
+
+        if (size > FILE_UPLOAD_LIMIT) {
+            props.enqueueSnackbar('Total upload size must be less than 20MB', { variant: 'error' });
+        }
+
+        finalObject.uploadSize = size;
+
         setState({ ...finalObject });
     }
 
     function isDisabled() {
         const keys = Object.keys(state.filesToUpload);
+
         if (keys.length == 0) return true;
+        if (state.uploadSize > 20000000) return true;
         if (state.notes == '') return true;
 
         const buildFileExists = !!keys.find((key) => key.match(/\.build\.(qrk)$/));
         const projectFileExists = !!keys.find((key) => key.match(/\.(qrk)$/) && key.search('.build.qrk') == -1);
 
-        if(!buildFileExists || !projectFileExists) return true;
+        if (!buildFileExists || !projectFileExists) return true;
         return false;
     }
 
