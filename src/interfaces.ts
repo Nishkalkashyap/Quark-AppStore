@@ -1,1 +1,1 @@
-export interface ProjectData { projectName: string,projectId : string; description: string, createdAt : string }
+export interface ProjectData { projectName: string, projectId: string; description: string, createdAt: firebase.firestore.Timestamp }

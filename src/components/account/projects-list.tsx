@@ -78,12 +78,12 @@ function TablePaginationActions(props: any) {
     );
 }
 
-TablePaginationActions.propTypes = {
-    count: PropTypes.number.isRequired,
-    onChangePage: PropTypes.func.isRequired,
-    page: PropTypes.number.isRequired,
-    rowsPerPage: PropTypes.number.isRequired,
-};
+// TablePaginationActions.propTypes = {
+//     count: PropTypes.number.isRequired,
+//     onChangePage: PropTypes.func.isRequired,
+//     page: PropTypes.number.isRequired,
+//     rowsPerPage: PropTypes.number.isRequired,
+// };
 
 const useStyles2 = makeStyles(theme => ({
     root: {
@@ -112,22 +112,20 @@ export default function CustomPaginationActionsTable(props: basePropType) {
 
     let rowss: ProjectData[] = [];
     const [rows, setArr] = useState(rowss);
+    const [wasUpdatedOnce, setWasUpdatedOnce] = useState(false);
 
     const user = props.firebase.auth.currentUser!;
 
-    if (!rows.length) {
+    if (!wasUpdatedOnce) {
         props.firebase.firestore.collection(getProjectsCollectionPath(user.uid)).get()
             .then((val) => {
-                // rows.length = 0;
                 const arr = val.docs.map((doc) => {
                     return doc.data();
                 }) as any;
-                // rows.push(...arr as any);
-                setArr(arr);
                 console.log(arr);
+                setWasUpdatedOnce(true);
+                setArr(arr);
             }).catch((err) => { handleFirebaseError(props, err, 'Could not fetch projects') });
-    } else {
-        console.log(rows.length);
     }
 
 
@@ -152,19 +150,19 @@ export default function CustomPaginationActionsTable(props: basePropType) {
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow>
-                            <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-                            <StyledTableCell align="right">Calories</StyledTableCell>
-                            <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
+                            <StyledTableCell>Name</StyledTableCell>
+                            <StyledTableCell>ID</StyledTableCell>
+                            <StyledTableCell>Created At</StyledTableCell>
+                            <StyledTableCell>Description</StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => (
-                            <TableRow key={row.projectName}>
-                                <TableCell component="th" scope="row">
-                                    {row.projectName}
-                                </TableCell>
-                                <TableCell align="right">{row.projectName}</TableCell>
-                                <TableCell align="right">{row.description}</TableCell>
+                            <TableRow key={row.projectId}>
+                                <TableCell component="th" scope="row">{row.projectName}</TableCell>
+                                <TableCell>{row.projectId}</TableCell>
+                                <TableCell>{new Date(row.createdAt.seconds).toUTCString()}</TableCell>
+                                <TableCell>{row.description}</TableCell>
                             </TableRow>
                         ))}
 
