@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withFirebase } from './../../services/firebase/firebase.index';
-import { basePropType, SignUpLink } from './signup';
+import { SignUpLink } from './signup';
+import { basePropType } from "../../basePropType";
 import { Button, TextField, Avatar, makeStyles, Container, CssBaseline, Typography, Grid } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { withSnackbar } from 'notistack';

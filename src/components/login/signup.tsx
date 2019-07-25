@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { ROUTES } from '../../data/routes';
-import { Firebase, withFirebase } from '../../services/firebase/firebase.index';
+import { withFirebase } from '../../services/firebase/firebase.index';
 import { default as MaterialLink } from '@material-ui/core/Link';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -13,7 +13,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { WithSnackbarProps, withSnackbar } from 'notistack'
+import { withSnackbar } from 'notistack'
+import { basePropType } from '../../basePropType';
 
 
 const SignUpPage = () => <SignUpForm />
@@ -25,7 +26,6 @@ const INITIAL_STATE = {
     error: { message: null },
 };
 
-export interface basePropType { firebase: Firebase, history: { push: (path: string) => void }, enqueueSnackbar: WithSnackbarProps['enqueueSnackbar'] }
 class SignUpFormBase extends Component<basePropType> {
     constructor(props: basePropType) {
         super(props);

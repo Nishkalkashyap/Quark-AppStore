@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { basePropType } from '../login/signup';
+import { basePropType } from "../../basePropType";
 import { useStyles } from '../login/signin';
 import { Container, CssBaseline, Avatar, Typography, TextField, Button } from '@material-ui/core';
 import FiberNewIcon from '@material-ui/icons/FiberNew';

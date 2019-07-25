@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { StandardProperties } from 'csstype';
-import { basePropType } from '../login/signup';
+import { basePropType } from "../../basePropType";
 import { Firebase } from '../../services/firebase/firebase.index';
 import { ROUTES } from '../../data/routes';
 import { makeStyles, IconButton } from '@material-ui/core';

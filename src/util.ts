@@ -1,4 +1,4 @@
-import { basePropType } from "./components/login/signup";
+import { basePropType } from "./basePropType";
 
 export function handleFirebaseError(props: basePropType, err: any, message: string) {
     console.error(err, err.message);

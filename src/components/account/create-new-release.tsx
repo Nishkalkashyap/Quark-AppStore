@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { basePropType } from '../login/signup';
+import { basePropType } from "../../basePropType";
 import { Container } from '@material-ui/core';
 import { withFirebase } from '../../services/firebase/firebase.index';
 import withAuthorization from '../login/routeGuard';

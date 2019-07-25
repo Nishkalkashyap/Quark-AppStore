@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { basePropType } from '../login/signup';
+import { basePropType } from "../../basePropType";
 import { getProjectReleaseCollectionPath, getProjectPath } from '../../data/paths';
 import { handleFirebaseError } from '../../util';
 import { withFirebase } from '../../services/firebase/firebase.index';

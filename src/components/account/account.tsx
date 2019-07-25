@@ -1,7 +1,7 @@
 import React from 'react';
 import { withFirebase } from '../../services/firebase/firebase.index';
 import withAuthorization from '../login/routeGuard';
-import { basePropType } from '../login/signup';
+import { basePropType } from "../../basePropType";
 import logo from './../../assets/logo.svg';
 import { StandardProperties } from 'csstype';
 import Typography from '@material-ui/core/Typography/Typography';

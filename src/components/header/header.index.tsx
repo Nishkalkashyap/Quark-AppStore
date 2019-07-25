@@ -1,7 +1,7 @@
 import { StandardProperties } from 'csstype';
 import logo from './../../assets/logo.svg';
 import { withFirebase } from '../../services/firebase/firebase.index';
-import { basePropType } from '../login/signup';
+import { basePropType } from "../../basePropType";
 import React, { Component } from 'react';
 
 import IconButton from '@material-ui/core/IconButton';
