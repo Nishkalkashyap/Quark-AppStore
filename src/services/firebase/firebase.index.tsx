@@ -1,5 +1,5 @@
 import React from 'react';
-import app from 'firebase/app';
+import * as app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/storage';
 import 'firebase/firestore';
