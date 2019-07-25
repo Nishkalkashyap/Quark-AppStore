@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import { basePropType } from "../../basePropType";
-import { Container, CssBaseline, Avatar, Typography, TextField, Button, Grid, Paper } from '@material-ui/core';
+import { Container, CssBaseline, Avatar, Typography, TextField, Button, Grid, Paper, ListItem, ListItemAvatar, ListItemText, ListItemSecondaryAction, IconButton, List } from '@material-ui/core';
 import { withFirebase } from '../../services/firebase/firebase.index';
 import withAuthorization from '../login/routeGuard';
 import { withSnackbar } from 'notistack';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { useStyles } from '../login/signin';
 import { StandardProperties } from 'csstype';
+import { useForceUpdate } from '../../util';
 const DropToUpload = require('react-drop-to-upload').default;
 
 const filesToUploa: FilesToUpload = {};
@@ -25,9 +27,10 @@ const LocalComponent = (props: basePropType) => {
         event.preventDefault();
     }
 
+    const forceUpdate = useForceUpdate();
+
     const onChange = (event: any) => {
         setState({ ...state, notes: event.target.value });
-        console.log(state);
     }
 
     const addFiles = (ftu: FilesToUpload) => {
@@ -35,8 +38,7 @@ const LocalComponent = (props: basePropType) => {
     }
 
     function isDisabled() {
-        // return state.notes == '' || !filesToUpload['md.md']
-        return state.notes == '';
+        return state.notes == '' || !state.filesToUpload['md.md']
     }
 
     return (
@@ -68,6 +70,7 @@ const LocalComponent = (props: basePropType) => {
                         onChange={onChange}
                     />
                     <DropZone addFiles={addFiles as any} />
+                    <ListComponent files={state.filesToUpload as any} forceUpdate={forceUpdate as any}></ListComponent>
                     <Button
                         type="submit"
                         fullWidth
@@ -81,6 +84,34 @@ const LocalComponent = (props: basePropType) => {
                 </form>
             </div>
         </Container>
+    )
+}
+
+const ListComponent = (props: { files: FilesToUpload, forceUpdate: Function }) => {
+
+    const deleteKey = (key: string) => {
+        delete props.files[key];
+        props.forceUpdate();
+    }
+
+    return (
+        <List>
+            {Object.keys(props.files).map((key) => {
+                return (
+                    <ListItem key={key + props.files[key].file.size}>
+                        <ListItemText
+                            primary={key}
+                            secondary={props.files[key].file.size}
+                        />
+                        <ListItemSecondaryAction>
+                            <IconButton edge="end" aria-label="delete" onClick={() => deleteKey(key)}>
+                                <DeleteForeverIcon />
+                            </IconButton>
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                )
+            })}
+        </List>
     )
 }
 
