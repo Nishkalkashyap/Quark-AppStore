@@ -17,6 +17,7 @@ import { basePropType } from '../login/editProfile';
 import { getProjectsCollectionPath } from '../../data/paths';
 import { handleFirebaseError } from '../../util';
 import { TableHead } from '@material-ui/core';
+import { ProjectData } from '../../interfaces';
 
 const useStyles1 = makeStyles(theme => ({
     root: {
@@ -109,7 +110,7 @@ const StyledTableCell = withStyles(theme => ({
 
 export default function CustomPaginationActionsTable(props: basePropType) {
 
-    let rowss: { projectName: string, description: string, createdAt : string }[] = [];
+    let rowss: ProjectData[] = [];
     const [rows, setArr] = useState(rowss);
 
     const user = props.firebase.auth.currentUser!;
