@@ -6,12 +6,13 @@ import FiberNewIcon from '@material-ui/icons/FiberNew';
 import { getProjectPath } from '../../data/paths';
 import { handleFirebaseError, getRandomId } from '../../util';
 import firebase from 'firebase';
+import { ROUTES } from '../../data/routes';
 
 const INITIAL_STATE = {
     projectName: '',
     description: '',
-    projectId : '',
-    createdAt : ''
+    projectId: '',
+    createdAt: ''
 }
 
 export default class CreateProject extends Component<basePropType> {
@@ -27,6 +28,7 @@ export default class CreateProject extends Component<basePropType> {
         const createdAt = firebase.firestore.FieldValue.serverTimestamp();
         this.props.firebase.firestore.doc(getProjectPath(this.props.firebase.auth.currentUser!.uid, random)).set({ ...this.state, createdAt, projectId: random }).then(() => {
             this.props.enqueueSnackbar('Project created', { variant: 'success' });
+            this.props.history.push(`${ROUTES.Project}/${this.props.firebase.auth.currentUser!.uid}/${random}`);
         })
             .catch((err) => {
                 handleFirebaseError(this.props, err, 'Failed to create project');
