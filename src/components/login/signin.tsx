@@ -165,7 +165,7 @@ const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof IN
     )
 };
 
-const useStyles = makeStyles(theme => ({
+export const useStyles = makeStyles(theme => ({
     '@global': {
         body: {
             backgroundColor: theme.palette.common.white,
