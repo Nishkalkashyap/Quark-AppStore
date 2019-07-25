@@ -19,6 +19,7 @@ import { getProjectsCollectionPath } from '../../data/paths';
 import { handleFirebaseError } from '../../util';
 import { TableHead } from '@material-ui/core';
 import { ProjectData } from '../../interfaces';
+import { ROUTES } from '../../data/routes';
 
 const useStyles1 = makeStyles(theme => ({
     root: {
@@ -149,7 +150,7 @@ export default function CustomPaginationActionsTable(props: basePropType) {
     }
 
     function openProject(item: ProjectData) {
-        console.log(item);
+        props.history.push(`${ROUTES.Project}/${props.firebase.auth.currentUser!.uid}/${item.projectId}`);
     }
 
     return (
