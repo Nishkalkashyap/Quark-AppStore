@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import { StandardProperties } from 'csstype';
-import logo from './../../logo.svg';
 import { basePropType } from '../login/signup';
 import { Firebase } from '../../services/firebase/firebase.index';
 import { ROUTES } from '../../data/routes';
-import { Avatar, makeStyles, IconButton } from '@material-ui/core';
+import { makeStyles, IconButton } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 

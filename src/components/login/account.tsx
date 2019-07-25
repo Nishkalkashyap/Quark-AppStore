@@ -26,7 +26,7 @@ const AccountPage = (props: basePropType) => {
 
             <div style={SubContainer}>
                 <div className="left-content" style={{ width: '22%' }}>
-                    <img src={user.photoURL || logo} alt="user image" style={ImageStyle} />
+                    <img src={user.photoURL || logo} alt="" style={ImageStyle} />
                     <Typography variant="h5" style={{ fontWeight: 700 }}>
                         {user.displayName || 'Chuck Norris'}
                     </Typography>

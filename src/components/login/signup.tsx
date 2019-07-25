@@ -139,7 +139,6 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
         email,
         passwordOne,
         passwordTwo,
-        error,
     } = obj.state;
 
     const isInvalid =

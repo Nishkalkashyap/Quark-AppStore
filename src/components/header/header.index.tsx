@@ -38,9 +38,9 @@ const ITEM_HEIGHT = 48;
 
 class Header extends Component<basePropType> {
 
-    constructor(props: basePropType) {
-        super(props);
-    }
+    // constructor(props: basePropType) {
+    //     super(props);
+    // }
 
     render() {
         return (

@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import Header from './components/header/header.index';
 import Sidebar from './components/sidebar/sidebar.index';
-import PrivateRoute from './components/private-route';
+// import PrivateRoute from './components/private-route';
 import Dashboard from './components/dashboard/dashboard.index';
 import Landing from './components/dashboard/landing';
 import { BrowserRouter as Router, Route, withRouter } from 'react-router-dom';
