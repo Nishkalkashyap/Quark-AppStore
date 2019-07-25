@@ -50,7 +50,7 @@ const AccountPage = (props: basePropType) => {
                         </AppBar>
                         {value === 0 &&
                             <TabContainer>
-                                <CustomPaginationActionsTable></CustomPaginationActionsTable>
+                                <CustomPaginationActionsTable {...props}></CustomPaginationActionsTable>
                             </TabContainer>}
                         {value === 1 &&
                             <TabContainer>

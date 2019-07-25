@@ -5,3 +5,7 @@ export function getProfilePath(currentUser: firebase.User) {
 export function getProjectPath(userId: string, projectId: string) {
     return `Users/${userId}/projects/${projectId}`
 }
+
+export function getProjectsCollectionPath(userId: string) {
+    return `Users/${userId}/projects`
+}
