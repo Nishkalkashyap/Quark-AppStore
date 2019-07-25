@@ -13,6 +13,7 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
+import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser';
 import { basePropType } from '../login/editProfile';
 import { getProjectsCollectionPath } from '../../data/paths';
 import { handleFirebaseError } from '../../util';
@@ -96,6 +97,9 @@ const useStyles2 = makeStyles(theme => ({
     tableWrapper: {
         overflowX: 'auto',
     },
+    button: {
+        margin: theme.spacing(1),
+    }
 }));
 
 const StyledTableCell = withStyles(theme => ({
@@ -144,6 +148,10 @@ export default function CustomPaginationActionsTable(props: basePropType) {
         setPage(0);
     }
 
+    function openProject(item: ProjectData) {
+        console.log(item);
+    }
+
     return (
         <Paper className={classes.root}>
             <div className={classes.tableWrapper}>
@@ -154,6 +162,7 @@ export default function CustomPaginationActionsTable(props: basePropType) {
                             <StyledTableCell>ID</StyledTableCell>
                             <StyledTableCell>Created At</StyledTableCell>
                             <StyledTableCell>Description</StyledTableCell>
+                            <StyledTableCell>Open</StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -163,6 +172,11 @@ export default function CustomPaginationActionsTable(props: basePropType) {
                                 <TableCell>{row.projectId}</TableCell>
                                 <TableCell>{new Date(row.createdAt.seconds).toUTCString()}</TableCell>
                                 <TableCell>{row.description}</TableCell>
+                                <TableCell>
+                                    <IconButton className={classes.button} aria-label="Open" onClick={() => openProject(row)}>
+                                        <OpenInBrowserIcon></OpenInBrowserIcon>
+                                    </IconButton>
+                                </TableCell>
                             </TableRow>
                         ))}
 
