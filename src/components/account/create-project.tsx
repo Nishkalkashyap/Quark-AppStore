@@ -9,7 +9,9 @@ import firebase from 'firebase';
 
 const INITIAL_STATE = {
     projectName: '',
-    description: ''
+    description: '',
+    projectId : '',
+    createdAt : ''
 }
 
 export default class CreateProject extends Component<basePropType> {
@@ -21,10 +23,9 @@ export default class CreateProject extends Component<basePropType> {
     state: typeof INITIAL_STATE;
 
     onSubmit = (event: any) => {
-        //    ...
         const random = getRandomId();
         const createdAt = firebase.firestore.FieldValue.serverTimestamp();
-        this.props.firebase.firestore.doc(getProjectPath(this.props.firebase.auth.currentUser!.uid, random)).set({ ...this.state, createdAt }).then(() => {
+        this.props.firebase.firestore.doc(getProjectPath(this.props.firebase.auth.currentUser!.uid, random)).set({ ...this.state, createdAt, projectId: random }).then(() => {
             this.props.enqueueSnackbar('Project created', { variant: 'success' });
         })
             .catch((err) => {

@@ -51,8 +51,8 @@ const AccountPage = (props: basePropType) => {
                         </AppBar>
                         {value === 0 &&
                             <TabContainer>
-                                <ProjectsList {...props}></ProjectsList>
-                                {/* <CustomPaginationActionsTable {...props}></CustomPaginationActionsTable> */}
+                                {/* <ProjectsList {...props}></ProjectsList> */}
+                                <CustomPaginationActionsTable {...props}></CustomPaginationActionsTable>
                             </TabContainer>}
                         {value === 1 &&
                             <TabContainer>
