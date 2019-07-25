@@ -18,6 +18,8 @@ import { withFirebase } from './services/firebase/firebase.index';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 import { ViewProjectPage } from './components/account/view-project-page';
+import { CreateNewRelease } from './components/account/create-new-release';
+// import { NotFoundComponent } from './components/common';
 
 const Routing = () => (
   <React.Fragment>
@@ -31,7 +33,10 @@ const Routing = () => (
     <Route path={ROUTES.SIGN_IN} component={SignInPage} />
     <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
     <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-    <Route path={ROUTES.Project} component={ViewProjectPage} />
+    
+    <Route path={ROUTES.NewRelease} component={CreateNewRelease} exact />
+    <Route path={ROUTES.Project} component={ViewProjectPage} exact />
+    {/* <Route path="*" component={NotFoundComponent} /> */}
   </React.Fragment>
 )
 const StupidTypescript: any = withRouter(withFirebase(Sidebar));

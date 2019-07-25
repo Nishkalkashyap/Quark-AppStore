@@ -12,7 +12,8 @@ export const ROUTES = {
     SIGN_IN: '/signin',
     PASSWORD_FORGET: '/forgot-password',
     ACCOUNT: '/account',
-    Project: '/project',
+    Project: '/project/:userId/:projectId',
+    NewRelease: '/project/:userId/:projectId/create-release',
 }
 // type Route = {
 //     [key in allRoutes]: {
