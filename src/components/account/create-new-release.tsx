@@ -1,3 +1,4 @@
+import { merge } from 'lodash';
 import React, { useState } from 'react'
 import { basePropType } from "../../basePropType";
 import { Container, CssBaseline, Avatar, Typography, TextField, Button, Grid, Paper, ListItem, ListItemAvatar, ListItemText, ListItemSecondaryAction, IconButton, List } from '@material-ui/core';
@@ -34,7 +35,8 @@ const LocalComponent = (props: basePropType) => {
     }
 
     const addFiles = (ftu: FilesToUpload) => {
-        setState({ ...state, filesToUpload: ftu });
+        const finalObject = merge({}, state, { filesToUpload: ftu });
+        setState({ ...finalObject });
     }
 
     function isDisabled() {
@@ -94,6 +96,22 @@ const ListComponent = (props: { files: FilesToUpload, forceUpdate: Function }) =
         props.forceUpdate();
     }
 
+    const getSecondary = (bytes: number) => {
+        if (bytes < 1000) {
+            return `${bytes} bytes`;
+        }
+
+        if (bytes < 1000000) {
+            return `${Math.floor(bytes / 1000)} kilobytes`;
+        }
+
+        if (bytes < 1000000000) {
+            return `${Math.floor(bytes / 1000000)} megabytes`;
+        }
+
+        return `${bytes} bytes`;
+    }
+
     return (
         <List>
             {Object.keys(props.files).map((key) => {
@@ -101,7 +119,7 @@ const ListComponent = (props: { files: FilesToUpload, forceUpdate: Function }) =
                     <ListItem key={key + props.files[key].file.size}>
                         <ListItemText
                             primary={key}
-                            secondary={props.files[key].file.size}
+                            secondary={getSecondary(props.files[key].file.size)}
                         />
                         <ListItemSecondaryAction>
                             <IconButton edge="end" aria-label="delete" onClick={() => deleteKey(key)}>
