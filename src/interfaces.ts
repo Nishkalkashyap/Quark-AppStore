@@ -1,0 +1,1 @@
+export interface ProjectData { projectName: string, description: string, createdAt : string }

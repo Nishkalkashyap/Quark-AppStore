@@ -13,6 +13,7 @@ import { UploadButton } from '../common';
 import CreateProject from './create-project';
 import { withSnackbar } from 'notistack';
 import CustomPaginationActionsTable from './projects-list';
+import { ProjectsList } from './project-list-2';
 
 const AccountPage = (props: basePropType) => {
     const user = props.firebase.auth.currentUser as firebase.User;
@@ -50,7 +51,8 @@ const AccountPage = (props: basePropType) => {
                         </AppBar>
                         {value === 0 &&
                             <TabContainer>
-                                <CustomPaginationActionsTable {...props}></CustomPaginationActionsTable>
+                                <ProjectsList {...props}></ProjectsList>
+                                {/* <CustomPaginationActionsTable {...props}></CustomPaginationActionsTable> */}
                             </TabContainer>}
                         {value === 1 &&
                             <TabContainer>
