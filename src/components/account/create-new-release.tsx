@@ -28,6 +28,9 @@ const LocalComponent = (props: basePropType) => {
 
     const classes = useStyles();
     const onSubmit = (event: any) => {
+
+        // props.firebase.storage.ref('').put()
+
         event.preventDefault();
     }
 
@@ -40,7 +43,7 @@ const LocalComponent = (props: basePropType) => {
     const addFiles = (ftu: FilesToUpload) => {
 
         const nonRequiredFiles = Object.keys(ftu).filter((key) => {
-            return !key.endsWith('.qrk');
+            return !(key.endsWith('.qrk') || key == 'package.json' || key.endsWith('.ino'))
         });
 
 
