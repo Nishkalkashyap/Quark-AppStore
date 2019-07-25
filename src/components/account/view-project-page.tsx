@@ -8,15 +8,15 @@ import { withSnackbar } from 'notistack';
 import { ReleaseItem, ProjectData } from '../../interfaces';
 import { Button, Container, Typography } from '@material-ui/core';
 import { useStyles } from '../login/signin';
-import { ROUTES, POST_SLUG } from '../../data/routes';
+import { ROUTES, POST_SLUG, URL_KEYS } from '../../data/routes';
 
 export class PP extends Component<basePropType & { projectId: string, userID: string }> {
     constructor(props: basePropType & { projectId: string, userID: string }) {
         super(props);
         const currentUser = this.props.firebase.auth.currentUser!;
 
-        const userId = this.props.match.params.userId;
-        const projectId = this.props.match.params.projectId;
+        const userId = this.props.match.params[URL_KEYS.USER_ID];
+        const projectId = this.props.match.params[URL_KEYS.PROJECT_ID];
 
         // const pathname = (window.location.pathname || '').split('/');
         // const userId = pathname[2];
@@ -100,7 +100,7 @@ const CreateReleaseButton = ((context: typeof PP['prototype']) => {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
-                onClick={() => context.props.history.push(`${ROUTES.Project}/${context.props.match.params.userId}/${context.props.match.params.projectId}/${POST_SLUG.NewRelease}`)}
+                onClick={() => context.props.history.push(`${ROUTES.Project}/${context.props.match.params[URL_KEYS.USER_ID]}/${context.props.match.params[URL_KEYS.PROJECT_ID]}/${POST_SLUG.NewRelease}`)}
             >
                 Create new release
         </Button>

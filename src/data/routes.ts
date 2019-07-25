@@ -16,9 +16,14 @@ export const ROUTES = {
     NewRelease: '/project',
 }
 
+export const URL_KEYS = {
+    USER_ID: 'userId',
+    PROJECT_ID: 'projectId'
+}
+
 export const SLUGS = {
-    Project: ':userId/:projectId',
-    NewRelease: ':userId/:projectId'
+    Project: `:${URL_KEYS.USER_ID}/:${URL_KEYS.PROJECT_ID}`,
+    NewRelease: `:${URL_KEYS.USER_ID}/:${URL_KEYS.PROJECT_ID}`
 }
 
 export const POST_SLUG = {
