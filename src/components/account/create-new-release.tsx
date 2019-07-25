@@ -40,7 +40,15 @@ const LocalComponent = (props: basePropType) => {
     }
 
     function isDisabled() {
-        return state.notes == '' || !state.filesToUpload['md.md']
+        const keys = Object.keys(state.filesToUpload);
+        if (keys.length == 0) return true;
+        if (state.notes == '') return true;
+
+        const buildFileExists = !!keys.find((key) => key.match(/\.build\.(qrk)$/));
+        const projectFileExists = !!keys.find((key) => key.match(/\.(qrk)$/) && key.search('.build.qrk') == -1);
+
+        if(!buildFileExists || !projectFileExists) return true;
+        return false;
     }
 
     return (
