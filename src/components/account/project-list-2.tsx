@@ -1,9 +1,9 @@
 import { Component } from "react";
-import { basePropType } from "../login/editProfile";
 import { getProjectsCollectionPath } from "../../data/paths";
 import React from 'react';
 import { TablePagination } from "@material-ui/core";
 import { ProjectData } from "../../interfaces";
+import { basePropType } from "../../basePropType";
 
 
 interface QueryConfig {

@@ -14,12 +14,12 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
-import { basePropType } from '../login/editProfile';
 import { getProjectsCollectionPath } from '../../data/paths';
 import { handleFirebaseError } from '../../util';
 import { TableHead } from '@material-ui/core';
 import { ProjectData } from '../../interfaces';
 import { ROUTES } from '../../data/routes';
+import { basePropType } from '../../basePropType';
 
 const useStyles1 = makeStyles(theme => ({
     root: {

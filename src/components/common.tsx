@@ -2,7 +2,7 @@ import './common.css';
 import * as React from 'react';
 import { Link } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
-import { basePropType } from './login/editProfile';
+import { basePropType } from '../basePropType';
 export const UploadButton = () => {
     return (
         <div className="upload-btn-wrapper" style={{ display: 'block' }}>

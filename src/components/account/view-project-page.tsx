@@ -14,9 +14,12 @@ export class PP extends Component<basePropType & { projectId: string, userID: st
         super(props);
         const currentUser = this.props.firebase.auth.currentUser!;
 
-        const pathname = (window.location.pathname || '').split('/');
-        const userId = pathname[2];
-        const projectId = pathname[3];
+        const userId = this.props.match.params.userId;
+        const projectId = this.props.match.params.projectId;
+
+        // const pathname = (window.location.pathname || '').split('/');
+        // const userId = pathname[2];
+        // const projectId = pathname[3];
         // console.log(userId, projectId);
 
         this.state.isCurrentUser = currentUser.uid === userId;

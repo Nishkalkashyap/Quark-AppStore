@@ -14,6 +14,7 @@ import Container from '@material-ui/core/Container';
 import { WithSnackbarProps, withSnackbar } from 'notistack'
 import withAuthorization from './routeGuard';
 import { getProfilePath } from '../../data/paths';
+import { basePropType } from '../../basePropType';
 
 
 const EditProfilePage = () => <EditProfile />
@@ -25,7 +26,6 @@ const INITIAL_STATE = {
     site: ''
 };
 
-export interface basePropType { firebase: Firebase, history: { push: (path: string) => void }, enqueueSnackbar: WithSnackbarProps['enqueueSnackbar'] }
 class EditProfileBase extends Component<basePropType> {
     constructor(props: basePropType) {
         super(props);
