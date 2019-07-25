@@ -135,7 +135,7 @@ const ListComponent = (props: { files: FilesToUpload, forceUpdate: Function }) =
 
 const DropZone = (obj: { addFiles: Function }) => {
     const style: StandardProperties = {
-        minHeight: '100px',
+        minHeight: '150px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -154,10 +154,22 @@ const DropZone = (obj: { addFiles: Function }) => {
         obj.addFiles(filesToUpload);
     }
 
+    const id = "fksdbkfskd-fsdfs-fsdfsd-fsd-fsdf-fds";
+
+    const highlight = (e: MouseEvent) => {
+        document.getElementById(id)!.className = "drop-to-upload-highlight";
+    }
+
+    const unhighlight = (e: MouseEvent) => {
+        document.getElementById(id)!.className = "drop-to-upload-unhighlight";
+    }
+
     return (
-        <DropToUpload style={style} onDropArrayBuffer={onDropArrayBuffer}>
-            Drop file here to upload
-        </DropToUpload>
+        <div onDragEnter={highlight as any} onDropCapture={unhighlight as any} onMouseLeave={unhighlight as any} id={id}>
+            <DropToUpload style={style} onDropArrayBuffer={onDropArrayBuffer}>
+                Drop files here to upload
+            </DropToUpload>
+        </div>
     )
 }
 

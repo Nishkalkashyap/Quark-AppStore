@@ -11,3 +11,13 @@
     top: 0;
     opacity: 0;
 }
+
+
+.drop-to-upload-highlight {
+    background-color: rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s;
+}
+
+.drop-to-upload-unhighlight {
+    background-color: rgba(0, 0, 0, 0);
+}
