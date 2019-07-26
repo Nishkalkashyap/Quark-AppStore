@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Firebase, withFirebase } from '../../services/firebase/firebase.index';
+import { withFirebase } from '../services/firebase/firebase.index';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -9,13 +9,12 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { WithSnackbarProps, withSnackbar } from 'notistack'
-import withAuthorization from './routeGuard';
-import { getProfilePath } from '../../data/paths';
-import { basePropType } from '../../basePropType';
-import { useStyles } from '../common';
+import { withSnackbar } from 'notistack'
+import withAuthorization from '../components/login/routeGuard';
+import { getProfilePath } from '../data/paths';
+import { basePropType } from '../basePropType';
+import { useStyles } from '../components/common';
 
 
 const EditProfilePage = () => <EditProfile />

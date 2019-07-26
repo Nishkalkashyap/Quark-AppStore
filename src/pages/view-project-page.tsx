@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
-import { basePropType } from "../../basePropType";
-import { getProjectReleaseCollectionPath, getProjectPath } from '../../data/paths';
-import { handleFirebaseError } from '../../util';
-import { withFirebase } from '../../services/firebase/firebase.index';
-import withAuthorization from '../login/routeGuard';
+import { basePropType } from "../basePropType";
+import { getProjectReleaseCollectionPath, getProjectPath } from '../data/paths';
+import { handleFirebaseError } from '../util';
+import { withFirebase } from '../services/firebase/firebase.index';
+import withAuthorization from '../components/login/routeGuard';
 import { withSnackbar } from 'notistack';
-import { ReleaseItem, ProjectData } from '../../interfaces';
+import { ReleaseItem, ProjectData } from '../interfaces';
 import { Button, Container, Typography } from '@material-ui/core';
-import { ROUTES, POST_SLUG, URL_KEYS } from '../../data/routes';
-import { useStyles } from '../common';
+import { ROUTES, POST_SLUG, URL_KEYS } from '../data/routes';
+import { useStyles } from '../components/common';
 
 export class PP extends Component<basePropType & { projectId: string, userID: string }> {
     constructor(props: basePropType & { projectId: string, userID: string }) {

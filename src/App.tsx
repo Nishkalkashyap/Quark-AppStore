@@ -11,13 +11,13 @@ import { ROUTES, SLUGS, POST_SLUG } from './data/routes';
 import SignUpPage from './pages/signup-page';
 import SignInPage from './pages/sign-in-page';
 import Account from './components/account/account';
-import EditProfilePage from './components/login/editProfile';
+import EditProfilePage from './pages/edit-profile-page';
 import ForgotPasswordPage from './pages/forgot-password-page';
 import { withFirebase } from './services/firebase/firebase.index';
 
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
-import { ViewProjectPage } from './components/account/view-project-page';
+import { ViewProjectPage } from './pages/view-project-page';
 import { CreateNewRelease } from './components/account/create-new-release';
 import changePasswordPage from './pages/change-password-page';
 // import { NotFoundComponent } from './components/common';
