@@ -64,8 +64,9 @@ export default class LocalComponent extends Component<basePropType> {
                 <List style={{ marginTop: '30px' }}>
                     {
                         this.state.projects.map((project) => {
+                            const obj = { project, history: this.props.history, userID: this.state.userId };
                             return (
-                                <ProjectCard {...project} key={project.projectId}></ProjectCard>
+                                <ProjectCard {...obj} key={project.projectId} />
                             )
                         })
                     }
@@ -84,8 +85,9 @@ export default class LocalComponent extends Component<basePropType> {
     }
 }
 
-const ProjectCard = (project: ProjectData) => {
+const ProjectCard = (obj: { project: ProjectData, history: basePropType['history'], userID: string }) => {
     const classes = useStyles();
+    const { project, history, userID } = obj;
     return (
         <React.Fragment key={project.projectId}>
             <Card className={classes.card}>
@@ -107,11 +109,11 @@ const ProjectCard = (project: ProjectData) => {
                         Updated At: {project.updatedAt.toDate().toUTCString()}
                     </Typography>
                     <Typography className={classes.inline} color="textSecondary" component="span">
-                        ID: {project.projectId}
+                        Project ID: {project.projectId}
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small" variant="outlined" color="primary">View</Button>
+                    <Button size="small" variant="outlined" color="primary" onClick={() => history.push(`${ROUTES.Project}/${userID}/${project.projectId}`)}>View project</Button>
                 </CardActions>
             </Card>
         </React.Fragment>
