@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, List, ListItem, ListItemAvatar, Avatar, ListItemText, Typography, Divider, Card, CardContent, CardActions, Button, makeStyles, createStyles } from '@material-ui/core';
+import { Container, List, Typography, Card, CardContent, CardActions, Button, makeStyles, createStyles } from '@material-ui/core';
 import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
 import { URL_KEYS } from '../data/routes';
@@ -88,21 +88,6 @@ const ProjectCard = (project: ProjectData) => {
         </React.Fragment>
     )
 }
-
-
-// function LocalComponent(props: basePropType) {
-
-//     const values = queryString.parse(props.location.search);
-//     const userId = props.match.params[URL_KEYS.USER_ID] || props.firebase.auth.currentUser!.uid;
-//     const startAt = values['startAt'] || null;
-//     console.log(values);
-
-//     return (
-//         <Container maxWidth="md">
-//             <div></div>
-//         </Container>
-//     )
-// }
 
 const ProjectsListPage = withAllProviders(LocalComponent);
 export { ProjectsListPage }
