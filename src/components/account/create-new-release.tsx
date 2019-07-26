@@ -16,6 +16,7 @@ import { getProjectReleaseDocPath } from '../../data/paths';
 import { ReleaseItem } from '../../interfaces';
 const DropToUpload = require('react-drop-to-upload').default;
 
+type FilesToUpload = { [key: string]: { buffer: ArrayBuffer, file: File } };
 const filesToUploa: FilesToUpload = {};
 const INITIAL_STATE = {
     notes: '',
@@ -25,7 +26,6 @@ const INITIAL_STATE = {
 
 const FILE_UPLOAD_LIMIT = 20000000;
 
-type FilesToUpload = { [key: string]: { buffer: ArrayBuffer, file: File } };
 const LocalComponent = (props: basePropType) => {
 
     const [state, setState] = useState(INITIAL_STATE);
@@ -33,10 +33,6 @@ const LocalComponent = (props: basePropType) => {
     const classes = useStyles();
     const onSubmit = (event: any) => {
         event.preventDefault();
-        // create release in firestore
-        // after success, upload data in bucket
-
-        const currentUser = props.firebase.auth.currentUser!;
 
         const releaseId = getRandomId();
         const createdAt = firebase.firestore.FieldValue.serverTimestamp();
@@ -62,7 +58,7 @@ const LocalComponent = (props: basePropType) => {
                     })
                     .catch((err) => handleFirebaseError(props, err, 'Failed to upload files'))
                     .finally(() => {
-                        props.history.push(`${ROUTES.Project}/${userId}/${projectId}/${releaseId}`);
+                        props.history.push(`${ROUTES.Project}/${userId}/${projectId}`);
                     })
             })
             .catch((err) => {
