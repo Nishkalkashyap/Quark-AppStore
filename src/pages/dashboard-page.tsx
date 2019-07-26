@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { withAuthorization } from '../components/guards/routeGuard';
+import { withAuthorization } from '../components/providers/routeGuard';
 import { withFirebase } from '../services/firebase/firebase.index';
 
 const Dashboard = () => (

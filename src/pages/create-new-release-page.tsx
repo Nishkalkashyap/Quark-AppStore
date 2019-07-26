@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { basePropType } from "../basePropType";
 import { Container, CssBaseline, Avatar, Typography, TextField, Button, Grid, Paper, ListItem, ListItemAvatar, ListItemText, ListItemSecondaryAction, IconButton, List } from '@material-ui/core';
 import { withFirebase } from '../services/firebase/firebase.index';
-import withAuthorization from '../components/guards/routeGuard';
+import withAuthorization from '../components/providers/routeGuard';
 import { withSnackbar } from 'notistack';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
