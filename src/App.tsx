@@ -8,7 +8,7 @@ import Landing from './components/dashboard/landing';
 import { BrowserRouter as Router, Route, withRouter } from 'react-router-dom';
 import { ROUTES, SLUGS, POST_SLUG } from './data/routes';
 
-import SignUpPage from './pages/signup';
+import SignUpPage from './pages/signup-page';
 import SignInPage from './pages/sign-in-page';
 import Account from './components/account/account';
 import EditProfilePage from './components/login/editProfile';

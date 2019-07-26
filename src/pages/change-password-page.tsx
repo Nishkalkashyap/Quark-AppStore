@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { withFirebase } from './../../services/firebase/firebase.index';
-import { SignUpLink } from '../../pages/signup';
-import { basePropType } from "../../basePropType";
+import { withFirebase } from '../services/firebase/firebase.index';
+import { basePropType } from "../basePropType";
 import { Button, TextField, Avatar, makeStyles, Container, CssBaseline, Typography, Grid } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { withSnackbar } from 'notistack';
@@ -44,30 +43,6 @@ class PasswordChangeForm extends Component<basePropType> {
     };
 
     render() {
-        // const { passwordOne, passwordTwo } = this.state;
-
-        // const isInvalid =
-        //     passwordOne !== passwordTwo || passwordOne === '';
-
-        // <form onSubmit={this.onSubmit}>
-        //     <input
-        //         name="passwordOne"
-        //         value={passwordOne}
-        //         onChange={this.onChange}
-        //         type="password"
-        //         placeholder="New Password"
-        //     />
-        //     <input
-        //         name="passwordTwo"
-        //         value={passwordTwo}
-        //         onChange={this.onChange}
-        //         type="password"
-        //         placeholder="Confirm New Password"
-        //     />
-        //     <button disabled={isInvalid} type="submit">
-        //         Reset My Password
-        //     </button>
-        // </form>
         return (
             <PasswordChangeElement onChange={this.onChange} onSubmit={this.onSubmit} state={this.state}></PasswordChangeElement>
         );
