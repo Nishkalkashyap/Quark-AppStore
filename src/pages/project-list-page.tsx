@@ -72,7 +72,7 @@ const ProjectCard = (project: ProjectData) => {
             <Card className={classes.card}>
                 <CardContent>
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Created at: {project.createdAt.toDate().toUTCString()}
+                        Created At: {project.createdAt.toDate().toUTCString()}
                     </Typography>
                     <Typography variant="h5" component="h2">
                         {project.projectName}
@@ -82,7 +82,8 @@ const ProjectCard = (project: ProjectData) => {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small" color="primary">View</Button>
+                    {/* <Button size="small" variant="contained" color="primary">View</Button> */}
+                    <Button size="small" color="secondary">View</Button>
                 </CardActions>
             </Card>
         </React.Fragment>

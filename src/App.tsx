@@ -16,7 +16,7 @@ import ForgotPasswordPage from './pages/forgot-password-page';
 import { withFirebase } from './providers/firebase-provider';
 
 import { ThemeProvider } from '@material-ui/styles';
-import { createMuiTheme } from '@material-ui/core';
+import { createMuiTheme, CssBaseline } from '@material-ui/core';
 import { ViewProjectPage } from './pages/view-project-page';
 import { CreateNewRelease } from './pages/create-new-release-page';
 import changePasswordPage from './pages/change-password-page';
@@ -37,7 +37,7 @@ const Routing = () => (
     <Route path={ROUTES.PASSWORD_FORGET} component={ForgotPasswordPage} />
     <Route path={ROUTES.CHANGE_PASSWORD_PAGE} component={changePasswordPage} />
     <Route path={ROUTES.ProjectsListPage} component={ProjectsListPage} />
-    
+
     <Route path={`${ROUTES.NewRelease}/${SLUGS.NewRelease}/${POST_SLUG.NewRelease}`} component={CreateNewRelease} exact />
     <Route path={`${ROUTES.Project}/${SLUGS.Project}`} component={ViewProjectPage} exact />
     {/* <Route path="*" component={NotFoundComponent} /> */}
@@ -56,6 +56,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <div className="App">
           <Header></Header>
           <div style={{ flexGrow: 1, display: 'flex' }}>

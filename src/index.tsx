@@ -5,6 +5,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Firebase, FirebaseContext } from './providers/firebase-provider';
 import { SnackbarProvider } from 'notistack';
+import 'typeface-roboto';
 
 ReactDOM.render(
     <FirebaseContext.Provider value={new Firebase()}>
