@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { ROUTES } from '../data/routes';
-import { withFirebase } from '../services/firebase/firebase.index';
+import { withFirebase } from '../components/providers/firebase-provider';
 import { default as MaterialLink } from '@material-ui/core/Link';
 
 import Avatar from '@material-ui/core/Avatar';

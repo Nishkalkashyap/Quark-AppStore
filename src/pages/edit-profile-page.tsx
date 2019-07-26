@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { withFirebase } from '../services/firebase/firebase.index';
+import { withFirebase } from '../components/providers/firebase-provider';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';

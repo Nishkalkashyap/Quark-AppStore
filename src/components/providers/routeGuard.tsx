@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { withFirebase } from '../../services/firebase/firebase.index';
+import { withFirebase } from './firebase-provider';
 import { ROUTES } from '../../data/routes';
 import { basePropType } from "../../basePropType";
 

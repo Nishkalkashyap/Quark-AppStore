@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Redirect, } from 'react-router-dom';
-import { FirebaseContext } from './../services/firebase/firebase.index';
+import { FirebaseContext } from './providers/firebase-provider';
 import { ROUTES } from './../data/routes';
 
 export default function PrivateRoute({ component: Component, ...rest }: any) {

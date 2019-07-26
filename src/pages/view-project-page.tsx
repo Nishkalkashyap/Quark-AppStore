@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { basePropType } from "../basePropType";
 import { getProjectReleaseCollectionPath, getProjectPath } from '../data/paths';
 import { handleFirebaseError } from '../util';
-import { withFirebase } from '../services/firebase/firebase.index';
+import { withFirebase } from '../components/providers/firebase-provider';
 import withAuthorization from '../components/providers/routeGuard';
 import { withSnackbar } from 'notistack';
 import { ReleaseItem, ProjectData } from '../interfaces';
