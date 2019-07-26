@@ -7,6 +7,7 @@ import queryString from 'query-string';
 import { getProjectsCollectionPath } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import { ProjectData } from '../interfaces';
+import moment from 'moment';
 
 export const useStylesList = makeStyles(
     createStyles({
@@ -93,7 +94,7 @@ const ProjectCard = (obj: { project: ProjectData, history: basePropType['history
             <Card className={classes.card}>
                 <CardContent>
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Created At: {project.createdAt.toDate().toUTCString()}
+                        Created: {moment(project.createdAt.toDate().toUTCString()).fromNow()}
                     </Typography>
                     <Typography variant="h5" component="h2">
                         {project.projectName}
@@ -106,7 +107,7 @@ const ProjectCard = (obj: { project: ProjectData, history: basePropType['history
                         Number of releases: {project.numberOfReleases}
                     </Typography>
                     <Typography className={classes.inline} color="textSecondary" component="span">
-                        Updated At: {project.updatedAt.toDate().toUTCString()}
+                        Last updated: {moment(project.updatedAt.toDate().toUTCString()).fromNow()}
                     </Typography>
                     <Typography className={classes.inline} color="textSecondary" component="span">
                         Project ID: {project.projectId}
