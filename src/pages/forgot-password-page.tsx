@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import { withFirebase } from './../../services/firebase/firebase.index';
-import { ROUTES } from '../../data/routes';
-import { SignUpLink } from './signup';
-import { basePropType } from "../../basePropType";
+import { withFirebase } from '../services/firebase/firebase.index';
+import { ROUTES } from '../data/routes';
+import { SignUpLink } from '../components/login/signup';
+import { basePropType } from "../basePropType";
 import { default as MaterialLink } from '@material-ui/core/Link';
 import { TextField, Button, makeStyles, Container, CssBaseline, Avatar, Typography } from '@material-ui/core';
 import { withSnackbar } from 'notistack';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
-const PasswordForgetPage = () => <PasswordForgetForm></PasswordForgetForm>
+const ForgotPasswordPage = () => <PasswordForgetForm></PasswordForgetForm>
 
 const INITIAL_STATE = {
     email: '',
@@ -50,24 +50,6 @@ class PasswordForgetFormBase extends Component<basePropType> {
     };
 
     render() {
-        // const { email, error } = this.state;
-
-        // const isInvalid = email === '';
-
-        // <form onSubmit={this.onSubmit}>
-        //     <input
-        //         name="email"
-        //         value={this.state.email}
-        //         onChange={this.onChange}
-        //         type="text"
-        //         placeholder="Email Address"
-        //     />
-        //     <button disabled={isInvalid} type="submit">
-        //         Reset My Password
-        //     </button>
-
-        //     {error && <p>{error.message}</p>}
-        // </form>
         return (
             <ForgotPasswordElement onChange={this.onChange} onSubmit={this.onSubmit} state={this.state} />
         );
@@ -157,8 +139,8 @@ const PasswordForgetLink = () => (
     </StupidTypescript>
 );
 
-export default PasswordForgetPage;
-
 const PasswordForgetForm = withFirebase(withSnackbar(PasswordForgetFormBase as any));
+export default ForgotPasswordPage;
 
-export { PasswordForgetForm, PasswordForgetLink };
+
+export { PasswordForgetLink };

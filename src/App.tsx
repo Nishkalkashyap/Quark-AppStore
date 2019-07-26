@@ -12,7 +12,7 @@ import SignUpPage from './components/login/signup';
 import SignInPage from './pages/sign-in-page';
 import Account from './components/account/account';
 import EditProfilePage from './components/login/editProfile';
-import PasswordForgetPage from './components/login/passwordForget';
+import ForgotPasswordPage from './pages/forgot-password-page';
 import { withFirebase } from './services/firebase/firebase.index';
 
 import { ThemeProvider } from '@material-ui/styles';
@@ -32,7 +32,7 @@ const Routing = () => (
     <PrivateRoute path={ROUTES.ACCOUNT} component={Account} /> */}
     <Route path={ROUTES.SIGN_IN} component={SignInPage} />
     <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-    <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+    <Route path={ROUTES.PASSWORD_FORGET} component={ForgotPasswordPage} />
     
     <Route path={`${ROUTES.NewRelease}/${SLUGS.NewRelease}/${POST_SLUG.NewRelease}`} component={CreateNewRelease} exact />
     <Route path={`${ROUTES.Project}/${SLUGS.Project}`} component={ViewProjectPage} exact />

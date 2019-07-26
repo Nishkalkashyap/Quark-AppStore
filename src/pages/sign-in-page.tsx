@@ -5,7 +5,7 @@ import { SignUpLink } from '../components/login/signup';
 import { basePropType } from "../basePropType";
 import { withFirebase } from '../services/firebase/firebase.index';
 import { ROUTES } from '../data/routes';
-import { PasswordForgetLink } from '../components/login/passwordForget';
+import { PasswordForgetLink } from './forgot-password-page';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
