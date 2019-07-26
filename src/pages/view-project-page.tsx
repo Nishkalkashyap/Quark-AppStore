@@ -3,7 +3,7 @@ import { basePropType } from "../basePropType";
 import { getProjectReleaseCollectionPath, getProjectPath } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import { withFirebase } from '../components/providers/firebase-provider';
-import withAuthorization from '../components/providers/routeGuard';
+import withAuthorization from '../components/providers/route-guard-provider';
 import { withSnackbar } from 'notistack';
 import { ReleaseItem, ProjectData } from '../interfaces';
 import { Button, Container, Typography } from '@material-ui/core';

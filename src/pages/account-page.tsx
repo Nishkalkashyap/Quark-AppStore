@@ -1,6 +1,6 @@
 import React from 'react';
 import { withFirebase } from '../components/providers/firebase-provider';
-import withAuthorization from '../components/providers/routeGuard';
+import withAuthorization from '../components/providers/route-guard-provider';
 import { basePropType } from "../basePropType";
 import logo from './../assets/logo.svg';
 import { StandardProperties } from 'csstype';

@@ -11,7 +11,7 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { withSnackbar } from 'notistack'
-import withAuthorization from '../components/providers/routeGuard';
+import withAuthorization from '../components/providers/route-guard-provider';
 import { getProfilePath } from '../data/paths';
 import { basePropType } from '../basePropType';
 import { useStyles } from '../components/common-components';
