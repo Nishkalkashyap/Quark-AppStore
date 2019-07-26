@@ -47,7 +47,8 @@ const LocalComponent = (props: basePropType) => {
             updatedAt: createdAt,
             createdAt,
             releaseId,
-            projectId
+            projectId,
+            notes: state.notes
         }
 
         props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, releaseId)).set(releaseData)

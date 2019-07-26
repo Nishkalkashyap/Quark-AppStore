@@ -127,7 +127,6 @@ export default function CustomPaginationActionsTable(props: basePropType) {
                 const arr = val.docs.map((doc) => {
                     return doc.data();
                 }) as any;
-                console.log(arr);
                 setWasUpdatedOnce(true);
                 setArr(arr);
             }).catch((err) => { handleFirebaseError(props, err, 'Could not fetch projects') });

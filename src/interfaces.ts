@@ -10,4 +10,5 @@ export interface ReleaseItem {
     updatedAt: firebase.firestore.FieldValue;//auto set
     releaseId: string;//auto set
     projectId: string;//auto set
+    notes : string;
 }

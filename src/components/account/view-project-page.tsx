@@ -18,11 +18,6 @@ export class PP extends Component<basePropType & { projectId: string, userID: st
         const userId = this.props.match.params[URL_KEYS.USER_ID];
         const projectId = this.props.match.params[URL_KEYS.PROJECT_ID];
 
-        // const pathname = (window.location.pathname || '').split('/');
-        // const userId = pathname[2];
-        // const projectId = pathname[3];
-        // console.log(userId, projectId);
-
         this.state.isCurrentUser = currentUser.uid === userId;
 
         this.props.firebase.firestore.doc(getProjectPath(userId, projectId)).get()
@@ -34,7 +29,8 @@ export class PP extends Component<basePropType & { projectId: string, userID: st
 
         this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId)).get()
             .then((val) => {
-                this.setState({ releases: val.docs });
+                const docs = val.docs;
+                this.setState({ releases: docs.map((doc) => doc.data()) });
             }).catch((err) => {
                 handleFirebaseError(props, err, 'Failed to fetch project releases');
             });
@@ -71,42 +67,55 @@ const MetaData = ((state: typeof PP['prototype']['state']) => {
 });
 
 const MaterialComponent = (context: typeof PP['prototype']) => {
-    if (context.state.isCurrentUser) {
-        return (<CreateReleaseButton {...context as any} />)
-    }
+    const CreateReleaseButton = (() => {
+        const classes = useStyles();
+        return (
+            <Container component="main" maxWidth="sm">
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    onClick={() => context.props.history.push(`${ROUTES.Project}/${context.props.match.params[URL_KEYS.USER_ID]}/${context.props.match.params[URL_KEYS.PROJECT_ID]}/${POST_SLUG.NewRelease}`)}
+                >
+                    Create new release
+            </Button>
+            </Container>
+        )
+    });
 
     const ReleaseList = () => {
         return (
             <Container component="main" maxWidth="xs">
-
+                {context.state.releases.map((release) => {
+                    console.log(release);
+                    return (
+                        <div key={release.releaseId}>
+                            {release.projectId}
+                        </div>
+                    )
+                })}
             </Container>
         )
     };
 
+    if (context.state.isCurrentUser) {
+        return (
+            <div>
+                <ReleaseList></ReleaseList>
+                <CreateReleaseButton />
+            </div>
+        )
+    }
+
     return (
         <div>
-            Not Owner
+            <ReleaseList></ReleaseList>
         </div>
     )
 }
 
-const CreateReleaseButton = ((context: typeof PP['prototype']) => {
-    const classes = useStyles();
-    return (
-        <Container component="main" maxWidth="sm">
-            <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                onClick={() => context.props.history.push(`${ROUTES.Project}/${context.props.match.params[URL_KEYS.USER_ID]}/${context.props.match.params[URL_KEYS.PROJECT_ID]}/${POST_SLUG.NewRelease}`)}
-            >
-                Create new release
-        </Button>
-        </Container>
-    )
-});
 
 export const ViewProjectPage = withFirebase(withAuthorization(withSnackbar(PP as any)));
 
