@@ -9,10 +9,11 @@ import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { useStyles } from '../login/signin';
 import { StandardProperties } from 'csstype';
-import { useForceUpdate, getRandomId } from '../../util';
+import { useForceUpdate, getRandomId, handleFirebaseError } from '../../util';
 import { URL_KEYS, ROUTES } from '../../data/routes';
-import { getStorageBucketReleaseUrl } from '../../data/paths';
 import firebase from 'firebase';
+import { getProjectReleaseDocPath } from '../../data/paths';
+import { ReleaseItem } from '../../interfaces';
 const DropToUpload = require('react-drop-to-upload').default;
 
 const filesToUploa: FilesToUpload = {};
@@ -31,38 +32,51 @@ const LocalComponent = (props: basePropType) => {
 
     const classes = useStyles();
     const onSubmit = (event: any) => {
-
-        // const currentUser = props.firebase.auth.currentUser!;
-
-        // const random = getRandomId();
-        // const createdAt = firebase.firestore.FieldValue.serverTimestamp();
-        // const userId = props.match.params[URL_KEYS.USER_ID];
-        // const projectId = props.match.params[URL_KEYS.PROJECT_ID];
-
-        // const releaseBucketFolder = getStorageBucketReleaseUrl(userId, projectId, random);
-
-        // const bucketUploadPromises = Object.keys(state.filesToUpload).map((key) => {
-        //     const file = state.filesToUpload[key];
-        //     const ref = props.firebase.storage.ref(`${releaseBucketFolder}/${file.file.name}`);
-        //     return ref.put(file.buffer);
-        // });
-
-        // props.firebase.firestore.doc(getProjectPath(props.firebase.auth.currentUser!.uid, random)).set({ ...this.state, createdAt, projectId: random }).then(() => {
-        //     props.enqueueSnackbar('Project created', { variant: 'success' });
-        //     props.history.push(`${ROUTES.Project}/${props.firebase.auth.currentUser!.uid}/${random}`);
-        // })
-        //     .catch((err) => {
-        //         handleFirebaseError(props, err, 'Failed to create project');
-        //     })
-
-
-
-        // const promises = Object.keys(state.filesToUpload).map((key) => {
-        //     return props.firebase.storage.ref(``).put(state.filesToUpload['fds'].buffer)
-        // });
-
-
         event.preventDefault();
+        // create release in firestore
+        // after success, upload data in bucket
+
+        const currentUser = props.firebase.auth.currentUser!;
+
+        const releaseId = getRandomId();
+        const createdAt = firebase.firestore.FieldValue.serverTimestamp();
+        const userId = props.match.params[URL_KEYS.USER_ID];
+        const projectId = props.match.params[URL_KEYS.PROJECT_ID];
+
+        const releaseData: ReleaseItem = {
+            updatedAt: createdAt,
+            createdAt,
+            releaseId,
+            projectId
+        }
+
+        props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, releaseId)).set(releaseData)
+            .then(() => {
+                props.enqueueSnackbar('Release created', { variant: 'success' });
+                props.enqueueSnackbar('Uploading files', { variant: 'info' });
+
+                uploadFilesToBucket()
+                    .then(() => {
+                        props.enqueueSnackbar('Files uploaded', { variant: 'success' });
+                    })
+                    .catch((err) => handleFirebaseError(props, err, 'Failed to upload files'))
+                    .finally(() => {
+                        props.history.push(`${ROUTES.Project}/${userId}/${projectId}/${releaseId}`);
+                    })
+            })
+            .catch((err) => {
+                handleFirebaseError(props, err, 'Failed to create project');
+            })
+
+        async function uploadFilesToBucket() {
+            const releaseBucketFolder = getProjectReleaseDocPath(userId, projectId, releaseId);
+            const bucketUploadPromises = Object.keys(state.filesToUpload).map((key) => {
+                const file = state.filesToUpload[key];
+                const ref = props.firebase.storage.ref(`${releaseBucketFolder}/${file.file.name}`);
+                return ref.put(file.buffer);
+            });
+            return Promise.all(bucketUploadPromises);
+        }
     }
 
     const forceUpdate = useForceUpdate();

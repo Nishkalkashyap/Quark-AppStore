@@ -14,6 +14,10 @@ export function getProjectReleaseCollectionPath(userId: string, projectId: strin
     return `Users/${userId}/projects/${projectId}/releases`;
 }
 
-export function getStorageBucketReleaseUrl(userId: string, projectId: string, releaseId: string) {
-    return `User/${userId}/projects/${projectId}/releases/${releaseId}`;
+export function getProjectReleaseDocPath(userId: string, projectId: string, releaseId: string) {
+    return `Users/${userId}/projects/${projectId}/releases/${releaseId}`;
 }
+
+// export function getStorageBucketReleaseUrl(userId: string, projectId: string, releaseId: string) {
+//     return `User/${userId}/projects/${projectId}/releases/${releaseId}`;
+// }

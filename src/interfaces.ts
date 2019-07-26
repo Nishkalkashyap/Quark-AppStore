@@ -6,7 +6,8 @@ export interface ProjectData {
 }
 
 export interface ReleaseItem {
-    createdAt: firebase.firestore.Timestamp;//auto set
-    updatedAt: firebase.firestore.Timestamp;//auto set
-    versionId: string;//auto set
+    createdAt: firebase.firestore.FieldValue;//auto set
+    updatedAt: firebase.firestore.FieldValue;//auto set
+    releaseId: string;//auto set
+    projectId: string;//auto set
 }
