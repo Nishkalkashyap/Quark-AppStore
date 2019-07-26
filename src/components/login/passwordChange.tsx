@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withFirebase } from './../../services/firebase/firebase.index';
-import { SignUpLink } from './signup';
+import { SignUpLink } from '../../pages/signup';
 import { basePropType } from "../../basePropType";
 import { Button, TextField, Avatar, makeStyles, Container, CssBaseline, Typography, Grid } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';

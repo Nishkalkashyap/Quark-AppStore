@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import { ROUTES } from '../../data/routes';
-import { withFirebase } from '../../services/firebase/firebase.index';
+import { ROUTES } from '../data/routes';
+import { withFirebase } from '../services/firebase/firebase.index';
 import { default as MaterialLink } from '@material-ui/core/Link';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { withSnackbar } from 'notistack'
-import { basePropType } from '../../basePropType';
+import { basePropType } from '../basePropType';
 
 
 const SignUpPage = () => <SignUpForm />
@@ -56,53 +56,6 @@ class SignUpFormBase extends Component<basePropType> {
     };
 
     render() {
-        // const {
-        //     username,
-        //     email,
-        //     passwordOne,
-        //     passwordTwo,
-        //     error,
-        // } = this.state;
-
-        // const isInvalid =
-        //     passwordOne !== passwordTwo ||
-        //     passwordOne === '' ||
-        //     email === '' ||
-        //     username === '';
-
-        // <form onSubmit={this.onSubmit}>
-        //     <input
-        //         name="username"
-        //         value={username}
-        //         onChange={this.onChange}
-        //         type="text"
-        //         placeholder="Full Name"
-        //     />
-        //     <input
-        //         name="email"
-        //         value={email}
-        //         onChange={this.onChange}
-        //         type="text"
-        //         placeholder="Email Address"
-        //     />
-        //     <input
-        //         name="passwordOne"
-        //         value={passwordOne}
-        //         onChange={this.onChange}
-        //         type="password"
-        //         placeholder="Password"
-        //     />
-        //     <input
-        //         name="passwordTwo"
-        //         value={passwordTwo}
-        //         onChange={this.onChange}
-        //         type="password"
-        //         placeholder="Confirm Password"
-        //     />
-        //     <button disabled={isInvalid} type="submit">Sign Up</button>
-
-        //     {error && <p>{error.message}</p>}
-        // </form>
         return (
             <SignUpComponent onChange={this.onChange} onSubmit={this.onSubmit} state={this.state}></SignUpComponent>
         );
