@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { basePropType } from "../../basePropType";
-import { useStyles } from '../../pages/sign-in-page';
 import { Container, CssBaseline, Avatar, Typography, TextField, Button } from '@material-ui/core';
 import FiberNewIcon from '@material-ui/icons/FiberNew';
 import { getProjectPath } from '../../data/paths';
 import { handleFirebaseError, getRandomId } from '../../util';
 import firebase from 'firebase';
 import { ROUTES } from '../../data/routes';
+import { useStyles } from '../common';
 
 const INITIAL_STATE = {
     projectName: '',

@@ -7,8 +7,8 @@ import withAuthorization from '../login/routeGuard';
 import { withSnackbar } from 'notistack';
 import { ReleaseItem, ProjectData } from '../../interfaces';
 import { Button, Container, Typography } from '@material-ui/core';
-import { useStyles } from '../../pages/sign-in-page';
 import { ROUTES, POST_SLUG, URL_KEYS } from '../../data/routes';
+import { useStyles } from '../common';
 
 export class PP extends Component<basePropType & { projectId: string, userID: string }> {
     constructor(props: basePropType & { projectId: string, userID: string }) {

@@ -1,6 +1,6 @@
 import './common.css';
 import * as React from 'react';
-import { Link, Button } from '@material-ui/core';
+import { Link, Button, makeStyles } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
 import { basePropType } from '../basePropType';
 import { Firebase, withFirebase } from '../services/firebase/firebase.index';
@@ -20,6 +20,31 @@ export const NotFoundComponent = (props: basePropType) => {
         </Link>
     )
 }
+
+export const useStyles = makeStyles(theme => ({
+    '@global': {
+        body: {
+            backgroundColor: theme.palette.common.white,
+        },
+    },
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+}));
 
 
 const signOutButton = ({ firebase }: { firebase: Firebase }) => (

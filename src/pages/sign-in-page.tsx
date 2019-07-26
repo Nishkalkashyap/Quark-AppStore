@@ -17,6 +17,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { withSnackbar } from 'notistack';
+import { useStyles } from '../components/common';
 
 const SignInPage = () => <SignInForm />;
 
@@ -64,30 +65,6 @@ class SignInFormBase extends Component<basePropType> {
     };
 
     render() {
-        // const { email, password, error } = this.state;
-        // const isInvalid = password === '' || email === '';
-
-        //     <form onSubmit={this.onSubmit}>
-        //         <input
-        //             name="email"
-        //             value={email}
-        //             onChange={this.onChange}
-        //             type="text"
-        //             placeholder="Email Address"
-        //         />
-        //         <input
-        //             name="password"
-        //             value={password}
-        //             onChange={this.onChange}
-        //             type="password"
-        //             placeholder="Password"
-        //         />
-        //         <button disabled={isInvalid} type="submit">
-        //             Sign In
-        // </button>
-
-        //         {error && <p>{error.message}</p>}
-        //     </form>
         return (
             <MaterialComponent onChange={this.onChange} onSubmit={this.onSubmit} state={this.state}></MaterialComponent>
         )
@@ -165,31 +142,6 @@ const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof IN
         </Container>
     )
 };
-
-export const useStyles = makeStyles(theme => ({
-    '@global': {
-        body: {
-            backgroundColor: theme.palette.common.white,
-        },
-    },
-    paper: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-}));
 
 const SignInForm = withRouter(withFirebase(withSnackbar(SignInFormBase as any)));
 

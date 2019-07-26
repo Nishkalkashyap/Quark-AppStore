@@ -7,13 +7,13 @@ import withAuthorization from '../login/routeGuard';
 import { withSnackbar } from 'notistack';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import { useStyles } from '../../pages/sign-in-page';
 import { StandardProperties } from 'csstype';
 import { useForceUpdate, getRandomId, handleFirebaseError } from '../../util';
 import { URL_KEYS, ROUTES } from '../../data/routes';
 import firebase from 'firebase';
 import { getProjectReleaseDocPath } from '../../data/paths';
 import { ReleaseItem } from '../../interfaces';
+import { useStyles } from '../common';
 const DropToUpload = require('react-drop-to-upload').default;
 
 type FilesToUpload = { [key: string]: { buffer: ArrayBuffer, file: File } };
