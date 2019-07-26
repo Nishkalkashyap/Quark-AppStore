@@ -8,7 +8,7 @@ import { getProjectsCollectionPath } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import { ProjectData } from '../interfaces';
 
-const useStyles = makeStyles(
+export const useStylesList = makeStyles(
     createStyles({
         card: {
             minWidth: 275,
@@ -86,7 +86,7 @@ export default class LocalComponent extends Component<basePropType> {
 }
 
 const ProjectCard = (obj: { project: ProjectData, history: basePropType['history'], userID: string }) => {
-    const classes = useStyles();
+    const classes = useStylesList();
     const { project, history, userID } = obj;
     return (
         <React.Fragment key={project.projectId}>
