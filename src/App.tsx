@@ -21,6 +21,7 @@ import { ViewProjectPage } from './pages/view-project-page';
 import { CreateNewRelease } from './pages/create-new-release-page';
 import changePasswordPage from './pages/change-password-page';
 import { ProjectsListPage } from './pages/project-list-page';
+import CreateNewProjectPage from './pages/create-new-project-page';
 // import { NotFoundComponent } from './components/common';
 
 const Routing = () => (
@@ -40,6 +41,7 @@ const Routing = () => (
 
     <Route path={`${ROUTES.NewRelease}/${SLUGS.NewRelease}/${POST_SLUG.NewRelease}`} component={CreateNewRelease} exact />
     <Route path={`${ROUTES.Project}/${SLUGS.Project}`} component={ViewProjectPage} exact />
+    <Route path={ROUTES.CREATE_NEW_PROJECT_PAGE} component={CreateNewProjectPage} exact />
     {/* <Route path="*" component={NotFoundComponent} /> */}
   </React.Fragment>
 )

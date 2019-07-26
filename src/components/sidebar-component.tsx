@@ -6,6 +6,7 @@ import { ROUTES } from '../data/routes';
 import { makeStyles, IconButton, Tooltip } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import AppsIcon from '@material-ui/icons/Apps';
 
 interface SidebarItems {
     label: string;
@@ -44,6 +45,12 @@ const icons: SidebarItems[] = [
         icon: AccountBoxIcon,
         private: true,
         clickRoute: ROUTES.ACCOUNT
+    },
+    {
+        label: 'Projects',
+        icon: AppsIcon,
+        private: true,
+        clickRoute: ROUTES.ProjectsListPage
     }
 ]
 export default class Sidebar extends Component<basePropType> {

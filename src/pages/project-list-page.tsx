@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Container, List, Typography, Card, CardContent, CardActions, Button, makeStyles, createStyles } from '@material-ui/core';
 import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
-import { MATCH_PARAMS } from '../data/routes';
+import { MATCH_PARAMS, ROUTES } from '../data/routes';
 import queryString from 'query-string';
 import { getProjectsCollectionPath } from '../data/paths';
 import { handleFirebaseError } from '../util';
@@ -26,9 +26,9 @@ const useStyles = makeStyles(
         },
         inline: {
             fontSize: 14,
-            marginRight : '10px',
-            borderLeft : 'solid 2px rgba(0, 0, 0, 0.54)',
-            paddingLeft : '10px'
+            marginRight: '10px',
+            borderLeft: 'solid 2px rgba(0, 0, 0, 0.54)',
+            paddingLeft: '10px'
         },
     }),
 );
@@ -39,6 +39,7 @@ export default class LocalComponent extends Component<basePropType> {
 
         const values = queryString.parse(props.location.search);
         const userId = props.match.params[MATCH_PARAMS.USER_ID] || props.firebase.auth.currentUser!.uid;
+        this.state.userId = userId;
         const startAt = values['startAt'];
         console.log(values);
 
@@ -52,7 +53,7 @@ export default class LocalComponent extends Component<basePropType> {
         }).catch((err) => handleFirebaseError(err, this.props, 'Could not query projects collection.'));
     }
 
-    state: { projects: ProjectData[] } = { projects: [] };
+    state: { projects: ProjectData[], userId: string } = { projects: [], userId: '' };
 
     render() {
         return (
@@ -69,6 +70,15 @@ export default class LocalComponent extends Component<basePropType> {
                         })
                     }
                 </List>
+                <Button
+                    style={{ marginTop: '30px' }}
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    onClick={() => this.props.history.push(ROUTES.CREATE_NEW_PROJECT_PAGE)}
+                >
+                    Create new project
+                </Button>
             </Container>
         )
     }
