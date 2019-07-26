@@ -2,6 +2,7 @@
   "name": "quark-appstore",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://quarkjs.io/appstore",
   "dependencies": {
     "@material-ui/core": "^4.2.1",
     "@material-ui/icons": "^4.2.1",
@@ -23,7 +24,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "ts-node --skip-project ./scripts/hosting.ts"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -41,8 +43,13 @@
     ]
   },
   "devDependencies": {
+    "@google-cloud/storage": "^3.0.3",
     "@types/lodash": "^4.14.136",
     "@types/react-router-dom": "^4.3.4",
-    "node-sass": "^4.12.0"
+    "@types/recursive-readdir": "^2.2.0",
+    "node-sass": "^4.12.0",
+    "print-console-status": "^1.0.3",
+    "recursive-readdir": "^2.2.2",
+    "ts-node": "^8.3.0"
   }
 }
