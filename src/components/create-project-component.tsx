@@ -55,7 +55,6 @@ const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof IN
 
     return (
         <Container component="main" maxWidth="xs">
-            <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <FiberNewIcon />

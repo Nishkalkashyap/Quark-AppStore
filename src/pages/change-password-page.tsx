@@ -61,7 +61,6 @@ const PasswordChangeElement = (obj: { onSubmit: any, onChange: any, state: typeo
 
     return (
         <Container component="main" maxWidth="xs">
-            <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />

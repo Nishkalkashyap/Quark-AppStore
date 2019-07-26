@@ -129,7 +129,6 @@ const LocalComponent = (props: basePropType) => {
 
     return (
         <Container component="main" maxWidth="sm">
-            <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <NewReleasesIcon />
