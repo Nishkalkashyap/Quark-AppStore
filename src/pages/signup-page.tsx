@@ -15,7 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { withSnackbar } from 'notistack'
 import { basePropType } from '../basePropType';
-import { useStyles } from '../components/common';
+import { useStyles } from '../components/common-components';
 
 
 const SignUpPage = () => <SignUpForm />

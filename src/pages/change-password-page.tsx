@@ -5,7 +5,7 @@ import { Button, TextField, Avatar, makeStyles, Container, CssBaseline, Typograp
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { withSnackbar } from 'notistack';
 import { ROUTES } from '../data/routes';
-import { useStyles } from '../components/common';
+import { useStyles } from '../components/common-components';
 
 const INITIAL_STATE = {
     passwordOne: '',

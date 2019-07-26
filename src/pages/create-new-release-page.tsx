@@ -13,7 +13,7 @@ import { URL_KEYS, ROUTES } from '../data/routes';
 import firebase from 'firebase';
 import { getProjectReleaseDocPath } from '../data/paths';
 import { ReleaseItem } from '../interfaces';
-import { useStyles } from '../components/common';
+import { useStyles } from '../components/common-components';
 const DropToUpload = require('react-drop-to-upload').default;
 
 type FilesToUpload = { [key: string]: { buffer: ArrayBuffer, file: File } };

@@ -9,7 +9,7 @@ import { Divider, AppBar, Tabs, Tab } from '@material-ui/core';
 import { default as MaterialLink } from '@material-ui/core/Link';
 import { ROUTES } from '../data/routes';
 import { Link } from 'react-router-dom';
-import { UploadButton, useStyles } from '../components/common';
+import { UploadButton, useStyles } from '../components/common-components';
 import CreateProject from '../components/create-project-component';
 import { withSnackbar } from 'notistack';
 import CustomPaginationActionsTable from '../components/projects-list-component';

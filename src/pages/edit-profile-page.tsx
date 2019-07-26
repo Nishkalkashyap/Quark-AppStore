@@ -14,7 +14,7 @@ import { withSnackbar } from 'notistack'
 import withAuthorization from '../components/providers/routeGuard';
 import { getProfilePath } from '../data/paths';
 import { basePropType } from '../basePropType';
-import { useStyles } from '../components/common';
+import { useStyles } from '../components/common-components';
 
 
 const EditProfilePage = () => <EditProfile />

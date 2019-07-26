@@ -6,7 +6,7 @@ import { getProjectPath } from '../data/paths';
 import { handleFirebaseError, getRandomId } from '../util';
 import firebase from 'firebase';
 import { ROUTES } from '../data/routes';
-import { useStyles } from './common';
+import { useStyles } from './common-components';
 
 const INITIAL_STATE = {
     projectName: '',

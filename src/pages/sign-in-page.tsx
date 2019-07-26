@@ -17,7 +17,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { withSnackbar } from 'notistack';
-import { useStyles } from '../components/common';
+import { useStyles } from '../components/common-components';
 
 const SignInPage = () => <SignInForm />;
 

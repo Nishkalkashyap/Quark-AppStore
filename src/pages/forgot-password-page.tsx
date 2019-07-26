@@ -6,10 +6,10 @@ import { ROUTES } from '../data/routes';
 import { SignUpLink } from './signup-page';
 import { basePropType } from "../basePropType";
 import { default as MaterialLink } from '@material-ui/core/Link';
-import { TextField, Button, makeStyles, Container, CssBaseline, Avatar, Typography } from '@material-ui/core';
+import { TextField, Button, Container, CssBaseline, Avatar, Typography } from '@material-ui/core';
 import { withSnackbar } from 'notistack';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { useStyles } from '../components/common';
+import { useStyles } from '../components/common-components';
 
 const ForgotPasswordPage = () => <PasswordForgetForm></PasswordForgetForm>
 
