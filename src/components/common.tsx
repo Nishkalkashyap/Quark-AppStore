@@ -44,6 +44,13 @@ export const useStyles = makeStyles(theme => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    button: {
+        margin: theme.spacing(1)
+    },
+    root: {
+        flexGrow: 1,
+        backgroundColor: theme.palette.background.paper,
+    }
 }));
 
 

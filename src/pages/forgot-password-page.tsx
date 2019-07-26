@@ -9,6 +9,7 @@ import { default as MaterialLink } from '@material-ui/core/Link';
 import { TextField, Button, makeStyles, Container, CssBaseline, Avatar, Typography } from '@material-ui/core';
 import { withSnackbar } from 'notistack';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { useStyles } from '../components/common';
 
 const ForgotPasswordPage = () => <PasswordForgetForm></PasswordForgetForm>
 
@@ -55,31 +56,6 @@ class PasswordForgetFormBase extends Component<basePropType> {
         );
     }
 }
-
-const useStyles = makeStyles(theme => ({
-    '@global': {
-        body: {
-            backgroundColor: theme.palette.common.white,
-        },
-    },
-    paper: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-}));
 
 const ForgotPasswordElement = (obj: { onSubmit: any, onChange: any, state: typeof INITIAL_STATE }) => {
     const classes = useStyles();

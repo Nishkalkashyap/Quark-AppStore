@@ -5,15 +5,14 @@ import { basePropType } from "../../basePropType";
 import logo from './../../assets/logo.svg';
 import { StandardProperties } from 'csstype';
 import Typography from '@material-ui/core/Typography/Typography';
-import { Divider, AppBar, Tabs, Tab, makeStyles } from '@material-ui/core';
+import { Divider, AppBar, Tabs, Tab } from '@material-ui/core';
 import { default as MaterialLink } from '@material-ui/core/Link';
 import { ROUTES } from '../../data/routes';
 import { Link } from 'react-router-dom';
-import { UploadButton } from '../common';
+import { UploadButton, useStyles } from '../common';
 import CreateProject from './create-project';
 import { withSnackbar } from 'notistack';
 import CustomPaginationActionsTable from './projects-list';
-import { ProjectsList } from './project-list-2';
 
 const AccountPage = (props: basePropType) => {
     const user = props.firebase.auth.currentUser as firebase.User;
@@ -66,13 +65,6 @@ const AccountPage = (props: basePropType) => {
         </div>
     )
 };
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.background.paper,
-    },
-}));
 
 function TabContainer(props: { children: React.ReactNode; }) {
     return (
