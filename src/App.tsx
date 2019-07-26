@@ -19,6 +19,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 import { ViewProjectPage } from './components/account/view-project-page';
 import { CreateNewRelease } from './components/account/create-new-release';
+import changePasswordPage from './pages/change-password-page';
 // import { NotFoundComponent } from './components/common';
 
 const Routing = () => (
@@ -33,6 +34,7 @@ const Routing = () => (
     <Route path={ROUTES.SIGN_IN} component={SignInPage} />
     <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
     <Route path={ROUTES.PASSWORD_FORGET} component={ForgotPasswordPage} />
+    <Route path={ROUTES.CHANGE_PASSWORD_PAGE} component={changePasswordPage} />
     
     <Route path={`${ROUTES.NewRelease}/${SLUGS.NewRelease}/${POST_SLUG.NewRelease}`} component={CreateNewRelease} exact />
     <Route path={`${ROUTES.Project}/${SLUGS.Project}`} component={ViewProjectPage} exact />

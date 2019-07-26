@@ -4,6 +4,7 @@ import { basePropType } from "../basePropType";
 import { Button, TextField, Avatar, makeStyles, Container, CssBaseline, Typography, Grid } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { withSnackbar } from 'notistack';
+import { ROUTES } from '../data/routes';
 
 const INITIAL_STATE = {
     passwordOne: '',
@@ -29,11 +30,13 @@ class PasswordChangeForm extends Component<basePropType> {
             .doPasswordUpdate(passwordOne)
             .then(() => {
                 this.setState({ ...INITIAL_STATE });
+                this.props.enqueueSnackbar('Password changed', { variant: 'success' });
+                this.props.history.push(ROUTES.ACCOUNT);
             })
             .catch(error => {
                 this.setState({ error });
                 this.props.enqueueSnackbar(error.message, { variant: 'error' });
-            });
+            })
 
         event.preventDefault();
     };

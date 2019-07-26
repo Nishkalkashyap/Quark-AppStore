@@ -37,6 +37,7 @@ const AccountPage = (props: basePropType) => {
                     <Divider style={{ margin: '10px 0px 30px 0px' }} />
                     <UploadButton></UploadButton>
                     <EditProfile></EditProfile>
+                    <ChangePassword></ChangePassword>
                     <MaterialLink variant="body2" color="error" href="#" onClick={props.firebase.doSignOut} style={{ display: 'block' }}>
                         Sign Out
                     </MaterialLink>
@@ -105,8 +106,14 @@ const ImageStyle: StandardProperties = {
 
 const StupidTypescript = MaterialLink as any;
 const EditProfile = () => (
-    <StupidTypescript variant="body2" to={ROUTES.EditProfile} component={Link}>
+    <StupidTypescript variant="body2" to={ROUTES.EditProfile} component={Link} style={{ display: 'block' }}>
         Edit Profile
+    </StupidTypescript>
+);;
+
+const ChangePassword = () => (
+    <StupidTypescript variant="body2" to={ROUTES.CHANGE_PASSWORD_PAGE} component={Link} style={{ display: 'block' }}>
+        Change Password
     </StupidTypescript>
 );
 
