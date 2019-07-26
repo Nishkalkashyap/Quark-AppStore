@@ -1,10 +1,9 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { withFirebase } from './../../services/firebase/firebase.index';
+import { withFirebase } from '../../services/firebase/firebase.index';
 import { ROUTES } from '../../data/routes';
 import { basePropType } from "../../basePropType";
 
-// const condition = (authUser: firebase.User) => !!authUser;
 export const withAuthorization = (Component: any) => {
     class WithAuthorization extends React.Component<basePropType> {
 
