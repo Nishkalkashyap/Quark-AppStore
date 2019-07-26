@@ -1,10 +1,7 @@
 import { merge } from 'lodash';
 import React, { useState } from 'react'
 import { basePropType } from "../basePropType";
-import { Container, CssBaseline, Avatar, Typography, TextField, Button, Grid, Paper, ListItem, ListItemAvatar, ListItemText, ListItemSecondaryAction, IconButton, List } from '@material-ui/core';
-import { withFirebase } from '../providers/firebase-provider';
-import withAuthorization from '../providers/route-guard-provider';
-import { withSnackbar } from 'notistack';
+import { Container, CssBaseline, Avatar, Typography, TextField, Button, ListItem, ListItemText, ListItemSecondaryAction, IconButton, List } from '@material-ui/core';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { StandardProperties } from 'csstype';
@@ -18,16 +15,17 @@ import { withAllProviders } from '../providers/all-providers';
 const DropToUpload = require('react-drop-to-upload').default;
 
 type FilesToUpload = { [key: string]: { buffer: ArrayBuffer, file: File } };
-const filesToUploa: FilesToUpload = {};
-const INITIAL_STATE = {
-    notes: '',
-    filesToUpload: filesToUploa,
-    uploadSize: 0
-}
 
 const FILE_UPLOAD_LIMIT = 20000000;
 
 const LocalComponent = (props: basePropType) => {
+
+    const filesToUploa: FilesToUpload = {};
+    const INITIAL_STATE = {
+        notes: '',
+        filesToUpload: filesToUploa,
+        uploadSize: 0
+    }
 
     const [state, setState] = useState(INITIAL_STATE);
 
