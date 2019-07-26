@@ -3,13 +3,14 @@ import { StandardProperties } from 'csstype';
 import { basePropType } from "../basePropType";
 import { Firebase } from '../providers/firebase-provider';
 import { ROUTES } from '../data/routes';
-import { makeStyles, IconButton } from '@material-ui/core';
+import { makeStyles, IconButton, Tooltip } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
 interface SidebarItems {
     label: string;
-    icon?: JSX.Element;
+    // icon?: JSX.Element;
+    icon?: any;
     private: boolean;
     clickRoute: string;
 }
@@ -25,21 +26,22 @@ const useStyles = makeStyles(theme => ({
     },
     avatar: {
         margin: theme.spacing(1),
+        marginBottom : '20px',
         color: theme.palette.primary.main,
-        backgroundColor: 'transparent',
+        backgroundColor: 'transparent'
     }
 }));
 
 const icons: SidebarItems[] = [
     {
         label: 'Dashboard',
-        icon: <DashboardIcon />,
+        icon: DashboardIcon,
         private: false,
         clickRoute: ROUTES.DASHBOARD
     },
     {
         label: 'Account',
-        icon: <AccountBoxIcon />,
+        icon: AccountBoxIcon,
         private: true,
         clickRoute: ROUTES.ACCOUNT
     }
@@ -72,16 +74,15 @@ const SidebarElement = (obj: { firebase: Firebase, props: any }) => {
                 }
 
                 return (
-                    <div className="logo" key={item.label} title={item.label} onClick={() => {
+                    <Tooltip title={item.label} placement="right" key={item.label} onClick={() => {
                         if (item.clickRoute) {
                             (obj.props).history.push(item.clickRoute);
                         }
                     }}>
                         <IconButton className={classes.avatar}>
-                            {item.icon}
+                            {<item.icon style={{fontSize : '30px'}}></item.icon>}
                         </IconButton>
-                        {/* <img src={item.icon} alt={item.label} style={{ marginTop: '20px' }} /> */}
-                    </div>
+                    </Tooltip>
                 )
             })}
         </div>
@@ -92,7 +93,7 @@ const SidebarContainerStyle: StandardProperties = {
     display: 'flex',
     flexDirection: 'column',
     flexWrap: 'nowrap',
-    width: '66px',
+    width: '70px',
     height: '100%',
     borderRight: `1px solid var(--border-color)`
 }
