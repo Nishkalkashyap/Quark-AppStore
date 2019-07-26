@@ -24,6 +24,12 @@ const useStyles = makeStyles(
         pos: {
             marginBottom: 12,
         },
+        inline: {
+            fontSize: 14,
+            marginRight : '10px',
+            borderLeft : 'solid 2px rgba(0, 0, 0, 0.54)',
+            paddingLeft : '10px'
+        },
     }),
 );
 
@@ -80,12 +86,22 @@ const ProjectCard = (project: ProjectData) => {
                     <Typography variant="h5" component="h2">
                         {project.projectName}
                     </Typography>
-                    <Typography variant="body2" component="p">
+                    <Typography variant="body2" component="p" color="textSecondary" className={classes.pos}>
                         {project.description}
+                    </Typography>
+
+                    <Typography className={classes.inline} color="textSecondary" component="span">
+                        Number of releases: {project.numberOfReleases}
+                    </Typography>
+                    <Typography className={classes.inline} color="textSecondary" component="span">
+                        Updated At: {project.updatedAt.toDate().toUTCString()}
+                    </Typography>
+                    <Typography className={classes.inline} color="textSecondary" component="span">
+                        ID: {project.projectId}
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small" color="secondary">View</Button>
+                    <Button size="small" variant="outlined" color="primary">View</Button>
                 </CardActions>
             </Card>
         </React.Fragment>

@@ -2,7 +2,6 @@ import { basePropType } from "./basePropType";
 import { useState } from "react";
 
 export function handleFirebaseError(props: basePropType, err: any, message: string) {
-    console.error(err, err.message);
     if (message) {
         props.enqueueSnackbar(message, { variant: 'error' });
     }
@@ -15,7 +14,7 @@ export function getRandomId() {
     return '_' + Math.random().toString(36).substr(2, 9) + Math.random().toString(36).substr(2, 9);
 }
 
-export function useForceUpdate(){
+export function useForceUpdate() {
     const [value, set] = useState(true); //boolean state
     return () => set(!value); // toggle the state to force render
 }
