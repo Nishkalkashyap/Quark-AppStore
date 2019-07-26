@@ -18,7 +18,7 @@ import { withFirebase } from './services/firebase/firebase.index';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 import { ViewProjectPage } from './pages/view-project-page';
-import { CreateNewRelease } from './components/account/create-new-release';
+import { CreateNewRelease } from './pages/create-new-release-page';
 import changePasswordPage from './pages/change-password-page';
 // import { NotFoundComponent } from './components/common';
 

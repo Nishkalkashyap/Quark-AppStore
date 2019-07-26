@@ -1,19 +1,19 @@
 import { merge } from 'lodash';
 import React, { useState } from 'react'
-import { basePropType } from "../../basePropType";
+import { basePropType } from "../basePropType";
 import { Container, CssBaseline, Avatar, Typography, TextField, Button, Grid, Paper, ListItem, ListItemAvatar, ListItemText, ListItemSecondaryAction, IconButton, List } from '@material-ui/core';
-import { withFirebase } from '../../services/firebase/firebase.index';
-import withAuthorization from '../guards/routeGuard';
+import { withFirebase } from '../services/firebase/firebase.index';
+import withAuthorization from '../components/guards/routeGuard';
 import { withSnackbar } from 'notistack';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { StandardProperties } from 'csstype';
-import { useForceUpdate, getRandomId, handleFirebaseError } from '../../util';
-import { URL_KEYS, ROUTES } from '../../data/routes';
+import { useForceUpdate, getRandomId, handleFirebaseError } from '../util';
+import { URL_KEYS, ROUTES } from '../data/routes';
 import firebase from 'firebase';
-import { getProjectReleaseDocPath } from '../../data/paths';
-import { ReleaseItem } from '../../interfaces';
-import { useStyles } from '../common';
+import { getProjectReleaseDocPath } from '../data/paths';
+import { ReleaseItem } from '../interfaces';
+import { useStyles } from '../components/common';
 const DropToUpload = require('react-drop-to-upload').default;
 
 type FilesToUpload = { [key: string]: { buffer: ArrayBuffer, file: File } };
