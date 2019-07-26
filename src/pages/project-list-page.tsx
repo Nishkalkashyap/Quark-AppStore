@@ -43,7 +43,7 @@ export default class LocalComponent extends Component<basePropType> {
         query.get().then((snap) => {
             const arr = snap.docs.map((doc) => doc.data());
             this.setState({ projects: arr });
-        }).catch((err) => handleFirebaseError(err, this.props, 'Could not query projects collection.'))
+        }).catch((err) => handleFirebaseError(err, this.props, 'Could not query projects collection.'));
     }
 
     state: { projects: ProjectData[] } = { projects: [] };

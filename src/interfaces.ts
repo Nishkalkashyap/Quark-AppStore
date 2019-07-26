@@ -1,14 +1,19 @@
 export interface ProjectData {
+    projectId: string;//auto set
+
     projectName: string;
     description: string;
-    projectId: string;//auto set
+    numberOfReleases : number;
     createdAt: firebase.firestore.Timestamp//auto set
+    updatedAt: firebase.firestore.Timestamp;//auto set
 }
 
 export interface ReleaseItem {
-    createdAt: firebase.firestore.Timestamp;//auto set
-    updatedAt: firebase.firestore.Timestamp;//auto set
-    releaseId: string;//auto set
     projectId: string;//auto set
+    releaseId: string;//auto set
+
     notes : string;
+
+    updatedAt: firebase.firestore.Timestamp;//auto set
+    createdAt: firebase.firestore.Timestamp;//auto set
 }

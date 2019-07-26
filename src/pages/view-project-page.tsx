@@ -90,10 +90,9 @@ const MaterialComponent = (context: typeof PP['prototype']) => {
         return (
             <Container component="main" maxWidth="xs">
                 {context.state.releases.map((release) => {
-                    console.log(release);
                     return (
                         <div key={release.releaseId}>
-                            {release.projectId}
+                            {release.releaseId}
                         </div>
                     )
                 })}
