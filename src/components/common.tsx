@@ -1,8 +1,9 @@
 import './common.css';
 import * as React from 'react';
-import { Link } from '@material-ui/core';
+import { Link, Button } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
 import { basePropType } from '../basePropType';
+import { Firebase, withFirebase } from '../services/firebase/firebase.index';
 export const UploadButton = () => {
     return (
         <div className="upload-btn-wrapper" style={{ display: 'block' }}>
@@ -19,3 +20,16 @@ export const NotFoundComponent = (props: basePropType) => {
         </Link>
     )
 }
+
+
+const signOutButton = ({ firebase }: { firebase: Firebase }) => (
+    <Button
+        variant="contained"
+        color="primary"
+        onClick={firebase.doSignOut}
+    >
+        Sign Out
+  </Button>
+);
+
+export const SignOutButton = withFirebase(signOutButton);
