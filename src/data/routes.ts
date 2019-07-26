@@ -14,6 +14,7 @@ export const ROUTES = {
     PASSWORD_FORGET: '/forgot-password',
     ACCOUNT: '/account',
     Project: '/project',
+    ProjectsListPage: '/projects',
     NewRelease: '/project',
 }
 

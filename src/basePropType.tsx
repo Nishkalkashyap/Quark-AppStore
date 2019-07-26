@@ -1,5 +1,6 @@
 import { Firebase } from './providers/firebase-provider';
 import { WithSnackbarProps } from 'notistack';
+import { Location } from 'history';
 export interface basePropType {
     firebase: Firebase;
     history: {
@@ -7,6 +8,7 @@ export interface basePropType {
     };
     enqueueSnackbar: WithSnackbarProps['enqueueSnackbar'];
     match: Match
+    location: Location
 }
 
 interface Match {
@@ -17,3 +19,4 @@ interface Match {
     path: string;
     url: string;
 }
+
