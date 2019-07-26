@@ -15,6 +15,7 @@ import withAuthorization from '../providers/route-guard-provider';
 import { getProfilePath } from '../data/paths';
 import { basePropType } from '../basePropType';
 import { useStyles } from '../components/common-components';
+import { withAllProviders } from '../providers/all-providers';
 
 
 const EditProfilePage = () => <EditProfile />
@@ -173,5 +174,5 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
     )
 }
 
-const EditProfile = withRouter(withFirebase(withAuthorization(withSnackbar(EditProfileBase as any))));
+const EditProfile = withAllProviders(EditProfileBase);
 export default (EditProfilePage);

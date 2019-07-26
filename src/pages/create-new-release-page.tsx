@@ -14,6 +14,7 @@ import firebase from 'firebase';
 import { getProjectReleaseDocPath } from '../data/paths';
 import { ReleaseItem } from '../interfaces';
 import { useStyles } from '../components/common-components';
+import { withAllProviders } from '../providers/all-providers';
 const DropToUpload = require('react-drop-to-upload').default;
 
 type FilesToUpload = { [key: string]: { buffer: ArrayBuffer, file: File } };
@@ -257,4 +258,4 @@ const DropZone = (obj: { addFiles: Function }) => {
     )
 }
 
-export const CreateNewRelease = withFirebase(withAuthorization(withSnackbar(LocalComponent as any)));
+export const CreateNewRelease = withAllProviders(LocalComponent);

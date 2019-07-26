@@ -13,6 +13,7 @@ import { UploadButton, useStyles } from '../components/common-components';
 import CreateProject from '../components/create-project-component';
 import { withSnackbar } from 'notistack';
 import CustomPaginationActionsTable from '../components/projects-list-component';
+import { withAllProviders } from '../providers/all-providers';
 
 const AccountPage = (props: basePropType) => {
     const user = props.firebase.auth.currentUser as firebase.User;
@@ -109,4 +110,4 @@ const ChangePassword = () => (
     </StupidTypescript>
 );
 
-export default withAuthorization(withFirebase(withSnackbar(AccountPage as any)));
+export default withAllProviders(AccountPage);

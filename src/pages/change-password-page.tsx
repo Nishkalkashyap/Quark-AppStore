@@ -6,6 +6,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { withSnackbar } from 'notistack';
 import { ROUTES } from '../data/routes';
 import { useStyles } from '../components/common-components';
+import { withAllProviders } from '../providers/all-providers';
 
 const INITIAL_STATE = {
     passwordOne: '',
@@ -119,4 +120,4 @@ const PasswordChangeElement = (obj: { onSubmit: any, onChange: any, state: typeo
     )
 }
 
-export default withFirebase(withSnackbar(PasswordChangeForm as any));
+export default withAllProviders(PasswordChangeForm);

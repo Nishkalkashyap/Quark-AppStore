@@ -2,6 +2,7 @@ import React from 'react';
 
 import { withAuthorization } from '../providers/route-guard-provider';
 import { withFirebase } from '../providers/firebase-provider';
+import { withAllProviders } from '../providers/all-providers';
 
 const Dashboard = () => (
     <div>
@@ -10,4 +11,4 @@ const Dashboard = () => (
     </div>
 );
 
-export default withAuthorization(withFirebase(Dashboard));
+export default withAllProviders(Dashboard);

@@ -9,6 +9,7 @@ import { ReleaseItem, ProjectData } from '../interfaces';
 import { Button, Container, Typography } from '@material-ui/core';
 import { ROUTES, POST_SLUG, URL_KEYS } from '../data/routes';
 import { useStyles } from '../components/common-components';
+import { withAllProviders } from '../providers/all-providers';
 
 export class PP extends Component<basePropType & { projectId: string, userID: string }> {
     constructor(props: basePropType & { projectId: string, userID: string }) {
@@ -117,5 +118,5 @@ const MaterialComponent = (context: typeof PP['prototype']) => {
 }
 
 
-export const ViewProjectPage = withFirebase(withAuthorization(withSnackbar(PP as any)));
+export const ViewProjectPage = withAllProviders(PP);
 
