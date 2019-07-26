@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Link, Button, makeStyles } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
 import { basePropType } from '../basePropType';
-import { Firebase, withFirebase } from './providers/firebase-provider';
+import { Firebase, withFirebase } from '../providers/firebase-provider';
 export const UploadButton = () => {
     return (
         <div className="upload-btn-wrapper" style={{ display: 'block' }}>

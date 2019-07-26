@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { withAuthorization } from '../components/providers/route-guard-provider';
-import { withFirebase } from '../components/providers/firebase-provider';
+import { withAuthorization } from '../providers/route-guard-provider';
+import { withFirebase } from '../providers/firebase-provider';
 
 const Dashboard = () => (
     <div>

@@ -1,8 +1,8 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { withFirebase } from './firebase-provider';
-import { ROUTES } from '../../data/routes';
-import { basePropType } from "../../basePropType";
+import { ROUTES } from '../data/routes';
+import { basePropType } from "../basePropType";
 
 export const withAuthorization = (Component: any) => {
     class WithAuthorization extends React.Component<basePropType> {

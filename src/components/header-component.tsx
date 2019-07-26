@@ -1,6 +1,6 @@
 import { StandardProperties } from 'csstype';
 import logo from './../assets/logo.svg';
-import { withFirebase } from './providers/firebase-provider';
+import { withFirebase } from '../providers/firebase-provider';
 import { basePropType } from "../basePropType";
 import React, { Component } from 'react';
 

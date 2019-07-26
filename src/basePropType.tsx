@@ -1,4 +1,4 @@
-import { Firebase } from './components/providers/firebase-provider';
+import { Firebase } from './providers/firebase-provider';
 import { WithSnackbarProps } from 'notistack';
 export interface basePropType {
     firebase: Firebase;

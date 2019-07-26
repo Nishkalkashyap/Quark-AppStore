@@ -13,7 +13,7 @@ import SignInPage from './pages/sign-in-page';
 import Account from './pages/account-page';
 import EditProfilePage from './pages/edit-profile-page';
 import ForgotPasswordPage from './pages/forgot-password-page';
-import { withFirebase } from './components/providers/firebase-provider';
+import { withFirebase } from './providers/firebase-provider';
 
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { withFirebase } from '../components/providers/firebase-provider';
+import { withFirebase } from '../providers/firebase-provider';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -11,7 +11,7 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { withSnackbar } from 'notistack'
-import withAuthorization from '../components/providers/route-guard-provider';
+import withAuthorization from '../providers/route-guard-provider';
 import { getProfilePath } from '../data/paths';
 import { basePropType } from '../basePropType';
 import { useStyles } from '../components/common-components';

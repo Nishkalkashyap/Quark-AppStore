@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 
 import { SignUpLink } from './signup-page';
 import { basePropType } from "../basePropType";
-import { withFirebase } from '../components/providers/firebase-provider';
+import { withFirebase } from '../providers/firebase-provider';
 import { ROUTES } from '../data/routes';
 import { PasswordForgetLink } from './forgot-password-page';
 
