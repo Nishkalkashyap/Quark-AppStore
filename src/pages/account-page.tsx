@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 import { UploadButton, useStyles } from '../components/common';
 import CreateProject from '../components/create-project-component';
 import { withSnackbar } from 'notistack';
-import CustomPaginationActionsTable from '../components/account/projects-list';
+import CustomPaginationActionsTable from '../components/projects-list-component';
 
 const AccountPage = (props: basePropType) => {
     const user = props.firebase.auth.currentUser as firebase.User;
