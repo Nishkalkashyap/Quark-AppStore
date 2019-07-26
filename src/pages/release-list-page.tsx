@@ -28,12 +28,13 @@ export default class LocalComponent extends Component<basePropType> {
 
         this.props.firebase.firestore.doc(getProjectPath(userId, projectId)).get().then((snap) => {
             this.setState({ projectData: snap.data() })
-        }).catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'))
+        }).catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'));
 
+        
         const query = startAt ?
-            this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId)).limit(10).startAt(startAt) :
-            this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId)).limit(10);
-
+        this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId)).limit(10).startAt(startAt) :
+        this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId)).limit(10);
+        
         query.get().then((snap) => {
             const arr = snap.docs.map((doc) => doc.data());
             this.setState({ releases: arr });

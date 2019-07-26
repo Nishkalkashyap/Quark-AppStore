@@ -44,7 +44,8 @@ const LocalComponent = (props: basePropType) => {
             createdAt: createdAt as any,
             releaseId,
             projectId,
-            notes: state.notes
+            notes: state.notes,
+            assets: Object.keys(state.filesToUpload)
         }
 
         props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, releaseId)).set(releaseData)

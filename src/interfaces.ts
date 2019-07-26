@@ -16,4 +16,5 @@ export interface ReleaseItem {
 
     updatedAt: firebase.firestore.Timestamp;//auto set
     createdAt: firebase.firestore.Timestamp;//auto set
+    assets : string[];
 }
