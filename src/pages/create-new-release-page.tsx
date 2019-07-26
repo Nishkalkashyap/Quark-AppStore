@@ -41,8 +41,8 @@ const LocalComponent = (props: basePropType) => {
         const projectId = props.match.params[URL_KEYS.PROJECT_ID];
 
         const releaseData: ReleaseItem = {
-            updatedAt: createdAt,
-            createdAt,
+            updatedAt: createdAt as any,
+            createdAt: createdAt as any,
             releaseId,
             projectId,
             notes: state.notes
