@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { StandardProperties } from 'csstype';
-import { basePropType } from "../../basePropType";
-import { Firebase } from '../providers/firebase-provider';
-import { ROUTES } from '../../data/routes';
+import { basePropType } from "../basePropType";
+import { Firebase } from './providers/firebase-provider';
+import { ROUTES } from '../data/routes';
 import { makeStyles, IconButton } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';

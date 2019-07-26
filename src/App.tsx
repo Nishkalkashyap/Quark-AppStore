@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
-import Header from './components/header/header.index';
-import Sidebar from './components/sidebar/sidebar.index';
+import Header from './components/header-component';
+import Sidebar from './components/sidebar-component';
 // import PrivateRoute from './components/private-route';
 import Dashboard from './pages/dashboard-page';
 import Landing from './pages/landing-page';
