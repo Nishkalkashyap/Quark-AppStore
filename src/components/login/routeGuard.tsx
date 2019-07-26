@@ -40,11 +40,6 @@ export const withAuthorization = (Component: any) => {
     }
 
     return withRouter(withFirebase(WithAuthorization));
-
-    // return compose(
-    //     withRouter,
-    //     withFirebase,
-    // )(WithAuthorization);
 };
 
 export default withAuthorization;
