@@ -12,6 +12,7 @@ import { getProjectReleaseDocPath } from '../data/paths';
 import { ReleaseItem } from '../interfaces';
 import { useStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
+import { withOriginalOwner } from '../providers/owner-guard';
 const DropToUpload = require('react-drop-to-upload').default;
 
 type FilesToUpload = { [key: string]: { buffer: ArrayBuffer, file: File } };
@@ -256,4 +257,4 @@ const DropZone = (obj: { addFiles: Function }) => {
     )
 }
 
-export const CreateNewRelease = withAllProviders(LocalComponent);
+export const CreateNewRelease = withAllProviders(withOriginalOwner(LocalComponent));
