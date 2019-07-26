@@ -7,6 +7,7 @@ import { handleFirebaseError, getRandomId } from '../util';
 import firebase from 'firebase';
 import { ROUTES } from '../data/routes';
 import { useStyles } from '../components/common-components';
+import { withAllProviders } from '../providers/all-providers';
 
 const INITIAL_STATE = {
     projectName: '',
@@ -15,7 +16,7 @@ const INITIAL_STATE = {
     createdAt: ''
 }
 
-export default class CreateNewProjectPage extends Component<basePropType> {
+class LocalComponent extends Component<basePropType> {
 
     constructor(props: basePropType) {
         super(props);
@@ -24,6 +25,7 @@ export default class CreateNewProjectPage extends Component<basePropType> {
     state: typeof INITIAL_STATE;
 
     onSubmit = (event: any) => {
+        event.preventDefault();
         const random = getRandomId();
         const createdAt = firebase.firestore.FieldValue.serverTimestamp();
         this.props.firebase.firestore.doc(getProjectPath(this.props.firebase.auth.currentUser!.uid, random)).set({ ...this.state, createdAt, updatedAt: createdAt, projectId: random, numberOfReleases: 0 }).then(() => {
@@ -33,8 +35,6 @@ export default class CreateNewProjectPage extends Component<basePropType> {
             .catch((err) => {
                 handleFirebaseError(this.props, err, 'Failed to create project');
             })
-
-        event.preventDefault();
     };
 
     onChange = (event: any) => {
@@ -107,3 +107,5 @@ const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof IN
         </Container>
     )
 };
+
+export const CreateNewProjectPage = withAllProviders(LocalComponent);

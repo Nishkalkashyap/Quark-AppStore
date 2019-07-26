@@ -21,7 +21,7 @@ import { ViewProjectPage } from './pages/view-project-page';
 import { CreateNewRelease } from './pages/create-new-release-page';
 import changePasswordPage from './pages/change-password-page';
 import { ProjectsListPage } from './pages/project-list-page';
-import CreateNewProjectPage from './pages/create-new-project-page';
+import { CreateNewProjectPage } from './pages/create-new-project-page';
 import { ReleaseListPage } from './pages/release-list-page';
 // import { NotFoundComponent } from './components/common';
 
@@ -61,11 +61,11 @@ const App: React.FC = () => {
     <Router>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div className="App" style={{width : '100%', height : '100%', overflow : 'hidden', display : 'flex', flexDirection : 'column'}}>
+        <div className="App" style={{ width: '100%', height: '100%', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
           <Header></Header>
-          <div style={{ flexGrow: 1, display: 'flex', height : 'calc(100% - 56px)' }}>
+          <div style={{ flexGrow: 1, display: 'flex', height: 'calc(100% - 56px)' }}>
             <StupidTypescript ></StupidTypescript>
-            <div style={{ flexGrow: 1, padding : '32px 40px',width : '100%', height : '100%', overflowY : 'auto' }}>
+            <div style={{ flexGrow: 1, padding: '32px 40px', width: '100%', height: '100%', overflowY: 'auto' }}>
               <Routing></Routing>
             </div>
           </div>

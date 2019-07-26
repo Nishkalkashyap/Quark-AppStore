@@ -13,6 +13,7 @@ export const useStylesList = makeStyles(
     createStyles({
         card: {
             minWidth: 275,
+            marginBottom : '45px'
         },
         bullet: {
             display: 'inline-block',
