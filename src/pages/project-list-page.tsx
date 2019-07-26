@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Container, List, Typography, Card, CardContent, CardActions, Button, makeStyles, createStyles } from '@material-ui/core';
 import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
-import { URL_KEYS } from '../data/routes';
+import { MATCH_PARAMS } from '../data/routes';
 import queryString from 'query-string';
 import { getProjectsCollectionPath } from '../data/paths';
 import { handleFirebaseError } from '../util';
@@ -32,7 +32,7 @@ export default class LocalComponent extends Component<basePropType> {
         super(props);
 
         const values = queryString.parse(props.location.search);
-        const userId = props.match.params[URL_KEYS.USER_ID] || props.firebase.auth.currentUser!.uid;
+        const userId = props.match.params[MATCH_PARAMS.USER_ID] || props.firebase.auth.currentUser!.uid;
         const startAt = values['startAt'];
         console.log(values);
 

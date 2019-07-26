@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { withFirebase } from './firebase-provider';
 import { basePropType } from "../basePropType";
-import { URL_KEYS } from '../data/routes';
+import { MATCH_PARAMS } from '../data/routes';
 
 export const withOriginalOwner = (Component: any) => {
     class WithAuthorization extends React.Component<basePropType> {
@@ -10,7 +10,7 @@ export const withOriginalOwner = (Component: any) => {
         constructor(props: basePropType) {
             super(props);
             this.state = {
-                userID: props.match.params[URL_KEYS.USER_ID]
+                userID: props.match.params[MATCH_PARAMS.USER_ID]
             }
         }
 

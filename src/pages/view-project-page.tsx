@@ -7,7 +7,7 @@ import withAuthorization from '../providers/route-guard-provider';
 import { withSnackbar } from 'notistack';
 import { ReleaseItem, ProjectData } from '../interfaces';
 import { Button, Container, Typography } from '@material-ui/core';
-import { ROUTES, POST_SLUG, URL_KEYS } from '../data/routes';
+import { ROUTES, POST_SLUG, MATCH_PARAMS } from '../data/routes';
 import { useStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
 
@@ -16,8 +16,8 @@ export class PP extends Component<basePropType & { projectId: string, userID: st
         super(props);
         const currentUser = this.props.firebase.auth.currentUser!;
 
-        const userId = this.props.match.params[URL_KEYS.USER_ID];
-        const projectId = this.props.match.params[URL_KEYS.PROJECT_ID];
+        const userId = this.props.match.params[MATCH_PARAMS.USER_ID];
+        const projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
 
         this.state.isCurrentUser = currentUser.uid === userId;
 
@@ -78,7 +78,7 @@ const MaterialComponent = (context: typeof PP['prototype']) => {
                     variant="contained"
                     color="primary"
                     className={classes.submit}
-                    onClick={() => context.props.history.push(`${ROUTES.Project}/${context.props.match.params[URL_KEYS.USER_ID]}/${context.props.match.params[URL_KEYS.PROJECT_ID]}/${POST_SLUG.NewRelease}`)}
+                    onClick={() => context.props.history.push(`${ROUTES.Project}/${context.props.match.params[MATCH_PARAMS.USER_ID]}/${context.props.match.params[MATCH_PARAMS.PROJECT_ID]}/${POST_SLUG.NewRelease}`)}
                 >
                     Create new release
             </Button>

@@ -6,7 +6,7 @@ import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { StandardProperties } from 'csstype';
 import { useForceUpdate, getRandomId, handleFirebaseError } from '../util';
-import { URL_KEYS, ROUTES } from '../data/routes';
+import { MATCH_PARAMS, ROUTES } from '../data/routes';
 import firebase from 'firebase';
 import { getProjectReleaseDocPath } from '../data/paths';
 import { ReleaseItem } from '../interfaces';
@@ -36,8 +36,8 @@ const LocalComponent = (props: basePropType) => {
 
         const releaseId = getRandomId();
         const createdAt = firebase.firestore.FieldValue.serverTimestamp();
-        const userId = props.match.params[URL_KEYS.USER_ID];
-        const projectId = props.match.params[URL_KEYS.PROJECT_ID];
+        const userId = props.match.params[MATCH_PARAMS.USER_ID];
+        const projectId = props.match.params[MATCH_PARAMS.PROJECT_ID];
 
         const releaseData: ReleaseItem = {
             updatedAt: createdAt as any,
