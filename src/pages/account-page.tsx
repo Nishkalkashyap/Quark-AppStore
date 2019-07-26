@@ -1,18 +1,18 @@
 import React from 'react';
-import { withFirebase } from '../../services/firebase/firebase.index';
-import withAuthorization from '../guards/routeGuard';
-import { basePropType } from "../../basePropType";
+import { withFirebase } from '../services/firebase/firebase.index';
+import withAuthorization from '../components/guards/routeGuard';
+import { basePropType } from "../basePropType";
 import logo from './../../assets/logo.svg';
 import { StandardProperties } from 'csstype';
 import Typography from '@material-ui/core/Typography/Typography';
 import { Divider, AppBar, Tabs, Tab } from '@material-ui/core';
 import { default as MaterialLink } from '@material-ui/core/Link';
-import { ROUTES } from '../../data/routes';
+import { ROUTES } from '../data/routes';
 import { Link } from 'react-router-dom';
-import { UploadButton, useStyles } from '../common';
-import CreateProject from './create-project';
+import { UploadButton, useStyles } from '../components/common';
+import CreateProject from '../components/account/create-project';
 import { withSnackbar } from 'notistack';
-import CustomPaginationActionsTable from './projects-list';
+import CustomPaginationActionsTable from '../components/account/projects-list';
 
 const AccountPage = (props: basePropType) => {
     const user = props.firebase.auth.currentUser as firebase.User;
