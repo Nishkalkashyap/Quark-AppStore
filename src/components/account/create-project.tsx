@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { basePropType } from "../../basePropType";
-import { useStyles } from '../login/signin';
+import { useStyles } from '../../pages/sign-in-page';
 import { Container, CssBaseline, Avatar, Typography, TextField, Button } from '@material-ui/core';
 import FiberNewIcon from '@material-ui/icons/FiberNew';
 import { getProjectPath } from '../../data/paths';

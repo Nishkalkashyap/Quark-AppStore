@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
-import { SignUpLink } from './signup';
-import { basePropType } from "../../basePropType";
-import { withFirebase } from './../../services/firebase/firebase.index';
-import { ROUTES } from '../../data/routes';
-import { PasswordForgetLink } from './passwordForget';
+import { SignUpLink } from '../components/login/signup';
+import { basePropType } from "../basePropType";
+import { withFirebase } from '../services/firebase/firebase.index';
+import { ROUTES } from '../data/routes';
+import { PasswordForgetLink } from '../components/login/passwordForget';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -194,5 +194,3 @@ export const useStyles = makeStyles(theme => ({
 const SignInForm = withRouter(withFirebase(withSnackbar(SignInFormBase as any)));
 
 export default SignInPage;
-
-export { SignInForm };

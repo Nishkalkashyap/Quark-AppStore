@@ -7,7 +7,7 @@ import withAuthorization from '../login/routeGuard';
 import { withSnackbar } from 'notistack';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import { useStyles } from '../login/signin';
+import { useStyles } from '../../pages/sign-in-page';
 import { StandardProperties } from 'csstype';
 import { useForceUpdate, getRandomId, handleFirebaseError } from '../../util';
 import { URL_KEYS, ROUTES } from '../../data/routes';
