@@ -50,8 +50,11 @@ export default class LocalComponent extends Component<basePropType> {
 
     render() {
         return (
-            <Container maxWidth="sm">
-                <List>
+            <Container maxWidth="md">
+                <Typography variant="h2" component="h1">
+                    Your Projects
+                </Typography>
+                <List style={{ marginTop: '30px' }}>
                     {
                         this.state.projects.map((project) => {
                             return (
@@ -82,7 +85,6 @@ const ProjectCard = (project: ProjectData) => {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    {/* <Button size="small" variant="contained" color="primary">View</Button> */}
                     <Button size="small" color="secondary">View</Button>
                 </CardActions>
             </Card>

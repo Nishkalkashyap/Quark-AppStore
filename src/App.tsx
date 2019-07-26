@@ -48,7 +48,7 @@ const StupidTypescript: any = withRouter(withFirebase(Sidebar));
 const theme = createMuiTheme({
   palette: {
     primary: { main: '#055af9' }
-  },
+  }
 });
 
 
@@ -61,7 +61,7 @@ const App: React.FC = () => {
           <Header></Header>
           <div style={{ flexGrow: 1, display: 'flex' }}>
             <StupidTypescript ></StupidTypescript>
-            <div style={{ flexGrow: 1 }}>
+            <div style={{ flexGrow: 1, padding : '32px 40px' }}>
               <Routing></Routing>
             </div>
           </div>
