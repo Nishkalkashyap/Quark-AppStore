@@ -4,7 +4,7 @@ import Header from './components/header/header.index';
 import Sidebar from './components/sidebar/sidebar.index';
 // import PrivateRoute from './components/private-route';
 import Dashboard from './pages/dashboard-page';
-import Landing from './components/dashboard/landing';
+import Landing from './pages/landing-page';
 import { BrowserRouter as Router, Route, withRouter } from 'react-router-dom';
 import { ROUTES, SLUGS, POST_SLUG } from './data/routes';
 

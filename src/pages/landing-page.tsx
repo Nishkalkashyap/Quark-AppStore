@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ROUTES } from '../../data/routes';
+import { ROUTES } from '../data/routes';
 
 const Landing = () => (
     <div>

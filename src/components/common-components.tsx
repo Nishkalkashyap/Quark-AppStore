@@ -1,4 +1,4 @@
-import './common.css';
+import './common-styles.css';
 import * as React from 'react';
 import { Link, Button, makeStyles } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
