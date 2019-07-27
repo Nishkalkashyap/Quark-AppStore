@@ -22,7 +22,8 @@ import { CreateNewRelease } from './pages/create-new-release-page';
 import changePasswordPage from './pages/change-password-page';
 import { ProjectsListPage } from './pages/project-list-page';
 import { CreateNewProjectPage } from './pages/create-new-project-page';
-import { ReleaseListPage } from './pages/release-list-page';
+// import { ReleaseListPage } from './pages/release-list-page';
+import { ReleaseListPage } from './pages/release-list-page-second';
 import { NotFoundComponent } from './components/common-components';
 // import { NotFoundComponent } from './components/common';
 
