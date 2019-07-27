@@ -139,6 +139,22 @@ export default class LocalComponent extends Component<basePropType> {
         this.setState(state);
     }
 
+    showDeleteReleaseDialog(){
+        
+    }
+
+    deleteRelease(userId: string, projectId: string, releaseId: string) {
+        const findIndex = this.state.releases.findIndex((rel) => rel.releaseId == releaseId);
+        if (findIndex !== -1) {
+            this.state.releases.splice(findIndex, 1);
+            this.setState({ releases: this.state.releases });
+
+            this.props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, releaseId)).delete().then((rel) => {
+                this.props.enqueueSnackbar('Release deleted');
+            }).catch((err) => handleFirebaseError(this.props, err, 'Failed to delete release'));
+        }
+    }
+
     goToNextPage() {
         const { userId, projectId, releases } = this.state;
         if (releases.length) {
@@ -206,7 +222,7 @@ export default class LocalComponent extends Component<basePropType> {
                     <Button
                         style={{ marginTop: '30px' }}
                         fullWidth
-                        variant="contained"
+                        variant="outlined"
                         color="primary"
                         onClick={() => this.props.history.push(`${ROUTES.NewRelease}/${this.state.userId}/${this.state.projectId}/${POST_SLUG.NewRelease}`)}
                     >

@@ -18,3 +18,10 @@ export interface ReleaseItem {
     createdAt: firebase.firestore.Timestamp;//auto set
     assets : string[];
 }
+
+export interface DialogInterface {
+    title: string;
+    text: string;
+    actions: { text: string, handle: Function }[];
+    isOpen: boolean; handleClose: Function;
+}
