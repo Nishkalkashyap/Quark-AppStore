@@ -92,7 +92,7 @@ const LocalComponent = (props: basePropType) => {
     const addFiles = (ftu: FilesToUpload) => {
 
         const nonRequiredFiles = Object.keys(ftu).filter((key) => {
-            return !(key.endsWith('.qrk') || key == 'package.json' || key.endsWith('.ino'))
+            return !(key.endsWith('.qrk') || key === 'package.json' || key.endsWith('.ino'))
         });
 
 
@@ -123,12 +123,12 @@ const LocalComponent = (props: basePropType) => {
     function isDisabled() {
         const keys = Object.keys(state.filesToUpload);
 
-        if (keys.length == 0) return true;
+        if (keys.length === 0) return true;
         if (state.uploadSize > 20000000) return true;
-        if (state.notes == '') return true;
+        if (state.notes === '') return true;
 
         const buildFileExists = !!keys.find((key) => key.match(/\.build\.(qrk)$/));
-        const projectFileExists = !!keys.find((key) => key.match(/\.(qrk)$/) && key.search('.build.qrk') == -1);
+        const projectFileExists = !!keys.find((key) => key.match(/\.(qrk)$/) && key.search('.build.qrk') === -1);
 
         if (!buildFileExists || !projectFileExists) return true;
         return false;
