@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
-import { Container, List, Typography, Card, CardContent, Button, CardActions } from '@material-ui/core';
+import { Container, List, Typography, Card, CardContent, Button, CardActions, Link } from '@material-ui/core';
 import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES, POST_SLUG } from '../data/routes';
 import queryString from 'query-string';
-import { getProjectReleaseCollectionPath, getProjectPath } from '../data/paths';
-import { handleFirebaseError } from '../util';
+import { getProjectReleaseCollectionPath, getProjectPath, getProjectReleaseDocPath } from '../data/paths';
+import { handleFirebaseError, downloadFile } from '../util';
 import { ReleaseItem, ProjectData } from '../interfaces';
 import { useStylesList } from './project-list-page';
 import moment from 'moment';
+
+interface StateType { releases: ReleaseItem[], projectData: ProjectData, userId: string, projectId: string }
 
 export default class LocalComponent extends Component<basePropType> {
     constructor(props: basePropType) {
@@ -30,18 +32,26 @@ export default class LocalComponent extends Component<basePropType> {
             this.setState({ projectData: snap.data() })
         }).catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'));
 
-        
+
         const query = startAt ?
-        this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId)).limit(10).startAt(startAt) :
-        this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId)).limit(10);
-        
+            this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId)).limit(10).startAt(startAt) :
+            this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId)).limit(10);
+
         query.get().then((snap) => {
             const arr = snap.docs.map((doc) => doc.data());
             this.setState({ releases: arr });
         }).catch((err) => handleFirebaseError(err, this.props, 'Could not query releases collection'));
     }
 
-    state: { releases: ReleaseItem[], projectData: ProjectData, userId: string, projectId: string };
+    state: StateType;
+
+    getDownloadUrl(userId: string, projectId: string, releaseId: string, fileName: string) {
+        const url = this.props.firebase.storage.ref(`${getProjectReleaseDocPath(userId, projectId, releaseId)}/${fileName}`).getDownloadURL();
+        url.then((val) => {
+            console.log(val);
+            downloadFile(val, fileName);
+        }).catch(err => handleFirebaseError(err, this.props, 'Failed to fetch download url'));
+    }
 
     render() {
         const styles = {
@@ -54,7 +64,7 @@ export default class LocalComponent extends Component<basePropType> {
         return (
             <Container maxWidth="md">
                 <Typography variant="h2" component="h1">
-                    {this.state.projectData.projectName}
+                    🚀 {this.state.projectData.projectName || 'Project'}
                 </Typography>
                 <Typography variant="h4">
                     Project description
@@ -83,9 +93,9 @@ export default class LocalComponent extends Component<basePropType> {
                 <List style={{ marginTop: '30px' }}>
                     {
                         this.state.releases.map((release) => {
-                            const obj = { release, history: this.props.history, userID: this.state.userId };
+                            const obj = { release, history: this.props.history, userID: this.state.userId, props: this.props, state: this.state, getDownloadUrl: this.getDownloadUrl };
                             return (
-                                <ReleaseCard {...obj} key={release.projectId} />
+                                <ReleaseCard {...obj} key={release.releaseId} />
                             )
                         })
                     }
@@ -104,9 +114,9 @@ export default class LocalComponent extends Component<basePropType> {
     }
 }
 
-const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history'], userID: string }) => {
+const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history'], userID: string, props: basePropType, state: StateType, getDownloadUrl: typeof LocalComponent['prototype']['getDownloadUrl'] }) => {
     const classes = useStylesList();
-    const { release, history, userID } = obj;
+    const { release, history, userID, props, state, getDownloadUrl } = obj;
     return (
         <React.Fragment key={release.projectId}>
             <Card className={classes.card}>
@@ -128,12 +138,34 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
                         Release ID: {release.projectId}
                     </Typography>
                 </CardContent>
+                <DownloadsComponent {...{ release, props, state, getDownloadUrl }} />
                 <CardActions>
-                    <Button size="small" variant="outlined" color="primary" onClick={() => history.push(`${ROUTES.Project}/${userID}/${release.projectId}/${release.releaseId}`)}>View Release</Button>
+                    <Button size="small" variant="outlined" color="primary" onClick={() => history.push(`${ROUTES.Project}/${userID}/${release.projectId}/${release.releaseId}`)}>Edit Release</Button>
                 </CardActions>
             </Card>
         </React.Fragment>
     )
+}
+
+const DownloadsComponent = (obj: { release: ReleaseItem, props: basePropType, state: StateType, getDownloadUrl: LocalComponent['getDownloadUrl'] }) => {
+    const release = obj.release;
+    const userId = obj.state.userId;
+    const projectId = obj.state.projectId;
+    const releaseId = release.releaseId;
+
+    return (release.assets && release.assets.length) ? (
+        <React.Fragment>
+            <CardContent>
+                <strong>All Downloads</strong>
+                {(release.assets).map((rel) => (
+                    // <Link variant="body2" color="primary" key={rel} target="_blanck" onClick={() => obj.props.firebase.storage.ref(`${getProjectReleaseDocPath(userId, projectId, releaseId)}/${rel}`).getDownloadURL()} style={{ cursor: 'pointer', display: 'block' }}>
+                    <Link variant="body2" color="primary" key={rel} target="_blanck" onClick={() => obj.getDownloadUrl(userId, projectId, releaseId, rel)} style={{ cursor: 'pointer', display: 'block' }}>
+                        {rel}
+                    </Link>
+                ))}
+            </CardContent>
+        </React.Fragment>
+    ) : (<React.Fragment></React.Fragment>)
 }
 
 const ReleaseListPage = withAllProviders(LocalComponent);
