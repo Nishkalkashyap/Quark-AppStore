@@ -9,6 +9,7 @@ import { handleFirebaseError, downloadFile } from '../util';
 import { ReleaseItem, ProjectData } from '../interfaces';
 import { useStylesList } from './project-list-page';
 import moment from 'moment';
+import { progress } from '../components/header-component';
 
 interface StateType { releases: ReleaseItem[], projectData: ProjectData, userId: string, projectId: string }
 
@@ -31,6 +32,9 @@ export default class LocalComponent extends Component<basePropType> {
         this.props.firebase.firestore.doc(getProjectPath(userId, projectId)).get().then((snap) => {
             this.setState({ projectData: snap.data() })
         }).catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'));
+
+        // progress.showProgressBar();
+        // setTimeout(() => { progress.hideProgressBar(); }, 3000);
 
         if (startAfter && typeof startAfter == 'string') {
             this.props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, startAfter)).get()
@@ -90,19 +94,17 @@ export default class LocalComponent extends Component<basePropType> {
                 <Typography color="textSecondary" component="span" style={styles}>
                     Project ID: {this.state.projectId}
                 </Typography>
-                {(() => {
-                    const keysExist = Object.keys(this.state.projectData).length;
-                    return keysExist ? (
-                        <React.Fragment>
-                            <Typography color="textSecondary" component="span" style={styles}>
-                                Created: {moment(this.state.projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
-                            </Typography>
-                            <Typography color="textSecondary" component="span" style={styles}>
-                                Last updated: {moment(this.state.projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
-                            </Typography>
-                        </React.Fragment>
-                    ) : (<div></div>)
-                })()}
+
+                {Object.keys(this.state.projectData).length &&
+                    (<React.Fragment>
+                        <Typography color="textSecondary" component="span" style={styles}>
+                            Created: {moment(this.state.projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
+                        </Typography>
+                        <Typography color="textSecondary" component="span" style={styles}>
+                            Last updated: {moment(this.state.projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
+                        </Typography>
+                    </React.Fragment>)
+                }
 
                 <Button
                     style={{ marginTop: '30px' }}

@@ -14,6 +14,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PersonIcon from '@material-ui/icons/Person';
 import NoteIcon from '@material-ui/icons/Note';
+import { LinearProgress } from '@material-ui/core';
 
 const options = [
     {
@@ -36,28 +37,52 @@ const options = [
 
 const ITEM_HEIGHT = 48;
 
+export const progress: {
+    _showProgressBar: boolean;
+    showProgressBar: Function;
+    hideProgressBar: Function;
+} = { _showProgressBar: false } as any;
+
 class Header extends Component<basePropType> {
 
-    // constructor(props: basePropType) {
-    //     super(props);
-    // }
+    constructor(props: basePropType) {
+        super(props);
+        this.state._showProgressBar = progress._showProgressBar;
+        progress.showProgressBar = this.showProgressBar.bind(this);
+        progress.hideProgressBar = this.hideProgressBar.bind(this);
+    }
+
+    state: {
+        _showProgressBar: boolean;
+    } = { _showProgressBar: false }
+
+    showProgressBar() {
+        this.setState({ _showProgressBar: true });
+    }
+
+    hideProgressBar() {
+        this.setState({ _showProgressBar: false });
+    }
 
     render() {
         return (
-            <div style={MainContainerStyle}>
-                <div style={LeftHeaderStyle}>
-                    <img src={logo} alt="logo" style={ImageStyles} />
-                    <h3 style={{ margin: '0px 10px 0px 10px', verticalAlign: 'middle', fontSize: '1.3rem' }}>Dashboard</h3>
-                </div>
-                <div style={RightHeaderStyle}>
-                    {/* {() => {
+            <React.Fragment>
+                <div style={MainContainerStyle}>
+                    {this.state._showProgressBar && <LinearProgress style={{ position: 'absolute', width: '100%', top: '0px', height: '2px' }} />}
+                    <div style={LeftHeaderStyle}>
+                        <img src={logo} alt="logo" style={ImageStyles} />
+                        <h3 style={{ margin: '0px 10px 0px 10px', verticalAlign: 'middle', fontSize: '1.3rem' }}>Dashboard</h3>
+                    </div>
+                    <div style={RightHeaderStyle}>
+                        {/* {() => {
                         if (this.props.firebase.auth.currentUser) {
                             return <LongMenu ></LongMenu>
                         }
                         return <div />
                     }} */}
+                    </div>
                 </div>
-            </div>
+            </React.Fragment>
         )
     }
 }
@@ -70,7 +95,8 @@ const MainContainerStyle: StandardProperties = {
     height: '56px',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    position: 'relative'
 }
 
 const RightHeaderStyle: StandardProperties = {
