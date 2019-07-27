@@ -58,12 +58,13 @@ export default class LocalComponent extends Component<basePropType> {
             this.props.firebase.firestore.doc(getProjectReleaseDocPath(this.state.userId, this.state.projectId, startAfter)).get()
                 .then(async (snap) => {
                     if (snap.exists) {
-                        // const StartType: typeof firebase.firestore.Query.prototype.startAfter | typeof firebase.firestore.Query.prototype.endBefore = reverse ? 'startAfter' : 'endBefore' as any;
-                        // const StartType = reverse ? 'endBefore' : 'startAfter';
                         const StartType = reverse ? 'asc' : 'desc';
-                        // console.log(startAfter, reverse, StartType);
                         const query = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', StartType).startAfter(snap).limit(this.state.loadLimit);
                         const result = await this.executeQuery(query);
+                        if (result.length === 0) {
+                            this.props.history.push(ROUTES.NOT_FOUND);
+                            return;
+                        }
                         this.setState({ releases: reverse ? result.reverse() : result });
                         return;
                     }
@@ -86,8 +87,8 @@ export default class LocalComponent extends Component<basePropType> {
     goToNextPage() {
         const { userId, projectId, releases } = this.state;
         if (releases.length) {
-            const lastIndex = releases.length - 1;
-            this.props.history.push(`${ROUTES.Project}/${userId}/${projectId}?startAfter=${releases[lastIndex].releaseId}`);
+            const index = releases.length - 1;
+            this.props.history.push(`${ROUTES.Project}/${userId}/${projectId}?startAfter=${releases[index].releaseId}`);
             this.initialize(false);
         }
     }
@@ -95,9 +96,8 @@ export default class LocalComponent extends Component<basePropType> {
     goToPreviousPage() {
         const { userId, projectId, releases } = this.state;
         if (releases.length) {
-            const lastIndex = 0;
-            // const lastIndex = releases.length - 1;
-            this.props.history.push(`${ROUTES.Project}/${userId}/${projectId}?startAfter=${releases[lastIndex].releaseId}`);
+            const index = 0;
+            this.props.history.push(`${ROUTES.Project}/${userId}/${projectId}?startAfter=${releases[index].releaseId}`);
             this.initialize(true);
         }
     }
@@ -174,10 +174,10 @@ export default class LocalComponent extends Component<basePropType> {
                         size="small"
                         aria-label="large outlined secondary button group"
                     >
-                        <Button onClick={this.goToPreviousPage.bind(this)} disabled={!!!this.props.history.location.search}>
+                        <Button onClick={this.goToPreviousPage.bind(this)} disabled={!this.props.history.location.search && (this.state.loadLimit !== this.state.releases.length)}>
                             Previous
                         </Button>
-                        <Button onClick={this.goToNextPage.bind(this)} disabled={this.state.loadLimit != this.state.releases.length}>
+                        <Button onClick={this.goToNextPage.bind(this)} disabled={this.state.loadLimit !== this.state.releases.length}>
                             Next
                         </Button>
                     </ButtonGroup>
