@@ -9,27 +9,38 @@ import { handleFirebaseError, downloadFile } from '../util';
 import { ReleaseItem, ProjectData } from '../interfaces';
 import { useStylesList } from './project-list-page';
 import moment from 'moment';
-import { progress } from '../components/header-component';
+import { cloneDeep } from 'lodash';
+// import { progress } from '../components/header-component';
 
 interface StateType { releases: ReleaseItem[], projectData: ProjectData, userId: string, projectId: string }
 
+
 export default class LocalComponent extends Component<basePropType> {
+    INITIAL_STATE = {
+        releases: [],
+        userId: '',
+        projectId: '',
+        projectData: {} as any
+    }
+
     constructor(props: basePropType) {
         super(props);
+        this.state = cloneDeep(this.INITIAL_STATE);
+        this.initialize();
+    }
 
-        const values = queryString.parse(props.location.search);
-        const userId = props.match.params[MATCH_PARAMS.USER_ID] || props.firebase.auth.currentUser!.uid;
-        const projectId = props.match.params[MATCH_PARAMS.PROJECT_ID];
+    state: StateType;
+
+    initialize() {
+
+        console.log(this.props);
+
+        const values = queryString.parse(this.props.history.location.search);
+        this.state.userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
+        this.state.projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
         const startAfter = values['startAfter'];
 
-        this.state = {
-            releases: [],
-            userId,
-            projectId,
-            projectData: {} as any
-        }
-
-        this.props.firebase.firestore.doc(getProjectPath(userId, projectId)).get().then((snap) => {
+        this.props.firebase.firestore.doc(getProjectPath(this.state.userId, this.state.projectId)).get().then((snap) => {
             if (snap.exists) {
                 this.setState({ projectData: snap.data() });
                 return;
@@ -39,10 +50,10 @@ export default class LocalComponent extends Component<basePropType> {
 
 
         if (startAfter && typeof startAfter == 'string') {
-            this.props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, startAfter)).get()
+            this.props.firebase.firestore.doc(getProjectReleaseDocPath(this.state.userId, this.state.projectId, startAfter)).get()
                 .then((snap) => {
                     if (snap.exists) {
-                        const query = this.props.firebase.firestore.collection(getReleaseListCollectionPath(userId, projectId)).orderBy('createdAt', 'desc').startAfter(snap).limit(3);
+                        const query = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').startAfter(snap).limit(3);
                         this.executeQuery(query);
                         return;
                     }
@@ -50,33 +61,24 @@ export default class LocalComponent extends Component<basePropType> {
                     this.props.history.push(ROUTES.NOT_FOUND);
                 }).catch((err) => handleFirebaseError(err, this.props, 'Could not fetch document'))
         } else {
-            const query = this.props.firebase.firestore.collection(getReleaseListCollectionPath(userId, projectId)).orderBy('createdAt', 'desc').limit(3);
+            const query = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').limit(3);
             this.executeQuery(query);
         }
     }
 
-    state: StateType;
-
-    executeQuery = (query: firebase.firestore.Query) => {
-        query.get().then((snap) => {
-            const arr = snap.docs.map((doc) => doc.data());
-            this.setState({ releases: arr });
-        }).catch((err) => handleFirebaseError(err, this.props, 'Could not query releases collection'));
+    executeQuery = async (query: firebase.firestore.Query) => {
+        const snap = await query.get();
+        const arr = snap.docs.map((doc) => doc.data());
+        this.setState({ releases: arr });
+        return arr;
     }
 
     goToNextPage() {
         const { userId, projectId, releases } = this.state;
-        if (releases.length) {
-            this.props.history.push(`${ROUTES.Project}/${userId}/${projectId}?startAfter=${releases.reverse()[0].releaseId}`);
-        }
+        const lastIndex = releases.length - 1;
+        this.props.history.push(`${ROUTES.Project}/${userId}/${projectId}?startAfter=${releases[lastIndex].releaseId}`);
+        this.initialize();
     }
-
-    // goToPreviousPage() {
-    //     const { userId, projectId, releases } = this.state;
-    //     if (releases.length) {
-    //         this.props.history.push(`${ROUTES.Project}/${userId}/${projectId}?startAfter=${releases.reverse()[0].releaseId}`);
-    //     }
-    // }
 
     downloadFile(userId: string, projectId: string, releaseId: string, fileName: string) {
         const url = this.props.firebase.storage.ref(`${getProjectReleaseDocPath(userId, projectId, releaseId)}/${fileName}`).getDownloadURL();
@@ -151,7 +153,7 @@ export default class LocalComponent extends Component<basePropType> {
                         size="small"
                         aria-label="large outlined secondary button group"
                     >
-                        <Button onClick={this.goToNextPage.bind(this)} disabled={!!!this.props.location.search.length}>
+                        <Button onClick={this.goToNextPage.bind(this)} disabled={!!!this.props.history.location.search}>
                             Previous
                         </Button>
                         <Button onClick={this.goToNextPage.bind(this)}>
@@ -208,8 +210,8 @@ const DownloadsComponent = (obj: { release: ReleaseItem, props: basePropType, st
             <CardContent>
                 <strong>All Downloads</strong>
                 {(release.assets).map((rel) => (
-                    <div>
-                        <Link variant="body2" color="primary" key={rel} target="_blanck" onClick={() => obj.downloadFile(userId, projectId, releaseId, rel)} style={{ cursor: 'pointer', display: 'inline-block' }}>
+                    <div key={rel}>
+                        <Link variant="body2" color="primary" target="_blanck" onClick={() => obj.downloadFile(userId, projectId, releaseId, rel)} style={{ cursor: 'pointer', display: 'inline-block' }}>
                             {rel}
                         </Link>
                     </div>

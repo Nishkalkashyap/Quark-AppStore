@@ -39,7 +39,7 @@ export default class LocalComponent extends Component<basePropType> {
     constructor(props: basePropType) {
         super(props);
 
-        const values = queryString.parse(props.location.search);
+        const values = queryString.parse(props.history.location.search);
         const userId = props.match.params[MATCH_PARAMS.USER_ID] || props.firebase.auth.currentUser!.uid;
         this.state.userId = userId;
         const startAt = values['startAt'];
