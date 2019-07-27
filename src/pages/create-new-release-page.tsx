@@ -1,7 +1,7 @@
 import { merge } from 'lodash';
 import React, { useState } from 'react'
 import { basePropType } from "../basePropType";
-import { Container, CssBaseline, Avatar, Typography, TextField, Button, ListItem, ListItemText, ListItemSecondaryAction, IconButton, List } from '@material-ui/core';
+import { Container, Avatar, Typography, TextField, Button, ListItem, ListItemText, ListItemSecondaryAction, IconButton, List, LinearProgress } from '@material-ui/core';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { StandardProperties } from 'csstype';
@@ -15,7 +15,7 @@ import { withAllProviders } from '../providers/all-providers';
 import { withOriginalOwner } from '../providers/owner-guard';
 const DropToUpload = require('react-drop-to-upload').default;
 
-type FilesToUpload = { [key: string]: { buffer: ArrayBuffer, file: File } };
+type FilesToUpload = { [key: string]: { buffer: ArrayBuffer, file: File, percent: number } };
 
 const FILE_UPLOAD_LIMIT = 20000000;
 
@@ -71,7 +71,13 @@ const LocalComponent = (props: basePropType) => {
             const bucketUploadPromises = Object.keys(state.filesToUpload).map((key) => {
                 const file = state.filesToUpload[key];
                 const ref = props.firebase.storage.ref(`${releaseBucketFolder}/${file.file.name}`);
-                return ref.put(file.buffer);
+                const task = ref.put(file.buffer);
+                task.on('state_changed', (snapshot) => {
+                    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    file.percent = progress;
+                    setState({ filesToUpload: state.filesToUpload } as any);
+                });
+                return task;
             });
             return await Promise.all(bucketUploadPromises);
         }
@@ -200,17 +206,20 @@ const ListComponent = (props: { files: FilesToUpload, forceUpdate: Function }) =
         <List>
             {Object.keys(props.files).map((key) => {
                 return (
-                    <ListItem key={key + props.files[key].file.size}>
-                        <ListItemText
-                            primary={key}
-                            secondary={getSecondary(props.files[key].file.size)}
-                        />
-                        <ListItemSecondaryAction>
-                            <IconButton edge="end" aria-label="delete" onClick={() => deleteKey(key)}>
-                                <DeleteForeverIcon />
-                            </IconButton>
-                        </ListItemSecondaryAction>
-                    </ListItem>
+                    <React.Fragment key={key + props.files[key].file.size}>
+                        <LinearProgress variant="determinate" value={props.files[key].percent} />
+                        <ListItem>
+                            <ListItemText
+                                primary={key}
+                                secondary={getSecondary(props.files[key].file.size)}
+                            />
+                            <ListItemSecondaryAction>
+                                <IconButton edge="end" aria-label="delete" onClick={() => deleteKey(key)}>
+                                    <DeleteForeverIcon />
+                                </IconButton>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    </React.Fragment>
                 )
             })}
         </List>
@@ -232,7 +241,8 @@ const DropZone = (obj: { addFiles: Function }) => {
         files.map((file, index) => {
             filesToUpload[file.name] = {
                 file,
-                buffer: buffers[index]
+                buffer: buffers[index],
+                percent: 0
             }
         });
         obj.addFiles(filesToUpload);
