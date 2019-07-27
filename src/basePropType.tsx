@@ -1,11 +1,9 @@
 import { Firebase } from './providers/firebase-provider';
 import { WithSnackbarProps } from 'notistack';
-import { Location } from 'history';
+import { Location, History } from 'history';
 export interface basePropType {
     firebase: Firebase;
-    history: {
-        push: (path: string) => void;
-    };
+    history: History;
     enqueueSnackbar: WithSnackbarProps['enqueueSnackbar'];
     match: Match
     location: Location
