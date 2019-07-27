@@ -32,7 +32,7 @@ export const NotFoundComponent = (props: basePropType) => {
             <Typography variant="body1" style={style}>
                 Looks like we've got some broken links.
             </Typography>
-            <Link style={{ marginTop: '20px', display : 'inline-block', cursor : 'pointer' }}>
+            <Link style={{ marginTop: '20px', display: 'inline-block', cursor: 'pointer' }} href={ROUTES.LANDING}>
                 Take me home
             </Link>
         </Container>
