@@ -13,7 +13,7 @@ import { useStylesList } from './project-list-page';
 import moment from 'moment';
 import { cloneDeep } from 'lodash';
 import * as firebase from 'firebase';
-import { progress } from '../components/header-component';
+import { progress, dialog } from '../components/header-component';
 
 interface StateType {
     releases: ReleaseItem[],
@@ -139,8 +139,9 @@ export default class LocalComponent extends Component<basePropType> {
         this.setState(state);
     }
 
-    showDeleteReleaseDialog(){
-        
+    async showDeleteReleaseDialog() {
+        const result = await dialog.showMessageBox('Hello', 'My name is nishkal', ['Hello', 'World'], 'info');
+        console.log(result);
     }
 
     deleteRelease(userId: string, projectId: string, releaseId: string) {
@@ -232,7 +233,7 @@ export default class LocalComponent extends Component<basePropType> {
                     <List style={{ marginTop: '30px' }}>
                         {
                             this.state.releases.map((release) => {
-                                const obj = { release, history: this.props.history, userID: this.state.userId, props: this.props, state: this.state, downloadFile: this.downloadFile };
+                                const obj = { release, history: this.props.history, userID: this.state.userId, props: this.props, state: this.state, downloadFile: this.downloadFile, allData : this };
                                 return (
                                     <ReleaseCard {...obj} key={release.releaseId} />
                                 )
@@ -260,9 +261,9 @@ export default class LocalComponent extends Component<basePropType> {
     }
 }
 
-const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history'], userID: string, props: basePropType, state: StateType, downloadFile: typeof LocalComponent['prototype']['downloadFile'] }) => {
+const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history'], userID: string, props: basePropType, state: StateType, downloadFile: typeof LocalComponent['prototype']['downloadFile'], allData : LocalComponent }) => {
     const classes = useStylesList();
-    const { release, history, userID, props, state, downloadFile: getDownloadUrl } = obj;
+    const { release, history, userID, props, state, downloadFile: getDownloadUrl, allData } = obj;
     return (
         <React.Fragment key={release.projectId}>
             <Card className={classes.card}>
@@ -290,7 +291,7 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
                         Edit Release
                         <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
                     </Button>
-                    <Button size="small" variant="text" color="secondary">
+                    <Button size="small" variant="text" color="secondary" onClick={allData.showDeleteReleaseDialog}>
                         Delete
                         <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
                     </Button>

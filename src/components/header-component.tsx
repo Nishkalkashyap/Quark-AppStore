@@ -15,6 +15,8 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PersonIcon from '@material-ui/icons/Person';
 import NoteIcon from '@material-ui/icons/Note';
 import { LinearProgress } from '@material-ui/core';
+import { DialogInterface } from '../interfaces';
+import { DialogComponent } from './dialog-component';
 
 const options = [
     {
@@ -43,17 +45,30 @@ export const progress: {
     hideProgressBar: Function;
 } = { _showProgressBar: false } as any;
 
+const dialogOptions: DialogInterface = {
+    title: '',
+    text: '',
+    isOpen: false,
+    buttons: []
+}
+
+export let dialog: {
+    showMessageBox: typeof Header['prototype']['_showMessageBox']
+} = {} as any;
+
 class Header extends Component<basePropType> {
 
     constructor(props: basePropType) {
         super(props);
         this.state._showProgressBar = progress._showProgressBar;
-        this.componentDidUpdate();
+        dialog.showMessageBox = this._showMessageBox.bind(this);
+        this.init();
     }
 
     state: {
         _showProgressBar: boolean;
-    } = { _showProgressBar: false }
+        dialogOptions: DialogInterface
+    } = { _showProgressBar: false, dialogOptions }
 
     showProgressBar() {
         this.setState({ _showProgressBar: true });
@@ -63,12 +78,39 @@ class Header extends Component<basePropType> {
         this.setState({ _showProgressBar: false });
     }
 
-    componentDidUpdate(){
+    currentOnResolve: Function = () => null;
+    currentOnReject: Function = () => null;
+
+    async _showMessageBox(title: string, text: string, buttons: string[], type: "none" | "info" | "error" | "question" | "warning") {
+        return new Promise<number>((resolve, reject) => {
+            dialogOptions.title = title;
+            dialogOptions.text = text;
+            dialogOptions.isOpen = true;
+            dialogOptions.buttons = buttons;
+            this.setState({ dialogOptions });
+
+            this.currentOnResolve = resolve;
+            this.currentOnReject = reject;
+        });
+    }
+
+    init() {
         progress.showProgressBar = this.showProgressBar.bind(this);
         progress.hideProgressBar = this.hideProgressBar.bind(this);
     }
 
+    onClose(num?: number) {
+        this.setState({ dialogOptions: { ...dialogOptions, isOpen: false } });
+        console.log('On close called');
+
+        if (this.currentOnResolve) {
+            this.currentOnResolve(num);
+        }
+    }
+
     render() {
+        const obj = { onClose: this.onClose.bind(this) };
+        const options = Object.assign(this.state.dialogOptions, obj);
         return (
             <React.Fragment>
                 <div style={MainContainerStyle}>
@@ -80,6 +122,7 @@ class Header extends Component<basePropType> {
                     <div style={RightHeaderStyle}>
                     </div>
                 </div>
+                <DialogComponent {...options}></DialogComponent>
             </React.Fragment>
         )
     }
