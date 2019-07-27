@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { basePropType } from "../basePropType";
-import { getProjectReleaseCollectionPath, getProjectPath } from '../data/paths';
+import { getReleaseListCollectionPath, getProjectPath } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import { ReleaseItem, ProjectData } from '../interfaces';
 import { Button, Container, Typography } from '@material-ui/core';
@@ -25,7 +25,7 @@ export class PP extends Component<basePropType & { projectId: string, userID: st
                 handleFirebaseError(props, err, 'Failed to fetch project data');
             });
 
-        this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId)).get()
+        this.props.firebase.firestore.collection(getReleaseListCollectionPath(userId, projectId)).get()
             .then((val) => {
                 const docs = val.docs;
                 this.setState({ releases: docs.map((doc) => doc.data()) });

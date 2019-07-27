@@ -10,7 +10,7 @@ export function getProjectsCollectionPath(userId: string) {
     return `Users/${userId}/projects`
 }
 
-export function getProjectReleaseCollectionPath(userId: string, projectId: string) {
+export function getReleaseListCollectionPath(userId: string, projectId: string) {
     return `Users/${userId}/projects/${projectId}/releases`;
 }
 
