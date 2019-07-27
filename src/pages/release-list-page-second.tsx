@@ -13,6 +13,7 @@ import { useStylesList } from './project-list-page';
 import moment from 'moment';
 import { cloneDeep } from 'lodash';
 import * as firebase from 'firebase';
+import { progress } from '../components/header-component';
 
 interface StateType {
     releases: ReleaseItem[],
@@ -51,6 +52,7 @@ export default class LocalComponent extends Component<basePropType> {
     private async _setReleaseArray() {
         const values = queryString.parse(this.props.history.location.search);
         const startAfter = values['startAfter'];
+        progress.showProgressBar();
 
         if (startAfter && typeof startAfter == 'string') {
             this.props.firebase.firestore.doc(getProjectReleaseDocPath(this.state.userId, this.state.projectId, startAfter)).get()
@@ -63,6 +65,7 @@ export default class LocalComponent extends Component<basePropType> {
                         const arr = result.docs.map((doc) => doc.data());
                         this.setState({ releases: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: result });
                         this._fetchNextAndPreviousDocuments();
+                        progress.hideProgressBar();
 
                         if (result.docs.length === 0) {
                             this.props.history.push(ROUTES.NOT_FOUND);
@@ -78,6 +81,7 @@ export default class LocalComponent extends Component<basePropType> {
             const arr = result.docs.map((doc) => doc.data());
             this.setState({ releases: arr, querySnapshot: result });
             this._fetchNextAndPreviousDocuments();
+            progress.hideProgressBar();
         }
     }
 

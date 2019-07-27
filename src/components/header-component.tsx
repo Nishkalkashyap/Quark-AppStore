@@ -48,8 +48,7 @@ class Header extends Component<basePropType> {
     constructor(props: basePropType) {
         super(props);
         this.state._showProgressBar = progress._showProgressBar;
-        progress.showProgressBar = this.showProgressBar.bind(this);
-        progress.hideProgressBar = this.hideProgressBar.bind(this);
+        this.componentDidUpdate();
     }
 
     state: {
@@ -64,6 +63,11 @@ class Header extends Component<basePropType> {
         this.setState({ _showProgressBar: false });
     }
 
+    componentDidUpdate(){
+        progress.showProgressBar = this.showProgressBar.bind(this);
+        progress.hideProgressBar = this.hideProgressBar.bind(this);
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -74,12 +78,6 @@ class Header extends Component<basePropType> {
                         <h3 style={{ margin: '0px 10px 0px 10px', verticalAlign: 'middle', fontSize: '1.3rem' }}>Dashboard</h3>
                     </div>
                     <div style={RightHeaderStyle}>
-                        {/* {() => {
-                        if (this.props.firebase.auth.currentUser) {
-                            return <LongMenu ></LongMenu>
-                        }
-                        return <div />
-                    }} */}
                     </div>
                 </div>
             </React.Fragment>
@@ -153,7 +151,6 @@ function LongMenu() {
             >
                 {options.map(option => (
                     <MenuItem key={option.label} onClick={handleClose}>
-                        {/* {option} */}
                         <ListItemIcon>
                             {option.icon}
                         </ListItemIcon>

@@ -26,14 +26,7 @@ export const withProgress = (Component: any) => {
 
         render() {
             return (<React.Fragment>
-                {
-                    (() => {
-                        if (this._show) {
-                            return (<LinearProgress color="secondary" />)
-                        }
-                        return (<React.Fragment />)
-                    })()
-                }
+                {this._show && <LinearProgress color="secondary" />}
                 <Component {...this.props} progress={{ show: this.show.bind(this), hide: this.hide.bind(this) }} />
             </React.Fragment>)
         }
@@ -42,20 +35,3 @@ export const withProgress = (Component: any) => {
 
     return ProgressBar;
 }
-
-
-// export const withProgress = (Component: any) => (props: any) => (
-//         {progress => (
-//             <React.Fragment>
-//                 {
-//                     (() => {
-//                         if (progress._show) {
-//                             return (<LinearProgress color="secondary" />)
-//                         }
-//                         return (<React.Fragment />)
-//                     })()
-//                 }
-//                 <Component {...props} progress={progress} />
-//             </React.Fragment>
-//         )}
-// );
