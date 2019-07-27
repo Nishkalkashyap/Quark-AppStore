@@ -51,7 +51,7 @@ const LocalComponent = (props: basePropType) => {
         props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, releaseId)).set(releaseData)
             .then(() => {
                 props.enqueueSnackbar('Release created', { variant: 'success' });
-                props.enqueueSnackbar('Uploading files', { variant: 'info' });
+                props.enqueueSnackbar('Uploading files. Please wait.', { variant: 'info' });
 
                 uploadFilesToBucket()
                     .then(() => {
@@ -73,7 +73,7 @@ const LocalComponent = (props: basePropType) => {
                 const ref = props.firebase.storage.ref(`${releaseBucketFolder}/${file.file.name}`);
                 return ref.put(file.buffer);
             });
-            return Promise.all(bucketUploadPromises);
+            return await Promise.all(bucketUploadPromises);
         }
     }
 
