@@ -50,7 +50,7 @@ const dialogOptions: DialogInterface = {
     text: '',
     isOpen: false,
     buttons: [],
-    type : 'info'
+    type: 'info'
 }
 
 export let dialog: {
@@ -88,6 +88,7 @@ class Header extends Component<basePropType> {
             dialogOptions.text = text;
             dialogOptions.isOpen = true;
             dialogOptions.buttons = buttons;
+            dialogOptions.type = type;
             this.setState({ dialogOptions });
 
             this.currentOnResolve = resolve;
@@ -104,7 +105,8 @@ class Header extends Component<basePropType> {
         this.setState({ dialogOptions: { ...dialogOptions, isOpen: false } });
 
         if (this.currentOnResolve) {
-            this.currentOnResolve(num);
+            const resolveVal = typeof num == 'number' ? num : null;
+            this.currentOnResolve(resolveVal);
         }
     }
 

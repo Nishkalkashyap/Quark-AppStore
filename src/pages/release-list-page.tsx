@@ -140,7 +140,7 @@ export default class LocalComponent extends Component<basePropType> {
     }
 
     async showDeleteReleaseDialog() {
-        const result = await dialog.showMessageBox('Delete release', 'Are you sure you want to delete this release. This action is irreversible', ['Yes', 'Cancel'], 'info');
+        const result = await dialog.showMessageBox('Delete release', 'Are you sure you want to delete this release. This action is irreversible', ['Yes', 'Cancel'], 'warning');
         console.log(result);
     }
 
