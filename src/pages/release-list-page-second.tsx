@@ -39,12 +39,12 @@ export default class LocalComponent extends Component<basePropType> {
 
     constructor(props: basePropType) {
         super(props);
-        this.state = cloneDeep(this.INITIAL_STATE);
+        this._setInitialState();
         this._setProjectData();
         this._setReleaseArray();
     }
 
-    state: StateType;
+    state: StateType = {} as any;
 
     private async _setReleaseArray() {
         const values = queryString.parse(this.props.history.location.search);
@@ -79,9 +79,17 @@ export default class LocalComponent extends Component<basePropType> {
         }
     }
 
+
+    private _setInitialState() {
+        const userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
+        const projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
+
+        this.state = cloneDeep(this.INITIAL_STATE);
+        this.state.userId = userId;
+        this.state.projectId = projectId;
+    }
+
     private _setProjectData() {
-        this.state.userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
-        this.state.projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
 
         this.props.firebase.firestore.doc(getProjectPath(this.state.userId, this.state.projectId)).get().then((snap) => {
             if (snap.exists) {
@@ -105,20 +113,17 @@ export default class LocalComponent extends Component<basePropType> {
 
         const reverse = this.state.goingBackwards;
         let snap = this.state.querySnapshot!.docs;
-        if(reverse){
+        if (reverse) {
             snap = snap.reverse();
         }
 
         const nextDoc = snap[this.state.releases.length - 1];
         const prevDoc = snap[0];
 
-        const next = await this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).get();
-        const prev = await this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).get();
+        const next = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).get();
+        const prev = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).get();
 
-        const nextExists = next.docs[0] && next.docs[0].exists;
-        const previousExists = prev.docs[0] && prev.docs[0].exists;
-
-        // console.log(next.docs[0], prev.docs[0]);
+        const [nextExists, previousExists] = (await Promise.all([next, prev])).map((res) => (res.docs[0] && res.docs[0].exists));
 
         const state: Partial<StateType> = {
             nextExists,
