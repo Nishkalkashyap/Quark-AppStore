@@ -13,7 +13,7 @@ export const useStylesList = makeStyles(
     createStyles({
         card: {
             minWidth: 275,
-            marginBottom : '45px'
+            marginBottom: '45px'
         },
         bullet: {
             display: 'inline-block',
@@ -95,7 +95,7 @@ const ProjectCard = (obj: { project: ProjectData, history: basePropType['history
             <Card className={classes.card}>
                 <CardContent>
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Created: {moment(project.createdAt.toDate().toUTCString()).fromNow()}
+                        Created: {moment(project.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
                     </Typography>
                     <Typography variant="h5" component="h2">
                         {project.projectName}
@@ -108,7 +108,7 @@ const ProjectCard = (obj: { project: ProjectData, history: basePropType['history
                         Number of releases: {project.numberOfReleases}
                     </Typography>
                     <Typography className={classes.inline} color="textSecondary" component="span">
-                        Last updated: {moment(project.updatedAt.toDate().toUTCString()).fromNow()}
+                        Last updated: {moment(project.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
                     </Typography>
                     <Typography className={classes.inline} color="textSecondary" component="span">
                         Project ID: {project.projectId}

@@ -81,10 +81,10 @@ export default class LocalComponent extends Component<basePropType> {
                     return keysExist ? (
                         <React.Fragment>
                             <Typography color="textSecondary" component="span" style={styles}>
-                                Created: {moment(this.state.projectData.createdAt.toDate().toLocaleString()).fromNow()}
+                                Created: {moment(this.state.projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
                             </Typography>
                             <Typography color="textSecondary" component="span" style={styles}>
-                                Last updated: {moment(this.state.projectData.updatedAt.toDate().toLocaleString()).fromNow()}
+                                Last updated: {moment(this.state.projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
                             </Typography>
                         </React.Fragment>
                     ) : (<div></div>)
@@ -122,7 +122,7 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
             <Card className={classes.card}>
                 <CardContent>
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Created: {moment(release.createdAt.toDate().toUTCString()).fromNow()}
+                        Created: {moment(release.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
                     </Typography>
                     <Typography className={classes.title} gutterBottom>
                         <strong>Notes</strong>
@@ -132,7 +132,7 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
                     </Typography>
 
                     <Typography className={classes.inline} color="textSecondary" component="span">
-                        Last updated: {moment(release.updatedAt.toDate().toUTCString()).fromNow()}
+                        Last updated: {moment(release.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
                     </Typography>
                     <Typography className={classes.inline} color="textSecondary" component="span">
                         Release ID: {release.projectId}
