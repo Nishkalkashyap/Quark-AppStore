@@ -24,4 +24,5 @@ export interface DialogInterface {
     text: string;
     buttons: string[];
     isOpen: boolean;
+    type : "info" | "error" | "question" | "warning"
 }

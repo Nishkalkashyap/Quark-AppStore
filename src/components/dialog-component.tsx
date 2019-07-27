@@ -1,4 +1,4 @@
-import { DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Dialog } from "@material-ui/core";
+import { DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Dialog, createMuiTheme, Theme } from "@material-ui/core";
 import { DialogInterface } from "../interfaces";
 import React from 'react';
 
@@ -18,9 +18,13 @@ export const DialogComponent = (data: DialogInterface & { onClose: Function }) =
             </DialogContent>
             <DialogActions>
                 {data.buttons.map((action, index) => {
-                    return (<Button key={action} onClick={() => data.onClose(index)} color="primary" autoFocus>
-                        {action}
-                    </Button>)
+                    return (
+                        <React.Fragment key={action}>
+                            <Button onClick={() => data.onClose(index)} autoFocus variant="outlined" >
+                                {action}
+                            </Button>
+                        </React.Fragment>
+                    )
                 })}
             </DialogActions>
         </Dialog>

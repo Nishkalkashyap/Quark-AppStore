@@ -49,7 +49,8 @@ const dialogOptions: DialogInterface = {
     title: '',
     text: '',
     isOpen: false,
-    buttons: []
+    buttons: [],
+    type : 'info'
 }
 
 export let dialog: {
@@ -81,7 +82,7 @@ class Header extends Component<basePropType> {
     currentOnResolve: Function = () => null;
     currentOnReject: Function = () => null;
 
-    async _showMessageBox(title: string, text: string, buttons: string[], type: "none" | "info" | "error" | "question" | "warning") {
+    async _showMessageBox(title: string, text: string, buttons: string[], type: DialogInterface['type']) {
         return new Promise<number>((resolve, reject) => {
             dialogOptions.title = title;
             dialogOptions.text = text;
@@ -101,7 +102,6 @@ class Header extends Component<basePropType> {
 
     onClose(num?: number) {
         this.setState({ dialogOptions: { ...dialogOptions, isOpen: false } });
-        console.log('On close called');
 
         if (this.currentOnResolve) {
             this.currentOnResolve(num);
