@@ -66,7 +66,7 @@ export default class LocalComponent extends Component<basePropType> {
                 <Button
                     style={{ marginTop: '30px' }}
                     fullWidth
-                    variant="contained"
+                    variant="outlined"
                     color="primary"
                     onClick={() => this.props.history.push(ROUTES.CREATE_NEW_PROJECT_PAGE)}
                 >
