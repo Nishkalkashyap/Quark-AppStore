@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-import { Container, List, Typography, Card, CardContent, Button, CardActions, Link, ButtonGroup } from '@material-ui/core';
+import { Container, List, Typography, Card, CardContent, Button, CardActions, Link, ButtonGroup, IconButton } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES, POST_SLUG } from '../data/routes';
@@ -263,8 +265,18 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
                     </Typography>
                 </CardContent>
                 <DownloadsComponent {...{ release, props, state, downloadFile: getDownloadUrl }} />
-                <CardActions>
-                    <Button size="small" variant="outlined" color="primary" onClick={() => history.push(`${ROUTES.Project}/${userID}/${release.projectId}/${release.releaseId}`)}>Edit Release</Button>
+                <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Button size="small" variant="outlined" color="primary" onClick={() => history.push(`${ROUTES.Project}/${userID}/${release.projectId}/${release.releaseId}`)}>
+                        Edit Release
+                        <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                    </Button>
+                    <Button size="small" variant="text" color="secondary">
+                        Delete
+                        <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                    </Button>
+                    {/* <IconButton aria-label="delete">
+                        <DeleteIcon fontSize="default" color="secondary" />
+                    </IconButton> */}
                 </CardActions>
             </Card>
         </React.Fragment>
