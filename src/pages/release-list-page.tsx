@@ -4,7 +4,7 @@ import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES, POST_SLUG } from '../data/routes';
 import queryString from 'query-string';
-import { getProjectReleaseCollectionPath, getProjectPath, getProjectReleaseDocPath } from '../data/paths';
+import { getReleaseListCollectionPath, getProjectPath, getProjectReleaseDocPath } from '../data/paths';
 import { handleFirebaseError, downloadFile } from '../util';
 import { ReleaseItem, ProjectData } from '../interfaces';
 import { useStylesList } from './project-list-page';
@@ -19,7 +19,7 @@ export default class LocalComponent extends Component<basePropType> {
         const values = queryString.parse(props.location.search);
         const userId = props.match.params[MATCH_PARAMS.USER_ID] || props.firebase.auth.currentUser!.uid;
         const projectId = props.match.params[MATCH_PARAMS.PROJECT_ID];
-        const startAt = values['startAt'];
+        const startAfter = values['startAfter'];
 
         this.state = {
             releases: [],
@@ -32,18 +32,31 @@ export default class LocalComponent extends Component<basePropType> {
             this.setState({ projectData: snap.data() })
         }).catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'));
 
+        if (startAfter && typeof startAfter == 'string') {
+            this.props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, startAfter)).get()
+                .then((snap) => {
+                    if (snap.exists) {
+                        const query = this.props.firebase.firestore.collection(getReleaseListCollectionPath(userId, projectId)).orderBy('createdAt', 'desc').startAfter(snap).limit(3);
+                        this.executeQuery(query);
+                        return;
+                    }
 
-        const query = startAt ?
-            this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId)).limit(10).orderBy('updatedAt', 'desc').startAt(startAt) :
-            this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId)).limit(10).orderBy('updatedAt', 'desc');
+                    this.props.history.push('404 not found');
+                }).catch((err) => handleFirebaseError(err, this.props, 'Could not fetch document'))
+        } else {
+            const query = this.props.firebase.firestore.collection(getReleaseListCollectionPath(userId, projectId)).orderBy('createdAt', 'desc').limit(3);
+            this.executeQuery(query);
+        }
+    }
 
+    state: StateType;
+
+    executeQuery = (query: firebase.firestore.Query) => {
         query.get().then((snap) => {
             const arr = snap.docs.map((doc) => doc.data());
             this.setState({ releases: arr });
         }).catch((err) => handleFirebaseError(err, this.props, 'Could not query releases collection'));
     }
-
-    state: StateType;
 
     downloadFile(userId: string, projectId: string, releaseId: string, fileName: string) {
         const url = this.props.firebase.storage.ref(`${getProjectReleaseDocPath(userId, projectId, releaseId)}/${fileName}`).getDownloadURL();
