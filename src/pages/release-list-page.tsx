@@ -91,6 +91,16 @@ export default class LocalComponent extends Component<basePropType> {
                     ) : (<div></div>)
                 })()}
 
+                <Button
+                    style={{ marginTop: '30px' }}
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    onClick={() => this.props.history.push(`${ROUTES.NewRelease}/${this.state.userId}/${this.state.projectId}/${POST_SLUG.NewRelease}`)}
+                >
+                    Create new release
+                </Button>
+
                 <List style={{ marginTop: '30px' }}>
                     {
                         this.state.releases.map((release) => {
@@ -101,15 +111,6 @@ export default class LocalComponent extends Component<basePropType> {
                         })
                     }
                 </List>
-                <Button
-                    style={{ marginTop: '30px' }}
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    onClick={() => this.props.history.push(`${ROUTES.NewRelease}/${this.state.userId}/${this.state.projectId}/${POST_SLUG.NewRelease}`)}
-                >
-                    Create new release
-                </Button>
             </Container>
         )
     }

@@ -63,6 +63,15 @@ export default class LocalComponent extends Component<basePropType> {
                 <Typography variant="h2" component="h1">
                     Your Projects
                 </Typography>
+                <Button
+                    style={{ marginTop: '30px' }}
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    onClick={() => this.props.history.push(ROUTES.CREATE_NEW_PROJECT_PAGE)}
+                >
+                    Create new project
+                </Button>
                 <List style={{ marginTop: '30px' }}>
                     {
                         this.state.projects.map((project) => {
@@ -73,15 +82,6 @@ export default class LocalComponent extends Component<basePropType> {
                         })
                     }
                 </List>
-                <Button
-                    style={{ marginTop: '30px' }}
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    onClick={() => this.props.history.push(ROUTES.CREATE_NEW_PROJECT_PAGE)}
-                >
-                    Create new project
-                </Button>
             </Container>
         )
     }
