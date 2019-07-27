@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, List, Typography, Card, CardContent, Button, CardActions, Link } from '@material-ui/core';
+import { Container, List, Typography, Card, CardContent, Button, CardActions, Link, ButtonGroup } from '@material-ui/core';
 import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES, POST_SLUG } from '../data/routes';
@@ -64,6 +64,20 @@ export default class LocalComponent extends Component<basePropType> {
         }).catch((err) => handleFirebaseError(err, this.props, 'Could not query releases collection'));
     }
 
+    goToNextPage() {
+        const { userId, projectId, releases } = this.state;
+        if (releases.length) {
+            this.props.history.push(`${ROUTES.Project}/${userId}/${projectId}?startAfter=${releases.reverse()[0].releaseId}`);
+        }
+    }
+
+    // goToPreviousPage() {
+    //     const { userId, projectId, releases } = this.state;
+    //     if (releases.length) {
+    //         this.props.history.push(`${ROUTES.Project}/${userId}/${projectId}?startAfter=${releases.reverse()[0].releaseId}`);
+    //     }
+    // }
+
     downloadFile(userId: string, projectId: string, releaseId: string, fileName: string) {
         const url = this.props.firebase.storage.ref(`${getProjectReleaseDocPath(userId, projectId, releaseId)}/${fileName}`).getDownloadURL();
         url.then((val) => {
@@ -81,54 +95,71 @@ export default class LocalComponent extends Component<basePropType> {
         };
 
         return (
-            <Container maxWidth="md">
-                <Typography variant="h2" component="h1">
-                    <span role="img" aria-label="Projects">🚀</span>
-                    {this.state.projectData.projectName || 'Project'}
+            <React.Fragment>
+                <Container maxWidth="md">
+                    <Typography variant="h2" component="h1">
+                        <span role="img" aria-label="Projects">🚀</span>
+                        {this.state.projectData.projectName || 'Project'}
+                    </Typography>
+                    <Typography variant="h4">
+                        Project description
                 </Typography>
-                <Typography variant="h4">
-                    Project description
-                </Typography>
-                <Typography component="p">
-                    {this.state.projectData.description}
-                </Typography>
+                    <Typography component="p">
+                        {this.state.projectData.description}
+                    </Typography>
 
-                <Typography color="textSecondary" component="span" style={styles}>
-                    Project ID: {this.state.projectId}
-                </Typography>
+                    <Typography color="textSecondary" component="span" style={styles}>
+                        Project ID: {this.state.projectId}
+                    </Typography>
 
-                {Object.keys(this.state.projectData).length &&
-                    (<React.Fragment>
-                        <Typography color="textSecondary" component="span" style={styles}>
-                            Created: {moment(this.state.projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
-                        </Typography>
-                        <Typography color="textSecondary" component="span" style={styles}>
-                            Last updated: {moment(this.state.projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
-                        </Typography>
-                    </React.Fragment>)
-                }
+                    {Object.keys(this.state.projectData).length &&
+                        (<React.Fragment>
+                            <Typography color="textSecondary" component="span" style={styles}>
+                                Created: {moment(this.state.projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
+                            </Typography>
+                            <Typography color="textSecondary" component="span" style={styles}>
+                                Last updated: {moment(this.state.projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
+                            </Typography>
+                        </React.Fragment>)
+                    }
 
-                <Button
-                    style={{ marginTop: '30px' }}
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    onClick={() => this.props.history.push(`${ROUTES.NewRelease}/${this.state.userId}/${this.state.projectId}/${POST_SLUG.NewRelease}`)}
-                >
-                    Create new release
+                    <Button
+                        style={{ marginTop: '30px' }}
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        onClick={() => this.props.history.push(`${ROUTES.NewRelease}/${this.state.userId}/${this.state.projectId}/${POST_SLUG.NewRelease}`)}
+                    >
+                        Create new release
                 </Button>
 
-                <List style={{ marginTop: '30px' }}>
-                    {
-                        this.state.releases.map((release) => {
-                            const obj = { release, history: this.props.history, userID: this.state.userId, props: this.props, state: this.state, downloadFile: this.downloadFile };
-                            return (
-                                <ReleaseCard {...obj} key={release.releaseId} />
-                            )
-                        })
-                    }
-                </List>
-            </Container>
+                    <List style={{ marginTop: '30px' }}>
+                        {
+                            this.state.releases.map((release) => {
+                                const obj = { release, history: this.props.history, userID: this.state.userId, props: this.props, state: this.state, downloadFile: this.downloadFile };
+                                return (
+                                    <ReleaseCard {...obj} key={release.releaseId} />
+                                )
+                            })
+                        }
+                    </List>
+                </Container>
+                <Container maxWidth="sm">
+                    <ButtonGroup
+                        fullWidth
+                        color="primary"
+                        size="small"
+                        aria-label="large outlined secondary button group"
+                    >
+                        <Button onClick={this.goToNextPage.bind(this)} disabled={!!!this.props.location.search.length}>
+                            Previous
+                        </Button>
+                        <Button onClick={this.goToNextPage.bind(this)}>
+                            Next
+                        </Button>
+                    </ButtonGroup>
+                </Container>
+            </React.Fragment>
         )
     }
 }
@@ -177,10 +208,11 @@ const DownloadsComponent = (obj: { release: ReleaseItem, props: basePropType, st
             <CardContent>
                 <strong>All Downloads</strong>
                 {(release.assets).map((rel) => (
-                    // <Link variant="body2" color="primary" key={rel} target="_blanck" onClick={() => obj.props.firebase.storage.ref(`${getProjectReleaseDocPath(userId, projectId, releaseId)}/${rel}`).getDownloadURL()} style={{ cursor: 'pointer', display: 'block' }}>
-                    <Link variant="body2" color="primary" key={rel} target="_blanck" onClick={() => obj.downloadFile(userId, projectId, releaseId, rel)} style={{ cursor: 'pointer', display: 'block' }}>
-                        {rel}
-                    </Link>
+                    <div>
+                        <Link variant="body2" color="primary" key={rel} target="_blanck" onClick={() => obj.downloadFile(userId, projectId, releaseId, rel)} style={{ cursor: 'pointer', display: 'inline-block' }}>
+                            {rel}
+                        </Link>
+                    </div>
                 ))}
             </CardContent>
         </React.Fragment>
