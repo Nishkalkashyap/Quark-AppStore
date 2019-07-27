@@ -17,6 +17,7 @@ export const ROUTES = {
     ProjectsListPage: '/projects',
     NewRelease: '/project',
     CREATE_NEW_PROJECT_PAGE: '/new-project',
+    NOT_FOUND: '/404',
 }
 
 export const MATCH_PARAMS = {

@@ -23,28 +23,28 @@ import changePasswordPage from './pages/change-password-page';
 import { ProjectsListPage } from './pages/project-list-page';
 import { CreateNewProjectPage } from './pages/create-new-project-page';
 import { ReleaseListPage } from './pages/release-list-page';
+import { NotFoundComponent } from './components/common-components';
 // import { NotFoundComponent } from './components/common';
 
 const Routing = () => (
   <React.Fragment>
-    <Route path={ROUTES.LANDING} component={Landing} exact />
-    <Route path={ROUTES.DASHBOARD} component={Dashboard} />
-    <Route path={ROUTES.ACCOUNT} component={Account} />
-    <Route path={ROUTES.EditProfile} component={EditProfilePage} />
-    {/* <PrivateRoute path={ROUTES.LANDING} component={Landing} exact />
-    <PrivateRoute path={ROUTES.DASHBOARD} component={Dashboard} />
-    <PrivateRoute path={ROUTES.ACCOUNT} component={Account} /> */}
-    <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-    <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-    <Route path={ROUTES.PASSWORD_FORGET} component={ForgotPasswordPage} />
-    <Route path={ROUTES.CHANGE_PASSWORD_PAGE} component={changePasswordPage} />
-    <Route path={ROUTES.ProjectsListPage} component={ProjectsListPage} />
+    <Route exact path={ROUTES.LANDING} component={Landing} />
+    <Route exact path={ROUTES.ACCOUNT} component={Account} />
+    <Route exact path={ROUTES.EditProfile} component={EditProfilePage} />
 
-    <Route path={`${ROUTES.NewRelease}/${SLUGS.NewRelease}/${POST_SLUG.NewRelease}`} component={CreateNewRelease} exact />
-    {/* <Route path={`${ROUTES.Project}/${SLUGS.Project}`} component={ViewProjectPage} exact /> */}
-    <Route path={`${ROUTES.Project}/${SLUGS.Project}`} component={ReleaseListPage} exact />
-    <Route path={ROUTES.CREATE_NEW_PROJECT_PAGE} component={CreateNewProjectPage} exact />
-    {/* <Route path="*" component={NotFoundComponent} /> */}
+    <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
+    <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
+    <Route exact path={ROUTES.ProjectsListPage} component={ProjectsListPage} />
+
+    <Route exact path={ROUTES.PASSWORD_FORGET} component={ForgotPasswordPage} />
+    <Route exact path={ROUTES.CHANGE_PASSWORD_PAGE} component={changePasswordPage} />
+    <Route exact path={ROUTES.DASHBOARD} component={Dashboard} />
+
+    <Route exact path={`${ROUTES.NewRelease}/${SLUGS.NewRelease}/${POST_SLUG.NewRelease}`} component={CreateNewRelease} />
+    <Route exact path={`${ROUTES.Project}/${SLUGS.Project}`} component={ReleaseListPage} />
+    <Route exact path={ROUTES.CREATE_NEW_PROJECT_PAGE} component={CreateNewProjectPage} />
+    
+    <Route exact path={ROUTES.NOT_FOUND} component={NotFoundComponent} />
   </React.Fragment>
 )
 const StupidTypescript: any = withRouter(withFirebase(Sidebar));

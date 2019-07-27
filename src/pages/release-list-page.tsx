@@ -30,11 +30,13 @@ export default class LocalComponent extends Component<basePropType> {
         }
 
         this.props.firebase.firestore.doc(getProjectPath(userId, projectId)).get().then((snap) => {
-            this.setState({ projectData: snap.data() })
+            if (snap.exists) {
+                this.setState({ projectData: snap.data() });
+                return;
+            }
+            this.props.history.push(ROUTES.NOT_FOUND);
         }).catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'));
 
-        // progress.showProgressBar();
-        // setTimeout(() => { progress.hideProgressBar(); }, 3000);
 
         if (startAfter && typeof startAfter == 'string') {
             this.props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, startAfter)).get()
@@ -45,7 +47,7 @@ export default class LocalComponent extends Component<basePropType> {
                         return;
                     }
 
-                    this.props.history.push('404 not found');
+                    this.props.history.push(ROUTES.NOT_FOUND);
                 }).catch((err) => handleFirebaseError(err, this.props, 'Could not fetch document'))
         } else {
             const query = this.props.firebase.firestore.collection(getReleaseListCollectionPath(userId, projectId)).orderBy('createdAt', 'desc').limit(3);
