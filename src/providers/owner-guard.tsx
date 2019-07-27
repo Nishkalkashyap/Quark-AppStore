@@ -1,6 +1,4 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { withFirebase } from './firebase-provider';
 import { basePropType } from "../basePropType";
 import { MATCH_PARAMS } from '../data/routes';
 
@@ -19,7 +17,7 @@ export const withOriginalOwner = (Component: any) => {
         }
 
         render() {
-            if (this.props.firebase.auth.currentUser!.uid == this.state.userID) {
+            if (this.props.firebase.auth.currentUser!.uid === this.state.userID) {
                 return (
                     <Component {...this.props} />
                 );

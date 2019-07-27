@@ -1,6 +1,4 @@
 import React from 'react';
-import { withFirebase } from '../providers/firebase-provider';
-import withAuthorization from '../providers/route-guard-provider';
 import { basePropType } from "../basePropType";
 import logo from './../assets/logo.svg';
 import { StandardProperties } from 'csstype';
@@ -11,7 +9,6 @@ import { ROUTES } from '../data/routes';
 import { Link } from 'react-router-dom';
 import { UploadButton, useStyles } from '../components/common-components';
 import CreateProject from '../components/create-project-component';
-import { withSnackbar } from 'notistack';
 import CustomPaginationActionsTable from '../components/projects-list-component';
 import { withAllProviders } from '../providers/all-providers';
 

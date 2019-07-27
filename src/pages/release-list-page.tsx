@@ -64,7 +64,8 @@ export default class LocalComponent extends Component<basePropType> {
         return (
             <Container maxWidth="md">
                 <Typography variant="h2" component="h1">
-                    🚀 {this.state.projectData.projectName || 'Project'}
+                    <span role="img" aria-label="Projects">🚀</span>
+                     {this.state.projectData.projectName || 'Project'}
                 </Typography>
                 <Typography variant="h4">
                     Project description

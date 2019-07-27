@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { withFirebase } from '../providers/firebase-provider';
 import { basePropType } from "../basePropType";
-import { Button, TextField, Avatar, makeStyles, Container, CssBaseline, Typography, Grid } from '@material-ui/core';
+import { Button, TextField, Avatar, Container, Typography, Grid } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { withSnackbar } from 'notistack';
 import { ROUTES } from '../data/routes';
 import { useStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
@@ -57,7 +55,7 @@ class PasswordChangeForm extends Component<basePropType> {
 const PasswordChangeElement = (obj: { onSubmit: any, onChange: any, state: typeof INITIAL_STATE }) => {
     const classes = useStyles();
     const { passwordOne, passwordTwo } = obj.state;
-    const isInvalid = passwordOne != passwordTwo;
+    const isInvalid = passwordOne !== passwordTwo;
 
     return (
         <Container component="main" maxWidth="xs">

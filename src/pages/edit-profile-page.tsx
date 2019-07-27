@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import { withFirebase } from '../providers/firebase-provider';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import Typography from '@material-ui/core/Typography';
@@ -14,6 +10,7 @@ import { getProfilePath } from '../data/paths';
 import { basePropType } from '../basePropType';
 import { useStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
+import { TextField } from '@material-ui/core';
 
 
 const EditProfilePage = () => <EditProfile />
@@ -40,7 +37,7 @@ class EditProfileBase extends Component<basePropType> {
             .then((val) => {
                 const data = (val.data() || {}) as any;
                 Object.keys(data).map((key) => {
-                    this.setState({ [key]: data[key] })
+                    return this.setState({ [key]: data[key] })
                 });
             }).catch((err) => {
                 console.error(err);
