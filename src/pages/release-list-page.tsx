@@ -10,31 +10,36 @@ import { ReleaseItem, ProjectData } from '../interfaces';
 import { useStylesList } from './project-list-page';
 import moment from 'moment';
 import { cloneDeep } from 'lodash';
+import * as firebase from 'firebase';
 // import { progress } from '../components/header-component';
 
-interface StateType { releases: ReleaseItem[], projectData: ProjectData, userId: string, projectId: string }
+interface StateType {
+    releases: ReleaseItem[],
+    userId: string,
+    projectId: string,
+    projectData: ProjectData,
+    loadLimit: number
+}
 
 
 export default class LocalComponent extends Component<basePropType> {
-    INITIAL_STATE = {
+    INITIAL_STATE: StateType = {
         releases: [],
         userId: '',
         projectId: '',
-        projectData: {} as any
+        projectData: {} as any,
+        loadLimit: 3
     }
 
     constructor(props: basePropType) {
         super(props);
         this.state = cloneDeep(this.INITIAL_STATE);
-        this.initialize();
+        this.initialize(false);
     }
 
     state: StateType;
 
-    initialize() {
-
-        console.log(this.props);
-
+    async initialize(reverse: boolean) {
         const values = queryString.parse(this.props.history.location.search);
         this.state.userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
         this.state.projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
@@ -51,39 +56,55 @@ export default class LocalComponent extends Component<basePropType> {
 
         if (startAfter && typeof startAfter == 'string') {
             this.props.firebase.firestore.doc(getProjectReleaseDocPath(this.state.userId, this.state.projectId, startAfter)).get()
-                .then((snap) => {
+                .then(async (snap) => {
                     if (snap.exists) {
-                        const query = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').startAfter(snap).limit(3);
-                        this.executeQuery(query);
+                        // const StartType: typeof firebase.firestore.Query.prototype.startAfter | typeof firebase.firestore.Query.prototype.endBefore = reverse ? 'startAfter' : 'endBefore' as any;
+                        // const StartType = reverse ? 'endBefore' : 'startAfter';
+                        const StartType = reverse ? 'asc' : 'desc';
+                        // console.log(startAfter, reverse, StartType);
+                        const query = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', StartType).startAfter(snap).limit(this.state.loadLimit);
+                        const result = await this.executeQuery(query);
+                        this.setState({ releases: reverse ? result.reverse() : result });
                         return;
                     }
 
                     this.props.history.push(ROUTES.NOT_FOUND);
                 }).catch((err) => handleFirebaseError(err, this.props, 'Could not fetch document'))
         } else {
-            const query = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').limit(3);
-            this.executeQuery(query);
+            const query = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').limit(this.state.loadLimit);
+            const result = await this.executeQuery(query);
+            this.setState({ releases: result });
         }
     }
 
     executeQuery = async (query: firebase.firestore.Query) => {
         const snap = await query.get();
         const arr = snap.docs.map((doc) => doc.data());
-        this.setState({ releases: arr });
         return arr;
     }
 
     goToNextPage() {
         const { userId, projectId, releases } = this.state;
-        const lastIndex = releases.length - 1;
-        this.props.history.push(`${ROUTES.Project}/${userId}/${projectId}?startAfter=${releases[lastIndex].releaseId}`);
-        this.initialize();
+        if (releases.length) {
+            const lastIndex = releases.length - 1;
+            this.props.history.push(`${ROUTES.Project}/${userId}/${projectId}?startAfter=${releases[lastIndex].releaseId}`);
+            this.initialize(false);
+        }
+    }
+
+    goToPreviousPage() {
+        const { userId, projectId, releases } = this.state;
+        if (releases.length) {
+            const lastIndex = 0;
+            // const lastIndex = releases.length - 1;
+            this.props.history.push(`${ROUTES.Project}/${userId}/${projectId}?startAfter=${releases[lastIndex].releaseId}`);
+            this.initialize(true);
+        }
     }
 
     downloadFile(userId: string, projectId: string, releaseId: string, fileName: string) {
         const url = this.props.firebase.storage.ref(`${getProjectReleaseDocPath(userId, projectId, releaseId)}/${fileName}`).getDownloadURL();
         url.then((val) => {
-            console.log(val);
             downloadFile(val, fileName);
         }).catch(err => handleFirebaseError(err, this.props, 'Failed to fetch download url'));
     }
@@ -153,10 +174,10 @@ export default class LocalComponent extends Component<basePropType> {
                         size="small"
                         aria-label="large outlined secondary button group"
                     >
-                        <Button onClick={this.goToNextPage.bind(this)} disabled={!!!this.props.history.location.search}>
+                        <Button onClick={this.goToPreviousPage.bind(this)} disabled={!!!this.props.history.location.search}>
                             Previous
                         </Button>
-                        <Button onClick={this.goToNextPage.bind(this)}>
+                        <Button onClick={this.goToNextPage.bind(this)} disabled={this.state.loadLimit != this.state.releases.length}>
                             Next
                         </Button>
                     </ButtonGroup>
