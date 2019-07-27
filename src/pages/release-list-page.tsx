@@ -34,8 +34,8 @@ export default class LocalComponent extends Component<basePropType> {
 
 
         const query = startAt ?
-            this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId)).limit(10).startAt(startAt) :
-            this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId)).limit(10);
+            this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId)).limit(10).orderBy('updatedAt', 'desc').startAt(startAt) :
+            this.props.firebase.firestore.collection(getProjectReleaseCollectionPath(userId, projectId)).limit(10).orderBy('updatedAt', 'desc');
 
         query.get().then((snap) => {
             const arr = snap.docs.map((doc) => doc.data());
@@ -65,7 +65,7 @@ export default class LocalComponent extends Component<basePropType> {
             <Container maxWidth="md">
                 <Typography variant="h2" component="h1">
                     <span role="img" aria-label="Projects">🚀</span>
-                     {this.state.projectData.projectName || 'Project'}
+                    {this.state.projectData.projectName || 'Project'}
                 </Typography>
                 <Typography variant="h4">
                     Project description
@@ -136,7 +136,7 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
                         Last updated: {moment(release.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
                     </Typography>
                     <Typography className={classes.inline} color="textSecondary" component="span">
-                        Release ID: {release.projectId}
+                        Release ID: {release.releaseId}
                     </Typography>
                 </CardContent>
                 <DownloadsComponent {...{ release, props, state, downloadFile: getDownloadUrl }} />

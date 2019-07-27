@@ -46,8 +46,8 @@ export default class LocalComponent extends Component<basePropType> {
         console.log(values);
 
         const query = startAt ?
-            this.props.firebase.firestore.collection(getProjectsCollectionPath(userId)).limit(10).startAt(startAt) :
-            this.props.firebase.firestore.collection(getProjectsCollectionPath(userId)).limit(10);
+            this.props.firebase.firestore.collection(getProjectsCollectionPath(userId)).limit(10).orderBy('updatedAt', 'desc').startAt(startAt) :
+            this.props.firebase.firestore.collection(getProjectsCollectionPath(userId)).limit(10).orderBy('updatedAt', 'desc');
 
         query.get().then((snap) => {
             const arr = snap.docs.map((doc) => doc.data());
