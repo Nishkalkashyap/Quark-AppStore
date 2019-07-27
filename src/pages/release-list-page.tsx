@@ -45,7 +45,7 @@ export default class LocalComponent extends Component<basePropType> {
 
     state: StateType;
 
-    getDownloadUrl(userId: string, projectId: string, releaseId: string, fileName: string) {
+    downloadFile(userId: string, projectId: string, releaseId: string, fileName: string) {
         const url = this.props.firebase.storage.ref(`${getProjectReleaseDocPath(userId, projectId, releaseId)}/${fileName}`).getDownloadURL();
         url.then((val) => {
             console.log(val);
@@ -94,7 +94,7 @@ export default class LocalComponent extends Component<basePropType> {
                 <List style={{ marginTop: '30px' }}>
                     {
                         this.state.releases.map((release) => {
-                            const obj = { release, history: this.props.history, userID: this.state.userId, props: this.props, state: this.state, getDownloadUrl: this.getDownloadUrl };
+                            const obj = { release, history: this.props.history, userID: this.state.userId, props: this.props, state: this.state, downloadFile: this.downloadFile };
                             return (
                                 <ReleaseCard {...obj} key={release.releaseId} />
                             )
@@ -115,9 +115,9 @@ export default class LocalComponent extends Component<basePropType> {
     }
 }
 
-const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history'], userID: string, props: basePropType, state: StateType, getDownloadUrl: typeof LocalComponent['prototype']['getDownloadUrl'] }) => {
+const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history'], userID: string, props: basePropType, state: StateType, downloadFile: typeof LocalComponent['prototype']['downloadFile'] }) => {
     const classes = useStylesList();
-    const { release, history, userID, props, state, getDownloadUrl } = obj;
+    const { release, history, userID, props, state, downloadFile: getDownloadUrl } = obj;
     return (
         <React.Fragment key={release.projectId}>
             <Card className={classes.card}>
@@ -139,7 +139,7 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
                         Release ID: {release.projectId}
                     </Typography>
                 </CardContent>
-                <DownloadsComponent {...{ release, props, state, getDownloadUrl }} />
+                <DownloadsComponent {...{ release, props, state, downloadFile: getDownloadUrl }} />
                 <CardActions>
                     <Button size="small" variant="outlined" color="primary" onClick={() => history.push(`${ROUTES.Project}/${userID}/${release.projectId}/${release.releaseId}`)}>Edit Release</Button>
                 </CardActions>
@@ -148,7 +148,7 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
     )
 }
 
-const DownloadsComponent = (obj: { release: ReleaseItem, props: basePropType, state: StateType, getDownloadUrl: LocalComponent['getDownloadUrl'] }) => {
+const DownloadsComponent = (obj: { release: ReleaseItem, props: basePropType, state: StateType, downloadFile: LocalComponent['downloadFile'] }) => {
     const release = obj.release;
     const userId = obj.state.userId;
     const projectId = obj.state.projectId;
@@ -160,7 +160,7 @@ const DownloadsComponent = (obj: { release: ReleaseItem, props: basePropType, st
                 <strong>All Downloads</strong>
                 {(release.assets).map((rel) => (
                     // <Link variant="body2" color="primary" key={rel} target="_blanck" onClick={() => obj.props.firebase.storage.ref(`${getProjectReleaseDocPath(userId, projectId, releaseId)}/${rel}`).getDownloadURL()} style={{ cursor: 'pointer', display: 'block' }}>
-                    <Link variant="body2" color="primary" key={rel} target="_blanck" onClick={() => obj.getDownloadUrl(userId, projectId, releaseId, rel)} style={{ cursor: 'pointer', display: 'block' }}>
+                    <Link variant="body2" color="primary" key={rel} target="_blanck" onClick={() => obj.downloadFile(userId, projectId, releaseId, rel)} style={{ cursor: 'pointer', display: 'block' }}>
                         {rel}
                     </Link>
                 ))}
