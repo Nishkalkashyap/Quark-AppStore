@@ -203,6 +203,24 @@ export default class LocalComponent extends Component<basePropType> {
         }
     }
 
+    async showDeleteProjectDialog() {
+        const self = this;
+        const result = await dialog.showMessageBox<'Yes' | 'Cancel'>('Delete project', 'Are you sure you want to delete this project. This action is irreversible', ['Yes', 'Cancel'], 'question');
+        if (result == 'Yes') {
+            deleteRelease();
+        }
+
+        function deleteRelease() {
+            self.props.firebase.firestore.doc(getProjectDocPath(self.state.userId, self.state.projectId))
+                .delete()
+                .then(() => {
+                    self.props.enqueueSnackbar('Project deleted', { variant: 'success' });
+                    self.props.history.push(ROUTES.PROJECTS_LIST_PAGE);
+                })
+                .catch(err => handleFirebaseError(self.props, err, 'Failed to delete project'))
+        }
+    }
+
     async showDeleteReleaseDialog(userId: string, projectId: string, releaseId: string) {
         const self = this;
         const result = await dialog.showMessageBox<'Yes' | 'Cancel'>('Delete release', 'Are you sure you want to delete this release. This action is irreversible', ['Yes', 'Cancel'], 'warning');
@@ -299,7 +317,7 @@ export default class LocalComponent extends Component<basePropType> {
                                     Edit description
                                     <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
                                 </Button>
-                                <Button>
+                                <Button onClick={() => this.showDeleteProjectDialog()}>
                                     Delete project
                                     <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
                                 </Button>
