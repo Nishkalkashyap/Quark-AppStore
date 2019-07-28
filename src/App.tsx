@@ -66,7 +66,7 @@ const theme = createMuiTheme({
 const App: React.FC = () => {
   return (
     <Router>
-          {/* <MainBgComponent></MainBgComponent> */}
+      <MainBgComponent bgColor='linear-gradient(90deg ,#f6f6ff 0,#afc1cd 100%)' position="fixed"/>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <StupidPageContainer>

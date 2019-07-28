@@ -1,12 +1,13 @@
 import React from 'react'
 import { StandardProperties } from 'csstype';
 import { cloneDeep } from 'lodash';
-import { GradientBackground } from '../util';
 
-export default function MainBgComponent() {
+export default function MainBgComponent(props?: { bgColor?: string, position?: 'fixed' | 'absolute' }) {
+    const color = props!.bgColor ? props!.bgColor : 'linear-gradient(90deg,#2196F3 0,#21CBF3 100%)';
+    const position = props!.position ? props!.position : 'absolute';
     return (
         // <div style={Object.assign({}, CommonStyles, { backgroundImage: 'linear-gradient(90deg,#2196F322 0,#21CBF322 100%)', transform: undefined,borderRadius : '5px' })}>
-        <div style={Object.assign(cloneDeep(CommonStyles), { backgroundImage: 'linear-gradient(90deg,#2196F3 0,#21CBF3 100%)', transform: undefined, borderRadius: '5px' })}>
+        <div style={Object.assign(cloneDeep(CommonStyles), { background: color, transform: undefined, borderRadius: '5px', position })}>
             <div style={Object.assign(cloneDeep(CommonStyles), { opacity: 0.05, top: '75%', left: '0%' })}></div>
             <div style={Object.assign(cloneDeep(CommonStyles), { opacity: 0.1, top: '50%', left: '15%' })}></div>
             <div style={Object.assign(cloneDeep(CommonStyles), { opacity: 0.09, top: '25%', left: '30%' })}></div>

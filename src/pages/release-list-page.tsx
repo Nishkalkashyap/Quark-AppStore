@@ -233,7 +233,7 @@ export default class LocalComponent extends Component<basePropType> {
             <React.Fragment>
                 <Container maxWidth="md">
                     <Card style={MainBgContainerStyles}>
-                        <MainBgComponent></MainBgComponent>
+                        <MainBgComponent />
                         <Typography variant="h2" component="h1" color="inherit">
                             {this.state.projectData.projectName || 'Project'}
                         </Typography>
