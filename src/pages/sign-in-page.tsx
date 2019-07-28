@@ -136,10 +136,10 @@ const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof IN
                         </Grid>
                     </Grid>
                 </form>
-                <ButtonGroup fullWidth aria-label="full width outlined button group" style={{marginTop : '30px'}}>
+                {/* <ButtonGroup fullWidth aria-label="full width outlined button group" style={{marginTop : '30px'}}>
                     <Button>Google</Button>
                     <Button>GitHub</Button>
-                </ButtonGroup>
+                </ButtonGroup> */}
             </div>
         </Container>
     )
