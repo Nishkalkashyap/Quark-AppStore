@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { basePropType } from "../basePropType";
-import { Container, Avatar, Typography, TextField, Button } from '@material-ui/core';
+import { Container, Avatar, Typography, TextField, Button, Card } from '@material-ui/core';
 import FiberNewIcon from '@material-ui/icons/FiberNew';
 import { getProjectDocPath } from '../data/paths';
 import { handleFirebaseError, getRandomId } from '../util';
@@ -8,6 +8,7 @@ import firebase from 'firebase';
 import { ROUTES } from '../data/routes';
 import { useStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
+import { ProjectData } from '../interfaces';
 
 const INITIAL_STATE = {
     projectName: '',
@@ -28,7 +29,19 @@ class LocalComponent extends Component<basePropType> {
         event.preventDefault();
         const random = getRandomId();
         const createdAt = firebase.firestore.FieldValue.serverTimestamp();
-        this.props.firebase.firestore.doc(getProjectDocPath(this.props.firebase.auth.currentUser!.uid, random)).set({ ...this.state, createdAt, updatedAt: createdAt, projectId: random, numberOfReleases: 0 }).then(() => {
+
+        const dataToSend: ProjectData = {
+            numberOfReleases: 0,
+            numberOfDownloads: 0,
+            projectId: random,
+            updatedAt: createdAt as any,
+            createdAt: createdAt as any,
+            description: this.state.description,
+            projectName: this.state.projectName
+        }
+
+        this.props.firebase.firestore.doc(getProjectDocPath(this.props.firebase.auth.currentUser!.uid, random)).set(dataToSend).then(() => {
+            // this.props.firebase.firestore.doc(getProjectDocPath(this.props.firebase.auth.currentUser!.uid, random)).set({ ...this.state, createdAt, updatedAt: createdAt, projectId: random, numberOfReleases: 0, numberOfDownloads : 0 }).then(() => {
             this.props.enqueueSnackbar('Project created', { variant: 'success' });
             this.props.history.push(`${ROUTES.PROJECT_PAGE}/${this.props.firebase.auth.currentUser!.uid}/${random}`);
         })
@@ -54,56 +67,58 @@ const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof IN
     const isInvalid = projectName === '' || description === '';
 
     return (
-        <Container component="section" maxWidth="xs">
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <FiberNewIcon />
-                </Avatar>
-                <Typography component="h1" variant="h3">
-                    New Project
+        <Container component="section" maxWidth="sm">
+            <Card style={{ padding: '10px 40px' }}>
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <FiberNewIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h3">
+                        New Project
                 </Typography>
-                <form className={classes.form} onSubmit={obj.onSubmit}>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
+                    <form className={classes.form} onSubmit={obj.onSubmit}>
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
 
-                        id="projectName"
-                        label="Project Name"
-                        name="projectName"
-                        type="text"
-                        autoFocus
+                            id="projectName"
+                            label="Project Name"
+                            name="projectName"
+                            type="text"
+                            autoFocus
 
-                        value={projectName}
-                        onChange={obj.onChange}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
+                            value={projectName}
+                            onChange={obj.onChange}
+                        />
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
 
-                        id="description"
-                        label="Description"
-                        name="description"
-                        type="text"
+                            id="description"
+                            label="Description"
+                            name="description"
+                            type="text"
 
-                        value={description}
-                        onChange={obj.onChange}
-                    />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        disabled={isInvalid}
-                    >
-                        Create
+                            value={description}
+                            onChange={obj.onChange}
+                        />
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                            disabled={isInvalid}
+                        >
+                            Create
                     </Button>
-                </form>
-            </div>
+                    </form>
+                </div>
+            </Card>
         </Container>
     )
 };
