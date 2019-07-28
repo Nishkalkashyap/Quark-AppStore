@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, List, Typography, Card, CardContent, Button, CardActions, Link, ButtonGroup } from '@material-ui/core';
+import { Container, List, Typography, Card, CardContent, Button, CardActions, Link, ButtonGroup, Chip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { withAllProviders } from '../providers/all-providers';
@@ -15,6 +15,9 @@ import { cloneDeep } from 'lodash';
 import * as firebase from 'firebase';
 import { progress, dialog } from '../components/header-component';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import EditDownloadIcon from '@material-ui/icons/Edit';
+import UpdateDownloadIcon from '@material-ui/icons/Update';
 import MainBgComponent, { MainBgContainerStyles } from '../components/main-background-component';
 
 interface StateType {
@@ -27,7 +30,8 @@ interface StateType {
     previousExists: boolean,
     querySnapshot?: firebase.firestore.QuerySnapshot,
     goingBackwards: boolean,
-    isOwner: boolean
+    isOwner: boolean,
+    numberOfDownloads: number
 }
 
 
@@ -41,7 +45,8 @@ export default class LocalComponent extends Component<basePropType> {
         nextExists: false,
         previousExists: false,
         goingBackwards: false,
-        isOwner: false
+        isOwner: false,
+        numberOfDownloads: 0
     }
 
     constructor(props: basePropType) {
@@ -106,6 +111,17 @@ export default class LocalComponent extends Component<basePropType> {
         const userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
         const projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
 
+        this.state = cloneDeep(this.INITIAL_STATE);
+        this.state.userId = userId;
+        this.state.projectId = projectId;
+
+        this.props.firebase.firestore.doc(getProjectStatsDocPath(userId, projectId)).get()
+            .then((snap) => {
+                const data = (snap.data() || { numberOfDownloads: 0 });
+                this.setState({ numberOfDownloads: data.numberOfDownloads });
+            })
+            .catch((err) => handleFirebaseError(this.props, err, 'Cannot fetch downloads'))
+
         this.props.firebase.auth.onAuthStateChanged((e) => {
             if (e) {
                 this.setState({ isOwner: e.uid == userId });
@@ -118,10 +134,6 @@ export default class LocalComponent extends Component<basePropType> {
                 // }
             }
         });
-
-        this.state = cloneDeep(this.INITIAL_STATE);
-        this.state.userId = userId;
-        this.state.projectId = projectId;
     }
 
     private _setProjectData() {
@@ -268,20 +280,12 @@ export default class LocalComponent extends Component<basePropType> {
                             <Typography component="p" color="inherit">
                                 {this.state.projectData.description}
                             </Typography>
-
-                            <Typography color="inherit" component="span" style={styles}>
-                                Project ID: {this.state.projectId}
-                            </Typography>
                             {Object.keys(this.state.projectData).length &&
                                 (<React.Fragment>
-                                    <Typography color="inherit" component="span" style={styles}>
-                                        Created: {moment(this.state.projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
-                                    </Typography>
-                                    <Typography color="inherit" component="span" style={styles}>
-                                        Last updated: {moment(this.state.projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
-                                    </Typography>
-                                </React.Fragment>)
-                            }
+                                    <Chip label={`Downloads: ${this.state.numberOfDownloads}`} variant="outlined" size="small" icon={<CloudDownloadIcon style={{ color: '#ffffff' }} />} style={{ color: '#ffffff', borderColor: '#ffffff', marginTop: '15px', marginRight: '15px' }} />
+                                    <Chip label={`Created: ${moment(this.state.projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}`} variant="outlined" size="small" icon={<EditDownloadIcon style={{ color: '#ffffff' }} />} style={{ color: '#ffffff', borderColor: '#ffffff', marginTop: '15px', marginRight: '15px' }} />
+                                    <Chip label={`Last updated: ${moment(this.state.projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}`} variant="outlined" size="small" icon={<UpdateDownloadIcon style={{ color: '#ffffff' }} />} style={{ color: '#ffffff', borderColor: '#ffffff', marginTop: '15px', marginRight: '15px' }} />
+                                </React.Fragment>)}
                         </CardContent>
                         {this.state.isOwner && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
