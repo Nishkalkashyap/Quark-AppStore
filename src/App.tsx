@@ -29,20 +29,20 @@ import { NotFoundComponent } from './components/common-components';
 
 const Routing = () => (
   <React.Fragment>
-    <Route exact path={ROUTES.LANDING} component={Landing} />
-    <Route exact path={ROUTES.ACCOUNT} component={Account} />
-    <Route exact path={ROUTES.EditProfile} component={EditProfilePage} />
+    <Route exact path={ROUTES.LANDING_PAGE} component={Landing} />
+    <Route exact path={ROUTES.ACCOUNT_PAGE} component={Account} />
+    <Route exact path={ROUTES.EDIT_PROFILE_PAGE} component={EditProfilePage} />
 
     <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
     <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
-    <Route exact path={ROUTES.ProjectsListPage} component={ProjectsListPage} />
+    <Route exact path={ROUTES.PROJECTS_LIST_PAGE} component={ProjectsListPage} />
 
-    <Route exact path={ROUTES.PASSWORD_FORGET} component={ForgotPasswordPage} />
+    <Route exact path={ROUTES.PASSWORD_FORGET_PAGE} component={ForgotPasswordPage} />
     <Route exact path={ROUTES.CHANGE_PASSWORD_PAGE} component={changePasswordPage} />
-    <Route exact path={ROUTES.DASHBOARD} component={Dashboard} />
+    <Route exact path={ROUTES.DASHBOARD_PAGE} component={Dashboard} />
 
-    <Route exact path={`${ROUTES.NewRelease}/${SLUGS.NewRelease}/${POST_SLUG.NewRelease}`} component={CreateNewRelease} />
-    <Route exact path={`${ROUTES.Project}/${SLUGS.Project}`} component={ReleaseListPage} />
+    <Route exact path={`${ROUTES.NEW_RELEASE}/${SLUGS.NEW_RELEASE}/${POST_SLUG.NEW_RELEASE}`} component={CreateNewRelease} />
+    <Route exact path={`${ROUTES.PROJECT_PAGE}/${SLUGS.Project}`} component={ReleaseListPage} />
     <Route exact path={ROUTES.CREATE_NEW_PROJECT_PAGE} component={CreateNewProjectPage} />
     
     <Route exact path={ROUTES.NOT_FOUND} component={NotFoundComponent} />

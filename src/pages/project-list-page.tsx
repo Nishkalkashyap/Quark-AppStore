@@ -115,7 +115,7 @@ const ProjectCard = (obj: { project: ProjectData, history: basePropType['history
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small" variant="outlined" color="primary" onClick={() => history.push(`${ROUTES.Project}/${userID}/${project.projectId}`)}>View project</Button>
+                    <Button size="small" variant="outlined" color="primary" onClick={() => history.push(`${ROUTES.PROJECT_PAGE}/${userID}/${project.projectId}`)}>View project</Button>
                 </CardActions>
             </Card>
         </React.Fragment>

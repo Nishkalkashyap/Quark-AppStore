@@ -59,7 +59,7 @@ const LocalComponent = (props: basePropType) => {
                     })
                     .catch((err) => handleFirebaseError(props, err, 'Failed to upload files'))
                     .finally(() => {
-                        props.history.push(`${ROUTES.Project}/${userId}/${projectId}`);
+                        props.history.push(`${ROUTES.PROJECT_PAGE}/${userId}/${projectId}`);
                     })
             })
             .catch((err) => {

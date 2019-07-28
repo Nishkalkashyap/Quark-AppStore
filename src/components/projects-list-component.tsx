@@ -148,7 +148,7 @@ export default function CustomPaginationActionsTable(props: basePropType) {
     }
 
     function openProject(item: ProjectData) {
-        props.history.push(`${ROUTES.Project}/${props.firebase.auth.currentUser!.uid}/${item.projectId}`);
+        props.history.push(`${ROUTES.PROJECT_PAGE}/${props.firebase.auth.currentUser!.uid}/${item.projectId}`);
     }
 
     return (

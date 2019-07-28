@@ -75,7 +75,7 @@ const MaterialComponent = (context: typeof PP['prototype']) => {
                     variant="contained"
                     color="primary"
                     className={classes.submit}
-                    onClick={() => context.props.history.push(`${ROUTES.Project}/${context.props.match.params[MATCH_PARAMS.USER_ID]}/${context.props.match.params[MATCH_PARAMS.PROJECT_ID]}/${POST_SLUG.NewRelease}`)}
+                    onClick={() => context.props.history.push(`${ROUTES.PROJECT_PAGE}/${context.props.match.params[MATCH_PARAMS.USER_ID]}/${context.props.match.params[MATCH_PARAMS.PROJECT_ID]}/${POST_SLUG.NEW_RELEASE}`)}
                 >
                     Create new release
             </Button>

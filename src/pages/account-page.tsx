@@ -96,7 +96,7 @@ const ImageStyle: StandardProperties = {
 
 const StupidTypescript = MaterialLink as any;
 const EditProfile = () => (
-    <StupidTypescript variant="body2" to={ROUTES.EditProfile} component={Link} style={{ display: 'block' }}>
+    <StupidTypescript variant="body2" to={ROUTES.EDIT_PROFILE_PAGE} component={Link} style={{ display: 'block' }}>
         Edit Profile
     </StupidTypescript>
 );;

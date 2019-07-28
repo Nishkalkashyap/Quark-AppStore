@@ -5,17 +5,17 @@
 // }
 
 export const ROUTES = {
-    LANDING: '/',
-    DASHBOARD: '/dashboard',
+    LANDING_PAGE: '/',
+    DASHBOARD_PAGE: '/dashboard',
     SIGN_UP: '/signup',
     SIGN_IN: '/signin',
-    EditProfile: '/edit-profile',
+    EDIT_PROFILE_PAGE: '/edit-profile',
     CHANGE_PASSWORD_PAGE: '/change-password',
-    PASSWORD_FORGET: '/forgot-password',
-    ACCOUNT: '/account',
-    Project: '/project',
-    ProjectsListPage: '/projects',
-    NewRelease: '/project',
+    PASSWORD_FORGET_PAGE: '/forgot-password',
+    ACCOUNT_PAGE: '/account',
+    PROJECT_PAGE: '/project',
+    PROJECTS_LIST_PAGE: '/projects',
+    NEW_RELEASE: '/project',
     CREATE_NEW_PROJECT_PAGE: '/new-project',
     NOT_FOUND: '/404',
 }
@@ -27,11 +27,11 @@ export const MATCH_PARAMS = {
 
 export const SLUGS = {
     Project: `:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`,
-    NewRelease: `:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`
+    NEW_RELEASE: `:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`
 }
 
 export const POST_SLUG = {
-    NewRelease: 'create-release'
+    NEW_RELEASE: 'create-release'
 }
 // type Route = {
 //     [key in allRoutes]: {

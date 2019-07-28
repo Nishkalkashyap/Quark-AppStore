@@ -109,7 +109,7 @@ const ForgotPasswordElement = (obj: { onSubmit: any, onChange: any, state: typeo
 
 const StupidTypescript = MaterialLink as any;
 const PasswordForgetLink = () => (
-    <StupidTypescript variant="body2" to={ROUTES.PASSWORD_FORGET} component={Link}>
+    <StupidTypescript variant="body2" to={ROUTES.PASSWORD_FORGET_PAGE} component={Link}>
         Forgot Password?
     </StupidTypescript>
 );

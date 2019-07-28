@@ -167,7 +167,7 @@ export default class LocalComponent extends Component<basePropType> {
         const { userId, projectId, releases } = this.state;
         if (releases.length) {
             const index = releases.length - 1;
-            this.props.history.push(`${ROUTES.Project}/${userId}/${projectId}?startAfter=${releases[index].releaseId}`);
+            this.props.history.push(`${ROUTES.PROJECT_PAGE}/${userId}/${projectId}?startAfter=${releases[index].releaseId}`);
             this.setState({ goingBackwards: false });
             this._setReleaseArray();
         }
@@ -177,7 +177,7 @@ export default class LocalComponent extends Component<basePropType> {
         const { userId, projectId, releases } = this.state;
         if (releases.length) {
             const index = 0;
-            this.props.history.push(`${ROUTES.Project}/${userId}/${projectId}?startAfter=${releases[index].releaseId}`);
+            this.props.history.push(`${ROUTES.PROJECT_PAGE}/${userId}/${projectId}?startAfter=${releases[index].releaseId}`);
             this.setState({ goingBackwards: true });
             this._setReleaseArray();
         }
@@ -232,7 +232,7 @@ export default class LocalComponent extends Component<basePropType> {
                         fullWidth
                         variant="outlined"
                         color="primary"
-                        onClick={() => this.props.history.push(`${ROUTES.NewRelease}/${this.state.userId}/${this.state.projectId}/${POST_SLUG.NewRelease}`)}
+                        onClick={() => this.props.history.push(`${ROUTES.NEW_RELEASE}/${this.state.userId}/${this.state.projectId}/${POST_SLUG.NEW_RELEASE}`)}
                     >
                         Create new release
                     </Button>
@@ -295,7 +295,7 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
                 <DownloadsComponent {...{ release, props, state, downloadFile: getDownloadUrl }} />
                 <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <ButtonGroup size="small" aria-label="small outlined button group">
-                        <Button onClick={() => history.push(`${ROUTES.Project}/${userID}/${release.projectId}/${release.releaseId}`)}>
+                        <Button onClick={() => history.push(`${ROUTES.PROJECT_PAGE}/${userID}/${release.projectId}/${release.releaseId}`)}>
                             Edit Release
                             <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
                         </Button>

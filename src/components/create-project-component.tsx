@@ -28,7 +28,7 @@ export default class CreateProject extends Component<basePropType> {
         const createdAt = firebase.firestore.FieldValue.serverTimestamp();
         this.props.firebase.firestore.doc(getProjectPath(this.props.firebase.auth.currentUser!.uid, random)).set({ ...this.state, createdAt, updatedAt: createdAt, projectId: random, numberOfReleases: 0 }).then(() => {
             this.props.enqueueSnackbar('Project created', { variant: 'success' });
-            this.props.history.push(`${ROUTES.Project}/${this.props.firebase.auth.currentUser!.uid}/${random}`);
+            this.props.history.push(`${ROUTES.PROJECT_PAGE}/${this.props.firebase.auth.currentUser!.uid}/${random}`);
         })
             .catch((err) => {
                 handleFirebaseError(this.props, err, 'Failed to create project');

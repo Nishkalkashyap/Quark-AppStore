@@ -31,7 +31,7 @@ class PasswordChangeForm extends Component<basePropType> {
             .then(() => {
                 this.setState({ ...INITIAL_STATE });
                 this.props.enqueueSnackbar('Password changed', { variant: 'success' });
-                this.props.history.push(ROUTES.ACCOUNT);
+                this.props.history.push(ROUTES.ACCOUNT_PAGE);
             })
             .catch(error => {
                 this.setState({ error });

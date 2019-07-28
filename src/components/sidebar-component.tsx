@@ -38,19 +38,19 @@ const icons: SidebarItems[] = [
         label: 'Dashboard',
         icon: DashboardIcon,
         private: false,
-        clickRoute: ROUTES.DASHBOARD
+        clickRoute: ROUTES.DASHBOARD_PAGE
     },
     {
         label: 'Account',
         icon: AccountBoxIcon,
         private: true,
-        clickRoute: ROUTES.ACCOUNT
+        clickRoute: ROUTES.ACCOUNT_PAGE
     },
     {
         label: 'Projects',
         icon: AppsIcon,
         private: true,
-        clickRoute: ROUTES.ProjectsListPage
+        clickRoute: ROUTES.PROJECTS_LIST_PAGE
     }
 ]
 export default class Sidebar extends Component<basePropType> {
