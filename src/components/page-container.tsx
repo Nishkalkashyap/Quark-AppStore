@@ -17,10 +17,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
-import HeaderComponent from './header-component';
+import HeaderComponent, { progress } from './header-component';
 import { basePropType } from '../basePropType';
 import { sidebarItems } from './sidebar-component';
 import { Firebase } from '../providers/firebase-provider';
+import { LinearProgress } from '@material-ui/core';
 
 const drawerWidth = 240;
 
@@ -100,9 +101,15 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export function PageContainer(props: basePropType & { children: any }) {
+
+    const initial = progress._showProgressBar;
+    progress.showProgressBar = showProgressBar;
+    progress.hideProgressBar = hideProgressBar;
+
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const [_showProgressBar, setShowProgressBar] = React.useState(initial);
 
     const childrenWithProps = React.Children.map(props.children, child =>
         React.cloneElement(child, { ...props })
@@ -116,6 +123,15 @@ export function PageContainer(props: basePropType & { children: any }) {
         setOpen(false);
     }
 
+
+    function showProgressBar() {
+        setShowProgressBar(true);
+    }
+
+    function hideProgressBar() {
+        setShowProgressBar(false);
+    }
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -125,6 +141,7 @@ export function PageContainer(props: basePropType & { children: any }) {
                     [classes.appBarShift]: open,
                 })}
             >
+                {_showProgressBar && <LinearProgress style={{ position: 'absolute', width: '100%', top: '0px', height: '2px' }} />}
                 <Toolbar>
                     <IconButton
                         color="inherit"

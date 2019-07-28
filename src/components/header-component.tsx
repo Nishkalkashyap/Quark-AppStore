@@ -72,26 +72,15 @@ class Header extends Component<basePropType> {
 
     constructor(props: basePropType) {
         super(props);
-        this.state._showProgressBar = progress._showProgressBar;
 
         dialog.showMessageBox = this._showMessageBox.bind(this);
         dialog.showFormDialog = this._showFormDialog.bind(this);
-        this.init();
     }
 
     state: {
-        _showProgressBar: boolean;
         messageDialogOptions: MessageDialogInterface,
         formDialogOptions: FormDialogInterface,
-    } = { _showProgressBar: false, messageDialogOptions, formDialogOptions }
-
-    showProgressBar() {
-        this.setState({ _showProgressBar: true });
-    }
-
-    hideProgressBar() {
-        this.setState({ _showProgressBar: false });
-    }
+    } = { messageDialogOptions, formDialogOptions }
 
     messageOnResolve: <T = any>(text: T) => void = (t) => { }
     formOnResolve: <T = any>(res: FormResolveType<T>) => void = (t) => { }
@@ -126,10 +115,6 @@ class Header extends Component<basePropType> {
         });
     }
 
-    init() {
-        progress.showProgressBar = this.showProgressBar.bind(this);
-        progress.hideProgressBar = this.hideProgressBar.bind(this);
-    }
 
     onCloseMessageDialog(num?: number) {
         this.setState({ messageDialogOptions: { ...messageDialogOptions, isOpen: false } });
@@ -155,14 +140,9 @@ class Header extends Component<basePropType> {
         const formOptions = Object.assign(this.state.formDialogOptions, { onClose: this.onCloseFormDialog.bind(this) });
         return (
             <React.Fragment>
-                <div style={MainContainerStyle}>
-                    {this.state._showProgressBar && <LinearProgress style={{ position: 'absolute', width: '100%', top: '0px', height: '2px' }} />}
-                    <div style={LeftHeaderStyle}>
-                        <img src={logo} alt="logo" style={ImageStyles} />
-                        <h3 style={{ margin: '0px 10px 0px 10px', verticalAlign: 'middle', fontSize: '1.3rem' }}>Dashboard</h3>
-                    </div>
-                    <div style={RightHeaderStyle}>
-                    </div>
+                <div style={LeftHeaderStyle}>
+                    <img src={logo} alt="logo" style={ImageStyles} />
+                    <h3 style={{ margin: '0px 10px 0px 10px', verticalAlign: 'middle', fontSize: '1.3rem' }}>Dashboard</h3>
                 </div>
                 {this.state.messageDialogOptions.isOpen && <MessageDialogComponent {...messageOptions}></MessageDialogComponent>}
                 {this.state.formDialogOptions.isOpen && <FormDialogComponent {...formOptions}></FormDialogComponent>}
