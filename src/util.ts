@@ -15,6 +15,10 @@ export function getRandomId() {
     return '_' + Math.random().toString(36).substr(2, 9) + Math.random().toString(36).substr(2, 9);
 }
 
+export function scrollToTop(behavior: "auto" | "smooth" | undefined = 'smooth') {
+    document.getElementById('routes-container')!.scrollTo({ top: 0, behavior })
+}
+
 export function useForceUpdate() {
     const [value, set] = useState(true); //boolean state
     return () => set(!value); // toggle the state to force render

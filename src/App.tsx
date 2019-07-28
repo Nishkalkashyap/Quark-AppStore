@@ -66,7 +66,7 @@ const App: React.FC = () => {
           <Header></Header>
           <div style={{ flexGrow: 1, display: 'flex', height: 'calc(100% - 56px)' }}>
             <StupidTypescript ></StupidTypescript>
-            <div style={{ flexGrow: 1, padding: '32px 40px', width: '100%', height: '100%', overflowY: 'auto' }}>
+            <div style={{ flexGrow: 1, padding: '32px 40px', width: '100%', height: '100%', overflowY: 'auto' }} id="routes-container">
               <Routing></Routing>
             </div>
           </div>

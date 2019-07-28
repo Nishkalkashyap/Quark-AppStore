@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, List, Typography, Card, CardContent, Button, CardActions, Link, ButtonGroup, IconButton } from '@material-ui/core';
+import { Container, List, Typography, Card, CardContent, Button, CardActions, Link, ButtonGroup } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { withAllProviders } from '../providers/all-providers';
@@ -7,7 +7,7 @@ import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES, POST_SLUG } from '../data/routes';
 import queryString from 'query-string';
 import { getReleaseListCollectionPath, getProjectPath, getProjectReleaseDocPath } from '../data/paths';
-import { handleFirebaseError, downloadFile } from '../util';
+import { handleFirebaseError, downloadFile, scrollToTop } from '../util';
 import { ReleaseItem, ProjectData } from '../interfaces';
 import { useStylesList } from './project-list-page';
 import moment from 'moment';
@@ -45,9 +45,14 @@ export default class LocalComponent extends Component<basePropType> {
         this._setInitialState();
         this._setProjectData();
         this._setReleaseArray();
+
     }
 
     state: StateType = {} as any;
+
+    // private _scrollToTop() {
+    //     (ReactDOM.findDOMNode(this)! as HTMLElement).scrollTop = 0;
+    // }
 
     private async _setReleaseArray() {
         const values = queryString.parse(this.props.history.location.search);
@@ -63,6 +68,7 @@ export default class LocalComponent extends Component<basePropType> {
                         const query = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', StartType).startAfter(snap).limit(this.state.loadLimit);
                         const result = await query.get();
                         const arr = result.docs.map((doc) => doc.data());
+                        scrollToTop();
                         this.setState({ releases: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: result });
                         this._fetchNextAndPreviousDocuments();
                         progress.hideProgressBar();
@@ -79,6 +85,7 @@ export default class LocalComponent extends Component<basePropType> {
             const query = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').limit(this.state.loadLimit);
             const result = await query.get();
             const arr = result.docs.map((doc) => doc.data());
+            scrollToTop();
             this.setState({ releases: arr, querySnapshot: result });
             this._fetchNextAndPreviousDocuments();
             progress.hideProgressBar();
@@ -96,7 +103,6 @@ export default class LocalComponent extends Component<basePropType> {
     }
 
     private _setProjectData() {
-
         this.props.firebase.firestore.doc(getProjectPath(this.state.userId, this.state.projectId)).get().then((snap) => {
             if (snap.exists) {
                 this.setState({ projectData: snap.data() });
