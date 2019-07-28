@@ -4,6 +4,7 @@ export interface ProjectData {
     projectName: string;
     description: string;
     numberOfReleases: number;
+    numberOfDownloads: number;
     createdAt: firebase.firestore.Timestamp//auto set
     updatedAt: firebase.firestore.Timestamp;//auto set
 }
