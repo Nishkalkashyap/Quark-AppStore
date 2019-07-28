@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, List, Typography, Card, CardContent, Button, CardActions, Link, ButtonGroup, Chip } from '@material-ui/core';
+import { Container, List, Typography, Card, CardContent, Button, CardActions, Link, ButtonGroup, Chip, CardHeader } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { withAllProviders } from '../providers/all-providers';
@@ -275,11 +275,13 @@ export default class LocalComponent extends Component<basePropType> {
                         </Typography>
                         <CardContent>
                             <Typography variant="h4" color="inherit">
-                                Project description
+                                Description
                             </Typography>
                             <Typography component="p" color="inherit">
                                 {this.state.projectData.description}
                             </Typography>
+                        </CardContent>
+                        <CardContent>
                             {Object.keys(this.state.projectData).length &&
                                 (<React.Fragment>
                                     <Chip label={`Downloads: ${this.state.numberOfDownloads}`} variant="outlined" size="small" icon={<CloudDownloadIcon style={{ color: '#ffffff' }} />} style={{ color: '#ffffff', borderColor: '#ffffff', marginTop: '15px', marginRight: '15px' }} />
