@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const icons: SidebarItems[] = [
+export const sidebarItems: SidebarItems[] = [
     {
         label: 'Dashboard',
         icon: DashboardIcon,
@@ -75,7 +75,7 @@ const SidebarElement = (obj: { firebase: Firebase, props: any }) => {
     const classes = useStyles();
     return (
         <div style={SidebarContainerStyle}>
-            {icons.map((item) => {
+            {sidebarItems.map((item) => {
                 if (item.private && !firebase.auth.currentUser) {
                     return null;
                 }

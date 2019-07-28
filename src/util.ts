@@ -16,7 +16,8 @@ export function getRandomId() {
 }
 
 export function scrollToTop(behavior: "auto" | "smooth" | undefined = 'smooth') {
-    document.getElementById('routes-container')!.scrollTo({ top: 0, behavior })
+    // document.getElementById('routes-container')!.scrollTo({ top: 0, behavior })
+    window.scrollTo({ top: 0, behavior })
 }
 
 export function useForceUpdate() {

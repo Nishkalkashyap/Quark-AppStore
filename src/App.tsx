@@ -25,6 +25,7 @@ import { CreateNewProjectPage } from './pages/create-new-project-page';
 // import { ReleaseListPage } from './pages/release-list-page';
 import { ReleaseListPage } from './pages/release-list-page';
 import { NotFoundComponent } from './components/common-components';
+import { PageContainer } from './components/page-container';
 // import { NotFoundComponent } from './components/common';
 
 const Routing = () => (
@@ -44,11 +45,12 @@ const Routing = () => (
     <Route exact path={`${ROUTES.NEW_RELEASE}/${SLUGS.NEW_RELEASE}/${POST_SLUG.NEW_RELEASE}`} component={CreateNewRelease} />
     <Route exact path={`${ROUTES.PROJECT_PAGE}/${SLUGS.Project}`} component={ReleaseListPage} />
     <Route exact path={ROUTES.CREATE_NEW_PROJECT_PAGE} component={CreateNewProjectPage} />
-    
+
     <Route exact path={ROUTES.NOT_FOUND} component={NotFoundComponent} />
   </React.Fragment>
 )
-const StupidTypescript: any = withRouter(withFirebase(Sidebar));
+const StupidSidebar: any = withRouter(withFirebase(Sidebar));
+const StupidPageContainer: any = withRouter(withFirebase(PageContainer));
 
 const theme = createMuiTheme({
   palette: {
@@ -62,15 +64,18 @@ const App: React.FC = () => {
     <Router>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div className="App" style={{ width: '100%', height: '100%', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+        <StupidPageContainer>
+          <Routing />
+        </StupidPageContainer>
+        {/* <div className="App" style={{ width: '100%', height: '100%', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
           <Header></Header>
           <div style={{ flexGrow: 1, display: 'flex', height: 'calc(100% - 56px)' }}>
-            <StupidTypescript ></StupidTypescript>
+            <StupidSidebar ></StupidSidebar>
             <div style={{ flexGrow: 1, padding: '32px 40px', width: '100%', height: '100%', overflowY: 'auto' }} id="routes-container">
               <Routing></Routing>
             </div>
           </div>
-        </div>
+        </div> */}
       </ThemeProvider>
     </Router>
   );

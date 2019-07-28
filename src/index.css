@@ -7,11 +7,11 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
-#root {
+/* #root {
   width: 100%;
   height: 100%;
   overflow: hidden;
-}
+} */
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
