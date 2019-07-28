@@ -135,7 +135,7 @@ const LocalComponent = (props: basePropType) => {
     }
 
     return (
-        <Container component="main" maxWidth="sm">
+        <Container component="section" maxWidth="sm">
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <NewReleasesIcon />

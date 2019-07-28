@@ -63,7 +63,7 @@ const ForgotPasswordElement = (obj: { onSubmit: any, onChange: any, state: typeo
     const isInvalid = email === '';
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="section" maxWidth="xs">
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />

@@ -54,7 +54,7 @@ const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof IN
     const isInvalid = projectName === '' || description === '';
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="section" maxWidth="xs">
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <FiberNewIcon />

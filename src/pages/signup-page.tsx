@@ -75,7 +75,7 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
         obj.state.email === '';
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="section" maxWidth="xs">
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />

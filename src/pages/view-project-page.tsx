@@ -53,7 +53,7 @@ export class PP extends Component<basePropType & { projectId: string, userID: st
 
 const MetaData = ((state: typeof PP['prototype']['state']) => {
     return (
-        <Container component="main" maxWidth="md">
+        <Container component="section" maxWidth="md">
             <Typography component="h1" variant="h3">
                 {state.metaData.projectName}
             </Typography>
@@ -68,7 +68,7 @@ const MaterialComponent = (context: typeof PP['prototype']) => {
     const CreateReleaseButton = (() => {
         const classes = useStyles();
         return (
-            <Container component="main" maxWidth="sm">
+            <Container component="section" maxWidth="sm">
                 <Button
                     type="submit"
                     fullWidth
@@ -85,7 +85,7 @@ const MaterialComponent = (context: typeof PP['prototype']) => {
 
     const ReleaseList = () => {
         return (
-            <Container component="main" maxWidth="xs">
+            <Container component="section" maxWidth="xs">
                 {context.state.releases.map((release) => {
                     return (
                         <div key={release.releaseId}>
