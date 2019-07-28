@@ -16,7 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { withSnackbar } from 'notistack';
 import { useStyles } from '../components/common-components';
-import { ButtonGroup } from '@material-ui/core';
+import { ButtonGroup, Card } from '@material-ui/core';
 
 const SignInPage = () => <SignInForm />;
 
@@ -76,7 +76,8 @@ const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof IN
     const isInvalid = password === '' || email === '' || password.length < 8;
 
     return (
-        <Container component="section" maxWidth="xs">
+        <Container component="section" maxWidth="sm">
+            <Card style={{ padding: '10px 40px' }}>
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
@@ -141,6 +142,7 @@ const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof IN
                     <Button>GitHub</Button>
                 </ButtonGroup> */}
             </div>
+            </Card>
         </Container>
     )
 };

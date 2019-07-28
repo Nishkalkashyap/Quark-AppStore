@@ -14,6 +14,7 @@ import Container from '@material-ui/core/Container';
 import { withSnackbar } from 'notistack'
 import { basePropType } from '../basePropType';
 import { useStyles } from '../components/common-components';
+import { Card } from '@material-ui/core';
 
 
 const SignUpPage = () => <SignUpForm />
@@ -75,7 +76,8 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
         obj.state.email === '';
 
     return (
-        <Container component="section" maxWidth="xs">
+        <Container component="section" maxWidth="sm">
+            <Card style={{ padding: '10px 40px' }}>
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
@@ -149,6 +151,7 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
                     </Grid>
                 </form>
             </div>
+            </Card>
         </Container>
     )
 }

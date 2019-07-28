@@ -10,7 +10,7 @@ import { getProfilePath } from '../data/paths';
 import { basePropType } from '../basePropType';
 import { useStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
-import { TextField } from '@material-ui/core';
+import { TextField, Card } from '@material-ui/core';
 
 
 const EditProfilePage = () => <EditProfile />
@@ -91,79 +91,81 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
     } = obj.state;
 
     return (
-        <Container component="section" maxWidth="xs">
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <AccountBoxIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Edit Profile
+        <Container component="section" maxWidth="sm">
+            <Card style={{ padding: '10px 40px' }}>
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <AccountBoxIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Edit Profile
                 </Typography>
-                <form className={classes.form} onSubmit={obj.onSubmit}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                id="name"
-                                label="Name"
-                                name="name"
+                    <form className={classes.form} onSubmit={obj.onSubmit}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    id="name"
+                                    label="Name"
+                                    name="name"
 
-                                value={name}
-                                onChange={obj.onChange}
-                            />
+                                    value={name}
+                                    onChange={obj.onChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    id="bio"
+                                    label="Bio"
+                                    name="bio"
+
+                                    multiline
+                                    rows="4"
+
+                                    value={bio}
+                                    onChange={obj.onChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    id="location"
+                                    label="Location"
+                                    name="location"
+
+                                    value={location}
+                                    onChange={obj.onChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    id="site"
+                                    label="Site"
+                                    name="site"
+
+                                    value={site}
+                                    onChange={obj.onChange}
+                                />
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                id="bio"
-                                label="Bio"
-                                name="bio"
-
-                                multiline
-                                rows="4"
-
-                                value={bio}
-                                onChange={obj.onChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                id="location"
-                                label="Location"
-                                name="location"
-
-                                value={location}
-                                onChange={obj.onChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                id="site"
-                                label="Site"
-                                name="site"
-
-                                value={site}
-                                onChange={obj.onChange}
-                            />
-                        </Grid>
-                    </Grid>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Save
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                        >
+                            Save
                     </Button>
-                </form>
-            </div>
+                    </form>
+                </div>
+            </Card>
         </Container>
     )
 }
