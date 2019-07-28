@@ -223,27 +223,42 @@ export default class LocalComponent extends Component<basePropType> {
                         <span role="img" aria-label="Projects">🚀</span>
                         {this.state.projectData.projectName || 'Project'}
                     </Typography>
-                    <Typography variant="h4">
-                        Project description
-                </Typography>
-                    <Typography component="p">
-                        {this.state.projectData.description}
-                    </Typography>
-
-                    <Typography color="textSecondary" component="span" style={styles}>
-                        Project ID: {this.state.projectId}
-                    </Typography>
-
-                    {Object.keys(this.state.projectData).length &&
-                        (<React.Fragment>
-                            <Typography color="textSecondary" component="span" style={styles}>
-                                Created: {moment(this.state.projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
+                    <Card>
+                        <CardContent>
+                            <Typography variant="h4">
+                                Project description
                             </Typography>
-                            <Typography color="textSecondary" component="span" style={styles}>
-                                Last updated: {moment(this.state.projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
+                            <Typography component="p">
+                                {this.state.projectData.description}
                             </Typography>
-                        </React.Fragment>)
-                    }
+
+                            <Typography color="textSecondary" component="span" style={styles}>
+                                Project ID: {this.state.projectId}
+                            </Typography>
+                            {Object.keys(this.state.projectData).length &&
+                                (<React.Fragment>
+                                    <Typography color="textSecondary" component="span" style={styles}>
+                                        Created: {moment(this.state.projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
+                                    </Typography>
+                                    <Typography color="textSecondary" component="span" style={styles}>
+                                        Last updated: {moment(this.state.projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
+                                    </Typography>
+                                </React.Fragment>)
+                            }
+                        </CardContent>
+                        <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <ButtonGroup size="small" aria-label="small outlined button group">
+                                <Button >
+                                    Edit description
+                                    <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                                </Button>
+                                <Button >
+                                    Delete project
+                                    <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                                </Button>
+                            </ButtonGroup>
+                        </CardActions>
+                    </Card>
 
                     <Button
                         style={{ marginTop: '30px' }}
@@ -314,11 +329,11 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
                 <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <ButtonGroup size="small" aria-label="small outlined button group">
                         <Button onClick={() => allData.showEditReleaseDialog(userID, release.projectId, release.releaseId, release.notes)}>
-                            Edit Release
+                            Edit Notes
                             <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
                         </Button>
                         <Button onClick={() => allData.showDeleteReleaseDialog(userID, release.projectId, release.releaseId)}>
-                            Delete
+                            Delete Release
                             <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
                         </Button>
                     </ButtonGroup>

@@ -141,8 +141,10 @@ class Header extends Component<basePropType> {
             <React.Fragment>
                 <div style={MainContainerStyle}>
                     <div style={LeftHeaderStyle}>
-                        <img src={logo} alt="logo" style={ImageStyles} />
-                        <h3 id="appbar-title" style={{ margin: '0px 10px 0px 10px', verticalAlign: 'middle', fontSize: '1.3rem' }}>Quark</h3>
+                        {/* <img src={logo} alt="logo" style={ImageStyles} /> */}
+                        <Typography component="h3" id="appbar-title" style={{ margin: '0px 10px 0px 10px', verticalAlign: 'middle', fontSize: '1.3rem', color : 'inherit' }}>
+                            Quark
+                        </Typography>
                     </div>
                     <div style={RightHeaderStyle}>
                         {this.props.children}
