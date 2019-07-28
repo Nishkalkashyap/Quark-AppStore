@@ -107,7 +107,9 @@ export default class LocalComponent extends Component<basePropType> {
         const projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
 
         this.props.firebase.auth.onAuthStateChanged((e) => {
-            this.setState({ isOwner: !!e });
+            if (e) {
+                this.setState({ isOwner: e.uid == userId });
+            }
         });
 
         this.state = cloneDeep(this.INITIAL_STATE);
@@ -347,7 +349,7 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
                     </Typography>
                 </CardContent>
                 <DownloadsComponent {...{ release, props, state, downloadFile: getDownloadUrl }} />
-                <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                {state.isOwner && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <ButtonGroup size="small" aria-label="small outlined button group">
                         <Button onClick={() => allData.showEditReleaseDialog(userID, release.projectId, release.releaseId, release.notes)}>
                             Edit Notes
@@ -358,7 +360,7 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
                             <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
                         </Button>
                     </ButtonGroup>
-                </CardActions>
+                </CardActions>}
             </Card>
         </React.Fragment>
     )
