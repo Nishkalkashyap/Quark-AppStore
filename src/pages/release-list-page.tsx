@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, List, Typography, Card, CardContent, Button, CardActions, Link, ButtonGroup } from '@material-ui/core';
+import { Container, List, Typography, Card, CardContent, Button, CardActions, Link, ButtonGroup, Fab, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { withAllProviders } from '../providers/all-providers';
@@ -257,10 +257,15 @@ export default class LocalComponent extends Component<basePropType> {
                                     <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
                                 </Button>
                             </ButtonGroup>
+                            <Button variant="contained" size="small" color="primary" style={{background : 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)', boxShadow : '0 3px 5px 2px rgba(33, 203, 243, .3)'}}
+                                onClick={() => this.props.history.push(`${ROUTES.NEW_RELEASE}/${this.state.userId}/${this.state.projectId}/${POST_SLUG.NEW_RELEASE}`)}
+                            >
+                                Create new release
+                            </Button>
                         </CardActions>
                     </Card>
 
-                    <Button
+                    {/* <Button
                         style={{ marginTop: '30px' }}
                         fullWidth
                         variant="outlined"
@@ -268,7 +273,7 @@ export default class LocalComponent extends Component<basePropType> {
                         onClick={() => this.props.history.push(`${ROUTES.NEW_RELEASE}/${this.state.userId}/${this.state.projectId}/${POST_SLUG.NEW_RELEASE}`)}
                     >
                         Create new release
-                    </Button>
+                    </Button> */}
 
                     <List style={{ marginTop: '30px' }}>
                         {

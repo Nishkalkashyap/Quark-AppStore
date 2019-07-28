@@ -16,7 +16,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import HeaderComponent, { progress } from './header-component';
 import { basePropType } from '../basePropType';
 import { sidebarItems } from './sidebar-component';
-import { LinearProgress, Button } from '@material-ui/core';
+import { LinearProgress, Button, Typography } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
 import { HeaderAvatarComponent } from './header-avatar-component';
 
@@ -135,7 +135,9 @@ export function PageContainer(props: basePropType & { children: any }) {
                 className={clsx(classes.appBar, {
                     [classes.appBarShift]: open,
                 })}
-                // style={{ background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)', color : 'white' }}
+                style={{ background: '#ffffff' }}
+                // style={{ background: '#f2f4f8' }}
+            // style={{ background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)', color : 'white' }}
             >
                 {_showProgressBar && <LinearProgress style={{ position: 'absolute', width: '100%', top: '0px', height: '2px' }} />}
                 <Toolbar>
@@ -151,6 +153,9 @@ export function PageContainer(props: basePropType & { children: any }) {
                         <MenuIcon />
                     </IconButton>
                     <HeaderComponent>
+                        <Button variant="outlined" size="small">
+                            Go to docs
+                        </Button>
                         {!isAuthenticated && <Button color="inherit" onClick={() => props.history.push(ROUTES.SIGN_IN)}>Login</Button>}
                         {isAuthenticated && <HeaderAvatarComponent {...props} />}
                     </HeaderComponent>
@@ -170,26 +175,33 @@ export function PageContainer(props: basePropType & { children: any }) {
                 }}
                 open={open}
             >
-                <div className={classes.toolbar}>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                    </IconButton>
+                {/* <div style={{ background: 'linear-gradient(180deg, #2196F3 30%, #21CBF3 90%)', color: 'white', height: '100%' }}                > */}
+                <div style={{ background: '#ffffff', height: '100%' }}                >
+                    <div className={classes.toolbar} style={{ justifyContent : 'space-between' }}>
+                        <Typography component="h3" color="inherit" style={{margin : '20px'}}>
+                            Quark
+                        </Typography>
+                        <IconButton onClick={handleDrawerClose}>
+                            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                        </IconButton>
+                    </div>
+                    <Divider />
+                    <List>
+                        {sidebarItems.map((item, index) => (
+                            <ListItem button key={item.label} onClick={() => {
+                                if (item.clickRoute) {
+                                    (props).history.push(item.clickRoute);
+                                }
+                            }}>
+                                    {/* <item.icon  style={{color : '#ffffff'}} /> */}
+                                <ListItemIcon>
+                                    <item.icon />
+                                </ListItemIcon>
+                                <ListItemText primary={item.label} />
+                            </ListItem>
+                        ))}
+                    </List>
                 </div>
-                <Divider />
-                <List>
-                    {sidebarItems.map((item, index) => (
-                        <ListItem button key={item.label} onClick={() => {
-                            if (item.clickRoute) {
-                                (props).history.push(item.clickRoute);
-                            }
-                        }}>
-                            <ListItemIcon>
-                                <item.icon />
-                            </ListItemIcon>
-                            <ListItemText primary={item.label} />
-                        </ListItem>
-                    ))}
-                </List>
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
