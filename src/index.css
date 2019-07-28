@@ -13,6 +13,12 @@ html {
   overflow: hidden;
 } */
 
+@media only screen and (max-width: 600px) {
+  #appbar-title {
+    display: none;
+  }
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

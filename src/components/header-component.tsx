@@ -14,7 +14,6 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PersonIcon from '@material-ui/icons/Person';
 import NoteIcon from '@material-ui/icons/Note';
-import { LinearProgress } from '@material-ui/core';
 import { MessageDialogInterface, FormDialogInterface } from '../interfaces';
 import { MessageDialogComponent } from './message-dialog-component';
 import { FormDialogComponent } from './form-dialog-component';
@@ -140,12 +139,17 @@ class Header extends Component<basePropType> {
         const formOptions = Object.assign(this.state.formDialogOptions, { onClose: this.onCloseFormDialog.bind(this) });
         return (
             <React.Fragment>
-                <div style={LeftHeaderStyle}>
-                    <img src={logo} alt="logo" style={ImageStyles} />
-                    <h3 style={{ margin: '0px 10px 0px 10px', verticalAlign: 'middle', fontSize: '1.3rem' }}>Dashboard</h3>
+                <div style={MainContainerStyle}>
+                    <div style={LeftHeaderStyle}>
+                        <img src={logo} alt="logo" style={ImageStyles} />
+                        <h3 id="appbar-title" style={{ margin: '0px 10px 0px 10px', verticalAlign: 'middle', fontSize: '1.3rem' }}>Quark</h3>
+                    </div>
+                    <div style={RightHeaderStyle}>
+                        {this.props.children}
+                    </div>
+                    {this.state.messageDialogOptions.isOpen && <MessageDialogComponent {...messageOptions}></MessageDialogComponent>}
+                    {this.state.formDialogOptions.isOpen && <FormDialogComponent {...formOptions}></FormDialogComponent>}
                 </div>
-                {this.state.messageDialogOptions.isOpen && <MessageDialogComponent {...messageOptions}></MessageDialogComponent>}
-                {this.state.formDialogOptions.isOpen && <FormDialogComponent {...formOptions}></FormDialogComponent>}
             </React.Fragment>
         )
     }
@@ -154,10 +158,8 @@ class Header extends Component<basePropType> {
 export default withFirebase(Header);
 
 const MainContainerStyle: StandardProperties = {
-    color: 'black',
-    borderBottom: `1px solid var(--border-color)`,
-    height: '56px',
     display: 'flex',
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
     position: 'relative'
@@ -175,8 +177,9 @@ const LeftHeaderStyle: StandardProperties = {
 }
 
 const ImageStyles: StandardProperties = {
-    maxWidth: '35.2px',
-    marginLeft: '24px',
+    // maxWidth: '35.2px',
+    maxWidth: '30.2px',
+    // marginLeft: '24px',
 }
 
 

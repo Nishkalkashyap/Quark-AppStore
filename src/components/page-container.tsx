@@ -21,21 +21,11 @@ import HeaderComponent, { progress } from './header-component';
 import { basePropType } from '../basePropType';
 import { sidebarItems } from './sidebar-component';
 import { Firebase } from '../providers/firebase-provider';
-import { LinearProgress } from '@material-ui/core';
+import { LinearProgress, Button } from '@material-ui/core';
+import { ROUTES } from '../data/routes';
+import { HeaderAvatarComponent } from './header-avatar-component';
 
 const drawerWidth = 240;
-
-interface SidebarItems {
-    label: string;
-    action: Function;
-    icon: any
-}
-
-// const sidebarItems: SidebarItems[] = [{
-//     label: 'Profile',
-//     action: () => { },
-//     icon: MailIcon
-// }]
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -109,7 +99,16 @@ export function PageContainer(props: basePropType & { children: any }) {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const [isAuthenticated, setIsAuthenticated] = React.useState(false);
     const [_showProgressBar, setShowProgressBar] = React.useState(initial);
+
+    props.firebase.auth.onAuthStateChanged((e) => {
+        if (e) {
+            setIsAuthenticated(true);
+        } else {
+            setIsAuthenticated(false);
+        }
+    });
 
     const childrenWithProps = React.Children.map(props.children, child =>
         React.cloneElement(child, { ...props })
@@ -137,6 +136,8 @@ export function PageContainer(props: basePropType & { children: any }) {
             <CssBaseline />
             <AppBar
                 position="fixed"
+                color="default"
+                elevation={1}
                 className={clsx(classes.appBar, {
                     [classes.appBarShift]: open,
                 })}
@@ -154,10 +155,10 @@ export function PageContainer(props: basePropType & { children: any }) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <HeaderComponent></HeaderComponent>
-                    {/* <Typography variant="h6" noWrap>
-                        Mini variant drawer
-                    </Typography> */}
+                    <HeaderComponent>
+                        {!isAuthenticated && <Button color="inherit" onClick={() => props.history.push(ROUTES.SIGN_IN)}>Login</Button>}
+                        {isAuthenticated && <HeaderAvatarComponent {...props} />}
+                    </HeaderComponent>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -194,23 +195,6 @@ export function PageContainer(props: basePropType & { children: any }) {
                         </ListItem>
                     ))}
                 </List>
-                {/* <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
-                </List> */}
-                {/* <Divider />
-                <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
-                </List> */}
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
