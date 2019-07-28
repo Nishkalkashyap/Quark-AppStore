@@ -82,7 +82,7 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
-                <Typography component="h1" variant="h5">
+                <Typography component="h1" variant="h3">
                     Sign up
                 </Typography>
                 <form className={classes.form} onSubmit={obj.onSubmit}>

@@ -1,7 +1,7 @@
 import { merge } from 'lodash';
 import React, { useState } from 'react'
 import { basePropType } from "../basePropType";
-import { Container, Avatar, Typography, TextField, Button, ListItem, ListItemText, ListItemSecondaryAction, IconButton, List, LinearProgress } from '@material-ui/core';
+import { Container, Avatar, Typography, TextField, Button, ListItem, ListItemText, ListItemSecondaryAction, IconButton, List, LinearProgress, Card } from '@material-ui/core';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { StandardProperties } from 'csstype';
@@ -136,45 +136,47 @@ const LocalComponent = (props: basePropType) => {
 
     return (
         <Container component="section" maxWidth="sm">
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <NewReleasesIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Create Release
-                </Typography>
-                <form className={classes.form} onSubmit={onSubmit}>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
+            <Card style={{ padding: '10px 40px' }}>
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <NewReleasesIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h3">
+                        Create Release
+                    </Typography>
+                    <form className={classes.form} onSubmit={onSubmit}>
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
 
-                        id="notes"
-                        label="Notes"
-                        name="notes"
-                        type="text"
-                        autoFocus
+                            id="notes"
+                            label="Notes"
+                            name="notes"
+                            type="text"
+                            autoFocus
 
-                        multiline
-                        rows="4"
+                            multiline
+                            rows="4"
 
-                        onChange={onChange}
-                    />
-                    <DropZone addFiles={addFiles as any} />
-                    <ListComponent files={state.filesToUpload as any} forceUpdate={forceUpdate as any}></ListComponent>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        disabled={!!isDisabled()}
-                    >
-                        Publish
+                            onChange={onChange}
+                        />
+                        <DropZone addFiles={addFiles as any} />
+                        <ListComponent files={state.filesToUpload as any} forceUpdate={forceUpdate as any}></ListComponent>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                            disabled={!!isDisabled()}
+                        >
+                            Publish
                     </Button>
-                </form>
-            </div>
+                    </form>
+                </div>
+            </Card>
         </Container>
     )
 }

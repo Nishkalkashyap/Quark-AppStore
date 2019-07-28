@@ -82,7 +82,7 @@ const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof IN
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
-                <Typography component="h1" variant="h5">
+                <Typography component="h1" variant="h3">
                     Sign in
                 </Typography>
                 <form className={classes.form} onSubmit={obj.onSubmit}>

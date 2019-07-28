@@ -63,7 +63,7 @@ const PasswordChangeElement = (obj: { onSubmit: any, onChange: any, state: typeo
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
-                <Typography component="h1" variant="h5">
+                <Typography component="h1" variant="h3">
                     Change Password
                 </Typography>
                 <form className={classes.form} onSubmit={obj.onSubmit}>

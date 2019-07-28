@@ -6,7 +6,7 @@ import { ROUTES } from '../data/routes';
 import { SignUpLink } from './signup-page';
 import { basePropType } from "../basePropType";
 import { default as MaterialLink } from '@material-ui/core/Link';
-import { TextField, Button, Container, Avatar, Typography } from '@material-ui/core';
+import { TextField, Button, Container, Avatar, Typography, Card } from '@material-ui/core';
 import { withSnackbar } from 'notistack';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { useStyles } from '../components/common-components';
@@ -63,45 +63,47 @@ const ForgotPasswordElement = (obj: { onSubmit: any, onChange: any, state: typeo
     const isInvalid = email === '';
 
     return (
-        <Container component="section" maxWidth="xs">
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Forgot Password
+        <Container component="section" maxWidth="sm">
+            <Card style={{ padding: '10px 40px' }}>
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h3">
+                        Forgot Password
                 </Typography>
-                <form className={classes.form} onSubmit={obj.onSubmit}>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
+                    <form className={classes.form} onSubmit={obj.onSubmit}>
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
 
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        type="email"
-                        autoFocus
+                            id="email"
+                            label="Email Address"
+                            name="email"
+                            autoComplete="email"
+                            type="email"
+                            autoFocus
 
-                        value={email}
-                        onChange={obj.onChange}
-                    />
+                            value={email}
+                            onChange={obj.onChange}
+                        />
 
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        disabled={isInvalid}
-                    >
-                        Send password reset email
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                            disabled={isInvalid}
+                        >
+                            Send password reset email
                     </Button>
-                    <SignUpLink></SignUpLink>
-                </form>
-            </div>
+                        <SignUpLink></SignUpLink>
+                    </form>
+                </div>
+            </Card>
         </Container>
     )
 }

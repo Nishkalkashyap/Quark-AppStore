@@ -5,8 +5,8 @@ import { GradientBackground } from '../util';
 
 export default function MainBgComponent() {
     return (
-        // <div style={Object.assign({}, CommonStyles,GradientBackground, { backgroundImage: 'linear-gradient(90deg,#2196F3 0,#21CBF3 100%)', transform: undefined, borderRadius : '5px' })}>
-        <div style={Object.assign({}, CommonStyles, { backgroundImage: 'linear-gradient(90deg,#2196F322 0,#21CBF322 100%)', transform: undefined })}>
+        // <div style={Object.assign({}, CommonStyles, { backgroundImage: 'linear-gradient(90deg,#2196F322 0,#21CBF322 100%)', transform: undefined,borderRadius : '5px' })}>
+        <div style={Object.assign(cloneDeep(CommonStyles), { backgroundImage: 'linear-gradient(90deg,#2196F3 0,#21CBF3 100%)', transform: undefined, borderRadius: '5px' })}>
             <div style={Object.assign(cloneDeep(CommonStyles), { opacity: 0.05, top: '75%', left: '0%' })}></div>
             <div style={Object.assign(cloneDeep(CommonStyles), { opacity: 0.1, top: '50%', left: '15%' })}></div>
             <div style={Object.assign(cloneDeep(CommonStyles), { opacity: 0.09, top: '25%', left: '30%' })}></div>
@@ -15,6 +15,13 @@ export default function MainBgComponent() {
             <div style={Object.assign(cloneDeep(CommonStyles), { opacity: 0.08, top: '-50%', left: '76%' })}></div>
         </div>
     )
+}
+
+export const MainBgContainerStyles: StandardProperties = {
+    padding: '20px 30px',
+    color: '#ffffff',
+    position: 'relative',
+    zIndex: 20
 }
 
 const CommonStyles: StandardProperties = {
@@ -27,5 +34,5 @@ const CommonStyles: StandardProperties = {
     overflow: 'hidden',
     backgroundImage: 'linear-gradient(90deg,#fff 0,rgba(255,255,255,0) 75%)',
     transform: `translate(-20px,0) rotate(-3deg) skew(16deg,0deg) scale(1,1.5)`,
-    transformOrigin: 'top'
+    transformOrigin: 'top',
 }

@@ -60,10 +60,11 @@ h6 {
     line-height: 1.1;
     /* padding: 0.25em 0px; */
     padding-bottom: 0.25em;
+    z-index: 10;
 }
 
 h1 {
-    font-size: 4rem !important;
+    font-size: 4rem;
     padding-top: 0;
     margin-bottom: 40px !important;
     /* margin-top: 10px !important; */

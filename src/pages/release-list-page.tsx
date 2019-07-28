@@ -7,13 +7,15 @@ import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES, POST_SLUG } from '../data/routes';
 import queryString from 'query-string';
 import { getReleaseListCollectionPath, getProjectPath, getProjectReleaseDocPath } from '../data/paths';
-import { handleFirebaseError, downloadFile, scrollToTop, GradientBackground } from '../util';
+import { handleFirebaseError, downloadFile, scrollToTop } from '../util';
 import { ReleaseItem, ProjectData } from '../interfaces';
 import { useStylesList } from './project-list-page';
 import moment from 'moment';
 import { cloneDeep } from 'lodash';
 import * as firebase from 'firebase';
 import { progress, dialog } from '../components/header-component';
+import NewReleasesIcon from '@material-ui/icons/NewReleases';
+import MainBgComponent, { MainBgContainerStyles } from '../components/main-background-component';
 
 interface StateType {
     releases: ReleaseItem[],
@@ -24,7 +26,8 @@ interface StateType {
     nextExists: boolean,
     previousExists: boolean,
     querySnapshot?: firebase.firestore.QuerySnapshot,
-    goingBackwards: boolean
+    goingBackwards: boolean,
+    isOwner: boolean
 }
 
 
@@ -37,7 +40,8 @@ export default class LocalComponent extends Component<basePropType> {
         loadLimit: 3,
         nextExists: false,
         previousExists: false,
-        goingBackwards: false
+        goingBackwards: false,
+        isOwner: false
     }
 
     constructor(props: basePropType) {
@@ -45,7 +49,6 @@ export default class LocalComponent extends Component<basePropType> {
         this._setInitialState();
         this._setProjectData();
         this._setReleaseArray();
-
     }
 
     state: StateType = {} as any;
@@ -92,6 +95,10 @@ export default class LocalComponent extends Component<basePropType> {
     private _setInitialState() {
         const userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
         const projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
+
+        this.props.firebase.auth.onAuthStateChanged((e) => {
+            this.setState({ isOwner: !!e });
+        });
 
         this.state = cloneDeep(this.INITIAL_STATE);
         this.state.userId = userId;
@@ -219,50 +226,49 @@ export default class LocalComponent extends Component<basePropType> {
         return (
             <React.Fragment>
                 <Container maxWidth="md">
-                    <Typography variant="h2" component="h1">
-                        {/* <span role="img" aria-label="Projects">🚀</span> */}
-                        {this.state.projectData.projectName || 'Project'}
-                    </Typography>
-                    <Card>
+                    <Card style={MainBgContainerStyles}>
+                        <MainBgComponent></MainBgComponent>
+                        <Typography variant="h2" component="h1" color="inherit">
+                            {this.state.projectData.projectName || 'Project'}
+                        </Typography>
                         <CardContent>
-                            <Typography variant="h4">
+                            <Typography variant="h4" color="inherit">
                                 Project description
                             </Typography>
-                            <Typography component="p">
+                            <Typography component="p" color="inherit">
                                 {this.state.projectData.description}
                             </Typography>
 
-                            <Typography color="textSecondary" component="span" style={styles}>
+                            <Typography color="inherit" component="span" style={styles}>
                                 Project ID: {this.state.projectId}
                             </Typography>
                             {Object.keys(this.state.projectData).length &&
                                 (<React.Fragment>
-                                    <Typography color="textSecondary" component="span" style={styles}>
+                                    <Typography color="inherit" component="span" style={styles}>
                                         Created: {moment(this.state.projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
                                     </Typography>
-                                    <Typography color="textSecondary" component="span" style={styles}>
+                                    <Typography color="inherit" component="span" style={styles}>
                                         Last updated: {moment(this.state.projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
                                     </Typography>
                                 </React.Fragment>)
                             }
                         </CardContent>
-                        <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <ButtonGroup size="small" aria-label="small outlined button group">
-                                <Button >
+                        {this.state.isOwner && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
+                                <Button onClick={() => this.props.history.push(`${ROUTES.NEW_RELEASE}/${this.state.userId}/${this.state.projectId}/${POST_SLUG.NEW_RELEASE}`)}>
+                                    Create new release
+                                    <NewReleasesIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                                </Button>
+                                <Button>
                                     Edit description
                                     <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
                                 </Button>
-                                <Button >
+                                <Button>
                                     Delete project
                                     <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
                                 </Button>
                             </ButtonGroup>
-                            <Button variant="contained" size="small" color="primary" style={GradientBackground}
-                                onClick={() => this.props.history.push(`${ROUTES.NEW_RELEASE}/${this.state.userId}/${this.state.projectId}/${POST_SLUG.NEW_RELEASE}`)}
-                            >
-                                Create new release
-                            </Button>
-                        </CardActions>
+                        </CardActions>}
                     </Card>
 
                     {/* <Button
