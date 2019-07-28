@@ -53,41 +53,51 @@ export default class LocalComponent extends Component<basePropType> {
 
     state: StateType = {} as any;
 
-    private async _setReleaseArray() {
+    private _setReleaseArray() {
         const values = queryString.parse(this.props.history.location.search);
         const startAfter = values['startAfter'];
         progress.showProgressBar();
 
         if (startAfter && typeof startAfter == 'string') {
             this.props.firebase.firestore.doc(getProjectReleaseDocPath(this.state.userId, this.state.projectId, startAfter)).get()
-                .then(async (snap) => {
-                    if (snap.exists) {
-                        const StartType = this.state.goingBackwards ? 'asc' : 'desc';
+                .then((snap) => {
 
-                        const query = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', StartType).startAfter(snap).limit(this.state.loadLimit);
-                        const result = await query.get();
-                        const arr = result.docs.map((doc) => doc.data());
-                        scrollToTop();
-                        this.setState({ releases: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: result });
-                        this._fetchNextAndPreviousDocuments();
-                        progress.hideProgressBar();
-
-                        if (result.docs.length === 0) {
-                            this.props.history.push(ROUTES.NOT_FOUND);
-                        }
-                        return;
+                    if (!snap.exists) {
+                        this.props.history.push(ROUTES.NOT_FOUND);
                     }
 
-                    this.props.history.push(ROUTES.NOT_FOUND);
-                }).catch((err) => handleFirebaseError(err, this.props, 'Could not fetch document'))
+                    const StartType = this.state.goingBackwards ? 'asc' : 'desc';
+                    return this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId))
+                        .orderBy('createdAt', StartType)
+                        .startAfter(snap)
+                        .limit(this.state.loadLimit)
+                        .get();
+                })
+                .then((result) => {
+                    if (result.docs.length === 0) {
+                        this.props.history.push(ROUTES.NOT_FOUND);
+                    }
+
+                    const arr = result.docs.map((doc) => doc.data());
+                    scrollToTop();
+                    this.setState({ releases: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: result });
+                    this._fetchNextAndPreviousDocuments();
+                    progress.hideProgressBar();
+                })
+                .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch document'))
         } else {
-            const query = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').limit(this.state.loadLimit);
-            const result = await query.get();
-            const arr = result.docs.map((doc) => doc.data());
-            scrollToTop();
-            this.setState({ releases: arr, querySnapshot: result });
-            this._fetchNextAndPreviousDocuments();
-            progress.hideProgressBar();
+            this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId))
+                .orderBy('createdAt', 'desc')
+                .limit(this.state.loadLimit)
+                .get()
+                .then((result) => {
+                    const arr = result.docs.map((doc) => doc.data());
+                    scrollToTop();
+                    this.setState({ releases: arr, querySnapshot: result });
+                    this._fetchNextAndPreviousDocuments();
+                    progress.hideProgressBar();
+                })
+                .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch document'))
         }
     }
 
@@ -106,13 +116,16 @@ export default class LocalComponent extends Component<basePropType> {
     }
 
     private _setProjectData() {
-        this.props.firebase.firestore.doc(getProjectDocPath(this.state.userId, this.state.projectId)).get().then((snap) => {
-            if (snap.exists) {
+        this.props.firebase.firestore.doc(getProjectDocPath(this.state.userId, this.state.projectId))
+            .get()
+            .then((snap) => {
+                if (!snap.exists) {
+                    this.props.history.push(ROUTES.NOT_FOUND);
+                    return;
+                }
                 this.setState({ projectData: snap.data() });
-                return;
-            }
-            this.props.history.push(ROUTES.NOT_FOUND);
-        }).catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'));
+            })
+            .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'));
     }
 
     private async _fetchNextAndPreviousDocuments() {
@@ -277,16 +290,6 @@ export default class LocalComponent extends Component<basePropType> {
                         </CardActions>}
                     </Card>
 
-                    {/* <Button
-                        style={{ marginTop: '30px' }}
-                        fullWidth
-                        variant="outlined"
-                        color="primary"
-                        onClick={() => this.props.history.push(`${ROUTES.NEW_RELEASE}/${this.state.userId}/${this.state.projectId}/${POST_SLUG.NEW_RELEASE}`)}
-                    >
-                        Create new release
-                    </Button> */}
-
                     <List style={{ marginTop: '30px' }}>
                         {
                             this.state.releases.map((release) => {
@@ -297,6 +300,7 @@ export default class LocalComponent extends Component<basePropType> {
                             })
                         }
                     </List>
+
                 </Container>
                 <Container maxWidth="sm">
                     <ButtonGroup
