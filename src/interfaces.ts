@@ -29,7 +29,8 @@ export interface MessageDialogInterface<T=any> {
 
 export interface FormDialogInterface<T=any> {
     title: string;
-    text: string;
+    subTitle: string;
+    value: string;
     buttons: T[];
     isOpen: boolean;
     fieldlabel : string;

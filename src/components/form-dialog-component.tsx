@@ -4,7 +4,7 @@ import React, { ChangeEvent } from 'react';
 
 export const FormDialogComponent = (data: FormDialogInterface & { onClose: (num: number, text: string) => void }) => {
 
-    let content = '';
+    let content = data.value;
     function onChange(e: ChangeEvent<HTMLInputElement>) {
         content = e.target.value;
     }
@@ -19,7 +19,7 @@ export const FormDialogComponent = (data: FormDialogInterface & { onClose: (num:
             <DialogTitle id="alert-dialog-title">{data.title}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                    {data.text}
+                    {data.subTitle}
                 </DialogContentText>
             </DialogContent>
             <TextField
@@ -32,6 +32,7 @@ export const FormDialogComponent = (data: FormDialogInterface & { onClose: (num:
                 fullWidth
                 multiline
                 onChange={onChange}
+                value={content}
             />
             <DialogActions>
                 {data.buttons.map((action, index) => {

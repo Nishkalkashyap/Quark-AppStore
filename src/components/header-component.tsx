@@ -55,7 +55,8 @@ const messageDialogOptions: MessageDialogInterface = {
 
 const formDialogOptions: FormDialogInterface = {
     title: '',
-    text: '',
+    subTitle: '',
+    value: '',
     isOpen: false,
     buttons: [],
     fieldlabel: 'Content'
@@ -111,10 +112,11 @@ class Header extends Component<basePropType> {
     }
 
 
-    async _showFormDialog<T = any>(title: string, text: string, buttons: T[]): Promise<FormResolveType<T>> {
+    async _showFormDialog<T = any>(title: string, text: string, buttons: T[], value?: string): Promise<FormResolveType<T>> {
         return new Promise<FormResolveType<T>>((resolve) => {
             formDialogOptions.title = title;
-            formDialogOptions.text = text;
+            formDialogOptions.subTitle = text;
+            formDialogOptions.value = value || '';
             formDialogOptions.isOpen = true;
             formDialogOptions.buttons = buttons;
             this.setState({ formDialogOptions });
