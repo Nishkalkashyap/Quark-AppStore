@@ -6,7 +6,7 @@ import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES, POST_SLUG } from '../data/routes';
 import queryString from 'query-string';
-import { getReleaseListCollectionPath, getProjectDocPath, getProjectReleaseDocPath } from '../data/paths';
+import { getReleaseListCollectionPath, getProjectDocPath, getProjectReleaseDocPath, getProjectStatsDocPath } from '../data/paths';
 import { handleFirebaseError, downloadFile, scrollToTop } from '../util';
 import { ReleaseItem, ProjectData } from '../interfaces';
 import { useStylesList } from './project-list-page';
@@ -209,16 +209,12 @@ export default class LocalComponent extends Component<basePropType> {
     }
 
     downloadFile(userId: string, projectId: string, releaseId: string, fileName: string) {
-        // const url = this.props.firebase.storage.ref(`${getProjectReleaseDocPath(userId, projectId, releaseId)}/${fileName}`).getDownloadURL();
-        // url.then((val) => {
-        //     downloadFile(val, fileName);
-        // }).catch(err => handleFirebaseError(err, this.props, 'Failed to fetch download url'));
         this.props.firebase.storage.ref(`${getProjectReleaseDocPath(userId, projectId, releaseId)}/${fileName}`).getDownloadURL()
             .then((val) => {
                 return downloadFile(val, fileName);
             })
-            .then((val) => {
-                return this.props.firebase.firestore.doc(getProjectDocPath(userId, projectId)).set(({
+            .then(() => {
+                return this.props.firebase.firestore.doc(getProjectStatsDocPath(userId, projectId)).set(({
                     numberOfDownloads: firebase.firestore.FieldValue.increment(1) as any
                 } as Partial<ProjectData>), { merge: true });
             })

@@ -32,7 +32,6 @@ class LocalComponent extends Component<basePropType> {
 
         const dataToSend: ProjectData = {
             numberOfReleases: 0,
-            numberOfDownloads: 0,
             projectId: random,
             updatedAt: createdAt as any,
             createdAt: createdAt as any,
