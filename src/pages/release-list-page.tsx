@@ -50,10 +50,6 @@ export default class LocalComponent extends Component<basePropType> {
 
     state: StateType = {} as any;
 
-    // private _scrollToTop() {
-    //     (ReactDOM.findDOMNode(this)! as HTMLElement).scrollTop = 0;
-    // }
-
     private async _setReleaseArray() {
         const values = queryString.parse(this.props.history.location.search);
         const startAfter = values['startAfter'];
@@ -145,28 +141,43 @@ export default class LocalComponent extends Component<basePropType> {
         this.setState(state);
     }
 
-    async showEditReleaseDialog(userId: string, projectId: string, releaseId: string, notes : string) {
+    async showEditReleaseDialog(userId: string, projectId: string, releaseId: string, notes: string) {
+        const self = this;
         const result = await dialog.showFormDialog<'Yes' | 'Cancel'>('Delete release', 'Are you sure you want to delete this release. This action is irreversible', 'Notes', ['Yes', 'Cancel'], notes);
         if (result.result.button == 'Yes') {
-            console.log(result.result.text);
+            editRelease(result.result.text);
+        }
+
+        function editRelease(updatedNotes: string) {
+            const findIndex = self.state.releases.findIndex((rel) => rel.releaseId == releaseId);
+            if (findIndex !== -1) {
+                self.props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, releaseId)).update({
+                    notes: updatedNotes
+                }).then(() => {
+                    self.state.releases[findIndex].notes = updatedNotes;
+                    self.setState({ releases: self.state.releases });
+                    self.props.enqueueSnackbar('Release updated', { variant: 'success' });
+                }).catch((err) => handleFirebaseError(self.props, err, 'Failed to delete release'));
+            }
         }
     }
 
     async showDeleteReleaseDialog(userId: string, projectId: string, releaseId: string) {
+        const self = this;
         const result = await dialog.showMessageBox<'Yes' | 'Cancel'>('Delete release', 'Are you sure you want to delete this release. This action is irreversible', ['Yes', 'Cancel'], 'warning');
         if (result == 'Yes') {
-            this.deleteRelease(userId, projectId, releaseId);
+            deleteRelease();
         }
-    }
 
-    deleteRelease(userId: string, projectId: string, releaseId: string) {
-        const findIndex = this.state.releases.findIndex((rel) => rel.releaseId == releaseId);
-        if (findIndex !== -1) {
-            this.props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, releaseId)).delete().then(() => {
-                this.state.releases.splice(findIndex, 1);
-                this.setState({ releases: this.state.releases });
-                this.props.enqueueSnackbar('Release deleted');
-            }).catch((err) => handleFirebaseError(this.props, err, 'Failed to delete release'));
+        function deleteRelease() {
+            const findIndex = self.state.releases.findIndex((rel) => rel.releaseId == releaseId);
+            if (findIndex !== -1) {
+                self.props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, releaseId)).delete().then(() => {
+                    self.state.releases.splice(findIndex, 1);
+                    self.setState({ releases: self.state.releases });
+                    self.props.enqueueSnackbar('Release deleted', { variant: 'success' });
+                }).catch((err) => handleFirebaseError(self.props, err, 'Failed to delete release'));
+            }
         }
     }
 
@@ -302,7 +313,6 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
                 <DownloadsComponent {...{ release, props, state, downloadFile: getDownloadUrl }} />
                 <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <ButtonGroup size="small" aria-label="small outlined button group">
-                        {/* <Button onClick={() => history.push(`${ROUTES.PROJECT_PAGE}/${userID}/${release.projectId}/${release.releaseId}`)}> */}
                         <Button onClick={() => allData.showEditReleaseDialog(userID, release.projectId, release.releaseId, release.notes)}>
                             Edit Release
                             <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
