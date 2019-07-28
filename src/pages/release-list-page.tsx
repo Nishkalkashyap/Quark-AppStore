@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, List, Typography, Card, CardContent, Button, CardActions, Link, ButtonGroup, Fab, IconButton } from '@material-ui/core';
+import { Container, List, Typography, Card, CardContent, Button, CardActions, Link, ButtonGroup } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { withAllProviders } from '../providers/all-providers';
@@ -8,7 +8,7 @@ import { MATCH_PARAMS, ROUTES, POST_SLUG } from '../data/routes';
 import queryString from 'query-string';
 import { getReleaseListCollectionPath, getProjectDocPath, getProjectReleaseDocPath, getProjectStatsDocPath } from '../data/paths';
 import { handleFirebaseError, downloadFile, scrollToTop } from '../util';
-import { ReleaseItem, ProjectData, ProjectStats } from '../interfaces';
+import { ReleaseItem, ProjectData } from '../interfaces';
 import { useStylesList } from './project-list-page';
 import moment from 'moment';
 import { cloneDeep } from 'lodash';
@@ -134,7 +134,7 @@ export default class LocalComponent extends Component<basePropType> {
                 }
                 this.setState({ projectData: snap.data() });
             })
-        .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'));
+            .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'));
     }
 
     private async _fetchNextAndPreviousDocuments() {
@@ -236,9 +236,11 @@ export default class LocalComponent extends Component<basePropType> {
                 return downloadFile(val, fileName);
             })
             .then(() => {
-                return this.props.firebase.firestore.doc(getProjectStatsDocPath(userId, projectId)).set(({
-                    numberOfDownloads: firebase.firestore.FieldValue.increment(1) as any
-                } as Partial<ProjectData>), { merge: true });
+                if (!this.state.isOwner) {
+                    return this.props.firebase.firestore.doc(getProjectStatsDocPath(userId, projectId)).set(({
+                        numberOfDownloads: firebase.firestore.FieldValue.increment(1) as any
+                    } as Partial<ProjectData>), { merge: true });
+                }
             })
             .catch(err => handleFirebaseError(err, this.props, 'Failed to fetch download url'));
     }
@@ -357,7 +359,7 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
                 </CardContent>
                 <DownloadsComponent {...{ release, props, state, downloadFile: getDownloadUrl }} />
                 {state.isOwner && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
-                {/* {<CardActions style={{ display: 'flex', justifyContent: 'space-between' }}> */}
+                    {/* {<CardActions style={{ display: 'flex', justifyContent: 'space-between' }}> */}
                     <ButtonGroup size="small" aria-label="small outlined button group">
                         <Button onClick={() => allData.showEditReleaseDialog(userID, release.projectId, release.releaseId, release.notes)}>
                             Edit Notes
