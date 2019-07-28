@@ -4,9 +4,9 @@ import React, { ChangeEvent } from 'react';
 
 export const FormDialogComponent = (data: FormDialogInterface & { onClose: (num: number, text: string) => void }) => {
 
-    let content = data.value;
+    const [value, setValue] = React.useState(data.value);
     function onChange(e: ChangeEvent<HTMLInputElement>) {
-        content = e.target.value;
+        setValue(e.target.value);
     }
 
     return (
@@ -21,25 +21,25 @@ export const FormDialogComponent = (data: FormDialogInterface & { onClose: (num:
                 <DialogContentText id="alert-dialog-description">
                     {data.subTitle}
                 </DialogContentText>
-            <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label={data.fieldlabel}
-                type="text"
-                fullWidth
-                
-                rows="4"
-                multiline
-                onChange={onChange}
-                value={content}
-            />
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label={data.fieldlabel}
+                    type="text"
+                    fullWidth
+
+                    rows="4"
+                    multiline
+                    onChange={onChange}
+                    value={value}
+                />
             </DialogContent>
             <DialogActions>
                 {data.buttons.map((action, index) => {
                     return (
                         <React.Fragment key={action}>
-                            <Button onClick={() => data.onClose(index, content)} autoFocus variant="outlined" >
+                            <Button onClick={() => data.onClose(index, value)} autoFocus variant="outlined" >
                                 {action}
                             </Button>
                         </React.Fragment>

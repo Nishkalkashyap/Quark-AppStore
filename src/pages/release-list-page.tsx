@@ -145,8 +145,8 @@ export default class LocalComponent extends Component<basePropType> {
         this.setState(state);
     }
 
-    async showEditReleaseDialog(userId: string, projectId: string, releaseId: string) {
-        const result = await dialog.showFormDialog<'Yes' | 'Cancel'>('Delete release', 'Are you sure you want to delete this release. This action is irreversible', 'Notes', ['Yes', 'Cancel'], 'Initial value');
+    async showEditReleaseDialog(userId: string, projectId: string, releaseId: string, notes : string) {
+        const result = await dialog.showFormDialog<'Yes' | 'Cancel'>('Delete release', 'Are you sure you want to delete this release. This action is irreversible', 'Notes', ['Yes', 'Cancel'], notes);
         if (result.result.button == 'Yes') {
             console.log(result.result.text);
         }
@@ -303,7 +303,7 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
                 <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <ButtonGroup size="small" aria-label="small outlined button group">
                         {/* <Button onClick={() => history.push(`${ROUTES.PROJECT_PAGE}/${userID}/${release.projectId}/${release.releaseId}`)}> */}
-                        <Button onClick={() => allData.showEditReleaseDialog(userID, release.projectId, release.releaseId)}>
+                        <Button onClick={() => allData.showEditReleaseDialog(userID, release.projectId, release.releaseId, release.notes)}>
                             Edit Release
                             <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
                         </Button>

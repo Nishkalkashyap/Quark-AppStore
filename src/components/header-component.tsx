@@ -164,8 +164,8 @@ class Header extends Component<basePropType> {
                     <div style={RightHeaderStyle}>
                     </div>
                 </div>
-                <MessageDialogComponent {...messageOptions}></MessageDialogComponent>
-                <FormDialogComponent {...formOptions}></FormDialogComponent>
+                {this.state.messageDialogOptions.isOpen && <MessageDialogComponent {...messageOptions}></MessageDialogComponent>}
+                {this.state.formDialogOptions.isOpen && <FormDialogComponent {...formOptions}></FormDialogComponent>}
             </React.Fragment>
         )
     }
