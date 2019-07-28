@@ -8,7 +8,7 @@ import { MATCH_PARAMS, ROUTES, POST_SLUG } from '../data/routes';
 import queryString from 'query-string';
 import { getReleaseListCollectionPath, getProjectDocPath, getProjectReleaseDocPath, getProjectStatsDocPath } from '../data/paths';
 import { handleFirebaseError, downloadFile, scrollToTop } from '../util';
-import { ReleaseItem, ProjectData } from '../interfaces';
+import { ReleaseItem, ProjectData, ProjectStats } from '../interfaces';
 import { useStylesList } from './project-list-page';
 import moment from 'moment';
 import { cloneDeep } from 'lodash';
@@ -109,6 +109,12 @@ export default class LocalComponent extends Component<basePropType> {
         this.props.firebase.auth.onAuthStateChanged((e) => {
             if (e) {
                 this.setState({ isOwner: e.uid == userId });
+                if (e.uid !== userId) {
+                    console.log('Sending view');
+                    this.props.firebase.firestore.doc(getProjectStatsDocPath(userId, projectId)).set(({
+                        numberOfViews: firebase.firestore.FieldValue.increment(1) as any
+                    } as Partial<ProjectStats>), { merge: true });
+                }
             }
         });
 
@@ -127,7 +133,7 @@ export default class LocalComponent extends Component<basePropType> {
                 }
                 this.setState({ projectData: snap.data() });
             })
-            .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'));
+        .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'));
     }
 
     private async _fetchNextAndPreviousDocuments() {
@@ -350,6 +356,7 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
                 </CardContent>
                 <DownloadsComponent {...{ release, props, state, downloadFile: getDownloadUrl }} />
                 {state.isOwner && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                {/* {<CardActions style={{ display: 'flex', justifyContent: 'space-between' }}> */}
                     <ButtonGroup size="small" aria-label="small outlined button group">
                         <Button onClick={() => allData.showEditReleaseDialog(userID, release.projectId, release.releaseId, release.notes)}>
                             Edit Notes

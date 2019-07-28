@@ -23,7 +23,9 @@ export class Firebase {
         this.firestore = app.firestore();
 
 
-        this.firestore.enablePersistence()
+        this.firestore.enablePersistence({
+            synchronizeTabs : true
+        })
             .catch(function (err) {
                 if (err.code == 'failed-precondition') {
                     console.log(err);

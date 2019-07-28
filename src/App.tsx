@@ -1,8 +1,6 @@
 import React from 'react';
 import './App.css';
-import Header from './components/header-component';
 import Sidebar from './components/sidebar-component';
-// import PrivateRoute from './components/private-route';
 import Dashboard from './pages/dashboard-page';
 import Landing from './pages/landing-page';
 import { BrowserRouter as Router, Route, withRouter } from 'react-router-dom';
@@ -17,12 +15,10 @@ import { withFirebase } from './providers/firebase-provider';
 
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme, CssBaseline } from '@material-ui/core';
-import { ViewProjectPage } from './pages/view-project-page';
 import { CreateNewRelease } from './pages/create-new-release-page';
 import changePasswordPage from './pages/change-password-page';
 import { ProjectsListPage } from './pages/project-list-page';
 import { CreateNewProjectPage } from './pages/create-new-project-page';
-// import { ReleaseListPage } from './pages/release-list-page';
 import { ReleaseListPage } from './pages/release-list-page';
 import { NotFoundComponent } from './components/common-components';
 import { PageContainer } from './components/page-container';
@@ -66,7 +62,8 @@ const theme = createMuiTheme({
 const App: React.FC = () => {
   return (
     <Router>
-      <MainBgComponent bgColor='linear-gradient(90deg ,#f6f6ff 0,#afc1cd 100%)' position="fixed"/>
+      {/* <MainBgComponent bgColor='linear-gradient(90deg ,#f6f6ff 0,#afc1cd 100%)' position="fixed"/> */}
+      <MainBgComponent bgColor='linear-gradient(90deg ,#f6f6ff 0,rgba(0,0,0,0.2) 100%)' position="fixed" />
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <StupidPageContainer>
