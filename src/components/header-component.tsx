@@ -112,10 +112,11 @@ class Header extends Component<basePropType> {
     }
 
 
-    async _showFormDialog<T = any>(title: string, text: string, buttons: T[], value?: string): Promise<FormResolveType<T>> {
+    async _showFormDialog<T = any>(title: string, text: string, fieldlabel: string, buttons: T[], value?: string): Promise<FormResolveType<T>> {
         return new Promise<FormResolveType<T>>((resolve) => {
             formDialogOptions.title = title;
             formDialogOptions.subTitle = text;
+            formDialogOptions.fieldlabel = fieldlabel;
             formDialogOptions.value = value || '';
             formDialogOptions.isOpen = true;
             formDialogOptions.buttons = buttons;

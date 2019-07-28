@@ -21,19 +21,20 @@ export const FormDialogComponent = (data: FormDialogInterface & { onClose: (num:
                 <DialogContentText id="alert-dialog-description">
                     {data.subTitle}
                 </DialogContentText>
-            </DialogContent>
             <TextField
                 autoFocus
                 margin="dense"
                 id="name"
                 label={data.fieldlabel}
                 type="text"
-                rows="4"
                 fullWidth
+                
+                rows="4"
                 multiline
                 onChange={onChange}
                 value={content}
             />
+            </DialogContent>
             <DialogActions>
                 {data.buttons.map((action, index) => {
                     return (

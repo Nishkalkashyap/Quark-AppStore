@@ -146,7 +146,7 @@ export default class LocalComponent extends Component<basePropType> {
     }
 
     async showEditReleaseDialog(userId: string, projectId: string, releaseId: string) {
-        const result = await dialog.showFormDialog<'Yes' | 'Cancel'>('Delete release', 'Are you sure you want to delete this release. This action is irreversible', ['Yes', 'Cancel'], 'Initial value');
+        const result = await dialog.showFormDialog<'Yes' | 'Cancel'>('Delete release', 'Are you sure you want to delete this release. This action is irreversible', 'Notes', ['Yes', 'Cancel'], 'Initial value');
         if (result.result.button == 'Yes') {
             console.log(result.result.text);
         }
