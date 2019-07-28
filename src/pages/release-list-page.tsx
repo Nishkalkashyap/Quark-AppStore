@@ -209,10 +209,20 @@ export default class LocalComponent extends Component<basePropType> {
     }
 
     downloadFile(userId: string, projectId: string, releaseId: string, fileName: string) {
-        const url = this.props.firebase.storage.ref(`${getProjectReleaseDocPath(userId, projectId, releaseId)}/${fileName}`).getDownloadURL();
-        url.then((val) => {
-            downloadFile(val, fileName);
-        }).catch(err => handleFirebaseError(err, this.props, 'Failed to fetch download url'));
+        // const url = this.props.firebase.storage.ref(`${getProjectReleaseDocPath(userId, projectId, releaseId)}/${fileName}`).getDownloadURL();
+        // url.then((val) => {
+        //     downloadFile(val, fileName);
+        // }).catch(err => handleFirebaseError(err, this.props, 'Failed to fetch download url'));
+        this.props.firebase.storage.ref(`${getProjectReleaseDocPath(userId, projectId, releaseId)}/${fileName}`).getDownloadURL()
+            .then((val) => {
+                return downloadFile(val, fileName);
+            })
+            .then((val) => {
+                return this.props.firebase.firestore.doc(getProjectDocPath(userId, projectId)).set(({
+                    numberOfDownloads: firebase.firestore.FieldValue.increment(1) as any
+                } as Partial<ProjectData>), { merge: true });
+            })
+            .catch(err => handleFirebaseError(err, this.props, 'Failed to fetch download url'));
     }
 
     render() {
