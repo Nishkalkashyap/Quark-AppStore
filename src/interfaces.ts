@@ -19,10 +19,10 @@ export interface ReleaseItem {
     assets: string[];
 }
 
-export interface DialogInterface {
+export interface DialogInterface<T=any> {
     title: string;
     text: string;
-    buttons: string[];
+    buttons: T[];
     isOpen: boolean;
     type : "info" | "error" | "question" | "warning"
 }

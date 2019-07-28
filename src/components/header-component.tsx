@@ -82,8 +82,8 @@ class Header extends Component<basePropType> {
     currentOnResolve: Function = () => null;
     currentOnReject: Function = () => null;
 
-    async _showMessageBox(title: string, text: string, buttons: string[], type: DialogInterface['type']) {
-        return new Promise<number>((resolve, reject) => {
+    async _showMessageBox<T = any>(title: string, text: string, buttons: T[], type: DialogInterface['type']): Promise<T> {
+        return new Promise<T>((resolve, reject) => {
             dialogOptions.title = title;
             dialogOptions.text = text;
             dialogOptions.isOpen = true;
@@ -105,8 +105,8 @@ class Header extends Component<basePropType> {
         this.setState({ dialogOptions: { ...dialogOptions, isOpen: false } });
 
         if (this.currentOnResolve) {
-            const resolveVal = typeof num == 'number' ? num : null;
-            this.currentOnResolve(resolveVal);
+            const resolveVal = typeof num == 'number' ? num : 100000000;
+            this.currentOnResolve(dialogOptions.buttons[resolveVal]);
         }
     }
 

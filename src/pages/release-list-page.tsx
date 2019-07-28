@@ -139,20 +139,19 @@ export default class LocalComponent extends Component<basePropType> {
         this.setState(state);
     }
 
-    async showDeleteReleaseDialog() {
-        const result = await dialog.showMessageBox('Delete release', 'Are you sure you want to delete this release. This action is irreversible', ['Yes', 'Cancel'], 'warning');
-        if (typeof result == 'number') {
-            console.log(result);
+    async showDeleteReleaseDialog(userId: string, projectId: string, releaseId: string) {
+        const result = await dialog.showMessageBox<'Yes' | 'Cancel'>('Delete release', 'Are you sure you want to delete this release. This action is irreversible', ['Yes', 'Cancel'], 'warning');
+        if (result == 'Yes') {
+            this.deleteRelease(userId, projectId, releaseId);
         }
     }
 
     deleteRelease(userId: string, projectId: string, releaseId: string) {
         const findIndex = this.state.releases.findIndex((rel) => rel.releaseId == releaseId);
         if (findIndex !== -1) {
-            this.state.releases.splice(findIndex, 1);
-            this.setState({ releases: this.state.releases });
-
-            this.props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, releaseId)).delete().then((rel) => {
+            this.props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, releaseId)).delete().then(() => {
+                this.state.releases.splice(findIndex, 1);
+                this.setState({ releases: this.state.releases });
                 this.props.enqueueSnackbar('Release deleted');
             }).catch((err) => handleFirebaseError(this.props, err, 'Failed to delete release'));
         }
@@ -293,7 +292,7 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
                         Edit Release
                         <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
                     </Button>
-                    <Button size="small" variant="text" color="secondary" onClick={allData.showDeleteReleaseDialog}>
+                    <Button size="small" variant="text" color="secondary" onClick={() => allData.showDeleteReleaseDialog(userID, release.projectId, release.releaseId)}>
                         Delete
                         <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
                     </Button>
