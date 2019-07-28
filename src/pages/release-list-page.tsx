@@ -183,6 +183,11 @@ export default class LocalComponent extends Component<basePropType> {
     }
 
     async showEditReleaseDialog(userId: string, projectId: string, releaseId: string, notes: string) {
+
+        if (!this.state.isOwner) {
+            return;
+        }
+
         const self = this;
         const result = await dialog.showFormDialog<'Yes' | 'Cancel'>('Delete release', 'Are you sure you want to delete this release. This action is irreversible', 'Notes', ['Yes', 'Cancel'], notes);
         if (result.result.button == 'Yes') {
@@ -203,7 +208,38 @@ export default class LocalComponent extends Component<basePropType> {
         }
     }
 
+    async showEditProjectDialog() {
+
+        if (!this.state.isOwner) {
+            return;
+        }
+
+        const self = this;
+        const result = await dialog.showFormDialog<'Publish' | 'Cancel'>('Edit project', 'Add description for your project', 'Description', ['Publish', 'Cancel'], this.state.projectData.description);
+        if (result.result.button == 'Publish') {
+            editProject(result.result.text);
+        }
+
+        function editProject(text: string) {
+            self.props.firebase.firestore.doc(getProjectDocPath(self.state.userId, self.state.projectId))
+                .update(({
+                    description: text
+                } as Partial<ProjectData>))
+                .then(() => {
+                    self.state.projectData.description = text;
+                    self.setState(self.state);
+                    self.props.enqueueSnackbar('Project updated', { variant: 'success' });
+                })
+                .catch(err => handleFirebaseError(self.props, err, 'Failed to delete project'))
+        }
+    }
+
     async showDeleteProjectDialog() {
+
+        if (!this.state.isOwner) {
+            return;
+        }
+
         const self = this;
         const result = await dialog.showMessageBox<'Yes' | 'Cancel'>('Delete project', 'Are you sure you want to delete this project. This action is irreversible', ['Yes', 'Cancel'], 'question');
         if (result == 'Yes') {
@@ -222,6 +258,11 @@ export default class LocalComponent extends Component<basePropType> {
     }
 
     async showDeleteReleaseDialog(userId: string, projectId: string, releaseId: string) {
+
+        if (!this.state.isOwner) {
+            return;
+        }
+
         const self = this;
         const result = await dialog.showMessageBox<'Yes' | 'Cancel'>('Delete release', 'Are you sure you want to delete this release. This action is irreversible', ['Yes', 'Cancel'], 'warning');
         if (result == 'Yes') {
@@ -313,7 +354,7 @@ export default class LocalComponent extends Component<basePropType> {
                                     Create new release
                                     <NewReleasesIcon fontSize="small" style={{ marginLeft: '10px' }} />
                                 </Button>
-                                <Button>
+                                <Button onClick={() => this.showEditProjectDialog()}>
                                     Edit description
                                     <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
                                 </Button>
