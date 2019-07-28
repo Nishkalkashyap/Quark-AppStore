@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { basePropType } from "../basePropType";
-import { getReleaseListCollectionPath, getProjectPath } from '../data/paths';
+import { getReleaseListCollectionPath, getProjectDocPath } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import { ReleaseItem, ProjectData } from '../interfaces';
 import { Button, Container, Typography } from '@material-ui/core';
@@ -18,7 +18,7 @@ export class PP extends Component<basePropType & { projectId: string, userID: st
 
         this.state.isCurrentUser = currentUser.uid === userId;
 
-        this.props.firebase.firestore.doc(getProjectPath(userId, projectId)).get()
+        this.props.firebase.firestore.doc(getProjectDocPath(userId, projectId)).get()
             .then((val) => {
                 this.setState({ metaData: val.data() });
             }).catch((err) => {

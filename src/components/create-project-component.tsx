@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { basePropType } from "../basePropType";
 import { Container, Avatar, Typography, TextField, Button } from '@material-ui/core';
 import FiberNewIcon from '@material-ui/icons/FiberNew';
-import { getProjectPath } from '../data/paths';
+import { getProjectDocPath } from '../data/paths';
 import { handleFirebaseError, getRandomId } from '../util';
 import firebase from 'firebase';
 import { ROUTES } from '../data/routes';
@@ -26,7 +26,7 @@ export default class CreateProject extends Component<basePropType> {
     onSubmit = (event: any) => {
         const random = getRandomId();
         const createdAt = firebase.firestore.FieldValue.serverTimestamp();
-        this.props.firebase.firestore.doc(getProjectPath(this.props.firebase.auth.currentUser!.uid, random)).set({ ...this.state, createdAt, updatedAt: createdAt, projectId: random, numberOfReleases: 0 }).then(() => {
+        this.props.firebase.firestore.doc(getProjectDocPath(this.props.firebase.auth.currentUser!.uid, random)).set({ ...this.state, createdAt, updatedAt: createdAt, projectId: random, numberOfReleases: 0 }).then(() => {
             this.props.enqueueSnackbar('Project created', { variant: 'success' });
             this.props.history.push(`${ROUTES.PROJECT_PAGE}/${this.props.firebase.auth.currentUser!.uid}/${random}`);
         })

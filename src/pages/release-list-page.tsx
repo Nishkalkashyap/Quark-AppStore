@@ -6,7 +6,7 @@ import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES, POST_SLUG } from '../data/routes';
 import queryString from 'query-string';
-import { getReleaseListCollectionPath, getProjectPath, getProjectReleaseDocPath } from '../data/paths';
+import { getReleaseListCollectionPath, getProjectDocPath, getProjectReleaseDocPath } from '../data/paths';
 import { handleFirebaseError, downloadFile, scrollToTop } from '../util';
 import { ReleaseItem, ProjectData } from '../interfaces';
 import { useStylesList } from './project-list-page';
@@ -106,7 +106,7 @@ export default class LocalComponent extends Component<basePropType> {
     }
 
     private _setProjectData() {
-        this.props.firebase.firestore.doc(getProjectPath(this.state.userId, this.state.projectId)).get().then((snap) => {
+        this.props.firebase.firestore.doc(getProjectDocPath(this.state.userId, this.state.projectId)).get().then((snap) => {
             if (snap.exists) {
                 this.setState({ projectData: snap.data() });
                 return;
