@@ -1,9 +1,9 @@
 import { DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Dialog } from "@material-ui/core";
-import { DialogInterface } from "../interfaces";
+import { MessageDialogInterface } from "../interfaces";
 import React from 'react';
 import { StandardProperties } from "csstype";
 
-export const DialogComponent = (data: DialogInterface & { onClose: Function }) => {
+export const MessageDialogComponent = (data: MessageDialogInterface & { onClose: Function }) => {
     const color: 'medium' | 'danger' | 'secondary' | 'warning' = data.type === 'info' ? 'medium' : data.type === 'error' ? 'danger' : data.type === 'question' ? 'secondary' : 'warning';
     const style: StandardProperties = {
         borderLeft: `solid 3px var(--ion-color-${color})`

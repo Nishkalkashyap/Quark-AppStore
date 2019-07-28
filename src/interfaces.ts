@@ -19,10 +19,18 @@ export interface ReleaseItem {
     assets: string[];
 }
 
-export interface DialogInterface<T=any> {
+export interface MessageDialogInterface<T=any> {
     title: string;
     text: string;
     buttons: T[];
     isOpen: boolean;
     type : "info" | "error" | "question" | "warning"
+}
+
+export interface FormDialogInterface<T=any> {
+    title: string;
+    text: string;
+    buttons: T[];
+    isOpen: boolean;
+    fieldlabel : string;
 }

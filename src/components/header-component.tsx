@@ -15,8 +15,9 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PersonIcon from '@material-ui/icons/Person';
 import NoteIcon from '@material-ui/icons/Note';
 import { LinearProgress } from '@material-ui/core';
-import { DialogInterface } from '../interfaces';
-import { DialogComponent } from './dialog-component';
+import { MessageDialogInterface, FormDialogInterface } from '../interfaces';
+import { MessageDialogComponent } from './message-dialog-component';
+import { FormDialogComponent } from './form-dialog-component';
 
 const options = [
     {
@@ -37,7 +38,6 @@ const options = [
     }
 ]
 
-const ITEM_HEIGHT = 48;
 
 export const progress: {
     _showProgressBar: boolean;
@@ -45,7 +45,7 @@ export const progress: {
     hideProgressBar: Function;
 } = { _showProgressBar: false } as any;
 
-const dialogOptions: DialogInterface = {
+const messageDialogOptions: MessageDialogInterface = {
     title: '',
     text: '',
     isOpen: false,
@@ -53,23 +53,36 @@ const dialogOptions: DialogInterface = {
     type: 'info'
 }
 
+const formDialogOptions: FormDialogInterface = {
+    title: '',
+    text: '',
+    isOpen: false,
+    buttons: [],
+    fieldlabel: 'Content'
+}
+
 export let dialog: {
-    showMessageBox: typeof Header['prototype']['_showMessageBox']
+    showMessageBox: typeof Header['prototype']['_showMessageBox'];
+    showFormDialog: typeof Header['prototype']['_showFormDialog']
 } = {} as any;
 
+type FormResolveType<T> = { result: { button: T, text: string } };
 class Header extends Component<basePropType> {
 
     constructor(props: basePropType) {
         super(props);
         this.state._showProgressBar = progress._showProgressBar;
+
         dialog.showMessageBox = this._showMessageBox.bind(this);
+        dialog.showFormDialog = this._showFormDialog.bind(this);
         this.init();
     }
 
     state: {
         _showProgressBar: boolean;
-        dialogOptions: DialogInterface
-    } = { _showProgressBar: false, dialogOptions }
+        messageDialogOptions: MessageDialogInterface,
+        formDialogOptions: FormDialogInterface,
+    } = { _showProgressBar: false, messageDialogOptions, formDialogOptions }
 
     showProgressBar() {
         this.setState({ _showProgressBar: true });
@@ -79,20 +92,34 @@ class Header extends Component<basePropType> {
         this.setState({ _showProgressBar: false });
     }
 
-    currentOnResolve: Function = () => null;
-    currentOnReject: Function = () => null;
+    messageOnResolve: <T = any>(text: T) => void = (t) => { }
+    formOnResolve: <T = any>(res: FormResolveType<T>) => void = (t) => { }
+    // messageOnResolve: Function = () => null;
+    // formOnResolve: Function = () => null;
 
-    async _showMessageBox<T = any>(title: string, text: string, buttons: T[], type: DialogInterface['type']): Promise<T> {
-        return new Promise<T>((resolve, reject) => {
-            dialogOptions.title = title;
-            dialogOptions.text = text;
-            dialogOptions.isOpen = true;
-            dialogOptions.buttons = buttons;
-            dialogOptions.type = type;
-            this.setState({ dialogOptions });
+    async _showMessageBox<T = any>(title: string, text: string, buttons: T[], type: MessageDialogInterface['type']): Promise<T> {
+        return new Promise<T>((resolve) => {
+            messageDialogOptions.title = title;
+            messageDialogOptions.text = text;
+            messageDialogOptions.isOpen = true;
+            messageDialogOptions.buttons = buttons;
+            messageDialogOptions.type = type;
+            this.setState({ messageDialogOptions });
 
-            this.currentOnResolve = resolve;
-            this.currentOnReject = reject;
+            this.messageOnResolve = resolve as any;
+        });
+    }
+
+
+    async _showFormDialog<T = any>(title: string, text: string, buttons: T[]): Promise<FormResolveType<T>> {
+        return new Promise<FormResolveType<T>>((resolve) => {
+            formDialogOptions.title = title;
+            formDialogOptions.text = text;
+            formDialogOptions.isOpen = true;
+            formDialogOptions.buttons = buttons;
+            this.setState({ formDialogOptions });
+
+            this.formOnResolve = resolve as any;
         });
     }
 
@@ -101,18 +128,28 @@ class Header extends Component<basePropType> {
         progress.hideProgressBar = this.hideProgressBar.bind(this);
     }
 
-    onClose(num?: number) {
-        this.setState({ dialogOptions: { ...dialogOptions, isOpen: false } });
+    onCloseMessageDialog(num?: number) {
+        this.setState({ messageDialogOptions: { ...messageDialogOptions, isOpen: false } });
 
-        if (this.currentOnResolve) {
+        if (this.messageOnResolve) {
             const resolveVal = typeof num == 'number' ? num : 100000000;
-            this.currentOnResolve(dialogOptions.buttons[resolveVal]);
+            this.messageOnResolve(messageDialogOptions.buttons[resolveVal]);
+        }
+    }
+
+    onCloseFormDialog(num: number, text: string) {
+        this.setState({ formDialogOptions: { ...formDialogOptions, isOpen: false } });
+
+        if (this.formOnResolve) {
+            const resolveVal = typeof num == 'number' ? num : 100000000;
+            // this.formOnResolve(formDialogOptions.buttons[resolveVal]);
+            this.formOnResolve({ result: { button: formDialogOptions.buttons[resolveVal], text } });
         }
     }
 
     render() {
-        const obj = { onClose: this.onClose.bind(this) };
-        const options = Object.assign(this.state.dialogOptions, obj);
+        const messageOptions = Object.assign(this.state.messageDialogOptions, { onClose: this.onCloseMessageDialog.bind(this) });
+        const formOptions = Object.assign(this.state.formDialogOptions, { onClose: this.onCloseFormDialog.bind(this) });
         return (
             <React.Fragment>
                 <div style={MainContainerStyle}>
@@ -124,7 +161,8 @@ class Header extends Component<basePropType> {
                     <div style={RightHeaderStyle}>
                     </div>
                 </div>
-                <DialogComponent {...options}></DialogComponent>
+                <MessageDialogComponent {...messageOptions}></MessageDialogComponent>
+                <FormDialogComponent {...formOptions}></FormDialogComponent>
             </React.Fragment>
         )
     }
@@ -159,6 +197,7 @@ const ImageStyles: StandardProperties = {
 }
 
 
+const ITEM_HEIGHT = 48;
 function LongMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
