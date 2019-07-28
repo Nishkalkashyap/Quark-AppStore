@@ -141,7 +141,9 @@ export default class LocalComponent extends Component<basePropType> {
 
     async showDeleteReleaseDialog() {
         const result = await dialog.showMessageBox('Delete release', 'Are you sure you want to delete this release. This action is irreversible', ['Yes', 'Cancel'], 'warning');
-        console.log(result);
+        if (typeof result == 'number') {
+            console.log(result);
+        }
     }
 
     deleteRelease(userId: string, projectId: string, releaseId: string) {
@@ -233,7 +235,7 @@ export default class LocalComponent extends Component<basePropType> {
                     <List style={{ marginTop: '30px' }}>
                         {
                             this.state.releases.map((release) => {
-                                const obj = { release, history: this.props.history, userID: this.state.userId, props: this.props, state: this.state, downloadFile: this.downloadFile, allData : this };
+                                const obj = { release, history: this.props.history, userID: this.state.userId, props: this.props, state: this.state, downloadFile: this.downloadFile, allData: this };
                                 return (
                                     <ReleaseCard {...obj} key={release.releaseId} />
                                 )
@@ -261,7 +263,7 @@ export default class LocalComponent extends Component<basePropType> {
     }
 }
 
-const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history'], userID: string, props: basePropType, state: StateType, downloadFile: typeof LocalComponent['prototype']['downloadFile'], allData : LocalComponent }) => {
+const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history'], userID: string, props: basePropType, state: StateType, downloadFile: typeof LocalComponent['prototype']['downloadFile'], allData: LocalComponent }) => {
     const classes = useStylesList();
     const { release, history, userID, props, state, downloadFile: getDownloadUrl, allData } = obj;
     return (
