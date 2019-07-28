@@ -10,7 +10,7 @@ export interface ProjectData {
 
 export interface ProjectStats {
     numberOfDownloads: number;
-    numberOfViews: number;
+    // numberOfViews: number;
 }
 
 export interface ReleaseItem {

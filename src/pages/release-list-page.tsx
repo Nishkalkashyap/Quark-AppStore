@@ -109,12 +109,13 @@ export default class LocalComponent extends Component<basePropType> {
         this.props.firebase.auth.onAuthStateChanged((e) => {
             if (e) {
                 this.setState({ isOwner: e.uid == userId });
-                if (e.uid !== userId) {
-                    console.log('Sending view');
-                    this.props.firebase.firestore.doc(getProjectStatsDocPath(userId, projectId)).set(({
-                        numberOfViews: firebase.firestore.FieldValue.increment(1) as any
-                    } as Partial<ProjectStats>), { merge: true });
-                }
+                // cant do this
+                // if (e.uid !== userId) {
+                //     console.log('Sending view');
+                //     this.props.firebase.firestore.doc(getProjectStatsDocPath(userId, projectId)).set(({
+                //         numberOfViews: firebase.firestore.FieldValue.increment(1) as any
+                //     } as Partial<ProjectStats>), { merge: true });
+                // }
             }
         });
 
