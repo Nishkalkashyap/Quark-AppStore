@@ -132,13 +132,12 @@ export function PageContainer(props: basePropType & { children: any }) {
         <div className={classes.root}>
             <AppBar
                 position="fixed"
-                // color="default"
                 color="primary"
                 elevation={0}
                 className={clsx(classes.appBar, {
                     [classes.appBarShift]: open,
                 })}
-                style={GradientBackground}
+                style={{backgroundColor : '#100e17'}}
             >
                 {_showProgressBar && <LinearProgress style={{ position: 'absolute', width: '100%', top: '0px', height: '2px' }} />}
                 <Toolbar>

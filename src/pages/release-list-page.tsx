@@ -220,7 +220,7 @@ export default class LocalComponent extends Component<basePropType> {
             <React.Fragment>
                 <Container maxWidth="md">
                     <Typography variant="h2" component="h1">
-                        <span role="img" aria-label="Projects">🚀</span>
+                        {/* <span role="img" aria-label="Projects">🚀</span> */}
                         {this.state.projectData.projectName || 'Project'}
                     </Typography>
                     <Card>
