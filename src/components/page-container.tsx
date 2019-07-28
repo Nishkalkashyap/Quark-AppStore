@@ -19,6 +19,8 @@ import { sidebarItems } from './sidebar-component';
 import { LinearProgress, Button, Typography } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
 import { HeaderAvatarComponent } from './header-avatar-component';
+import MainBgComponent from './main-background-component';
+import { GradientBackground } from '../util';
 
 const drawerWidth = 240;
 
@@ -130,14 +132,13 @@ export function PageContainer(props: basePropType & { children: any }) {
         <div className={classes.root}>
             <AppBar
                 position="fixed"
-                color="default"
-                elevation={1}
+                // color="default"
+                color="primary"
+                elevation={0}
                 className={clsx(classes.appBar, {
                     [classes.appBarShift]: open,
                 })}
-                style={{ background: '#ffffff' }}
-                // style={{ background: '#f2f4f8' }}
-            // style={{ background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)', color : 'white' }}
+                style={GradientBackground}
             >
                 {_showProgressBar && <LinearProgress style={{ position: 'absolute', width: '100%', top: '0px', height: '2px' }} />}
                 <Toolbar>
@@ -153,7 +154,7 @@ export function PageContainer(props: basePropType & { children: any }) {
                         <MenuIcon />
                     </IconButton>
                     <HeaderComponent>
-                        <Button variant="outlined" size="small">
+                        <Button variant="outlined" size="small" color="inherit">
                             Go to docs
                         </Button>
                         {!isAuthenticated && <Button color="inherit" onClick={() => props.history.push(ROUTES.SIGN_IN)}>Login</Button>}
@@ -175,12 +176,11 @@ export function PageContainer(props: basePropType & { children: any }) {
                 }}
                 open={open}
             >
-                {/* <div style={{ background: 'linear-gradient(180deg, #2196F3 30%, #21CBF3 90%)', color: 'white', height: '100%' }}                > */}
-                <div style={{ background: '#ffffff', height: '100%' }}                >
-                    <div className={classes.toolbar} style={{ justifyContent : 'space-between' }}>
-                        <Typography component="h3" color="inherit" style={{margin : '20px'}}>
+                <div style={{ background: '#ffffff', height: '100%' }}>
+                    <div className={classes.toolbar} style={{ justifyContent: 'space-between' }}>
+                        {/* <Typography component="h3" color="inherit" style={{ marginLeft: '20px' }}>
                             Quark
-                        </Typography>
+                        </Typography> */}
                         <IconButton onClick={handleDrawerClose}>
                             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                         </IconButton>
@@ -193,7 +193,7 @@ export function PageContainer(props: basePropType & { children: any }) {
                                     (props).history.push(item.clickRoute);
                                 }
                             }}>
-                                    {/* <item.icon  style={{color : '#ffffff'}} /> */}
+                                {/* <item.icon  style={{color : '#ffffff'}} /> */}
                                 <ListItemIcon>
                                     <item.icon />
                                 </ListItemIcon>
@@ -203,7 +203,8 @@ export function PageContainer(props: basePropType & { children: any }) {
                     </List>
                 </div>
             </Drawer>
-            <main className={classes.content}>
+            <main className={classes.content} style={{ position: 'relative' }}>
+                {/* <MainBgComponent /> */}
                 <div className={classes.toolbar} />
                 {childrenWithProps}
             </main>

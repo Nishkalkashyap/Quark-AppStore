@@ -7,7 +7,7 @@ import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES, POST_SLUG } from '../data/routes';
 import queryString from 'query-string';
 import { getReleaseListCollectionPath, getProjectPath, getProjectReleaseDocPath } from '../data/paths';
-import { handleFirebaseError, downloadFile, scrollToTop } from '../util';
+import { handleFirebaseError, downloadFile, scrollToTop, GradientBackground } from '../util';
 import { ReleaseItem, ProjectData } from '../interfaces';
 import { useStylesList } from './project-list-page';
 import moment from 'moment';
@@ -257,7 +257,7 @@ export default class LocalComponent extends Component<basePropType> {
                                     <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
                                 </Button>
                             </ButtonGroup>
-                            <Button variant="contained" size="small" color="primary" style={{background : 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)', boxShadow : '0 3px 5px 2px rgba(33, 203, 243, .3)'}}
+                            <Button variant="contained" size="small" color="primary" style={GradientBackground}
                                 onClick={() => this.props.history.push(`${ROUTES.NEW_RELEASE}/${this.state.userId}/${this.state.projectId}/${POST_SLUG.NEW_RELEASE}`)}
                             >
                                 Create new release

@@ -26,6 +26,7 @@ import { CreateNewProjectPage } from './pages/create-new-project-page';
 import { ReleaseListPage } from './pages/release-list-page';
 import { NotFoundComponent } from './components/common-components';
 import { PageContainer } from './components/page-container';
+import MainBgComponent from './components/main-background-component';
 // import { NotFoundComponent } from './components/common';
 
 const Routing = () => (
@@ -55,10 +56,8 @@ const StupidPageContainer: any = withRouter(withFirebase(PageContainer));
 const theme = createMuiTheme({
   palette: {
     primary: { main: '#2196F3' },
-    // primary: { main: '#055af9' },
-    // primary: { main: '#612cfc' },
-    background : {
-      default : '#ffffff'
+    background: {
+      default: '#ffffff'
     }
   }
 });
@@ -67,6 +66,7 @@ const theme = createMuiTheme({
 const App: React.FC = () => {
   return (
     <Router>
+          {/* <MainBgComponent></MainBgComponent> */}
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <StupidPageContainer>
