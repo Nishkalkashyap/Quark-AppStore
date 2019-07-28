@@ -294,17 +294,16 @@ const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history
                 </CardContent>
                 <DownloadsComponent {...{ release, props, state, downloadFile: getDownloadUrl }} />
                 <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Button size="small" variant="outlined" color="primary" onClick={() => history.push(`${ROUTES.Project}/${userID}/${release.projectId}/${release.releaseId}`)}>
-                        Edit Release
-                        <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
-                    </Button>
-                    <Button size="small" variant="text" color="secondary" onClick={() => allData.showDeleteReleaseDialog(userID, release.projectId, release.releaseId)}>
-                        Delete
-                        <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
-                    </Button>
-                    {/* <IconButton aria-label="delete">
-                        <DeleteIcon fontSize="default" color="secondary" />
-                    </IconButton> */}
+                    <ButtonGroup size="small" aria-label="small outlined button group">
+                        <Button onClick={() => history.push(`${ROUTES.Project}/${userID}/${release.projectId}/${release.releaseId}`)}>
+                            Edit Release
+                            <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                        </Button>
+                        <Button onClick={() => allData.showDeleteReleaseDialog(userID, release.projectId, release.releaseId)}>
+                            Delete
+                            <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                        </Button>
+                    </ButtonGroup>
                 </CardActions>
             </Card>
         </React.Fragment>
