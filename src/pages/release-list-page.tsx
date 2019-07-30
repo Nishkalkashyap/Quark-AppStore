@@ -35,7 +35,7 @@ interface StateType {
 }
 
 
-export default class LocalComponent extends Component<basePropType> {
+export default class LocalComponent extends Component<basePropType, Partial<StateType>> {
     INITIAL_STATE: StateType = {
         releases: [],
         userId: '',
@@ -83,7 +83,7 @@ export default class LocalComponent extends Component<basePropType> {
                         this.props.history.push(ROUTES.NOT_FOUND);
                     }
 
-                    const arr = result.docs.map((doc) => doc.data());
+                    const arr = result.docs.map((doc) => doc.data()) as ReleaseItem[];
                     scrollToTop();
                     this.setState({ releases: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: result });
                     this._fetchNextAndPreviousDocuments();
@@ -96,7 +96,7 @@ export default class LocalComponent extends Component<basePropType> {
                 .limit(this.state.loadLimit)
                 .get()
                 .then((result) => {
-                    const arr = result.docs.map((doc) => doc.data());
+                    const arr = result.docs.map((doc) => doc.data()) as ReleaseItem[];
                     scrollToTop();
                     this.setState({ releases: arr, querySnapshot: result });
                     this._fetchNextAndPreviousDocuments();
@@ -124,7 +124,7 @@ export default class LocalComponent extends Component<basePropType> {
 
         this.props.firebase.auth.onAuthStateChanged((e) => {
             if (e) {
-                this.setState({ isOwner: e.uid == userId });
+                this.setState({ isOwner: e.uid === userId });
                 // cant do this
                 // if (e.uid !== userId) {
                 //     console.log('Sending view');
@@ -144,7 +144,7 @@ export default class LocalComponent extends Component<basePropType> {
                     this.props.history.push(ROUTES.NOT_FOUND);
                     return;
                 }
-                this.setState({ projectData: snap.data() });
+                this.setState({ projectData: snap.data() as ProjectData });
             })
             .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'));
     }
