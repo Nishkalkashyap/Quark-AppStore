@@ -8,7 +8,7 @@ import { default as MaterialLink } from '@material-ui/core/Link';
 import { ROUTES } from '../data/routes';
 import { Link } from 'react-router-dom';
 import { UploadButton, useStyles } from '../components/common-components';
-import CreateProject from '../components/create-project-component';
+// import CreateProject from '../components/create-project-component';
 import CustomPaginationActionsTable from '../components/projects-list-component';
 import { withAllProviders } from '../providers/all-providers';
 
@@ -54,7 +54,7 @@ const AccountPage = (props: basePropType) => {
                             </TabContainer>}
                         {value === 1 &&
                             <TabContainer>
-                                <CreateProject {...props}></CreateProject>
+                                {/* <CreateProject {...props}></CreateProject> */}
                             </TabContainer>
                         }
                     </div>
