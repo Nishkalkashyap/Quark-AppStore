@@ -3,15 +3,16 @@ import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES } from '../data/routes';
 import { ProjectData } from '../interfaces';
 import { cloneDeep } from 'lodash';
-import { getProjectStatsDocPath, getProjectDocPath } from '../data/paths';
+import { getProjectDocPath, getProjectStorageImagesPath } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import { withAllProviders } from '../providers/all-providers';
 import { withOriginalOwner } from '../providers/owner-guard';
-import { Container, Card, Typography, TextField, Button, Grid, Zoom, Paper } from '@material-ui/core';
-import { PasswordForgetLink } from './forgot-password-page';
-import { SignUpLink } from './signup-page';
-import { globalStyles } from '../components/common-components';
+import { Container, Card, Typography, TextField, Button, Zoom, Paper, Fab } from '@material-ui/core';
+import { globalStyles, useStyles } from '../components/common-components';
 import { withStyles } from '@material-ui/styles';
+import { DropZoneComponent, FilesToUpload } from '../components/drop-zone';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { progress } from '../components/header-component';
 
 interface StateType {
     userId: string,
@@ -19,8 +20,12 @@ interface StateType {
     projectData: Partial<ProjectData>,
     isOwner: boolean
     images: string[]
+    filesToUpload: FilesToUpload
+    uploadSize: number
 }
 
+const FILE_UPLOAD_LIMIT = 10000000;
+const ALLOWED_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif'];
 class LocalComponent extends Component<basePropType> {
 
     INITIAL_STATE: StateType = {
@@ -28,7 +33,9 @@ class LocalComponent extends Component<basePropType> {
         projectId: '',
         projectData: {},
         isOwner: false,
-        images: ['', '', '']
+        images: [],
+        filesToUpload: {},
+        uploadSize: 0
     }
 
     constructor(props: basePropType) {
@@ -44,6 +51,21 @@ class LocalComponent extends Component<basePropType> {
         this.state = cloneDeep(this.INITIAL_STATE);
         this.state.userId = userId;
         this.state.projectId = projectId;
+
+        progress.showProgressBar();
+        this.props.firebase.storage.ref(getProjectStorageImagesPath(userId, projectId))
+            .list()
+            .then((list) => {
+                const promises = list.items.map((item) => {
+                    return item.getDownloadURL()
+                });
+                return Promise.all(promises);
+            })
+            .then((val) => {
+                this.setState({ images: val } as Partial<StateType>)
+            })
+            .catch((err) => { console.log(err); handleFirebaseError(this.props, err, 'Could not fetch images') })
+            .finally(() => progress.hideProgressBar());
     }
 
     state: StateType = {} as any;
@@ -63,18 +85,73 @@ class LocalComponent extends Component<basePropType> {
 
     onSubmit = (event: any) => {
         event.preventDefault();
-        console.log(event);
+        const self = this;
+
+        const userId = this.props.match.params[MATCH_PARAMS.USER_ID];
+        const projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
+
+        const dataToSend: Partial<ProjectData> = {
+            projectName: this.state.projectData.projectName,
+            description: this.state.projectData.description,
+        }
+
+        uploadFilesToBucket()
+            .then(() => {
+                return this.props.firebase.firestore.doc(getProjectDocPath(this.props.firebase.auth.currentUser!.uid, this.state.projectId)).set(dataToSend, { merge: true })
+            })
+            .then(() => {
+                this.props.enqueueSnackbar('Project updated', { variant: 'success' });
+                this.props.history.push(`${ROUTES.PROJECT_PAGE}/${this.props.firebase.auth.currentUser!.uid}/${this.state.projectId}`);
+            })
+            .catch((err) => { handleFirebaseError(this.props, err, 'Failed to update project'); })
+
+        async function uploadFilesToBucket() {
+            const releaseBucketFolder = getProjectStorageImagesPath(userId, projectId);
+            const bucketUploadPromises = Object.keys(self.state.filesToUpload).map((key) => {
+                const file = self.state.filesToUpload[key];
+                const ref = self.props.firebase.storage.ref(`${releaseBucketFolder}/${file.file.name}`);
+                const task = ref.put(file.buffer);
+                task.on('state_changed', (snapshot) => {
+                    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    file.percent = progress;
+                    self.setState({ filesToUpload: self.state.filesToUpload } as any);
+                });
+                return task;
+            });
+            return await Promise.all(bucketUploadPromises);
+        }
     };
 
     onChange = (event: any) => {
-        // console.log({[event.target.name]: event.target.value});
         this.setState({ projectData: { [event.target.name]: event.target.value } });
     };
 
+    addFiles(files: FilesToUpload, size: number) {
+        this.setState({ filesToUpload: files, uploadSize: size } as Partial<StateType>)
+    }
+
+    deleteLocalImage(fileKey: string) {
+        const ftu = this.state.filesToUpload;
+        delete ftu[fileKey];
+        this.setState({ filesToUpload: ftu } as Partial<StateType>);
+    }
+
+    deleteCloudImage(url: string) {
+        this.props.firebase.storage.refFromURL(url).delete()
+            .then(() => {
+                const findIndex = this.state.images.findIndex((val) => val === url);
+                if (findIndex !== -1) {
+                    this.state.images.splice(findIndex, 1);
+                    this.setState({ images: this.state.images } as Partial<StateType>);
+                    this.props.enqueueSnackbar('Image deleted', { variant: 'success' });
+                }
+            }).catch((err) => handleFirebaseError(this.props, err, 'Failed to delete image'));
+    }
+
     render() {
         const classes = this.props.classes!;
-        const { projectData, images } = this.state;
-        const { createdAt, description, projectName, updatedAt, projectId } = projectData!;
+        const { projectData, images, filesToUpload } = this.state;
+        const { description, projectName } = projectData!;
         const isInvalid = projectName == '' || description == '';
 
         return (
@@ -115,15 +192,20 @@ class LocalComponent extends Component<basePropType> {
                                     onChange={this.onChange}
                                 />
                                 <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto' }}>
-                                    {
-                                        images.map((img, index) => (
-                                            <Zoom in={true} style={{ margin: '0px 10px', transitionDelay: index ? 500 * index + 'ms' : '0ms' }}>
-                                                <Paper elevation={4} className={classes.paper}>
-                                                    <img src="https://via.placeholder.com/150" alt="" />
-                                                </Paper>
-                                            </Zoom>
-                                        ))
-                                    }
+                                    {images.map((img, index) => (
+                                        <ImageComponent key={img + index} img={img} index={index} onDelete={() => this.deleteCloudImage(img)} />
+                                    ))}
+                                </div>
+                                <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto' }}>
+                                    {Object.keys(filesToUpload).map((file, index) => {
+                                        const url = URL.createObjectURL(new Blob([filesToUpload[file].buffer]));
+                                        return (
+                                            <ImageComponent key={url + index} img={url} index={index} onDelete={() => this.deleteLocalImage(file)} />
+                                        )
+                                    })}
+                                </div>
+                                <div>
+                                    <DropZoneComponent addFiles={this.addFiles.bind(this)} forceUpdate={this.forceUpdate.bind(this)} uploadLimit={FILE_UPLOAD_LIMIT} props={this.props} allowedExtensions={ALLOWED_EXTENSIONS} ></DropZoneComponent>
                                 </div>
                                 <Button
                                     type="submit"
@@ -142,6 +224,19 @@ class LocalComponent extends Component<basePropType> {
             </div>
         )
     }
+}
+
+const ImageComponent = (props: { img: string, index: number, onDelete: Function }) => {
+    const { img, index, onDelete } = props;
+    const classes = useStyles();
+    return (
+        <Zoom in={true} style={{ margin: '0px 10px', maxWidth: '150px', transitionDelay: index ? 200 * index + 'ms' : '0ms' }}>
+            <Paper elevation={4} className={classes.paper} style={{ position: 'relative' }}>
+                <img src={img} alt="" width="150px" style={{ margin: 'auto' }} />
+                <DeleteIcon fontSize="small" style={{ position: 'absolute', top: '0px', right: '0px', cursor: 'pointer' }} onClick={() => onDelete()} />
+            </Paper>
+        </Zoom>
+    )
 }
 
 

@@ -5,7 +5,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { List, LinearProgress, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from "@material-ui/core";
 import { merge } from 'lodash';
 const DropToUpload = require('react-drop-to-upload').default;
-type FilesToUpload = { [key: string]: { buffer: ArrayBuffer, file: File, percent: number } };
+export type FilesToUpload = { [key: string]: { buffer: ArrayBuffer, file: File, percent: number } };
 
 export const DropZoneComponent = (obj: { addFiles: (ftu: FilesToUpload, size: number) => void, forceUpdate: Function, allowedExtensions: string[], uploadLimit: number, props: basePropType }) => {
     const style: StandardProperties = {

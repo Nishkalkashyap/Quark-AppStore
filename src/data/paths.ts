@@ -18,6 +18,10 @@ export function getProjectStatsDocPath(userId: string, projectId: string) {
     return `Users/${userId}/projects/${projectId}/metaData/stats`;
 }
 
+export function getProjectStorageImagesPath(userId: string, projectId: string) {
+    return `Users/${userId}/projects/${projectId}/images`;
+}
+
 export function getProjectReleaseDocPath(userId: string, projectId: string, releaseId: string) {
     return `Users/${userId}/projects/${projectId}/releases/${releaseId}`;
 }
