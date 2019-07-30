@@ -2,14 +2,43 @@ export interface ProjectData {
     projectId: string;//auto set
 
     projectName: string;
-    tagline : string;
+    tagline: string;
     description: string;
     numberOfReleases: number;
     createdAt: firebase.firestore.Timestamp//auto set
     updatedAt: firebase.firestore.Timestamp;//auto set
 
+    category: allCategories;
     coverImageUrl?: string;
 }
+
+export type allCategories =
+    'Books' |
+    'Business' |
+    'Catalogs' |
+    'Developer Tools' |
+    'Education' |
+    'Entertainment' |
+    'Finance' |
+    'Food & Drink' |
+    'Games' |
+    'Health & Fitness' |
+    'Graphics & Design' |
+    'Lifestyle' |
+    'Kids' |
+    'Magazines & Newspapers' |
+    'Medical' |
+    'Music' |
+    'Navigation' |
+    'News' |
+    'Photo & Video' |
+    'Productivity' |
+    'Reference' |
+    'Shopping' |
+    'Social Networking' |
+    'Sports' |
+    'Travel' |
+    'Utilities'
 
 export interface ProjectStats {
     numberOfDownloads: number;

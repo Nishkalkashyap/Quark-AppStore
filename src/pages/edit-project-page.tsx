@@ -4,10 +4,10 @@ import { MATCH_PARAMS, ROUTES } from '../data/routes';
 import { ProjectData } from '../interfaces';
 import { cloneDeep } from 'lodash';
 import { getProjectDocPath, getProjectStorageImagesPath } from '../data/paths';
-import { handleFirebaseError } from '../util';
+import { handleFirebaseError, allProjectCategories } from '../util';
 import { withAllProviders } from '../providers/all-providers';
 import { withOriginalOwner } from '../providers/owner-guard';
-import { Container, Card, Typography, TextField, Button, Zoom, Paper, Fab, Tooltip, ButtonGroup, IconButton } from '@material-ui/core';
+import { Container, Card, Typography, TextField, Button, Zoom, Paper, Fab, Tooltip, ButtonGroup, IconButton, FormControl, InputLabel, Select, OutlinedInput, MenuItem } from '@material-ui/core';
 import { globalStyles, useStyles } from '../components/common-components';
 import { withStyles } from '@material-ui/styles';
 import { DropZoneComponent, FilesToUpload } from '../components/drop-zone';
@@ -194,7 +194,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
     render() {
         const classes = this.props.classes!;
         const { projectData, images, filesToUpload } = this.state;
-        const { description, projectName, tagline } = projectData!;
+        const { description, projectName, tagline, category } = projectData!;
 
         return (
             <div>
@@ -251,6 +251,22 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
                                     value={description || ''}
                                     onChange={this.onChange}
                                 />
+                                <FormControl variant="outlined" margin="normal" className={classes.formControl}>
+                                    <InputLabel>
+                                        Category
+                                    </InputLabel>
+                                    <Select
+                                        value={category || ''}
+                                        onChange={this.onChange}
+                                        input={<OutlinedInput labelWidth={10} name="category" />}
+                                    >
+                                        {
+                                            allProjectCategories.map((cat) => (
+                                                <MenuItem value={cat} key={cat}>{cat}</MenuItem>
+                                            ))
+                                        }
+                                    </Select>
+                                </FormControl>
                                 {images.length > 0 &&
                                     <Paper elevation={0} style={{ border: 'solid 1px rgba(0,0,0,0.23)', padding: '15px 10px', margin: '15px 0px' }}>
                                         <Typography color="textSecondary"> Existing images</Typography>

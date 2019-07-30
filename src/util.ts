@@ -2,6 +2,7 @@ import { basePropType } from "./basePropType";
 import { useState } from "react";
 import download from 'downloadjs';
 import { StandardProperties } from "csstype";
+import { allCategories } from "./interfaces";
 
 export function handleFirebaseError(props: basePropType, err: any, message: string) {
     if (message) {
@@ -37,3 +38,32 @@ export async function downloadFile(url: string, fileName: string) {
 export const GradientBackground: StandardProperties = {
     background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)', boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .3)'
 }
+
+export const allProjectCategories: allCategories[] = [
+    'Books',
+    'Business',
+    'Catalogs',
+    'Developer Tools',
+    'Education',
+    'Entertainment',
+    'Finance',
+    'Food & Drink',
+    'Games',
+    'Health & Fitness',
+    'Graphics & Design',
+    'Lifestyle',
+    'Kids',
+    'Magazines & Newspapers',
+    'Medical',
+    'Music',
+    'Navigation',
+    'News',
+    'Photo & Video',
+    'Productivity',
+    'Reference',
+    'Shopping',
+    'Social Networking',
+    'Sports',
+    'Travel',
+    'Utilities'
+]
