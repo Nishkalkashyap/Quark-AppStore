@@ -104,8 +104,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
         const projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
 
         const dataToSend: Partial<ProjectData> = {
-            projectName: this.state.projectData.projectName,
-            description: this.state.projectData.description,
+            ...this.state.projectData
         }
 
         uploadFilesToBucket()
@@ -285,7 +284,7 @@ const ImageComponent = (props: { img: string, index: number, onDelete: Function,
     const isCover = img === props.coverUrl;
     // const coverStyles: StandardProperties = { border: `solid 1px ${isCover ? 'var(--ion-color-primary)' : 'rgba(0,0,0,0.23)'}` };
     const coverStyles: StandardProperties = { border: `solid 1px ${isCover ? 'var(--ion-color-primary)' : 'rgba(0,0,0,0)'}` };
-    const baseStyles: StandardProperties = { padding: '10px 10px 0px 10px', borderRadius: '4px' };
+    const baseStyles: StandardProperties = { padding: '10px 10px 10px 10px', borderRadius: '4px' };
     const allStyles = Object.assign(coverStyles, baseStyles);
 
     return (
