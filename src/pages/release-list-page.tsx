@@ -25,6 +25,7 @@ import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { StandardProperties } from 'csstype';
 import Rating from '@material-ui/lab/Rating';
+import { RatingsComponent } from '../components/ratings-component';
 
 interface StateType {
     releases: ReleaseItem[],
@@ -407,6 +408,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                             </div>
                         </CardActions>
                     </Card>
+                    <RatingsComponent {...this.state.projectStats} />
 
                     <Container maxWidth="md" style={{ marginTop: '20px' }}>
                         <Carousel useKeyboardArrows autoPlay infiniteLoop >
