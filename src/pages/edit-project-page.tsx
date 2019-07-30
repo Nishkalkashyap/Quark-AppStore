@@ -7,12 +7,12 @@ import { getProjectDocPath, getProjectStorageImagesPath } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import { withAllProviders } from '../providers/all-providers';
 import { withOriginalOwner } from '../providers/owner-guard';
-import { Container, Card, Typography, TextField, Button, Zoom, Paper, Fab } from '@material-ui/core';
+import { Container, Card, Typography, TextField, Button, Zoom, Paper, Fab, Tooltip } from '@material-ui/core';
 import { globalStyles, useStyles } from '../components/common-components';
 import { withStyles } from '@material-ui/styles';
 import { DropZoneComponent, FilesToUpload } from '../components/drop-zone';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { progress } from '../components/header-component';
+import { progress, dialog } from '../components/header-component';
 
 interface StateType {
     userId: string,
@@ -123,7 +123,8 @@ class LocalComponent extends Component<basePropType> {
     };
 
     onChange = (event: any) => {
-        this.setState({ projectData: { [event.target.name]: event.target.value } });
+        const data = this.state.projectData;
+        this.setState({ projectData: Object.assign(data, { [event.target.name]: event.target.value }) });
     };
 
     addFiles(files: FilesToUpload, size: number) {
@@ -137,22 +138,29 @@ class LocalComponent extends Component<basePropType> {
     }
 
     deleteCloudImage(url: string) {
-        this.props.firebase.storage.refFromURL(url).delete()
-            .then(() => {
-                const findIndex = this.state.images.findIndex((val) => val === url);
-                if (findIndex !== -1) {
-                    this.state.images.splice(findIndex, 1);
-                    this.setState({ images: this.state.images } as Partial<StateType>);
-                    this.props.enqueueSnackbar('Image deleted', { variant: 'success' });
+
+        dialog.showMessageBox<'Yes' | 'Cancel'>('Delete image', 'Are you sure you want to delete this image. This action is irreversible', ['Yes', 'Cancel'], 'question')
+            .then((val) => {
+                if (val == 'Yes') {
+                    this.props.enqueueSnackbar('Deleting image', { variant: 'info' });
+                    this.props.firebase.storage.refFromURL(url).delete()
+                        .then(() => {
+                            const findIndex = this.state.images.findIndex((val) => val === url);
+                            if (findIndex !== -1) {
+                                this.state.images.splice(findIndex, 1);
+                                this.setState({ images: this.state.images } as Partial<StateType>);
+                                this.props.enqueueSnackbar('Image deleted', { variant: 'success' });
+                            }
+                        }).catch((err) => handleFirebaseError(this.props, err, 'Failed to delete image'));
                 }
-            }).catch((err) => handleFirebaseError(this.props, err, 'Failed to delete image'));
+            }).catch(console.error);
     }
 
     render() {
         const classes = this.props.classes!;
         const { projectData, images, filesToUpload } = this.state;
         const { description, projectName } = projectData!;
-        const isInvalid = projectName == '' || description == '';
+        const isInvalid = !projectName || !description;
 
         return (
             <div>
@@ -188,25 +196,35 @@ class LocalComponent extends Component<basePropType> {
                                     type="text"
                                     autoFocus
 
+                                    multiline
+                                    rows="4"
+
+
                                     value={description || ''}
                                     onChange={this.onChange}
                                 />
-                                <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto' }}>
-                                    {images.map((img, index) => (
-                                        <ImageComponent key={img + index} img={img} index={index} onDelete={() => this.deleteCloudImage(img)} />
-                                    ))}
-                                </div>
-                                <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto' }}>
-                                    {Object.keys(filesToUpload).map((file, index) => {
-                                        const url = URL.createObjectURL(new Blob([filesToUpload[file].buffer]));
-                                        return (
-                                            <ImageComponent key={url + index} img={url} index={index} onDelete={() => this.deleteLocalImage(file)} />
-                                        )
-                                    })}
-                                </div>
-                                <div>
-                                    <DropZoneComponent addFiles={this.addFiles.bind(this)} forceUpdate={this.forceUpdate.bind(this)} uploadLimit={FILE_UPLOAD_LIMIT} props={this.props} allowedExtensions={ALLOWED_EXTENSIONS} ></DropZoneComponent>
-                                </div>
+                                {images.length > 0 &&
+                                    <Paper elevation={0} style={{ border: 'solid 1px rgba(0,0,0,0.23)', padding: '15px 10px' }}>
+                                        <Typography color="textSecondary"> Existing images</Typography>
+                                        <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto', margin: '15px 0px' }}>
+                                            {images.map((img, index) => (
+                                                <ImageComponent key={img + index} img={img} index={index} onDelete={() => this.deleteCloudImage(img)} />
+                                            ))}
+                                        </div>
+                                    </Paper>}
+                                {Object.keys(filesToUpload).length > 0 &&
+                                    <Paper elevation={0} style={{ border: 'solid 1px rgba(0,0,0,0.23)', padding: '15px 10px' }}>
+                                        <Typography color="textSecondary"> Images to upload</Typography>
+                                        <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto', margin: '15px 0px' }}>
+                                            {Object.keys(filesToUpload).map((file, index) => {
+                                                const url = URL.createObjectURL(new Blob([filesToUpload[file].buffer]));
+                                                return (
+                                                    <ImageComponent key={url + index} img={url} index={index} onDelete={() => this.deleteLocalImage(file)} />
+                                                )
+                                            })}
+                                        </div>
+                                    </Paper>}
+                                <DropZoneComponent addFiles={this.addFiles.bind(this)} forceUpdate={this.forceUpdate.bind(this)} uploadLimit={FILE_UPLOAD_LIMIT} props={this.props} allowedExtensions={ALLOWED_EXTENSIONS} ></DropZoneComponent>
                                 <Button
                                     type="submit"
                                     fullWidth
@@ -230,10 +248,12 @@ const ImageComponent = (props: { img: string, index: number, onDelete: Function 
     const { img, index, onDelete } = props;
     const classes = useStyles();
     return (
-        <Zoom in={true} style={{ margin: '0px 10px', maxWidth: '150px', transitionDelay: index ? 200 * index + 'ms' : '0ms' }}>
+        <Zoom in={true} style={{ margin: '10px 10px', maxWidth: '200px', transitionDelay: index ? 200 * index + 'ms' : '0ms' }}>
             <Paper elevation={4} className={classes.paper} style={{ position: 'relative' }}>
-                <img src={img} alt="" width="150px" style={{ margin: 'auto' }} />
-                <DeleteIcon fontSize="small" style={{ position: 'absolute', top: '0px', right: '0px', cursor: 'pointer' }} onClick={() => onDelete()} />
+                <img src={img} alt="" width="200px" style={{ margin: 'auto' }} />
+                <Tooltip title="Delete">
+                    <DeleteIcon fontSize="small" color="error" style={{ position: 'absolute', top: '0px', right: '0px', cursor: 'pointer' }} onClick={() => onDelete()} />
+                </Tooltip>
             </Paper>
         </Zoom>
     )

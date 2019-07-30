@@ -62,12 +62,14 @@ export const DropZoneComponent = (obj: { addFiles: (ftu: FilesToUpload, size: nu
 
     return (
         <React.Fragment>
-            <div onDragEnter={highlight as any} onDropCapture={unhighlight as any} onMouseLeave={unhighlight as any} id={id}>
-                <DropToUpload style={style} onDropArrayBuffer={onDropArrayBuffer}>
-                    Drop files here to upload
+            <div style={{ margin: '10px 0px' }}>
+                <div onDragEnter={highlight as any} onDropCapture={unhighlight as any} onMouseLeave={unhighlight as any} id={id}>
+                    <DropToUpload style={style} onDropArrayBuffer={onDropArrayBuffer}>
+                        Drop files here to upload
                 </DropToUpload>
+                </div>
+                <ListComponent files={filesToUpload} setState={setFilesToUpload} forceUpdate={obj.forceUpdate} />
             </div>
-            <ListComponent files={filesToUpload} setState={setFilesToUpload} forceUpdate={obj.forceUpdate} />
         </React.Fragment>
     )
 }
