@@ -8,7 +8,7 @@ import { MATCH_PARAMS, ROUTES, POST_SLUG } from '../data/routes';
 import queryString from 'query-string';
 import { getReleaseListCollectionPath, getProjectDocPath, getProjectReleaseDocPath, getProjectStatsDocPath, getProjectStorageImagesPath } from '../data/paths';
 import { handleFirebaseError, downloadFile, scrollToTop } from '../util';
-import { ReleaseItem, ProjectData } from '../interfaces';
+import { ReleaseItem, ProjectData, ProjectStats } from '../interfaces';
 import { useStylesList } from './project-list-page';
 import moment from 'moment';
 import { cloneDeep } from 'lodash';
@@ -16,24 +16,28 @@ import * as firebase from 'firebase';
 import { progress, dialog } from '../components/header-component';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import CategoryIcon from '@material-ui/icons/Category';
 import EditDownloadIcon from '@material-ui/icons/Edit';
+import RateReviewIcon from '@material-ui/icons/RateReview';
 import UpdateDownloadIcon from '@material-ui/icons/Update';
 import MainBgComponent, { MainBgContainerStyles } from '../components/main-background-component';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { StandardProperties } from 'csstype';
+import Rating from '@material-ui/lab/Rating';
 
 interface StateType {
     releases: ReleaseItem[],
     userId: string,
     projectId: string,
     projectData: ProjectData,
+    projectStats: ProjectStats,
     loadLimit: number,
     nextExists: boolean,
     previousExists: boolean,
     querySnapshot?: firebase.firestore.QuerySnapshot,
     goingBackwards: boolean,
     isOwner: boolean,
-    numberOfDownloads: number,
     images: string[]
 }
 
@@ -44,12 +48,12 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         userId: '',
         projectId: '',
         projectData: {} as any,
+        projectStats: {} as any,
         loadLimit: 3,
         nextExists: false,
         previousExists: false,
         goingBackwards: false,
         isOwner: false,
-        numberOfDownloads: 0,
         images: []
     }
 
@@ -119,13 +123,6 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         this.state.userId = userId;
         this.state.projectId = projectId;
 
-        this.props.firebase.firestore.doc(getProjectStatsDocPath(userId, projectId)).get()
-            .then((snap) => {
-                const data = (snap.data() || { numberOfDownloads: 0 });
-                this.setState({ numberOfDownloads: data.numberOfDownloads });
-            })
-            .catch((err) => handleFirebaseError(this.props, err, 'Cannot fetch downloads'))
-
         this.props.firebase.storage.ref(getProjectStorageImagesPath(userId, projectId)).list()
             .then((list) => {
                 const promises = list.items.map((item) => {
@@ -163,6 +160,16 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                 this.setState({ projectData: snap.data() as ProjectData });
             })
             .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'));
+
+        this.props.firebase.firestore.doc(getProjectStatsDocPath(this.state.userId, this.state.projectId))
+            .get()
+            .then((snap) => {
+                if (!snap.exists) {
+                    return;
+                }
+                this.setState({ projectStats: snap.data() as ProjectStats });
+            })
+            .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project stats'));
     }
 
     private async _fetchNextAndPreviousDocuments() {
@@ -333,16 +340,19 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
     }
 
     render() {
-        const styles = {
-            fontSize: 14,
-            marginRight: '10px',
-            borderLeft: 'solid 2px rgba(0, 0, 0, 0.54)',
-            paddingLeft: '10px'
-        };
+
+        const chipStyle: StandardProperties = {
+            color: '#ffffff', borderColor: '#ffffff', marginTop: '15px', marginRight: '15px'
+        }
+        const chipDownloadIcon: StandardProperties = {
+            color: '#ffffff'
+        }
+
+        const { userId, projectId } = this.state;
 
         return (
             <React.Fragment>
-                <Container maxWidth="md">
+                <Container maxWidth="lg">
                     <Card style={MainBgContainerStyles}>
                         <MainBgComponent />
                         <Typography variant="h2" component="h1" color="inherit">
@@ -359,9 +369,10 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                         <CardContent>
                             {Object.keys(this.state.projectData).length &&
                                 (<React.Fragment>
-                                    <Chip label={`Downloads: ${this.state.numberOfDownloads}`} variant="outlined" size="small" icon={<CloudDownloadIcon style={{ color: '#ffffff' }} />} style={{ color: '#ffffff', borderColor: '#ffffff', marginTop: '15px', marginRight: '15px' }} />
-                                    <Chip label={`Created: ${moment(this.state.projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}`} variant="outlined" size="small" icon={<EditDownloadIcon style={{ color: '#ffffff' }} />} style={{ color: '#ffffff', borderColor: '#ffffff', marginTop: '15px', marginRight: '15px' }} />
-                                    <Chip label={`Last updated: ${moment(this.state.projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}`} variant="outlined" size="small" icon={<UpdateDownloadIcon style={{ color: '#ffffff' }} />} style={{ color: '#ffffff', borderColor: '#ffffff', marginTop: '15px', marginRight: '15px' }} />
+                                    <Chip label={`Downloads: ${this.state.projectStats.numberOfDownloads}`} variant="outlined" size="small" icon={<CloudDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
+                                    <Chip label={`Category: ${this.state.projectData.category}`} variant="outlined" size="small" icon={<CategoryIcon style={chipDownloadIcon} />} style={chipStyle} />
+                                    <Chip label={`Created: ${moment(this.state.projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}`} variant="outlined" size="small" icon={<EditDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
+                                    <Chip label={`Last updated: ${moment(this.state.projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}`} variant="outlined" size="small" icon={<UpdateDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
                                 </React.Fragment>)}
                         </CardContent>
                         {this.state.isOwner && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -374,16 +385,24 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                                     Edit Project
                                     <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
                                 </Button>
-                                {/* <Button onClick={() => this.showEditProjectDialog()}>
-                                    Edit description
-                                    <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
-                                </Button> */}
                                 <Button onClick={() => this.showDeleteProjectDialog()}>
                                     Delete project
                                     <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
                                 </Button>
                             </ButtonGroup>
                         </CardActions>}
+                        <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
+                                <Button onClick={() => this.props.history.push(`${ROUTES.PROJECT_REVIEW_PAGE}/${userId}/${projectId}`)}>
+                                    Write Review
+                                    <RateReviewIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                                </Button>
+                            </ButtonGroup>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <Typography color="textSecondary" variant="body1">{this.state.projectStats.numberOfReviews}</Typography>
+                                <Rating style={{ margin: '10px 10px' }} value={this.state.projectStats.averageRating} readOnly />
+                            </div>
+                        </CardActions>
                     </Card>
 
                     <Container maxWidth="md" style={{ marginTop: '20px' }}>
@@ -399,17 +418,18 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                             }
                         </Carousel>
                     </Container>
-
-                    <List style={{ marginTop: '30px' }}>
-                        {
-                            this.state.releases.map((release) => {
-                                const obj = { release, history: this.props.history, userID: this.state.userId, props: this.props, state: this.state, downloadFile: this.downloadFile, allData: this };
-                                return (
-                                    <ReleaseCard {...obj} key={release.releaseId} />
-                                )
-                            })
-                        }
-                    </List>
+                    <Container maxWidth="md">
+                        <List style={{ marginTop: '30px' }}>
+                            {
+                                this.state.releases.map((release) => {
+                                    const obj = { release, history: this.props.history, userID: this.state.userId, props: this.props, state: this.state, downloadFile: this.downloadFile, allData: this };
+                                    return (
+                                        <ReleaseCard {...obj} key={release.releaseId} />
+                                    )
+                                })
+                            }
+                        </List>
+                    </Container>
 
                 </Container>
                 <Container maxWidth="sm">
