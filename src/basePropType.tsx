@@ -7,6 +7,7 @@ export interface basePropType {
     enqueueSnackbar: WithSnackbarProps['enqueueSnackbar'];
     match: Match
     location: Location
+    classes?: Record<string, string>
 }
 
 interface Match {

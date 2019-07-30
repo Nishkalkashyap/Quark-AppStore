@@ -354,10 +354,14 @@ export default class LocalComponent extends Component<basePropType> {
                                     Create new release
                                     <NewReleasesIcon fontSize="small" style={{ marginLeft: '10px' }} />
                                 </Button>
-                                <Button onClick={() => this.showEditProjectDialog()}>
-                                    Edit description
+                                <Button onClick={() => this.props.history.push(`${ROUTES.EDIT_PROJECT_PAGE}/${this.state.userId}/${this.state.projectId}`)}>
+                                    Edit Project
                                     <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
                                 </Button>
+                                {/* <Button onClick={() => this.showEditProjectDialog()}>
+                                    Edit description
+                                    <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                                </Button> */}
                                 <Button onClick={() => this.showDeleteProjectDialog()}>
                                     Delete project
                                     <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />

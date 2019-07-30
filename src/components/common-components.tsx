@@ -42,7 +42,7 @@ export const NotFoundComponent = (props: basePropType) => {
 //     404 Not Found
 // </Link>
 
-export const useStyles = makeStyles(theme => ({
+export const globalStyles = (theme: any) => ({
     '@global': {
         body: {
             backgroundColor: theme.palette.common.white,
@@ -72,7 +72,8 @@ export const useStyles = makeStyles(theme => ({
         flexGrow: 1,
         backgroundColor: theme.palette.background.paper,
     }
-}));
+})
+export const useStyles = makeStyles(globalStyles as any);
 
 
 const signOutButton = ({ firebase }: { firebase: Firebase }) => (

@@ -15,6 +15,7 @@ export const ROUTES = {
     ACCOUNT_PAGE: '/account',
     PROJECT_PAGE: '/project',
     PROJECTS_LIST_PAGE: '/projects',
+    EDIT_PROJECT_PAGE: '/edit-project',
     NEW_RELEASE: '/project',
     CREATE_NEW_PROJECT_PAGE: '/new-project',
     NOT_FOUND: '/404',
