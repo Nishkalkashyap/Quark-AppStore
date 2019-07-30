@@ -53,7 +53,8 @@ const StupidPageContainer: any = withRouter(withFirebase(PageContainer));
 
 const theme = createMuiTheme({
   palette: {
-    primary: { main: '#2196F3' },
+    // primary: { main: '#2196F3' },
+    primary: { main: '#055af9' },
     background: {
       default: '#f5f5f5'
     }
