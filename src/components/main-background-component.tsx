@@ -4,7 +4,8 @@ import { cloneDeep } from 'lodash';
 
 export default function MainBgComponent(props?: { bgColor?: string, position?: 'fixed' | 'absolute' }) {
     // const color = props!.bgColor ? props!.bgColor : 'linear-gradient(90deg,#2196F3 0,#21CBF3 100%)';
-    const color = props!.bgColor ? props!.bgColor : 'linear-gradient(90deg,#055af9 0,#21CBF3 100%)';
+    // const color = props!.bgColor ? props!.bgColor : 'linear-gradient(90deg,#055af9 0,#21CBF3 100%)';
+    const color = props!.bgColor ? props!.bgColor : 'linear-gradient(90deg,#000000ff 0,#000000aa 100%)';
     const position = props!.position ? props!.position : 'absolute';
     return (
         // <div style={Object.assign({}, CommonStyles, { backgroundImage: 'linear-gradient(90deg,#2196F322 0,#21CBF322 100%)', transform: undefined,borderRadius : '5px' })}>

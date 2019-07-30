@@ -359,7 +359,10 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                             {this.state.projectData.projectName || 'Project'}
                         </Typography>
                         <CardContent>
-                            <Typography variant="h4" color="inherit">
+                            <Typography component="h3" color="inherit" style={{marginBottom : '20px'}}>
+                                {this.state.projectData.tagline || 'Tag line'}
+                            </Typography>
+                            <Typography variant="h5" color="inherit">
                                 Description
                             </Typography>
                             <Typography component="p" color="inherit">
@@ -399,7 +402,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                                 </Button>
                             </ButtonGroup>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography color="textSecondary" variant="body1">{this.state.projectStats.numberOfReviews}</Typography>
+                                <Typography color="inherit" variant="body1">{this.state.projectStats.numberOfReviews}</Typography>
                                 <Rating style={{ margin: '10px 10px' }} value={this.state.projectStats.averageRating} readOnly />
                             </div>
                         </CardActions>
