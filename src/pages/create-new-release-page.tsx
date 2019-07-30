@@ -13,6 +13,7 @@ import { ReleaseItem } from '../interfaces';
 import { useStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
 import { withOriginalOwner } from '../providers/owner-guard';
+import { DropZoneComponent } from '../components/drop-zone';
 const DropToUpload = require('react-drop-to-upload').default;
 
 type FilesToUpload = { [key: string]: { buffer: ArrayBuffer, file: File, percent: number } };
@@ -89,34 +90,37 @@ const LocalComponent = (props: basePropType) => {
         setState({ ...state, notes: event.target.value });
     }
 
-    const addFiles = (ftu: FilesToUpload) => {
+    const addFiles = (ftu: FilesToUpload, size: number) => {
 
-        const nonRequiredFiles = Object.keys(ftu).filter((key) => {
-            return !(key.endsWith('.qrk') || key === 'package.json' || key.endsWith('.ino'))
-        });
+        // console.log(ftu);
+
+        // const nonRequiredFiles = Object.keys(ftu).filter((key) => {
+        //     return !(key.endsWith('.qrk') || key === 'package.json' || key.endsWith('.ino'))
+        // });
 
 
-        if (nonRequiredFiles.length) {
-            nonRequiredFiles.map((file) => {
-                delete ftu[file];
-            });
-            props.enqueueSnackbar('You can only upload *.qrk, *.build.qrk, package.json and *.ino file', { variant: 'error' });
-            props.enqueueSnackbar('Some files were removed', { variant: 'error' });
-        }
+        // if (nonRequiredFiles.length) {
+        //     nonRequiredFiles.map((file) => {
+        //         delete ftu[file];
+        //     });
+        //     props.enqueueSnackbar('You can only upload *.qrk, *.build.qrk, package.json and *.ino file', { variant: 'error' });
+        //     props.enqueueSnackbar('Some files were removed', { variant: 'error' });
+        // }
 
-        const finalObject: typeof INITIAL_STATE = merge(state, { filesToUpload: ftu });
+        // const finalObject: typeof INITIAL_STATE = merge(state, { filesToUpload: ftu });
+        const finalObject: typeof INITIAL_STATE = (state);
+        state.filesToUpload = ftu;
 
-        let size = 0;
-        Object.keys(finalObject.filesToUpload).map((key) => {
-            size = size + finalObject.filesToUpload[key].file.size;
-        });
+        // let size = 0;
+        // Object.keys(finalObject.filesToUpload).map((key) => {
+        //     size = size + finalObject.filesToUpload[key].file.size;
+        // });
 
-        if (size > FILE_UPLOAD_LIMIT) {
-            props.enqueueSnackbar('Total upload size must be less than 20MB', { variant: 'error' });
-        }
+        // if (size > FILE_UPLOAD_LIMIT) {
+        //     props.enqueueSnackbar('Total upload size must be less than 20MB', { variant: 'error' });
+        // }
 
         finalObject.uploadSize = size;
-
         setState({ ...finalObject });
     }
 
@@ -162,8 +166,15 @@ const LocalComponent = (props: basePropType) => {
 
                             onChange={onChange}
                         />
-                        <DropZone addFiles={addFiles as any} />
-                        <ListComponent files={state.filesToUpload as any} forceUpdate={forceUpdate as any}></ListComponent>
+                        <DropZoneComponent
+                            addFiles={addFiles}
+                            allowedExtensions={['qrk', 'ino', 'package.json']}
+                            uploadLimit={FILE_UPLOAD_LIMIT}
+                            forceUpdate={forceUpdate}
+                            props={props}
+                        />
+                        {/* <DropZone addFiles={addFiles as any} /> */}
+                        {/* <ListComponent files={state.filesToUpload as any} forceUpdate={forceUpdate as any}></ListComponent> */}
                         <Button
                             type="submit"
                             fullWidth
@@ -181,92 +192,92 @@ const LocalComponent = (props: basePropType) => {
     )
 }
 
-const ListComponent = (props: { files: FilesToUpload, forceUpdate: Function }) => {
+// const ListComponent = (props: { files: FilesToUpload, forceUpdate: Function }) => {
 
-    const deleteKey = (key: string) => {
-        delete props.files[key];
-        props.forceUpdate();
-    }
+//     const deleteKey = (key: string) => {
+//         delete props.files[key];
+//         props.forceUpdate();
+//     }
 
-    const getSecondary = (bytes: number) => {
-        if (bytes < 1000) {
-            return `${bytes} bytes`;
-        }
+//     const getSecondary = (bytes: number) => {
+//         if (bytes < 1000) {
+//             return `${bytes} bytes`;
+//         }
 
-        if (bytes < 1000000) {
-            return `${Math.floor(bytes / 1000)} kilobytes`;
-        }
+//         if (bytes < 1000000) {
+//             return `${Math.floor(bytes / 1000)} kilobytes`;
+//         }
 
-        if (bytes < 1000000000) {
-            return `${Math.floor(bytes / 1000000)} megabytes`;
-        }
+//         if (bytes < 1000000000) {
+//             return `${Math.floor(bytes / 1000000)} megabytes`;
+//         }
 
-        return `${bytes} bytes`;
-    }
+//         return `${bytes} bytes`;
+//     }
 
-    return (
-        <List>
-            {Object.keys(props.files).map((key) => {
-                return (
-                    <React.Fragment key={key + props.files[key].file.size}>
-                        <LinearProgress variant="determinate" value={props.files[key].percent} />
-                        <ListItem>
-                            <ListItemText
-                                primary={key}
-                                secondary={getSecondary(props.files[key].file.size)}
-                            />
-                            <ListItemSecondaryAction>
-                                <IconButton edge="end" aria-label="delete" onClick={() => deleteKey(key)}>
-                                    <DeleteForeverIcon />
-                                </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>
-                    </React.Fragment>
-                )
-            })}
-        </List>
-    )
-}
+//     return (
+//         <List>
+//             {Object.keys(props.files).map((key) => {
+//                 return (
+//                     <React.Fragment key={key + props.files[key].file.size}>
+//                         <LinearProgress variant="determinate" value={props.files[key].percent} />
+//                         <ListItem>
+//                             <ListItemText
+//                                 primary={key}
+//                                 secondary={getSecondary(props.files[key].file.size)}
+//                             />
+//                             <ListItemSecondaryAction>
+//                                 <IconButton edge="end" aria-label="delete" onClick={() => deleteKey(key)}>
+//                                     <DeleteForeverIcon />
+//                                 </IconButton>
+//                             </ListItemSecondaryAction>
+//                         </ListItem>
+//                     </React.Fragment>
+//                 )
+//             })}
+//         </List>
+//     )
+// }
 
-const DropZone = (obj: { addFiles: Function }) => {
-    const style: StandardProperties = {
-        minHeight: '150px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        border: `2px dashed #bbb`,
-        boxShadow: 'none'
-    }
+// const DropZone = (obj: { addFiles: Function }) => {
+//     const style: StandardProperties = {
+//         minHeight: '150px',
+//         display: 'flex',
+//         alignItems: 'center',
+//         justifyContent: 'center',
+//         border: `2px dashed #bbb`,
+//         boxShadow: 'none'
+//     }
 
-    const onDropArrayBuffer = (buffers: ArrayBuffer[], files: File[]) => {
-        const filesToUpload: FilesToUpload = {};
-        files.map((file, index) => {
-            filesToUpload[file.name] = {
-                file,
-                buffer: buffers[index],
-                percent: 0
-            }
-        });
-        obj.addFiles(filesToUpload);
-    }
+//     const onDropArrayBuffer = (buffers: ArrayBuffer[], files: File[]) => {
+//         const filesToUpload: FilesToUpload = {};
+//         files.map((file, index) => {
+//             filesToUpload[file.name] = {
+//                 file,
+//                 buffer: buffers[index],
+//                 percent: 0
+//             }
+//         });
+//         obj.addFiles(filesToUpload);
+//     }
 
-    const id = "fksdbkfskd-fsdfs-fsdfsd-fsd-fsdf-fds";
+//     const id = "fksdbkfskd-fsdfs-fsdfsd-fsd-fsdf-fds";
 
-    const highlight = (e: MouseEvent) => {
-        document.getElementById(id)!.className = "drop-to-upload-highlight";
-    }
+//     const highlight = (e: MouseEvent) => {
+//         document.getElementById(id)!.className = "drop-to-upload-highlight";
+//     }
 
-    const unhighlight = (e: MouseEvent) => {
-        document.getElementById(id)!.className = "drop-to-upload-unhighlight";
-    }
+//     const unhighlight = (e: MouseEvent) => {
+//         document.getElementById(id)!.className = "drop-to-upload-unhighlight";
+//     }
 
-    return (
-        <div onDragEnter={highlight as any} onDropCapture={unhighlight as any} onMouseLeave={unhighlight as any} id={id}>
-            <DropToUpload style={style} onDropArrayBuffer={onDropArrayBuffer}>
-                Drop files here to upload
-            </DropToUpload>
-        </div>
-    )
-}
+//     return (
+//         <div onDragEnter={highlight as any} onDropCapture={unhighlight as any} onMouseLeave={unhighlight as any} id={id}>
+//             <DropToUpload style={style} onDropArrayBuffer={onDropArrayBuffer}>
+//                 Drop files here to upload
+//             </DropToUpload>
+//         </div>
+//     )
+// }
 
 export const CreateNewRelease = withAllProviders(withOriginalOwner(LocalComponent));
