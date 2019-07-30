@@ -7,7 +7,7 @@ import { getProjectStatsDocPath, getProjectDocPath } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import { withAllProviders } from '../providers/all-providers';
 import { withOriginalOwner } from '../providers/owner-guard';
-import { Container, Card, Typography, TextField, Button, Grid } from '@material-ui/core';
+import { Container, Card, Typography, TextField, Button, Grid, Zoom, Paper } from '@material-ui/core';
 import { PasswordForgetLink } from './forgot-password-page';
 import { SignUpLink } from './signup-page';
 import { globalStyles } from '../components/common-components';
@@ -18,6 +18,7 @@ interface StateType {
     projectId: string,
     projectData: Partial<ProjectData>,
     isOwner: boolean
+    images: string[]
 }
 
 class LocalComponent extends Component<basePropType> {
@@ -26,7 +27,8 @@ class LocalComponent extends Component<basePropType> {
         userId: '',
         projectId: '',
         projectData: {},
-        isOwner: false
+        isOwner: false,
+        images: ['', '', '']
     }
 
     constructor(props: basePropType) {
@@ -65,12 +67,16 @@ class LocalComponent extends Component<basePropType> {
     };
 
     onChange = (event: any) => {
-        this.setState({ [event.target.name]: event.target.value });
+        // console.log({[event.target.name]: event.target.value});
+        this.setState({ projectData: { [event.target.name]: event.target.value } });
     };
 
     render() {
         const classes = this.props.classes!;
-        const { isOwner, projectData, } = this.state;
+        const { projectData, images } = this.state;
+        const { createdAt, description, projectName, updatedAt, projectId } = projectData!;
+        const isInvalid = projectName == '' || description == '';
+
         return (
             <div>
                 <Container component="section" maxWidth="md">
@@ -86,34 +92,49 @@ class LocalComponent extends Component<basePropType> {
                                     required
                                     fullWidth
 
-                                    id="email"
-                                    label="Email Address"
-                                    name="email"
-                                    autoComplete="email"
-                                    type="email"
+                                    label="Name"
+                                    name="projectName"
+                                    type="text"
                                     autoFocus
 
-                                    value={email}
+                                    value={projectName || ''}
                                     onChange={this.onChange}
                                 />
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+
+                                    label="Description"
+                                    name="description"
+                                    type="text"
+                                    autoFocus
+
+                                    value={description || ''}
+                                    onChange={this.onChange}
+                                />
+                                <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto' }}>
+                                    {
+                                        images.map((img, index) => (
+                                            <Zoom in={true} style={{ margin: '0px 10px', transitionDelay: index ? 500 * index + 'ms' : '0ms' }}>
+                                                <Paper elevation={4} className={classes.paper}>
+                                                    <img src="https://via.placeholder.com/150" alt="" />
+                                                </Paper>
+                                            </Zoom>
+                                        ))
+                                    }
+                                </div>
                                 <Button
                                     type="submit"
                                     fullWidth
                                     variant="contained"
                                     color="primary"
                                     className={classes.submit}
-                                // disabled={isInvalid}
+                                    disabled={isInvalid}
                                 >
                                     Update
                                 </Button>
-                                <Grid container>
-                                    <Grid item xs>
-                                        <PasswordForgetLink></PasswordForgetLink>
-                                    </Grid>
-                                    <Grid item>
-                                        <SignUpLink></SignUpLink>
-                                    </Grid>
-                                </Grid>
                             </form>
                         </div>
                     </Card>
