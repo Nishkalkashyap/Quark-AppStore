@@ -14,10 +14,11 @@ const INITIAL_STATE = {
     projectName: '',
     description: '',
     projectId: '',
-    createdAt: ''
+    createdAt: '',
+    tagline: ''
 }
 
-class LocalComponent extends Component<basePropType> {
+class LocalComponent extends Component<basePropType, typeof INITIAL_STATE> {
 
     constructor(props: basePropType) {
         super(props);
@@ -36,7 +37,8 @@ class LocalComponent extends Component<basePropType> {
             updatedAt: createdAt as any,
             createdAt: createdAt as any,
             description: this.state.description,
-            projectName: this.state.projectName
+            projectName: this.state.projectName,
+            tagline: this.state.tagline
         }
 
         this.props.firebase.firestore.doc(getProjectDocPath(this.props.firebase.auth.currentUser!.uid, random)).set(dataToSend).then(() => {
@@ -50,7 +52,7 @@ class LocalComponent extends Component<basePropType> {
     };
 
     onChange = (event: any) => {
-        this.setState({ [event.target.name]: event.target.value });
+        this.setState({ [event.target.name]: event.target.value } as any);
     };
 
     render() {
@@ -62,8 +64,8 @@ class LocalComponent extends Component<basePropType> {
 
 const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof INITIAL_STATE }) => {
     const classes = useStyles();
-    const { projectName, description } = obj.state;
-    const isInvalid = projectName === '' || description === '';
+    const { projectName, description, tagline } = obj.state;
+    const isInvalid = projectName === '' || description === '' || tagline === '';
 
     return (
         <Container component="section" maxWidth="sm">
@@ -97,10 +99,28 @@ const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof IN
                             required
                             fullWidth
 
+                            id="tagline"
+                            label="Tag line"
+                            name="tagline"
+                            type="text"
+                            autoFocus
+
+                            value={tagline}
+                            onChange={obj.onChange}
+                        />
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+
                             id="description"
                             label="Description"
                             name="description"
                             type="text"
+
+                            multiline
+                            rows="4"
 
                             value={description}
                             onChange={obj.onChange}

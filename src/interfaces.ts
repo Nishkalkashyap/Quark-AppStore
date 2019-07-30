@@ -2,6 +2,7 @@ export interface ProjectData {
     projectId: string;//auto set
 
     projectName: string;
+    tagline : string;
     description: string;
     numberOfReleases: number;
     createdAt: firebase.firestore.Timestamp//auto set

@@ -172,7 +172,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
     }
 
     isDisabled() {
-        if (!this.state.projectData.projectName || !this.state.projectData.description) {
+        if (!this.state.projectData.projectName || !this.state.projectData.description || !this.state.projectData.tagline) {
             return true;
         }
 
@@ -194,7 +194,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
     render() {
         const classes = this.props.classes!;
         const { projectData, images, filesToUpload } = this.state;
-        const { description, projectName } = projectData!;
+        const { description, projectName, tagline } = projectData!;
 
         return (
             <div>
@@ -217,6 +217,20 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
                                     autoFocus
 
                                     value={projectName || ''}
+                                    onChange={this.onChange}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+
+                                    label="Tag line"
+                                    name="tagline"
+                                    type="text"
+                                    autoFocus
+
+                                    value={tagline || ''}
                                     onChange={this.onChange}
                                 />
                                 <TextField
