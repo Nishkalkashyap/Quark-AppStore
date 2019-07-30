@@ -6,7 +6,7 @@ import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES, POST_SLUG } from '../data/routes';
 import queryString from 'query-string';
-import { getReleaseListCollectionPath, getProjectDocPath, getProjectReleaseDocPath, getProjectStatsDocPath } from '../data/paths';
+import { getReleaseListCollectionPath, getProjectDocPath, getProjectReleaseDocPath, getProjectStatsDocPath, getProjectStorageImagesPath } from '../data/paths';
 import { handleFirebaseError, downloadFile, scrollToTop } from '../util';
 import { ReleaseItem, ProjectData } from '../interfaces';
 import { useStylesList } from './project-list-page';
@@ -19,6 +19,8 @@ import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import EditDownloadIcon from '@material-ui/icons/Edit';
 import UpdateDownloadIcon from '@material-ui/icons/Update';
 import MainBgComponent, { MainBgContainerStyles } from '../components/main-background-component';
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 interface StateType {
     releases: ReleaseItem[],
@@ -31,7 +33,8 @@ interface StateType {
     querySnapshot?: firebase.firestore.QuerySnapshot,
     goingBackwards: boolean,
     isOwner: boolean,
-    numberOfDownloads: number
+    numberOfDownloads: number,
+    images: string[]
 }
 
 
@@ -46,7 +49,8 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         previousExists: false,
         goingBackwards: false,
         isOwner: false,
-        numberOfDownloads: 0
+        numberOfDownloads: 0,
+        images: []
     }
 
     constructor(props: basePropType) {
@@ -121,6 +125,18 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                 this.setState({ numberOfDownloads: data.numberOfDownloads });
             })
             .catch((err) => handleFirebaseError(this.props, err, 'Cannot fetch downloads'))
+
+        this.props.firebase.storage.ref(getProjectStorageImagesPath(userId, projectId)).list()
+            .then((list) => {
+                const promises = list.items.map((item) => {
+                    return item.getDownloadURL()
+                });
+
+                return Promise.all(promises);
+            })
+            .then((val) => {
+                this.setState({ images: val });
+            });
 
         this.props.firebase.auth.onAuthStateChanged((e) => {
             if (e) {
@@ -369,6 +385,20 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                             </ButtonGroup>
                         </CardActions>}
                     </Card>
+
+                    <Container maxWidth="md" style={{ marginTop: '20px' }}>
+                        <Carousel useKeyboardArrows autoPlay infiniteLoop >
+                            {
+                                this.state.images.map((img) => {
+                                    return (
+                                        <div key={img}>
+                                            <img src={img} />
+                                        </div>
+                                    )
+                                })
+                            }
+                        </Carousel>
+                    </Container>
 
                     <List style={{ marginTop: '30px' }}>
                         {
