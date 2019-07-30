@@ -12,6 +12,7 @@ import { getProjectDocPath, getProjectReviewsDocPath } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
+import { progress } from '../components/header-component';
 
 
 interface StateType {
@@ -31,11 +32,13 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
         const userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
         this.state.projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
 
+        progress.showProgressBar();
         this.props.firebase.firestore.doc(getProjectReviewsDocPath(userId, this.state.projectId, this.props.firebase.auth.currentUser!.uid)).get()
             .then((snap) => {
                 this.setState({ review: snap.data() || {} })
             })
-            .catch((err) => handleFirebaseError(this.props, err, 'Failed to fetch project data'));
+            .catch((err) => handleFirebaseError(this.props, err, 'Failed to fetch project data'))
+            .finally(() => progress.hideProgressBar());
     }
 
     state: StateType = this.INITIAL_STATE;
@@ -121,7 +124,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
                                 disabled={isInvalid}
                             >
                                 Submit
-                    </Button>
+                            </Button>
                         </form>
                     </div>
                 </Card>

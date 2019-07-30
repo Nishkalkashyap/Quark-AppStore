@@ -42,6 +42,8 @@ export type allCategories =
 
 export interface ProjectStats {
     numberOfDownloads: number;
+    numberOfReviews: number;
+    averageRating : number;
     // numberOfViews: number;
 }
 
