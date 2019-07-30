@@ -6,6 +6,8 @@ export interface ProjectData {
     numberOfReleases: number;
     createdAt: firebase.firestore.Timestamp//auto set
     updatedAt: firebase.firestore.Timestamp;//auto set
+
+    coverImageUrl?: string;
 }
 
 export interface ProjectStats {
@@ -24,19 +26,19 @@ export interface ReleaseItem {
     assets: string[];
 }
 
-export interface MessageDialogInterface<T=any> {
+export interface MessageDialogInterface<T = any> {
     title: string;
     text: string;
     buttons: T[];
     isOpen: boolean;
-    type : "info" | "error" | "question" | "warning"
+    type: "info" | "error" | "question" | "warning"
 }
 
-export interface FormDialogInterface<T=any> {
+export interface FormDialogInterface<T = any> {
     title: string;
     subTitle: string;
     value: string;
     buttons: T[];
     isOpen: boolean;
-    fieldlabel : string;
+    fieldlabel: string;
 }

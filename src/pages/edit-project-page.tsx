@@ -7,26 +7,26 @@ import { getProjectDocPath, getProjectStorageImagesPath } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import { withAllProviders } from '../providers/all-providers';
 import { withOriginalOwner } from '../providers/owner-guard';
-import { Container, Card, Typography, TextField, Button, Zoom, Paper, Fab, Tooltip } from '@material-ui/core';
+import { Container, Card, Typography, TextField, Button, Zoom, Paper, Fab, Tooltip, ButtonGroup, IconButton } from '@material-ui/core';
 import { globalStyles, useStyles } from '../components/common-components';
 import { withStyles } from '@material-ui/styles';
 import { DropZoneComponent, FilesToUpload } from '../components/drop-zone';
-import DeleteIcon from '@material-ui/icons/Delete';
 import { progress, dialog } from '../components/header-component';
+import { StandardProperties } from 'csstype';
 
 interface StateType {
     userId: string,
     projectId: string,
     projectData: Partial<ProjectData>,
     isOwner: boolean
-    images: string[]
+    images: { url: string, meta: any }[]
     filesToUpload: FilesToUpload
-    uploadSize: number
+    uploadSize: number,
 }
 
 const FILE_UPLOAD_LIMIT = 10000000;
 const ALLOWED_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif'];
-class LocalComponent extends Component<basePropType> {
+class LocalComponent extends Component<basePropType, Partial<StateType>> {
 
     INITIAL_STATE: StateType = {
         userId: '',
@@ -59,12 +59,25 @@ class LocalComponent extends Component<basePropType> {
                 const promises = list.items.map((item) => {
                     return item.getDownloadURL()
                 });
-                return Promise.all(promises);
+
+                const meta = list.items.map((item) => {
+                    return item.getMetadata()
+                });
+
+                return Promise.all(promises.concat(meta));
             })
             .then((val) => {
-                this.setState({ images: val } as Partial<StateType>)
+                const images = val.filter((item) => typeof item == 'string');
+                const metaData = val.filter((item) => typeof item !== 'string');
+                const finalArray: StateType['images'] = images.map((url, index) => {
+                    return {
+                        url,
+                        meta: metaData[index]
+                    }
+                })
+                this.setState({ images: finalArray })
             })
-            .catch((err) => { console.log(err); handleFirebaseError(this.props, err, 'Could not fetch images') })
+            .catch((err) => { handleFirebaseError(this.props, err, 'Could not fetch images') })
             .finally(() => progress.hideProgressBar());
     }
 
@@ -138,14 +151,13 @@ class LocalComponent extends Component<basePropType> {
     }
 
     deleteCloudImage(url: string) {
-
         dialog.showMessageBox<'Yes' | 'Cancel'>('Delete image', 'Are you sure you want to delete this image. This action is irreversible', ['Yes', 'Cancel'], 'question')
             .then((val) => {
                 if (val == 'Yes') {
                     this.props.enqueueSnackbar('Deleting image', { variant: 'info' });
                     this.props.firebase.storage.refFromURL(url).delete()
                         .then(() => {
-                            const findIndex = this.state.images.findIndex((val) => val === url);
+                            const findIndex = this.state.images.findIndex((val) => val.url === url);
                             if (findIndex !== -1) {
                                 this.state.images.splice(findIndex, 1);
                                 this.setState({ images: this.state.images } as Partial<StateType>);
@@ -156,11 +168,34 @@ class LocalComponent extends Component<basePropType> {
             }).catch(console.error);
     }
 
+    setCoverImage(url: string) {
+        this.setState({ projectData: Object.assign(this.state.projectData, { coverImageUrl: url } as Partial<ProjectData>) })
+    }
+
+    isDisabled() {
+        if (!this.state.projectData.projectName || !this.state.projectData.description) {
+            return true;
+        }
+
+        let sum1 = 0;
+        this.state.images.map((val) => sum1 = sum1 + val.meta.size);
+
+        let sum2 = 0;
+        Object.keys(this.state.filesToUpload).map((key) => sum2 = sum2 + this.state.filesToUpload[key].file.size);
+
+        const finalSum = sum1 + sum2;
+        if (finalSum > FILE_UPLOAD_LIMIT) {
+            this.props.enqueueSnackbar('Max upload limit crossed', { variant: 'error' });
+            return true;
+        }
+
+        return false;
+    }
+
     render() {
         const classes = this.props.classes!;
         const { projectData, images, filesToUpload } = this.state;
         const { description, projectName } = projectData!;
-        const isInvalid = !projectName || !description;
 
         return (
             <div>
@@ -204,18 +239,18 @@ class LocalComponent extends Component<basePropType> {
                                     onChange={this.onChange}
                                 />
                                 {images.length > 0 &&
-                                    <Paper elevation={0} style={{ border: 'solid 1px rgba(0,0,0,0.23)', padding: '15px 10px' }}>
+                                    <Paper elevation={0} style={{ border: 'solid 1px rgba(0,0,0,0.23)', padding: '15px 10px', margin: '15px 0px' }}>
                                         <Typography color="textSecondary"> Existing images</Typography>
-                                        <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto', margin: '15px 0px' }}>
+                                        <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto' }}>
                                             {images.map((img, index) => (
-                                                <ImageComponent key={img + index} img={img} index={index} onDelete={() => this.deleteCloudImage(img)} />
+                                                <ImageComponent key={img.url + index} img={img.url} index={index} onDelete={() => this.deleteCloudImage(img.url)} coverUrl={this.state.projectData.coverImageUrl} makeCover={() => this.setCoverImage(img.url)} />
                                             ))}
                                         </div>
                                     </Paper>}
                                 {Object.keys(filesToUpload).length > 0 &&
-                                    <Paper elevation={0} style={{ border: 'solid 1px rgba(0,0,0,0.23)', padding: '15px 10px' }}>
+                                    <Paper elevation={0} style={{ border: 'solid 1px rgba(0,0,0,0.23)', padding: '15px 10px', margin: '15px 0px' }}>
                                         <Typography color="textSecondary"> Images to upload</Typography>
-                                        <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto', margin: '15px 0px' }}>
+                                        <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto' }}>
                                             {Object.keys(filesToUpload).map((file, index) => {
                                                 const url = URL.createObjectURL(new Blob([filesToUpload[file].buffer]));
                                                 return (
@@ -231,7 +266,7 @@ class LocalComponent extends Component<basePropType> {
                                     variant="contained"
                                     color="primary"
                                     className={classes.submit}
-                                    disabled={isInvalid}
+                                    disabled={!!this.isDisabled()}
                                 >
                                     Update
                                 </Button>
@@ -244,17 +279,30 @@ class LocalComponent extends Component<basePropType> {
     }
 }
 
-const ImageComponent = (props: { img: string, index: number, onDelete: Function }) => {
-    const { img, index, onDelete } = props;
+const ImageComponent = (props: { img: string, index: number, onDelete: Function, coverUrl?: string, makeCover?: Function }) => {
+    const { img, index, onDelete, makeCover } = props;
     const classes = useStyles();
+    const isCover = img === props.coverUrl;
+    // const coverStyles: StandardProperties = { border: `solid 1px ${isCover ? 'var(--ion-color-primary)' : 'rgba(0,0,0,0.23)'}` };
+    const coverStyles: StandardProperties = { border: `solid 1px ${isCover ? 'var(--ion-color-primary)' : 'rgba(0,0,0,0)'}` };
+    const baseStyles: StandardProperties = { padding: '10px 10px 0px 10px', borderRadius: '4px' };
+    const allStyles = Object.assign(coverStyles, baseStyles);
+
     return (
-        <Zoom in={true} style={{ margin: '10px 10px', maxWidth: '200px', transitionDelay: index ? 200 * index + 'ms' : '0ms' }}>
-            <Paper elevation={4} className={classes.paper} style={{ position: 'relative' }}>
-                <img src={img} alt="" width="200px" style={{ margin: 'auto' }} />
-                <Tooltip title="Delete">
-                    <DeleteIcon fontSize="small" color="error" style={{ position: 'absolute', top: '0px', right: '0px', cursor: 'pointer' }} onClick={() => onDelete()} />
-                </Tooltip>
-            </Paper>
+        <Zoom in={true} style={{ margin: '10px 10px', maxWidth: '220px', transitionDelay: index ? 200 * index + 'ms' : '0ms' }}>
+            <div style={allStyles}>
+                <ButtonGroup style={{ marginBottom: '10px' }} size="small" aria-label="small outlined button group">
+                    {!!makeCover && <Button onClick={() => makeCover()}>
+                        Make Cover
+                    </Button>}
+                    <Button onClick={() => onDelete()}>
+                        Delete
+                    </Button>
+                </ButtonGroup>
+                <Paper elevation={4} className={classes.paper} style={{ position: 'relative' }}>
+                    <img src={img} alt="" width="200px" style={{ margin: 'auto', borderRadius: '4px' }} />
+                </Paper>
+            </div>
         </Zoom>
     )
 }
