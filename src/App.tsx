@@ -25,6 +25,7 @@ import { PageContainer } from './components/page-container';
 import MainBgComponent from './components/main-background-component';
 import { EditProjectPage } from './pages/edit-project-page';
 import { WriteProjectReviewPage } from './pages/write-project-review-page';
+import { PRIMARY_COLOR } from './util';
 // import { NotFoundComponent } from './components/common';
 
 const Routing = () => (
@@ -56,7 +57,7 @@ const StupidPageContainer: any = withRouter(withFirebase(PageContainer));
 const theme = createMuiTheme({
   palette: {
     // primary: { main: '#2196F3' },
-    primary: { main: '#055af9' },
+    primary: { main: PRIMARY_COLOR },
     background: {
       default: '#f5f5f5'
     }

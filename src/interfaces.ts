@@ -43,8 +43,12 @@ export type allCategories =
 export interface ProjectStats {
     numberOfDownloads: number;
     numberOfReviews: number;
-    averageRating : number;
-    // numberOfViews: number;
+    averageRating: number;
+    numberOfStars_1?: number;
+    numberOfStars_2?: number;
+    numberOfStars_3?: number;
+    numberOfStars_4?: number;
+    numberOfStars_5?: number;
 }
 
 export interface ProjectReviewInterface {

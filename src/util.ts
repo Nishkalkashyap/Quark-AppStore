@@ -4,6 +4,8 @@ import download from 'downloadjs';
 import { StandardProperties } from "csstype";
 import { allCategories } from "./interfaces";
 
+export const PRIMARY_COLOR = '#055af9';
+
 export function handleFirebaseError(props: basePropType, err: any, message: string) {
     if (message) {
         props.enqueueSnackbar(message, { variant: 'error' });
