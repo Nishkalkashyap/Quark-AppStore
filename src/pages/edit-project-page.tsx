@@ -17,8 +17,7 @@ interface StateType {
     userId: string,
     projectId: string,
     projectData: Partial<ProjectData>,
-    isOwner: boolean,
-    numberOfDownloads: number
+    isOwner: boolean
 }
 
 class LocalComponent extends Component<basePropType> {
@@ -27,8 +26,7 @@ class LocalComponent extends Component<basePropType> {
         userId: '',
         projectId: '',
         projectData: {},
-        isOwner: false,
-        numberOfDownloads: 0
+        isOwner: false
     }
 
     constructor(props: basePropType) {
@@ -44,19 +42,6 @@ class LocalComponent extends Component<basePropType> {
         this.state = cloneDeep(this.INITIAL_STATE);
         this.state.userId = userId;
         this.state.projectId = projectId;
-
-        this.props.firebase.firestore.doc(getProjectStatsDocPath(userId, projectId)).get()
-            .then((snap) => {
-                const data = (snap.data() || { numberOfDownloads: 0 });
-                this.setState({ numberOfDownloads: data.numberOfDownloads });
-            })
-            .catch((err) => handleFirebaseError(this.props, err, 'Cannot fetch downloads'))
-
-        this.props.firebase.auth.onAuthStateChanged((e) => {
-            if (e) {
-                this.setState({ isOwner: e.uid == userId });
-            }
-        });
     }
 
     state: StateType = {} as any;
@@ -85,6 +70,7 @@ class LocalComponent extends Component<basePropType> {
 
     render() {
         const classes = this.props.classes!;
+        const { isOwner, projectData, } = this.state;
         return (
             <div>
                 <Container component="section" maxWidth="md">
@@ -93,8 +79,7 @@ class LocalComponent extends Component<basePropType> {
                             <Typography component="h1" variant="h3">
                                 Edit Project
                             </Typography>
-                            <form className={classes.form}>
-                                {/* <form className={classes.form} onSubmit={obj.onSubmit}> */}
+                            <form className={classes.form} onSubmit={this.onSubmit}>
                                 <TextField
                                     variant="outlined"
                                     margin="normal"
@@ -108,8 +93,8 @@ class LocalComponent extends Component<basePropType> {
                                     type="email"
                                     autoFocus
 
-                                // value={email}
-                                // onChange={obj.onChange}
+                                    value={email}
+                                    onChange={this.onChange}
                                 />
                                 <Button
                                     type="submit"
