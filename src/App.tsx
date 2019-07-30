@@ -24,6 +24,7 @@ import { NotFoundComponent } from './components/common-components';
 import { PageContainer } from './components/page-container';
 import MainBgComponent from './components/main-background-component';
 import { EditProjectPage } from './pages/edit-project-page';
+import { WriteProjectReviewPage } from './pages/write-project-review-page';
 // import { NotFoundComponent } from './components/common';
 
 const Routing = () => (
@@ -44,6 +45,7 @@ const Routing = () => (
     <Route exact path={`${ROUTES.PROJECT_PAGE}/${SLUGS.Project}`} component={ReleaseListPage} />
     <Route exact path={`${ROUTES.EDIT_PROJECT_PAGE}/${SLUGS.Project}`} component={EditProjectPage} />
     <Route exact path={ROUTES.CREATE_NEW_PROJECT_PAGE} component={CreateNewProjectPage} />
+    <Route exact path={`${ROUTES.PROJECT_REVIEW_PAGE}/${SLUGS.PROJECT_REVIEW_PAGE}`} component={WriteProjectReviewPage} />
 
     <Route exact path={ROUTES.NOT_FOUND} component={NotFoundComponent} />
   </React.Fragment>

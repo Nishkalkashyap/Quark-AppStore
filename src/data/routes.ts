@@ -19,6 +19,8 @@ export const ROUTES = {
     NEW_RELEASE: '/project',
     CREATE_NEW_PROJECT_PAGE: '/new-project',
     NOT_FOUND: '/404',
+
+    PROJECT_REVIEW_PAGE: '/review',
 }
 
 export const MATCH_PARAMS = {
@@ -28,7 +30,9 @@ export const MATCH_PARAMS = {
 
 export const SLUGS = {
     Project: `:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`,
-    NEW_RELEASE: `:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`
+    NEW_RELEASE: `:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`,
+    
+    PROJECT_REVIEW_PAGE: `:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`,
 }
 
 export const POST_SLUG = {

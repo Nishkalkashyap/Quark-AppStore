@@ -45,6 +45,12 @@ export interface ProjectStats {
     // numberOfViews: number;
 }
 
+export interface ProjectReviewInterface {
+    rating: number;
+    title: string;
+    content: string;
+}
+
 export interface ReleaseItem {
     projectId: string;//auto set
     releaseId: string;//auto set
