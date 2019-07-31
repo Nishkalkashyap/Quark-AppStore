@@ -25,7 +25,6 @@ interface StateType {
     previousExists: boolean,
     querySnapshot?: firebase.firestore.QuerySnapshot,
     goingBackwards: boolean,
-    isOwner: boolean,
 }
 
 
@@ -40,7 +39,6 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         nextExists: false,
         previousExists: false,
         goingBackwards: false,
-        isOwner: false
     }
 
     constructor(props: basePropType) {
@@ -52,51 +50,64 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
 
     state: StateType = {} as any;
 
+    listeners: Function[] = [];
+    reviewListeners: Function[] = [];
+    componentWillUnmount() {
+        this.listeners.map((listener) => { listener() });
+        this.reviewListeners.map((listener) => { listener() });
+    };
+
     private _setReviewArray() {
+        this.reviewListeners.map((listener) => { listener() });//remove listeners
+
         const values = queryString.parse(this.props.history.location.search);
         const startAfter = values['startAfter'];
         progress.showProgressBar();
 
         if (startAfter && typeof startAfter == 'string') {
-            this.props.firebase.firestore.doc(getProjectReviewDocPath(this.state.userId, this.state.projectId, startAfter)).get()
-                .then((snap) => {
+            const topListener = this.props.firebase.firestore
+                .doc(getProjectReviewDocPath(this.state.userId, this.state.projectId, startAfter))
+                .onSnapshot((snap) => {
 
                     if (!snap.exists) {
                         this.props.history.push(ROUTES.NOT_FOUND);
                     }
 
                     const StartType = this.state.goingBackwards ? 'asc' : 'desc';
-                    return this.props.firebase.firestore.collection(getProjectReviewsCollectionPath(this.state.userId, this.state.projectId))
+                    const subListener = this.props.firebase.firestore
+                        .collection(getProjectReviewsCollectionPath(this.state.userId, this.state.projectId))
                         .orderBy('createdAt', StartType)
                         .startAfter(snap)
                         .limit(this.state.loadLimit)
-                        .get();
-                })
-                .then((result) => {
-                    if (result.docs.length === 0) {
-                        this.props.history.push(ROUTES.NOT_FOUND);
-                    }
+                        .onSnapshot((subSnap) => {
 
-                    const arr = result.docs.map((doc) => doc.data()) as ProjectReviewInterface[];
-                    scrollToTop();
-                    this.setState({ reviews: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: result });
-                    this._fetchNextAndPreviousDocuments();
-                    progress.hideProgressBar();
-                })
-                .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch document'))
+                            if (subSnap.docs.length === 0) {
+                                this.props.history.push(ROUTES.NOT_FOUND);
+                            }
+
+                            const arr = subSnap.docs.map((doc) => doc.data()) as ProjectReviewInterface[];
+                            scrollToTop();
+                            this.setState({ reviews: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: subSnap });
+                            this._fetchNextAndPreviousDocuments();
+                            progress.hideProgressBar();
+                        });
+
+                    this.reviewListeners.push(subListener);
+
+                }, ((err) => handleFirebaseError(this.props, err, 'Could not fetch document')));
+
+            this.reviewListeners.push(topListener);
         } else {
-            this.props.firebase.firestore.collection(getProjectReviewsCollectionPath(this.state.userId, this.state.projectId))
+            this.reviewListeners.push(this.props.firebase.firestore.collection(getProjectReviewsCollectionPath(this.state.userId, this.state.projectId))
                 .orderBy('createdAt', 'desc')
                 .limit(this.state.loadLimit)
-                .get()
-                .then((result) => {
-                    const arr = result.docs.map((doc) => doc.data()) as ProjectReviewInterface[];
+                .onSnapshot((snap) => {
+                    const arr = snap.docs.map((doc) => doc.data()) as ProjectReviewInterface[];
                     scrollToTop();
-                    this.setState({ reviews: arr, querySnapshot: result });
+                    this.setState({ reviews: arr, querySnapshot: snap });
                     this._fetchNextAndPreviousDocuments();
                     progress.hideProgressBar();
-                })
-                .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch document'))
+                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch document')))
         }
     }
 
@@ -108,35 +119,27 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         this.state = cloneDeep(this.INITIAL_STATE);
         this.state.userId = userId;
         this.state.projectId = projectId;
-
-        this.props.firebase.auth.onAuthStateChanged((e) => {
-            if (e) {
-                this.setState({ isOwner: e.uid === userId });
-            }
-        });
     }
 
     private _setProjectData() {
-        this.props.firebase.firestore.doc(getProjectDocPath(this.state.userId, this.state.projectId))
-            .get()
-            .then((snap) => {
+        this.listeners.push(this.props.firebase.firestore.doc(getProjectDocPath(this.state.userId, this.state.projectId))
+            .onSnapshot((snap) => {
                 if (!snap.exists) {
                     this.props.history.push(ROUTES.NOT_FOUND);
                     return;
                 }
                 this.setState({ projectData: snap.data() as ProjectData });
-            })
-            .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'));
+            }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project data'))
+        );
 
-        this.props.firebase.firestore.doc(getProjectStatsDocPath(this.state.userId, this.state.projectId))
-            .get()
-            .then((snap) => {
+        this.listeners.push(this.props.firebase.firestore.doc(getProjectStatsDocPath(this.state.userId, this.state.projectId))
+            .onSnapshot((snap) => {
                 if (!snap.exists) {
                     return;
                 }
                 this.setState({ projectStats: snap.data() as ProjectStats });
-            })
-            .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project stats'));
+            }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project stats'))
+        );
     }
 
     private async _fetchNextAndPreviousDocuments() {
@@ -159,17 +162,17 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         const nextDoc = snap[this.state.reviews.length - 1];
         const prevDoc = snap[0];
 
-        const next = this.props.firebase.firestore.collection(getProjectReviewsCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).get();
-        const prev = this.props.firebase.firestore.collection(getProjectReviewsCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).get();
+        const subs1 = (this.props.firebase.firestore.collection(getProjectReviewsCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).onSnapshot((snap) => {
+            const nextExists = snap.docs[0] && snap.docs[0].exists;
+            this.setState({ nextExists });
+            subs1();
+        }));
 
-        const [nextExists, previousExists] = (await Promise.all([next, prev])).map((res) => (res.docs[0] && res.docs[0].exists));
-
-        const state: Partial<StateType> = {
-            nextExists,
-            previousExists
-        }
-
-        this.setState(state);
+        const subs2 = (this.props.firebase.firestore.collection(getProjectReviewsCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).onSnapshot((snap) => {
+            const previousExists = snap.docs[0] && snap.docs[0].exists;
+            this.setState({ previousExists });
+            subs2();
+        }));
     }
 
     goToNextPage() {

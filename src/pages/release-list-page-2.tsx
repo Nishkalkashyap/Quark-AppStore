@@ -24,7 +24,6 @@ interface StateType {
     previousExists: boolean,
     querySnapshot?: firebase.firestore.QuerySnapshot,
     goingBackwards: boolean,
-    isOwner: boolean,
     images: string[]
 }
 
@@ -40,7 +39,6 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         nextExists: false,
         previousExists: false,
         goingBackwards: false,
-        isOwner: false,
         images: []
     }
 
@@ -136,12 +134,6 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
             .then((val) => {
                 this.setState({ images: val });
             });
-
-        this.props.firebase.auth.onAuthStateChanged((e) => {
-            if (e) {
-                this.setState({ isOwner: e.uid === userId });
-            }
-        });
     }
 
     private _setProjectData() {
@@ -214,7 +206,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
 
     async showEditReleaseDialog(userId: string, projectId: string, releaseId: string, notes: string) {
 
-        if (!this.state.isOwner) {
+        if (!this.props.isOwner) {
             return;
         }
 
@@ -240,7 +232,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
 
     async showDeleteReleaseDialog(userId: string, projectId: string, releaseId: string) {
 
-        if (!this.state.isOwner) {
+        if (!this.props.isOwner) {
             return;
         }
 
@@ -288,7 +280,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                 return downloadFile(val, fileName);
             })
             .then(() => {
-                if (!this.state.isOwner) {
+                if (!this.props.isOwner) {
                     return this.props.firebase.firestore.doc(getProjectStatsDocPath(userId, projectId)).set(({
                         numberOfDownloads: firebase.firestore.FieldValue.increment(1) as any
                     } as Partial<ProjectData>), { merge: true });
