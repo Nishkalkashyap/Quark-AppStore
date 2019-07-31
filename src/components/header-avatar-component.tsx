@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconButton, Menu, MenuItem } from '@material-ui/core';
+import { IconButton, Menu, MenuItem, Divider } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { basePropType } from '../basePropType';
 import { ROUTES } from '../data/routes';
@@ -42,6 +42,9 @@ export function HeaderAvatarComponent(props: basePropType) {
                 onClose={handleClose}
             >
                 <MenuItem onClick={() => props.history.push(ROUTES.ACCOUNT_PAGE)}>My account</MenuItem>
+                <MenuItem onClick={() => props.history.push(ROUTES.EDIT_PROFILE_PAGE)}>Edit profile</MenuItem>
+                <MenuItem onClick={() => props.history.push(ROUTES.EDIT_PROFILE_PAGE)}>Change password</MenuItem>
+                <Divider/>
                 <MenuItem onClick={() => props.firebase.auth.signOut()}>Sign Out</MenuItem>
             </Menu>
         </div>
