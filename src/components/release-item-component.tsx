@@ -12,7 +12,7 @@ import firebase from 'firebase';
 import { handleFirebaseError, downloadFile } from '../util';
 
 type ReleaseComponentType = basePropType & {
-    release: ReleaseItem, methods: {
+    release: ReleaseItem, methods?: {
         showEditReleaseDialog: (userId: string, projectId: string, releaseId: string, notes: string) => void,
         showDeleteReleaseDialog: (userId: string, projectId: string, releaseId: string) => void,
     }
@@ -43,7 +43,7 @@ export function ReleaseItemComponent(props: ReleaseComponentType) {
                     </Typography>
                 </CardContent>
                 <DownloadsComponent {...props} />
-                {isOwner && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                {(isOwner && !!methods) && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                     {/* {<CardActions style={{ display: 'flex', justifyContent: 'space-between' }}> */}
                     <ButtonGroup size="small" aria-label="small outlined button group">
                         <Button onClick={() => methods.showEditReleaseDialog(props.urlUserId!, release.projectId, release.releaseId, release.notes)}>
