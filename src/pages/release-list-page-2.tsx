@@ -2,21 +2,18 @@ import React, { Component } from 'react'
 import { Container, List, Button, ButtonGroup, CardActions } from '@material-ui/core';
 import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
-import { MATCH_PARAMS, ROUTES } from '../data/routes';
+import { ROUTES } from '../data/routes';
 import queryString from 'query-string';
-import { getProjectDocPath, getProjectStatsDocPath, getProjectStorageImagesPath, getReleaseListCollectionPath, getProjectReleaseDocPath } from '../data/paths';
-import { handleFirebaseError, downloadFile, scrollToTop } from '../util';
+import { getProjectDocPath, getProjectStatsDocPath, getReleaseListCollectionPath, getProjectReleaseDocPath } from '../data/paths';
+import { handleFirebaseError, scrollToTop } from '../util';
 import { ReleaseItem, ProjectData, ProjectStats } from '../interfaces';
-import { cloneDeep } from 'lodash';
 import * as firebase from 'firebase';
-import { progress, dialog } from '../components/header-component';
+import { progress } from '../components/header-component';
 import { ReleaseItemComponent } from '../components/release-item-component';
 import { ProjectCardComponent } from '../components/project-card-component';
 
 interface StateType {
-    releases: ReleaseItem[],
-    userId: string,
-    projectId: string,
+    paginationArray: ReleaseItem[],
     projectData: ProjectData,
     projectStats: ProjectStats,
     loadLimit: number,
@@ -24,35 +21,53 @@ interface StateType {
     previousExists: boolean,
     querySnapshot?: firebase.firestore.QuerySnapshot,
     goingBackwards: boolean,
-    images: string[]
 }
 
 
 export default class LocalComponent extends Component<basePropType, Partial<StateType>> {
-    INITIAL_STATE: StateType = {
-        releases: [],
-        userId: '',
-        projectId: '',
+
+    getPaginationCollection = getReleaseListCollectionPath;
+    getPaginationDocument = getProjectReleaseDocPath;
+    redirectRoute = ROUTES.RELEASE_LIST_PAGE;
+
+    constructor(props: basePropType) {
+        super(props);
+        this._setProjectData();
+        this._setPaginationArray();
+    }
+
+    // only this could be different
+    private _setProjectData() {
+        this.listeners.push(
+            this.props.firebase.firestore.doc(getProjectDocPath(this.props.urlUserId!, this.props.urlProjectId!))
+                .onSnapshot((snap) => {
+                    if (!snap.exists) {
+                        this.props.history.push(ROUTES.NOT_FOUND);
+                        return;
+                    }
+                    this.setState({ projectData: snap.data() as ProjectData });
+                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project data')))
+
+        this.listeners.push(
+            this.props.firebase.firestore.doc(getProjectStatsDocPath(this.props.urlUserId!, this.props.urlProjectId!))
+                .onSnapshot((snap) => {
+                    if (!snap.exists) {
+                        return;
+                    }
+                    this.setState({ projectStats: snap.data() as ProjectStats });
+                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project stats'))
+        )
+    }
+
+    state: StateType = {
+        paginationArray: [],
         projectData: {} as any,
         projectStats: {} as any,
         loadLimit: 3,
         nextExists: false,
         previousExists: false,
         goingBackwards: false,
-        images: []
     }
-
-    constructor(props: basePropType) {
-        super(props);
-        this._setInitialState();
-        this._setProjectData();
-        this._setReleaseArray();
-    }
-
-    getPaginationCollection = getReleaseListCollectionPath;
-    getPaginationDocument = getProjectReleaseDocPath;
-
-    state: StateType = {} as any;
 
     listeners: Function[] = [];
     paginationListeners: Function[] = [];
@@ -61,7 +76,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         this.paginationListeners.map((listener) => { listener() });
     };
 
-    private _setReleaseArray() {
+    private _setPaginationArray() {
         this.paginationListeners.map((listener) => { listener() });//clear releaseListeners
 
         const values = queryString.parse(this.props.history.location.search);
@@ -70,7 +85,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
 
         if (startAfter && typeof startAfter == 'string') {
             const topListener = this.props.firebase.firestore
-                .doc(this.getPaginationDocument(this.state.userId, this.state.projectId, startAfter))
+                .doc(this.getPaginationDocument(this.props.urlUserId!, this.props.urlProjectId!, startAfter))
                 .onSnapshot((snap) => {
 
                     if (!snap.exists) {
@@ -79,7 +94,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
 
                     const StartType = this.state.goingBackwards ? 'asc' : 'desc';
                     const subListener = this.props.firebase.firestore
-                        .collection(this.getPaginationCollection(this.state.userId, this.state.projectId))
+                        .collection(this.getPaginationCollection(this.props.urlUserId!, this.props.urlProjectId!))
                         .orderBy('createdAt', StartType)
                         .startAfter(snap)
                         .limit(this.state.loadLimit)
@@ -91,7 +106,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
 
                             const arr = subSnap.docs.map((doc) => doc.data()) as ReleaseItem[];
                             scrollToTop();
-                            this.setState({ releases: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: subSnap });
+                            this.setState({ paginationArray: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: subSnap });
                             this._fetchNextAndPreviousDocuments();
                             progress.hideProgressBar();
                         });
@@ -103,13 +118,13 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
             this.paginationListeners.push(topListener);
         } else {
             this.paginationListeners.push(
-                this.props.firebase.firestore.collection(this.getPaginationCollection(this.state.userId, this.state.projectId))
+                this.props.firebase.firestore.collection(this.getPaginationCollection(this.props.urlUserId!, this.props.urlProjectId!))
                     .orderBy('createdAt', 'desc')
                     .limit(this.state.loadLimit)
                     .onSnapshot((snap) => {
                         const arr = snap.docs.map((doc) => doc.data()) as ReleaseItem[];
                         scrollToTop();
-                        this.setState({ releases: arr, querySnapshot: snap });
+                        this.setState({ paginationArray: arr, querySnapshot: snap });
                         this._fetchNextAndPreviousDocuments();
                         progress.hideProgressBar();
                     }, (err) => handleFirebaseError(this.props, err, 'Could not fetch document'))
@@ -117,53 +132,9 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         }
     }
 
-
-    private _setInitialState() {
-        const userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
-        const projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
-
-        this.state = cloneDeep(this.INITIAL_STATE);
-        this.state.userId = userId;
-        this.state.projectId = projectId;
-
-        this.props.firebase.storage.ref(getProjectStorageImagesPath(userId, projectId)).list()
-            .then((list) => {
-                const promises = list.items.map((item) => {
-                    return item.getDownloadURL()
-                });
-
-                return Promise.all(promises);
-            })
-            .then((val) => {
-                this.setState({ images: val });
-            });
-    }
-
-    private _setProjectData() {
-        this.listeners.push(
-            this.props.firebase.firestore.doc(getProjectDocPath(this.state.userId, this.state.projectId))
-                .onSnapshot((snap) => {
-                    if (!snap.exists) {
-                        this.props.history.push(ROUTES.NOT_FOUND);
-                        return;
-                    }
-                    this.setState({ projectData: snap.data() as ProjectData });
-                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project data')))
-
-        this.listeners.push(
-            this.props.firebase.firestore.doc(getProjectStatsDocPath(this.state.userId, this.state.projectId))
-                .onSnapshot((snap) => {
-                    if (!snap.exists) {
-                        return;
-                    }
-                    this.setState({ projectStats: snap.data() as ProjectStats });
-                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project stats'))
-        )
-    }
-
     private async _fetchNextAndPreviousDocuments() {
 
-        if (!this.state.releases.length) {
+        if (!this.state.paginationArray.length) {
             const state: Partial<StateType> = {
                 nextExists: false,
                 previousExists: false
@@ -178,16 +149,16 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
             snap = snap.reverse();
         }
 
-        const nextDoc = snap[this.state.releases.length - 1];
+        const nextDoc = snap[this.state.paginationArray.length - 1];
         const prevDoc = snap[0];
 
-        const subs1 = (this.props.firebase.firestore.collection(this.getPaginationCollection(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).onSnapshot((snap) => {
+        const subs1 = (this.props.firebase.firestore.collection(this.getPaginationCollection(this.props.urlUserId!, this.props.urlProjectId!)).orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).onSnapshot((snap) => {
             const nextExists = snap.docs[0] && snap.docs[0].exists;
             this.setState({ nextExists });
             subs1();
         }));
 
-        const subs2 = (this.props.firebase.firestore.collection(this.getPaginationCollection(this.state.userId, this.state.projectId)).orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).onSnapshot((snap) => {
+        const subs2 = (this.props.firebase.firestore.collection(this.getPaginationCollection(this.props.urlUserId!, this.props.urlProjectId!)).orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).onSnapshot((snap) => {
             const previousExists = snap.docs[0] && snap.docs[0].exists;
             this.setState({ previousExists });
             subs2();
@@ -196,45 +167,30 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
     }
 
     goToNextPage() {
-        const { userId, projectId, releases } = this.state;
-        if (releases.length) {
-            const index = releases.length - 1;
-            this.props.history.push(`${ROUTES.RELEASE_LIST_PAGE}/${userId}/${projectId}?startAfter=${releases[index].releaseId}`);
+        const { paginationArray } = this.state;
+        if (paginationArray.length) {
+            const index = paginationArray.length - 1;
+            this.props.history.push(`${this.redirectRoute}/${this.props.urlUserId}/${this.props.urlProjectId}?startAfter=${paginationArray[index].releaseId}`);
             this.setState({ goingBackwards: false });
-            this._setReleaseArray();
+            this._setPaginationArray();
         }
     }
 
     goToPreviousPage() {
-        const { userId, projectId, releases } = this.state;
-        if (releases.length) {
+        const { paginationArray } = this.state;
+        if (paginationArray.length) {
             const index = 0;
-            this.props.history.push(`${ROUTES.RELEASE_LIST_PAGE}/${userId}/${projectId}?startAfter=${releases[index].releaseId}`);
+            this.props.history.push(`${this.redirectRoute}/${this.props.urlUserId}/${this.props.urlProjectId}?startAfter=${paginationArray[index].releaseId}`);
             this.setState({ goingBackwards: true });
-            this._setReleaseArray();
+            this._setPaginationArray();
         }
-    }
-
-    downloadFile(userId: string, projectId: string, releaseId: string, fileName: string) {
-        this.props.firebase.storage.ref(`${this.getPaginationDocument(userId, projectId, releaseId)}/${fileName}`).getDownloadURL()
-            .then((val) => {
-                return downloadFile(val, fileName);
-            })
-            .then(() => {
-                if (!this.props.isOwner) {
-                    return this.props.firebase.firestore.doc(getProjectStatsDocPath(userId, projectId)).set(({
-                        numberOfDownloads: firebase.firestore.FieldValue.increment(1) as any
-                    } as Partial<ProjectData>), { merge: true });
-                }
-            })
-            .catch(err => handleFirebaseError(err, this.props, 'Failed to fetch download url'));
     }
 
     render() {
         return (
             <React.Fragment>
                 <Container maxWidth="lg">
-                    <ProjectCardComponent {...this.props} projectData={this.state.projectData} projectStats={this.state.projectStats} userId={this.state.userId}>
+                    <ProjectCardComponent {...this.props} projectData={this.state.projectData} projectStats={this.state.projectStats} userId={this.props.urlUserId!}>
                         <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
                                 <Button onClick={() => this.props.history.push(`${ROUTES.PROJECT_PAGE}/${this.props.urlUserId}/${this.props.urlProjectId}`)}>
@@ -246,7 +202,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                     <Container maxWidth="md">
                         <List style={{ marginTop: '30px' }}>
                             {
-                                this.state.releases.map((release) => {
+                                this.state.paginationArray.map((release) => {
                                     return (
                                         <ReleaseItemComponent key={release.releaseId}  {...this.props} release={release} />
                                     )
