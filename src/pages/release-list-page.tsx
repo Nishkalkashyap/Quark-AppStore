@@ -26,6 +26,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { StandardProperties } from 'csstype';
 import Rating from '@material-ui/lab/Rating';
 import { RatingsComponent } from '../components/ratings-component';
+import { AdditionalInformationComponent } from '../components/aditional-information-component';
 
 interface StateType {
     releases: ReleaseItem[],
@@ -360,7 +361,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                             {this.state.projectData.projectName || 'Project'}
                         </Typography>
                         <CardContent>
-                            <Typography component="h3" color="inherit" style={{marginBottom : '20px'}}>
+                            <Typography component="h3" color="inherit" style={{ marginBottom: '20px' }}>
                                 {this.state.projectData.tagline || 'Tag line'}
                             </Typography>
                             <Typography variant="h5" color="inherit">
@@ -408,7 +409,9 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                             </div>
                         </CardActions>
                     </Card>
+                    <AdditionalInformationComponent projectData={this.state.projectData} publisherId={this.state.userId} />
                     <RatingsComponent {...this.state.projectStats} />
+                    {/* <AdditionalInformationComponent {...{ projectData: { ...this.state.projectData }, publisherId: this.state.userId }} /> */}
 
                     <Container maxWidth="md" style={{ marginTop: '20px' }}>
                         <Carousel useKeyboardArrows autoPlay infiniteLoop >

@@ -33,7 +33,7 @@ class EditProfileBase extends Component<basePropType> {
 
     componentDidMount() {
         const currentUser = this.props.firebase.auth.currentUser!;
-        this.props.firebase.firestore.doc(getProfilePath(currentUser)).get()
+        this.props.firebase.firestore.doc(getProfilePath(currentUser.uid)).get()
             .then((val) => {
                 const data = (val.data() || {}) as any;
                 Object.keys(data).map((key) => {
@@ -55,7 +55,7 @@ class EditProfileBase extends Component<basePropType> {
             currentUser.updateProfile({
                 displayName: name
             }),
-            this.props.firebase.firestore.doc(getProfilePath(currentUser)).set({
+            this.props.firebase.firestore.doc(getProfilePath(currentUser.uid)).set({
                 name, bio, location, site
             })
         ];

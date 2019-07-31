@@ -1,5 +1,5 @@
-export function getProfilePath(currentUser: firebase.User) {
-    return `Users/${currentUser.uid}/profile/userData`
+export function getProfilePath(currentUserID: string) {
+    return `Users/${currentUserID}/profile/userData`
 }
 
 export function getProjectDocPath(userId: string, projectId: string) {
