@@ -54,8 +54,8 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
     }
 
     state: StateType = {} as any;
-    listeners: Function[] = [];
 
+    listeners: Function[] = [];
     componentWillUnmount() { this.listeners.map((listener) => { listener() }) };
 
     private _setInitialState() {
