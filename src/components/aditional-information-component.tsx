@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import { Typography } from '@material-ui/core';
-import { ProjectData, ProjectStats } from '../interfaces';
+import { ProjectData, ProjectStats, UserProfileInterface } from '../interfaces';
 import moment from 'moment';
 import { basePropType } from '../basePropType';
 import { getProfilePath } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import { StandardProperties } from 'csstype';
+import { isEqual } from 'lodash';
 
 export const AdditionalInformationComponent = (LocalComponent);
 
 function LocalComponent(props: { projectData: ProjectData, projectStats: ProjectStats, publisherId: string } & basePropType) {
-
-    const [userData, setUserData] = useState({} as firebase.User);
+    const [userData, setUserData] = useState({} as UserProfileInterface);
     useEffect(() => {
         const listener = props.firebase!.firestore.doc(getProfilePath(props.publisherId))
             .onSnapshot((snap) => {
                 const data = (snap.data() || {}) as any;
-                if (userData.uid !== data.uid) {
+                if (!isEqual(userData, data)) {
                     setUserData(data);
                 }
             }, (err) => handleFirebaseError(props as any, err, 'Failed to fetch user profile'));
@@ -46,7 +46,7 @@ function LocalComponent(props: { projectData: ProjectData, projectStats: Project
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={boxStyle}>
                     {/* <Item heading="User ID" content={props.publisherId}></Item> */}
-                    <Item heading="Publisher" content={userData.displayName || props.publisherId}></Item>
+                    <Item heading="Publisher" content={userData.name || props.publisherId}></Item>
                     <Item heading="Release Date" content={moment(props.projectData.createdAt.toDate().toISOString(), moment.ISO_8601).toLocaleString()}></Item>
                     <Item heading="Last updated" content={moment(props.projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).toLocaleString()}></Item>
                 </div>

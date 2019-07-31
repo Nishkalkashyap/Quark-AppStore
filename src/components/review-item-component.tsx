@@ -6,30 +6,30 @@ import Rating from '@material-ui/lab/Rating';
 import moment from 'moment';
 import { getProfilePath } from '../data/paths';
 import { handleFirebaseError } from '../util';
+import { isEqual } from 'lodash';
 
 export default function ReviewItemComponent(props: basePropType & { review: ProjectReviewInterface }) {
-    const { review } = props;
-
-    const [userProfile, setUserProfile] = useState({} as UserProfileInterface);
-
+    const [userData, setUserData] = useState({} as UserProfileInterface);
     useEffect(() => {
-        const listener = props.firebase.firestore.doc(getProfilePath(review.userId))
+        const listener = props.firebase!.firestore.doc(getProfilePath(review.userId))
             .onSnapshot((snap) => {
-                const data = (snap.data() || {}) as UserProfileInterface;
-                if (data.name !== userProfile.name) {
-                    setUserProfile(snap.data() || {})
+                const data = (snap.data() || {}) as any;
+                if (!isEqual(userData, data)) {
+                    setUserData(data);
                 }
-            }, (err) => handleFirebaseError(props, err, 'Failed to fetch user profile'));
+            }, (err) => handleFirebaseError(props as any, err, 'Failed to fetch user profile'));
 
         return listener;
-    })
+    });
+
+    const { review } = props;
 
     return (
         <React.Fragment>
             <Card style={{ padding: '20px' }} key={review.userId + review.content}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography variant="body2">
-                        {(userProfile || {}).name || review.userId}
+                        {(userData).name || review.userId}
                     </Typography>
                     <Typography variant="body2">
                         Created: {moment(review.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
