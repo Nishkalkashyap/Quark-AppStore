@@ -18,20 +18,20 @@ export class PP extends Component<basePropType & { projectId: string, userID: st
 
         this.state.isCurrentUser = currentUser.uid === userId;
 
-        this.props.firebase.firestore.doc(getProjectDocPath(userId, projectId)).get()
-            .then((val) => {
-                this.setState({ metaData: val.data() });
-            }).catch((err) => {
-                handleFirebaseError(props, err, 'Failed to fetch project data');
-            });
+        this.listeners.push(
+            this.props.firebase.firestore.doc(getProjectDocPath(userId, projectId))
+                .onSnapshot((snap) => {
+                    this.setState({ metaData: snap.data() });
+                }, (err) => handleFirebaseError(props, err, 'Failed to fetch project data'))
+        );
 
-        this.props.firebase.firestore.collection(getReleaseListCollectionPath(userId, projectId)).get()
-            .then((val) => {
-                const docs = val.docs;
-                this.setState({ releases: docs.map((doc) => doc.data()) });
-            }).catch((err) => {
-                handleFirebaseError(props, err, 'Failed to fetch project releases');
-            });
+        this.listeners.push(
+            this.props.firebase.firestore.collection(getReleaseListCollectionPath(userId, projectId))
+                .onSnapshot((snap) => {
+                    const docs = snap.docs;
+                    this.setState({ releases: docs.map((doc) => doc.data()) });
+                }, (err) => handleFirebaseError(props, err, 'Failed to fetch project releases'))
+        );
     }
 
     state = {
@@ -39,6 +39,9 @@ export class PP extends Component<basePropType & { projectId: string, userID: st
         isCurrentUser: false,
         metaData: {} as ProjectData
     }
+
+    listeners: Function[] = [];
+    componentWillUnmount() { this.listeners.map((listener) => { listener() }) };
 
 
     render() {

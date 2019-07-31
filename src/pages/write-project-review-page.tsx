@@ -32,15 +32,18 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
         const userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
 
         progress.showProgressBar();
-        this.props.firebase.firestore.doc(getProjectReviewsDocPath(userId, this.props.urlProjectId!, this.props.firebase.auth.currentUser!.uid)).get()
-            .then((snap) => {
-                this.setState({ review: snap.data() || {} })
-            })
-            .catch((err) => handleFirebaseError(this.props, err, 'Failed to fetch project data'))
-            .finally(() => progress.hideProgressBar());
+        this.listeners.push(
+            this.props.firebase.firestore.doc(getProjectReviewsDocPath(userId, this.props.urlProjectId!, this.props.firebase.auth.currentUser!.uid))
+                .onSnapshot((snap) => {
+                    this.setState({ review: snap.data() || {} });
+                    progress.hideProgressBar();
+                }, (err) => { handleFirebaseError(this.props, err, 'Failed to fetch project data'); progress.hideProgressBar() })
+        );
     }
 
     state: StateType = this.INITIAL_STATE;
+    listeners: Function[] = [];
+    componentWillUnmount() { this.listeners.map((listener) => { listener() }) };
 
     onSubmit(e: any) {
         e.preventDefault();
