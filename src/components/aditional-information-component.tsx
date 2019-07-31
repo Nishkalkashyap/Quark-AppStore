@@ -7,7 +7,7 @@ import { getProfilePath } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import { withAllProviders } from '../providers/all-providers';
 
-export const AdditionalInformationComponent = withAllProviders(LocalComponent) as any;
+export const AdditionalInformationComponent = (LocalComponent);
 
 function LocalComponent(props: { projectData: ProjectData, publisherId: string } & basePropType) {
 

@@ -3,7 +3,6 @@ import { ProjectStats } from '../interfaces';
 import { withStyles } from '@material-ui/styles';
 import { lighten } from '@material-ui/core/styles';
 import { LinearProgress, Typography } from '@material-ui/core';
-import { PRIMARY_COLOR } from '../util';
 import StarIcon from '@material-ui/icons/Star'
 import Rating from '@material-ui/lab/Rating';
 

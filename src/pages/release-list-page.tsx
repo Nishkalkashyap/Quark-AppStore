@@ -27,6 +27,7 @@ import Rating from '@material-ui/lab/Rating';
 import { RatingsComponent } from '../components/ratings-component';
 import { AdditionalInformationComponent } from '../components/aditional-information-component';
 import { ReleaseItemComponent } from '../components/release-item-component';
+import { ProjectCardComponent } from '../components/project-card-component';
 
 interface StateType {
     releases: ReleaseItem[],
@@ -335,74 +336,11 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
     }
 
     render() {
-
-        const chipStyle: StandardProperties = {
-            color: '#ffffff', borderColor: '#ffffff', marginTop: '15px', marginRight: '15px'
-        }
-        const chipDownloadIcon: StandardProperties = {
-            color: '#ffffff'
-        }
-
-        const { userId, projectId } = this.state;
-
         return (
             <React.Fragment>
                 <Container maxWidth="lg">
-                    <Card style={MainBgContainerStyles}>
-                        <MainBgComponent />
-                        <Typography variant="h2" component="h1" color="inherit">
-                            {this.state.projectData.projectName || 'Project'}
-                        </Typography>
-                        <CardContent>
-                            <Typography component="h3" color="inherit" style={{ marginBottom: '20px' }}>
-                                {this.state.projectData.tagline || 'Tag line'}
-                            </Typography>
-                            <Typography variant="h5" color="inherit">
-                                Description
-                            </Typography>
-                            <Typography component="p" color="inherit">
-                                {this.state.projectData.description}
-                            </Typography>
-                        </CardContent>
-                        <CardContent>
-                            {Object.keys(this.state.projectData).length &&
-                                (<React.Fragment>
-                                    <Chip label={`Downloads: ${this.state.projectStats.numberOfDownloads}`} variant="outlined" size="small" icon={<CloudDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
-                                    <Chip label={`Category: ${this.state.projectData.category}`} variant="outlined" size="small" icon={<CategoryIcon style={chipDownloadIcon} />} style={chipStyle} />
-                                    <Chip label={`Created: ${moment(this.state.projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}`} variant="outlined" size="small" icon={<EditDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
-                                    <Chip label={`Last updated: ${moment(this.state.projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}`} variant="outlined" size="small" icon={<UpdateDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
-                                </React.Fragment>)}
-                        </CardContent>
-                        {this.state.isOwner && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
-                                <Button onClick={() => this.props.history.push(`${ROUTES.NEW_RELEASE}/${this.state.userId}/${this.state.projectId}/${POST_SLUG.NEW_RELEASE}`)}>
-                                    Create new release
-                                    <NewReleasesIcon fontSize="small" style={{ marginLeft: '10px' }} />
-                                </Button>
-                                <Button onClick={() => this.props.history.push(`${ROUTES.EDIT_PROJECT_PAGE}/${this.state.userId}/${this.state.projectId}`)}>
-                                    Edit Project
-                                    <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
-                                </Button>
-                                <Button onClick={() => this.showDeleteProjectDialog()}>
-                                    Delete project
-                                    <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
-                                </Button>
-                            </ButtonGroup>
-                        </CardActions>}
-                        <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
-                                <Button onClick={() => this.props.history.push(`${ROUTES.PROJECT_REVIEW_PAGE}/${userId}/${projectId}`)}>
-                                    Write Review
-                                    <RateReviewIcon fontSize="small" style={{ marginLeft: '10px' }} />
-                                </Button>
-                            </ButtonGroup>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography color="inherit" variant="body1">{this.state.projectStats.numberOfReviews}</Typography>
-                                <Rating style={{ margin: '10px 10px' }} value={this.state.projectStats.averageRating} readOnly />
-                            </div>
-                        </CardActions>
-                    </Card>
-                    <AdditionalInformationComponent projectData={this.state.projectData} publisherId={this.state.userId} />
+                    <ProjectCardComponent {...this.props} projectData={this.state.projectData} projectStats={this.state.projectStats} methods={{ showDeleteProjectDialog: this.showDeleteProjectDialog.bind(this) }} userId={this.state.userId} />
+                    <AdditionalInformationComponent {...this.props} projectData={this.state.projectData} publisherId={this.state.userId} />
                     <RatingsComponent {...this.state.projectStats} />
                     <Container maxWidth="md" style={{ marginTop: '20px' }}>
                         <Carousel useKeyboardArrows autoPlay infiniteLoop >

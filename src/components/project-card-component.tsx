@@ -1,5 +1,4 @@
 import React from 'react'
-import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
 import { ProjectData, ProjectStats } from '../interfaces';
 import { Card, Typography, CardContent, Chip, CardActions, ButtonGroup, Button } from '@material-ui/core';
@@ -17,7 +16,7 @@ import UpdateDownloadIcon from '@material-ui/icons/Update';
 import moment from 'moment';
 import { StandardProperties } from 'csstype';
 
-export const ProjectCardComponent = withAllProviders(LocalComponent);
+export const ProjectCardComponent = (LocalComponent);
 
 function LocalComponent(props: basePropType & {
     projectData: ProjectData,
