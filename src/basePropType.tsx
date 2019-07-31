@@ -10,6 +10,7 @@ export interface basePropType {
     classes?: Record<string, string>
     userId?: string;
     projectId?: string;
+    isOwner?: string;
 }
 
 interface Match {
