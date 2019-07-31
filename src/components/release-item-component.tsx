@@ -84,7 +84,8 @@ function downloadReleaseItem(props: ReleaseComponentType & { filename: string })
     const releaseId = props.release.releaseId;
     props.firebase.storage.ref(`${getProjectReleaseDocPath(props.urlUserId!, props.urlProjectId!, releaseId)}/${filename}`).getDownloadURL()
         .then((val) => {
-            return downloadFile(val, filename);
+            // return downloadFile(val, filename);
+            window.open(val);
         })
         .then(() => {
             if (!isOwner) {
