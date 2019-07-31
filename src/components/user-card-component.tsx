@@ -54,7 +54,7 @@ export default function UserCardComponent(props: basePropType & { userId: string
                         <Typography component="p" color="inherit" style={{ marginTop: '10px' }}>
                             {userData.location || ''}
                         </Typography>
-                        {userData.site && <Link onClick={() => window.open(userData.site)} style={{ cursor: 'pointer', marginTop: '10px', display : 'block' }}>{userData.site}</Link>}
+                        {userData.site && <Link onClick={() => window.open(userData.site)} style={{ cursor: 'pointer', marginTop: '10px', display: 'block' }}>{userData.site}</Link>}
                     </CardContent>
                 </div>
                 {(isOwner) && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
