@@ -41,10 +41,10 @@ export type allCategories =
     'Utilities'
 
 export interface ProjectStats {
-    numberOfDownloads: number;
-    numberOfReviews: number;
-    totalScore: number;
-    averageRating: number;
+    numberOfDownloads?: number;
+    numberOfReviews?: number;
+    totalScore?: number;
+    averageRating?: number;
     numberOfStars_1?: number;
     numberOfStars_2?: number;
     numberOfStars_3?: number;

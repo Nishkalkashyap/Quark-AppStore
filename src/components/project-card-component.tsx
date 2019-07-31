@@ -71,7 +71,7 @@ function LocalComponent(props: basePropType & {
                 <CardContent>
                     {Object.keys(projectData).length &&
                         (<React.Fragment>
-                            <Chip label={`Downloads: ${projectStats.numberOfDownloads}`} variant="outlined" size="small" icon={<CloudDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
+                            <Chip label={`Downloads: ${projectStats.numberOfDownloads || 0}`} variant="outlined" size="small" icon={<CloudDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
                             <Chip label={`Category: ${projectData.category}`} variant="outlined" size="small" icon={<CategoryIcon style={chipDownloadIcon} />} style={chipStyle} />
                             <Chip label={`Created: ${moment(projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}`} variant="outlined" size="small" icon={<EditDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
                             <Chip label={`Last updated: ${moment(projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}`} variant="outlined" size="small" icon={<UpdateDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
@@ -101,8 +101,8 @@ function LocalComponent(props: basePropType & {
                         </Button>
                     </ButtonGroup>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography color="inherit" variant="body1">{projectStats.numberOfReviews}</Typography>
-                        <Rating style={{ margin: '10px 10px' }} value={projectStats.averageRating} readOnly />
+                        <Typography color="inherit" variant="body1">{projectStats.numberOfReviews || 0}</Typography>
+                        <Rating style={{ margin: '10px 10px' }} value={projectStats.averageRating || 0} readOnly />
                     </div>
                 </CardActions>}
                 {children}

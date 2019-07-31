@@ -51,9 +51,9 @@ function LocalComponent(props: { projectData: ProjectData, projectStats: Project
                     <Item heading="Description" content={props.projectData.description}></Item>
                 </div>
                 <div style={boxStyle}>
-                    <Item heading="Total downloads" content={props.projectStats.numberOfDownloads}></Item>
-                    <Item heading="Total releases" content={props.projectData.numberOfReleases}></Item>
-                    <Item heading="Average rating" content={props.projectStats.averageRating}></Item>
+                    <Item heading="Total downloads" content={props.projectStats.numberOfDownloads! || 0}></Item>
+                    <Item heading="Total releases" content={props.projectData.numberOfReleases! || 0}></Item>
+                    <Item heading="Average rating" content={props.projectStats.averageRating! || 0}></Item>
                 </div>
             </div>
         </div>

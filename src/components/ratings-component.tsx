@@ -35,12 +35,12 @@ export function RatingsComponent(props: ProjectStats) {
             <div style={{ margin: '30px 0px', display: 'flex' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-around', flexDirection: 'column', marginRight: '30px' }}>
                     <Typography component="p" variant="h1" style={{ textAlign: 'center' }}>
-                        {props.averageRating}
+                        {props.averageRating || 0}
                     </Typography>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Rating size="small" style={{ margin: '10px 10px' }} value={props.averageRating} readOnly />
+                        <Rating size="small" style={{ margin: '10px 10px' }} value={props.averageRating || 0} readOnly />
                         <Typography component="p">
-                            {props.numberOfReviews}
+                            {props.numberOfReviews || 0}
                         </Typography>
                     </div>
                 </div>
