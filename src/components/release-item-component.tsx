@@ -1,8 +1,7 @@
 import React from 'react'
 import { basePropType } from '../basePropType';
 import { ReleaseItem, ProjectData } from '../interfaces';
-import { useStylesList } from '../pages/project-list-page';
-import { Card, CardContent, Typography, CardActions, ButtonGroup, Button, Link, Chip, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
+import { Card, CardContent, Typography, CardActions, ButtonGroup, Button, Link, Chip, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, makeStyles, createStyles } from '@material-ui/core';
 import moment from 'moment';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -17,6 +16,32 @@ import EditDownloadIcon from '@material-ui/icons/Edit';
 import FiberNewIcon from '@material-ui/icons/FiberNew';
 import UpdateDownloadIcon from '@material-ui/icons/Update';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+const useStylesList = makeStyles(
+    createStyles({
+        card: {
+            minWidth: 275,
+            marginBottom: '45px'
+        },
+        bullet: {
+            display: 'inline-block',
+            margin: '0 2px',
+            transform: 'scale(0.8)',
+        },
+        title: {
+            fontSize: 14,
+        },
+        pos: {
+            marginBottom: 12,
+        },
+        inline: {
+            fontSize: 14,
+            marginRight: '10px',
+            borderLeft: 'solid 2px rgba(0, 0, 0, 0.54)',
+            paddingLeft: '10px'
+        },
+    }),
+);
 
 
 type ReleaseComponentType = basePropType & {
