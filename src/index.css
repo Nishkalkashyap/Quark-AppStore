@@ -18,6 +18,15 @@ ul.thumbs.animated {
   display: flex;
 }
 
+.crousel-component li.slide {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  background: transparent;
+  padding: 0px 20px;
+  box-sizing: border-box;
+}
+
 @media only screen and (max-width: 600px) {
   #appbar-title {
     display: none;

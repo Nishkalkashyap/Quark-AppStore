@@ -9,7 +9,7 @@ export function CrouselComponent(props: { images: string[] }) {
     }
 
     return (
-        <div style={{ margin: '100px 0px' }}>
+        <div style={{ margin: '100px 0px' }} className="crousel-component">
             <Typography component="p" variant="h3" style={{ marginBottom: '30px' }}>
                 Screenshots
             </Typography>
