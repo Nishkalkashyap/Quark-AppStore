@@ -174,17 +174,30 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         const nextDoc = snap[this.state.releases.length - 1];
         const prevDoc = snap[0];
 
-        const next = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).get();
-        const prev = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).get();
+        // const next = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).get();
+        // const prev = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).get();
 
-        const [nextExists, previousExists] = (await Promise.all([next, prev])).map((res) => (res.docs[0] && res.docs[0].exists));
+        // const [nextExists, previousExists] = (await Promise.all([next, prev])).map((res) => (res.docs[0] && res.docs[0].exists));
 
-        const state: Partial<StateType> = {
-            nextExists,
-            previousExists
-        }
+        // const state: Partial<StateType> = {
+        //     nextExists,
+        //     previousExists
+        // }
 
-        this.setState(state);
+        // this.setState(state);
+
+        const subs1 = (this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).onSnapshot((snap) => {
+            const nextExists = snap.docs[0] && snap.docs[0].exists;
+            this.setState({ nextExists });
+            subs1();
+        }));
+
+        const subs2 = (this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).onSnapshot((snap) => {
+            const previousExists = snap.docs[0] && snap.docs[0].exists;
+            this.setState({ previousExists });
+            subs2();
+        }));
+
     }
 
     async showEditReleaseDialog(userId: string, projectId: string, releaseId: string, notes: string) {
@@ -241,7 +254,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         const { userId, projectId, releases } = this.state;
         if (releases.length) {
             const index = releases.length - 1;
-            this.props.history.push(`${ROUTES.PROJECT_PAGE}/${userId}/${projectId}?startAfter=${releases[index].releaseId}`);
+            this.props.history.push(`${ROUTES.RELEASE_LIST_PAGE}/${userId}/${projectId}?startAfter=${releases[index].releaseId}`);
             this.setState({ goingBackwards: false });
             this._setReleaseArray();
         }
@@ -251,7 +264,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         const { userId, projectId, releases } = this.state;
         if (releases.length) {
             const index = 0;
-            this.props.history.push(`${ROUTES.PROJECT_PAGE}/${userId}/${projectId}?startAfter=${releases[index].releaseId}`);
+            this.props.history.push(`${ROUTES.RELEASE_LIST_PAGE}/${userId}/${projectId}?startAfter=${releases[index].releaseId}`);
             this.setState({ goingBackwards: true });
             this._setReleaseArray();
         }

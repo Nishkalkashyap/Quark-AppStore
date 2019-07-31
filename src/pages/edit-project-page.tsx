@@ -83,17 +83,20 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
 
     state: StateType = {} as any;
 
+    listeners: Function[] = [];
+    componentWillUnmount() { this.listeners.map((listener) => { listener() }) };
+
     private _setProjectData() {
-        this.props.firebase.firestore.doc(getProjectDocPath(this.state.userId, this.state.projectId))
-            .get()
-            .then((snap) => {
-                if (!snap.exists) {
-                    this.props.history.push(ROUTES.NOT_FOUND);
-                    return;
-                }
-                this.setState({ projectData: snap.data() });
-            })
-            .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'));
+        this.listeners.push(
+            this.props.firebase.firestore.doc(getProjectDocPath(this.state.userId, this.state.projectId))
+                .onSnapshot((snap) => {
+                    if (!snap.exists) {
+                        this.props.history.push(ROUTES.NOT_FOUND);
+                        return;
+                    }
+                    this.setState({ projectData: snap.data() });
+                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project data'))
+        );
     }
 
     onSubmit = (event: any) => {

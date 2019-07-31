@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Typography } from '@material-ui/core';
 import { ProjectData, ProjectStats } from '../interfaces';
 import moment from 'moment';
@@ -12,18 +12,22 @@ export const AdditionalInformationComponent = (LocalComponent);
 function LocalComponent(props: { projectData: ProjectData, projectStats: ProjectStats, publisherId: string } & basePropType) {
 
     const [userData, setUserData] = useState({} as firebase.User);
-    props.firebase!.firestore.doc(getProfilePath(props.publisherId)).get()
-        .then((snap) => {
-            const data = (snap.data() || {}) as any;
-            if (userData.uid !== data.uid) {
-                setUserData(data);
-            }
-        })
-        .catch((err) => handleFirebaseError(props as any, err, 'Failed to fetch user profile'));
+    useEffect(() => {
+        const listener = props.firebase!.firestore.doc(getProfilePath(props.publisherId))
+            .onSnapshot((snap) => {
+                const data = (snap.data() || {}) as any;
+                if (userData.uid !== data.uid) {
+                    setUserData(data);
+                }
+            }, (err) => handleFirebaseError(props as any, err, 'Failed to fetch user profile'));
+
+        return listener;
+    });
 
     if (!Object.keys(props.projectData).length) {
         return (<React.Fragment></React.Fragment>)
     }
+
 
     const boxStyle: StandardProperties = {
         display: 'flex',
