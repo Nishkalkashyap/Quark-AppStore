@@ -88,3 +88,10 @@ export interface FormDialogInterface<T = any> {
     isOpen: boolean;
     fieldlabel: string;
 }
+
+export interface UserProfileInterface {
+    name?: string,
+    bio?: string,
+    location?: string,
+    site?: string
+}

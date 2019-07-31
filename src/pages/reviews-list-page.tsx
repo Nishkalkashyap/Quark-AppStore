@@ -2,12 +2,11 @@ import React, { Component } from 'react'
 import { Container, List, Button, ButtonGroup, CardActions, Card, Typography, Divider } from '@material-ui/core';
 import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
-import { MATCH_PARAMS, ROUTES } from '../data/routes';
+import { ROUTES } from '../data/routes';
 import queryString from 'query-string';
 import { getProjectDocPath, getProjectStatsDocPath, getProjectReviewsCollectionPath, getProjectReviewDocPath } from '../data/paths';
 import { handleFirebaseError, scrollToTop } from '../util';
 import { ProjectData, ProjectStats, ProjectReviewInterface } from '../interfaces';
-import { cloneDeep } from 'lodash';
 import * as firebase from 'firebase';
 import { progress } from '../components/header-component';
 import { ProjectCardComponent } from '../components/project-card-component';
@@ -15,8 +14,9 @@ import Rating from '@material-ui/lab/Rating';
 import moment from 'moment';
 
 type PaginationType = ProjectReviewInterface;
+type extraState = {  }
 
-interface StateType {
+interface StateType extends extraState {
     paginationArray: PaginationType[],
     projectData: ProjectData,
     projectStats: ProjectStats,
@@ -25,14 +25,14 @@ interface StateType {
     previousExists: boolean,
     querySnapshot?: firebase.firestore.QuerySnapshot,
     goingBackwards: boolean,
-}
+};
 
 
 export default class LocalComponent extends Component<basePropType, Partial<StateType>> {
+    
     getPaginationCollection = getProjectReviewsCollectionPath;
     getPaginationDocument = getProjectReviewDocPath;
     redirectRoute = ROUTES.PROJECT_PAGE;
-
 
     constructor(props: basePropType) {
         super(props);

@@ -13,11 +13,12 @@ import { withAllProviders } from '../providers/all-providers';
 import { TextField, Card } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
 import { handleFirebaseError } from '../util';
+import { UserProfileInterface } from '../interfaces';
 
 
 const EditProfilePage = () => <EditProfile />
 
-const INITIAL_STATE = {
+const INITIAL_STATE : UserProfileInterface = {
     name: '',
     bio: '',
     location: '',

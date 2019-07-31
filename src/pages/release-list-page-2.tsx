@@ -6,15 +6,16 @@ import { ROUTES } from '../data/routes';
 import queryString from 'query-string';
 import { getProjectDocPath, getProjectStatsDocPath, getReleaseListCollectionPath, getProjectReleaseDocPath } from '../data/paths';
 import { handleFirebaseError, scrollToTop } from '../util';
-import { ReleaseItem, ProjectData, ProjectStats } from '../interfaces';
+import { ReleaseItem, ProjectData, ProjectStats, UserProfileInterface } from '../interfaces';
 import * as firebase from 'firebase';
 import { progress } from '../components/header-component';
 import { ReleaseItemComponent } from '../components/release-item-component';
 import { ProjectCardComponent } from '../components/project-card-component';
 
 type PaginationType = ReleaseItem;
+type extraState = { }
 
-interface StateType {
+interface StateType extends extraState {
     paginationArray: PaginationType[],
     projectData: ProjectData,
     projectStats: ProjectStats,
