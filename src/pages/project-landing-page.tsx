@@ -54,6 +54,9 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
     }
 
     state: StateType = {} as any;
+    listeners: Function[] = [];
+
+    componentWillUnmount() { this.listeners.map((listener) => { listener() }) };
 
     private _setInitialState() {
         const userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
@@ -78,41 +81,41 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
 
     private _setProjectData() {
         // fetch project data
-        this.props.firebase.firestore.doc(getProjectDocPath(this.state.userId, this.state.projectId))
-            .get()
-            .then((snap) => {
-                if (!snap.exists) {
-                    this.props.history.push(ROUTES.NOT_FOUND);
-                    return;
-                }
-                this.setState({ projectData: snap.data() as ProjectData });
-            })
-            .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'));
+        this.listeners.push(
+            this.props.firebase.firestore.doc(getProjectDocPath(this.state.userId, this.state.projectId))
+                .onSnapshot((snap) => {
+                    if (!snap.exists) {
+                        this.props.history.push(ROUTES.NOT_FOUND);
+                        return;
+                    }
+                    this.setState({ projectData: snap.data() as ProjectData });
+                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project data'))
+        );
 
         // fetch project stats 
-        this.props.firebase.firestore.doc(getProjectStatsDocPath(this.state.userId, this.state.projectId))
-            .get()
-            .then((snap) => {
-                if (!snap.exists) {
-                    return;
-                }
-                this.setState({ projectStats: snap.data() as ProjectStats });
-            })
-            .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project stats'));
+        this.listeners.push(
+            this.props.firebase.firestore.doc(getProjectStatsDocPath(this.state.userId, this.state.projectId))
+                .onSnapshot((snap) => {
+                    if (!snap.exists) {
+                        return;
+                    }
+                    this.setState({ projectStats: snap.data() as ProjectStats });
+                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project stats'))
+        )
 
         // fetch latest release 
-        this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId))
-            .orderBy('createdAt')
-            .limit(1)
-            .get()
-            .then((snap) => {
-                if (snap.docs.length && snap.docs[0].exists) {
-                    this.setState({ releaseExists: true, latestRelease: snap.docs[0].data() as any })
-                } else {
-                    this.setState({ releaseExists: false });
-                }
-            })
-
+        this.listeners.push(
+            this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId))
+                .orderBy('createdAt')
+                .limit(1)
+                .onSnapshot((snap) => {
+                    if (snap.docs.length && snap.docs[0].exists) {
+                        this.setState({ releaseExists: true, latestRelease: snap.docs[0].data() as any })
+                    } else {
+                        this.setState({ releaseExists: false });
+                    }
+                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project stats'))
+        )
     }
 
     async showDeleteProjectDialog() {
