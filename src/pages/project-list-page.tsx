@@ -1,125 +1,199 @@
 import React, { Component } from 'react'
-import { Container, List, Typography, Card, CardContent, CardActions, Button, makeStyles, createStyles } from '@material-ui/core';
+import { Container, Button, ButtonGroup } from '@material-ui/core';
 import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
-import { MATCH_PARAMS, ROUTES } from '../data/routes';
+import { ROUTES } from '../data/routes';
 import queryString from 'query-string';
-import { getProjectsCollectionPath } from '../data/paths';
-import { handleFirebaseError } from '../util';
+import { getProjectDocPath, getProjectsCollectionPath } from '../data/paths';
+import { handleFirebaseError, scrollToTop } from '../util';
 import { ProjectData } from '../interfaces';
-import moment from 'moment';
+import * as firebase from 'firebase';
+import { progress } from '../components/header-component';
+import { SmallProjectCardComponent } from '../components/small-project-card-component';
+import UserCardComponent from '../components/user-card-component';
 
-export const useStylesList = makeStyles(
-    createStyles({
-        card: {
-            minWidth: 275,
-            marginBottom: '45px'
-        },
-        bullet: {
-            display: 'inline-block',
-            margin: '0 2px',
-            transform: 'scale(0.8)',
-        },
-        title: {
-            fontSize: 14,
-        },
-        pos: {
-            marginBottom: 12,
-        },
-        inline: {
-            fontSize: 14,
-            marginRight: '10px',
-            borderLeft: 'solid 2px rgba(0, 0, 0, 0.54)',
-            paddingLeft: '10px'
-        },
-    }),
-);
+// replace this.props.urlUserId with (this.props.urlProjectId || this.props.firebase.auth.currentUser!.uid)
 
-export default class LocalComponent extends Component<basePropType> {
+type PaginationType = ProjectData;
+type extraState = {}
+
+interface StateType extends extraState {
+    paginationArray: PaginationType[],
+    loadLimit: number,
+    nextExists: boolean,
+    previousExists: boolean,
+    querySnapshot?: firebase.firestore.QuerySnapshot,
+    goingBackwards: boolean,
+}
+
+
+export default class LocalComponent extends Component<basePropType, Partial<StateType>> {
+
+    getPaginationCollection = getProjectsCollectionPath;
+    getPaginationDocument = getProjectDocPath;
+    redirectRoute = ROUTES.PROJECTS_LIST_PAGE;
+
     constructor(props: basePropType) {
         super(props);
-
-        const values = queryString.parse(props.history.location.search);
-        const userId = props.match.params[MATCH_PARAMS.USER_ID] || props.firebase.auth.currentUser!.uid;
-        this.state.userId = userId;
-        const startAt = values['startAt'];
-        console.log(values);
-
-        const query = startAt ?
-            this.props.firebase.firestore.collection(getProjectsCollectionPath(userId)).limit(10).orderBy('updatedAt', 'desc').startAt(startAt) :
-            this.props.firebase.firestore.collection(getProjectsCollectionPath(userId)).limit(10).orderBy('updatedAt', 'desc');
-
-        query.onSnapshot((snap) => {
-            const arr = snap.docs.map((doc) => doc.data());
-            this.setState({ projects: arr });
-        }, (err) => handleFirebaseError(this.props, err, 'Could not query projects collection.'));
+        this._setPaginationArray();
     }
 
-    state: { projects: ProjectData[], userId: string } = { projects: [], userId: '' };
+    state: StateType = {
+        paginationArray: [],
+        loadLimit: 3,
+        nextExists: false,
+        previousExists: false,
+        goingBackwards: false,
+    }
+
+    listeners: Function[] = [];
+    paginationListeners: Function[] = [];
+    componentWillUnmount() {
+        this.listeners.map((listener) => { listener() });
+        this.paginationListeners.map((listener) => { listener() });
+    };
+
+    private _setPaginationArray() {
+        this.paginationListeners.map((listener) => { listener() });//clear releaseListeners
+
+        const values = queryString.parse(this.props.history.location.search);
+        const startAfter = values['startAfter'];
+        progress.showProgressBar();
+
+        if (startAfter && typeof startAfter == 'string') {
+            const topListener = this.props.firebase.firestore
+                .doc(this.getPaginationDocument(this.props.urlProjectId || this.props.firebase.auth.currentUser!.uid, startAfter))
+                .onSnapshot((snap) => {
+
+                    if (!snap.exists) {
+                        this.props.history.push(ROUTES.NOT_FOUND);
+                    }
+
+                    const StartType = this.state.goingBackwards ? 'asc' : 'desc';
+                    const subListener = this.props.firebase.firestore
+                        .collection(this.getPaginationCollection(this.props.urlProjectId || this.props.firebase.auth.currentUser!.uid))
+                        .orderBy('createdAt', StartType)
+                        .startAfter(snap)
+                        .limit(this.state.loadLimit)
+                        .onSnapshot((subSnap) => {
+
+                            if (subSnap.docs.length === 0) {
+                                this.props.history.push(ROUTES.NOT_FOUND);
+                            }
+
+                            const arr = subSnap.docs.map((doc) => doc.data()) as PaginationType[];
+                            scrollToTop();
+                            this.setState({ paginationArray: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: subSnap });
+                            this._fetchNextAndPreviousDocuments();
+                            progress.hideProgressBar();
+                        });
+
+                    this.paginationListeners.push(subListener);
+
+                }, ((err) => handleFirebaseError(this.props, err, 'Could not fetch document')));
+
+            this.paginationListeners.push(topListener);
+        } else {
+            this.paginationListeners.push(
+                this.props.firebase.firestore.collection(this.getPaginationCollection(this.props.urlProjectId || this.props.firebase.auth.currentUser!.uid))
+                    .orderBy('createdAt', 'desc')
+                    .limit(this.state.loadLimit)
+                    .onSnapshot((snap) => {
+                        const arr = snap.docs.map((doc) => doc.data()) as PaginationType[];
+                        scrollToTop();
+                        this.setState({ paginationArray: arr, querySnapshot: snap });
+                        this._fetchNextAndPreviousDocuments();
+                        progress.hideProgressBar();
+                    }, (err) => handleFirebaseError(this.props, err, 'Could not fetch document'))
+            );
+        }
+    }
+
+    private async _fetchNextAndPreviousDocuments() {
+
+        if (!this.state.paginationArray.length) {
+            const state: Partial<StateType> = {
+                nextExists: false,
+                previousExists: false
+            }
+            this.setState(state);
+            return;
+        }
+
+        const reverse = this.state.goingBackwards;
+        let snap = this.state.querySnapshot!.docs;
+        if (reverse) {
+            snap = snap.reverse();
+        }
+
+        const nextDoc = snap[this.state.paginationArray.length - 1];
+        const prevDoc = snap[0];
+
+        const subs1 = (this.props.firebase.firestore.collection(this.getPaginationCollection(this.props.urlProjectId || this.props.firebase.auth.currentUser!.uid)).orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).onSnapshot((snap) => {
+            const nextExists = snap.docs[0] && snap.docs[0].exists;
+            this.setState({ nextExists });
+            subs1();
+        }));
+
+        const subs2 = (this.props.firebase.firestore.collection(this.getPaginationCollection(this.props.urlProjectId || this.props.firebase.auth.currentUser!.uid)).orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).onSnapshot((snap) => {
+            const previousExists = snap.docs[0] && snap.docs[0].exists;
+            this.setState({ previousExists });
+            subs2();
+        }));
+
+    }
+
+    goToNextPage() {
+        const { paginationArray } = this.state;
+        if (paginationArray.length) {
+            const index = paginationArray.length - 1;
+            this.props.history.push(`${this.redirectRoute}/${this.props.urlUserId}/${this.props.urlProjectId}?startAfter=${paginationArray[index].projectId}`);
+            this.setState({ goingBackwards: false });
+            this._setPaginationArray();
+        }
+    }
+
+    goToPreviousPage() {
+        const { paginationArray } = this.state;
+        if (paginationArray.length) {
+            const index = 0;
+            this.props.history.push(`${this.redirectRoute}/${this.props.urlUserId}/${this.props.urlProjectId}?startAfter=${paginationArray[index].projectId}`);
+            this.setState({ goingBackwards: true });
+            this._setPaginationArray();
+        }
+    }
 
     render() {
         return (
-            <Container maxWidth="md">
-                <Typography variant="h2" component="h1">
-                    All projects
-                </Typography>
-                <Button
-                    style={{ marginTop: '30px' }}
-                    fullWidth
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => this.props.history.push(ROUTES.CREATE_NEW_PROJECT_PAGE)}
-                >
-                    Create new project
-                </Button>
-                <List style={{ marginTop: '30px' }}>
-                    {
-                        this.state.projects.map((project) => {
-                            const obj = { project, history: this.props.history, userID: this.state.userId };
+            <React.Fragment>
+                <Container maxWidth="lg">
+                    <UserCardComponent {...this.props} userId={this.props.urlUserId || this.props.firebase.auth.currentUser!.uid}></UserCardComponent>
+                    <Container maxWidth="md">
+                        {this.state.paginationArray.map((arr) => {
                             return (
-                                <ProjectCard {...obj} key={project.projectId} />
+                                <SmallProjectCardComponent key={arr.projectId} {...this.props} projectData={arr} />
                             )
-                        })
-                    }
-                </List>
-            </Container>
+                        })}
+                    </Container>
+                </Container>
+                <Container maxWidth="sm" style={{ marginTop: '100px' }}>
+                    <ButtonGroup
+                        fullWidth
+                        color="primary"
+                        size="small"
+                        aria-label="large outlined secondary button group"
+                    >
+                        <Button onClick={this.goToPreviousPage.bind(this)} disabled={!this.state.previousExists}>
+                            Previous
+                        </Button>
+                        <Button onClick={this.goToNextPage.bind(this)} disabled={!this.state.nextExists}>
+                            Next
+                        </Button>
+                    </ButtonGroup>
+                </Container>
+            </React.Fragment>
         )
     }
-}
-
-const ProjectCard = (obj: { project: ProjectData, history: basePropType['history'], userID: string }) => {
-    const classes = useStylesList();
-    const { project, history, userID } = obj;
-    return (
-        <React.Fragment key={project.projectId}>
-            <Card className={classes.card}>
-                <CardContent>
-                    <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Created: {moment(project.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
-                    </Typography>
-                    <Typography variant="h5" component="h2">
-                        {project.projectName}
-                    </Typography>
-                    <Typography variant="body2" component="p" color="textSecondary" className={classes.pos}>
-                        {project.description}
-                    </Typography>
-
-                    <Typography className={classes.inline} color="textSecondary" component="span">
-                        Number of releases: {project.numberOfReleases}
-                    </Typography>
-                    <Typography className={classes.inline} color="textSecondary" component="span">
-                        Last updated: {moment(project.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
-                    </Typography>
-                    <Typography className={classes.inline} color="textSecondary" component="span">
-                        Project ID: {project.projectId}
-                    </Typography>
-                </CardContent>
-                <CardActions>
-                    <Button size="small" variant="outlined" color="primary" onClick={() => history.push(`${ROUTES.PROJECT_PAGE}/${userID}/${project.projectId}`)}>View project</Button>
-                </CardActions>
-            </Card>
-        </React.Fragment>
-    )
 }
 
 const ProjectsListPage = withAllProviders(LocalComponent);
