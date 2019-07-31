@@ -54,42 +54,54 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
     state: StateType = {} as any;
 
     listeners: Function[] = [];
-    componentWillUnmount() { this.listeners.map((listener) => { listener() }) };
+    releaseListeners: Function[] = [];
+    componentWillUnmount() {
+        this.listeners.map((listener) => { listener() });
+        this.releaseListeners.map((listener) => { listener() });
+    };
 
     private _setReleaseArray() {
+        this.componentWillUnmount();//clear listeners
+
         const values = queryString.parse(this.props.history.location.search);
         const startAfter = values['startAfter'];
         progress.showProgressBar();
 
         if (startAfter && typeof startAfter == 'string') {
-            this.props.firebase.firestore.doc(getProjectReleaseDocPath(this.state.userId, this.state.projectId, startAfter)).get()
-                .then((snap) => {
+            const topListener = this.props.firebase.firestore
+                .doc(getProjectReleaseDocPath(this.state.userId, this.state.projectId, startAfter))
+                .onSnapshot((snap) => {
 
                     if (!snap.exists) {
                         this.props.history.push(ROUTES.NOT_FOUND);
                     }
 
                     const StartType = this.state.goingBackwards ? 'asc' : 'desc';
-                    return this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId))
+                    const subListener = this.props.firebase.firestore
+                        .collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId))
                         .orderBy('createdAt', StartType)
                         .startAfter(snap)
                         .limit(this.state.loadLimit)
-                        .get();
-                })
-                .then((result) => {
-                    if (result.docs.length === 0) {
-                        this.props.history.push(ROUTES.NOT_FOUND);
-                    }
+                        .onSnapshot((subSnap) => {
 
-                    const arr = result.docs.map((doc) => doc.data()) as ReleaseItem[];
-                    scrollToTop();
-                    this.setState({ releases: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: result });
-                    this._fetchNextAndPreviousDocuments();
-                    progress.hideProgressBar();
-                })
-                .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch document'))
+                            if (subSnap.docs.length === 0) {
+                                this.props.history.push(ROUTES.NOT_FOUND);
+                            }
+
+                            const arr = subSnap.docs.map((doc) => doc.data()) as ReleaseItem[];
+                            scrollToTop();
+                            this.setState({ releases: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: subSnap });
+                            this._fetchNextAndPreviousDocuments();
+                            progress.hideProgressBar();
+                        });
+
+                    this.releaseListeners.push(subListener);
+
+                }, ((err) => handleFirebaseError(this.props, err, 'Could not fetch document')));
+
+            this.releaseListeners.push(topListener);
         } else {
-            this.listeners.push(
+            this.releaseListeners.push(
                 this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId))
                     .orderBy('createdAt', 'desc')
                     .limit(this.state.loadLimit)
