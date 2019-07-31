@@ -36,6 +36,7 @@ class LocalComponent extends Component<basePropType, typeof INITIAL_STATE> {
         const dataToSend: ProjectData = {
             numberOfReleases: 0,
             projectId: random,
+            userId: this.props.firebase.auth.currentUser!.uid,
             updatedAt: createdAt as any,
             createdAt: createdAt as any,
             description: this.state.description,

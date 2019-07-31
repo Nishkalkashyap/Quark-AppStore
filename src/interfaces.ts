@@ -1,5 +1,6 @@
 export interface ProjectData {
     projectId: string;//auto set
+    userId: string;//auto set
 
     projectName: string;
     tagline: string;
