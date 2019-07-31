@@ -3,9 +3,9 @@ import { Container } from '@material-ui/core';
 import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES } from '../data/routes';
-import { getProjectDocPath, getProjectReleaseDocPath, getProjectStatsDocPath, getProjectStorageImagesPath } from '../data/paths';
+import { getProjectDocPath, getProjectReleaseDocPath, getProjectStatsDocPath, getProjectStorageImagesPath, getReleaseListCollectionPath } from '../data/paths';
 import { handleFirebaseError, downloadFile } from '../util';
-import { ProjectData, ProjectStats } from '../interfaces';
+import { ProjectData, ProjectStats, ReleaseItem } from '../interfaces';
 import { cloneDeep } from 'lodash';
 import * as firebase from 'firebase';
 import { dialog } from '../components/header-component';
@@ -14,12 +14,15 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { RatingsComponent } from '../components/ratings-component';
 import { AdditionalInformationComponent } from '../components/aditional-information-component';
 import { ProjectCardComponent } from '../components/project-card-component';
+import { ReleaseNotesComponent } from '../components/release-notes-component';
 
 interface StateType {
     userId: string,
     projectId: string,
     projectData: ProjectData,
     projectStats: ProjectStats,
+    latestRelease: ReleaseItem,
+    releaseExists: boolean,
     loadLimit: number,
     nextExists: boolean,
     previousExists: boolean,
@@ -35,6 +38,8 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         projectId: '',
         projectData: {} as any,
         projectStats: {} as any,
+        latestRelease: {} as any,
+        releaseExists: false,
         loadLimit: 3,
         nextExists: false,
         previousExists: false,
@@ -72,6 +77,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
     }
 
     private _setProjectData() {
+        // fetch project data
         this.props.firebase.firestore.doc(getProjectDocPath(this.state.userId, this.state.projectId))
             .get()
             .then((snap) => {
@@ -83,6 +89,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
             })
             .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project data'));
 
+        // fetch project stats 
         this.props.firebase.firestore.doc(getProjectStatsDocPath(this.state.userId, this.state.projectId))
             .get()
             .then((snap) => {
@@ -92,6 +99,20 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                 this.setState({ projectStats: snap.data() as ProjectStats });
             })
             .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch project stats'));
+
+        // fetch latest release 
+        this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId))
+            .orderBy('createdAt')
+            .limit(1)
+            .get()
+            .then((snap) => {
+                if (snap.docs.length && snap.docs[0].exists) {
+                    this.setState({ releaseExists: true, latestRelease: snap.docs[0].data() as any })
+                } else {
+                    this.setState({ releaseExists: false });
+                }
+            })
+
     }
 
     async showDeleteProjectDialog() {
@@ -137,7 +158,6 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
             <React.Fragment>
                 <Container maxWidth="lg">
                     <ProjectCardComponent {...this.props} projectData={this.state.projectData} projectStats={this.state.projectStats} methods={{ showDeleteProjectDialog: this.showDeleteProjectDialog.bind(this) }} userId={this.state.userId} />
-                    <AdditionalInformationComponent {...this.props} projectData={this.state.projectData} publisherId={this.state.userId} />
                     <RatingsComponent {...this.state.projectStats} />
                     <Container maxWidth="md" style={{ marginTop: '20px' }}>
                         <Carousel useKeyboardArrows autoPlay infiniteLoop >
@@ -152,6 +172,8 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                             }
                         </Carousel>
                     </Container>
+                    {this.state.releaseExists && <ReleaseNotesComponent notes={this.state.latestRelease.notes} style={{ margin: '100px 0px' }} />}
+                    <AdditionalInformationComponent {...this.props} projectData={this.state.projectData} projectStats={this.state.projectStats} publisherId={this.state.userId} />
                 </Container>
             </React.Fragment>
         )
