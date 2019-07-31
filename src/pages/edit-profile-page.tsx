@@ -12,6 +12,7 @@ import { useStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
 import { TextField, Card } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
+import { handleFirebaseError } from '../util';
 
 
 const EditProfilePage = () => <EditProfile />
@@ -32,18 +33,20 @@ class EditProfileBase extends Component<basePropType> {
         this.state.name = name || '';
     }
 
+    listeners: Function[] = [];
+    componentWillUnmount() { this.listeners.map((listener) => { listener() }) };
+
     componentDidMount() {
         const currentUser = this.props.firebase.auth.currentUser!;
-        this.props.firebase.firestore.doc(getProfilePath(currentUser.uid)).get()
-            .then((val) => {
-                const data = (val.data() || {}) as any;
-                Object.keys(data).map((key) => {
-                    return this.setState({ [key]: data[key] })
-                });
-            }).catch((err) => {
-                console.error(err);
-                this.props.enqueueSnackbar('Failed to fetch profile', { variant: 'error' });
-            });
+        this.listeners.push(
+            this.props.firebase.firestore.doc(getProfilePath(currentUser.uid))
+                .onSnapshot((snap) => {
+                    const data = (snap.data() || {}) as any;
+                    Object.keys(data).map((key) => {
+                        return this.setState({ [key]: data[key] })
+                    });
+                }, (err) => handleFirebaseError(this.props, err, 'Failed to fetch profile'))
+        )
     }
 
     state: typeof INITIAL_STATE;

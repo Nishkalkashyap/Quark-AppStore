@@ -49,10 +49,10 @@ export default class LocalComponent extends Component<basePropType> {
             this.props.firebase.firestore.collection(getProjectsCollectionPath(userId)).limit(10).orderBy('updatedAt', 'desc').startAt(startAt) :
             this.props.firebase.firestore.collection(getProjectsCollectionPath(userId)).limit(10).orderBy('updatedAt', 'desc');
 
-        query.get().then((snap) => {
+        query.onSnapshot((snap) => {
             const arr = snap.docs.map((doc) => doc.data());
             this.setState({ projects: arr });
-        }).catch((err) => handleFirebaseError(err, this.props, 'Could not query projects collection.'));
+        }, (err) => handleFirebaseError(this.props, err, 'Could not query projects collection.'));
     }
 
     state: { projects: ProjectData[], userId: string } = { projects: [], userId: '' };

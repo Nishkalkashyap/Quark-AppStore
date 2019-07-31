@@ -89,18 +89,18 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                 })
                 .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch document'))
         } else {
-            this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId))
-                .orderBy('createdAt', 'desc')
-                .limit(this.state.loadLimit)
-                .get()
-                .then((result) => {
-                    const arr = result.docs.map((doc) => doc.data()) as ReleaseItem[];
-                    scrollToTop();
-                    this.setState({ releases: arr, querySnapshot: result });
-                    this._fetchNextAndPreviousDocuments();
-                    progress.hideProgressBar();
-                })
-                .catch((err) => handleFirebaseError(err, this.props, 'Could not fetch document'))
+            this.listeners.push(
+                this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId))
+                    .orderBy('createdAt', 'desc')
+                    .limit(this.state.loadLimit)
+                    .onSnapshot((snap) => {
+                        const arr = snap.docs.map((doc) => doc.data()) as ReleaseItem[];
+                        scrollToTop();
+                        this.setState({ releases: arr, querySnapshot: snap });
+                        this._fetchNextAndPreviousDocuments();
+                        progress.hideProgressBar();
+                    }, (err) => handleFirebaseError(this.props, err, 'Could not fetch document'))
+            );
         }
     }
 
