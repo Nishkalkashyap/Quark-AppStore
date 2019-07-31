@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, {  } from 'react'
 import { Carousel } from 'react-responsive-carousel';
 import { Typography, Container } from '@material-ui/core';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 export function CrouselComponent(props: { images: string[] }) {
 

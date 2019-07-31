@@ -10,7 +10,6 @@ import { cloneDeep } from 'lodash';
 import * as firebase from 'firebase';
 import { dialog } from '../components/header-component';
 import { Carousel } from 'react-responsive-carousel';
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { RatingsComponent } from '../components/ratings-component';
 import { AdditionalInformationComponent } from '../components/aditional-information-component';
 import { ProjectCardComponent } from '../components/project-card-component';
