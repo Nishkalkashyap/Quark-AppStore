@@ -13,6 +13,11 @@ html {
   overflow: hidden;
 } */
 
+ul.thumbs.animated {
+  justify-content: center;
+  display: flex;
+}
+
 @media only screen and (max-width: 600px) {
   #appbar-title {
     display: none;

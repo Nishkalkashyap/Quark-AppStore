@@ -30,77 +30,78 @@ function LocalComponent(props: basePropType & {
 
     const { projectData, projectStats, methods, userId, isOwner, history } = props;
     const chipStyle: StandardProperties = {
-        color: '#ffffff', borderColor: '#ffffff', marginTop: '15px', marginRight: '15px'
+        color: 'inherit', borderColor: 'inherit', marginTop: '15px', marginRight: '15px'
     }
     const chipDownloadIcon: StandardProperties = {
-        color: '#ffffff'
+        color: 'inherit'
     }
 
     return (
-        <Card style={MainBgContainerStyles}>
-            <MainBgComponent />
-            <Typography variant="h2" component="h1" color="inherit">
-                {projectData.projectName || 'Project'}
-            </Typography>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <CardContent style={{ flexGrow: 2, flexBasis: 66 }}>
-                    <Typography component="h3" color="inherit" style={{ marginBottom: '20px' }}>
-                        {projectData.tagline || 'Tag line'}
-                    </Typography>
-                    <Typography variant="h5" color="inherit">
-                        Description
+        <React.Fragment>
+            <Card style={Object.assign({}, MainBgContainerStyles, { color: null })} elevation={4}>
+                <MainBgComponent bgColor="#ffffff" />
+                <Typography variant="h2" component="h1" color="inherit">
+                    {projectData.projectName || 'Project'}
                 </Typography>
-                    <Typography component="p" color="inherit">
-                        {projectData.description}
-                    </Typography>
-                </CardContent>
-                <CardContent style={{ minWidth: '200px' }}>
-                    <Button variant="contained" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%', boxShadow : 'none' }}>
-                        Download project
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <CardContent style={{ flexGrow: 2, flexBasis: 66 }}>
+                        <Typography component="h3" color="inherit" style={{ marginBottom: '20px' }}>
+                            {projectData.tagline || 'Tag line'}
+                        </Typography>
+                        <Typography variant="h5" color="inherit">
+                            Description
+                </Typography>
+                        <Typography component="p" color="inherit">
+                            {projectData.description}
+                        </Typography>
+                    </CardContent>
+                    <CardContent style={{ minWidth: '200px' }}>
+                        <Button variant="contained" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%', boxShadow: 'none' }}>
+                            Download project
                     </Button>
-                    <Button variant="outlined" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%' }}>
-                        Download build
+                        <Button variant="outlined" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%' }}>
+                            Download build
                     </Button>
-                </CardContent>
-            </div>
-            <CardContent>
-                {Object.keys(projectData).length &&
-                    (<React.Fragment>
-                        <Chip label={`Downloads: ${projectStats.numberOfDownloads}`} variant="outlined" size="small" icon={<CloudDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
-                        <Chip label={`Category: ${projectData.category}`} variant="outlined" size="small" icon={<CategoryIcon style={chipDownloadIcon} />} style={chipStyle} />
-                        <Chip label={`Created: ${moment(projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}`} variant="outlined" size="small" icon={<EditDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
-                        <Chip label={`Last updated: ${moment(projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}`} variant="outlined" size="small" icon={<UpdateDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
-                    </React.Fragment>)}
-            </CardContent>
-            {isOwner && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
-                    <Button onClick={() => props.history.push(`${ROUTES.NEW_RELEASE}/${userId}/${projectData.projectId}/${POST_SLUG.NEW_RELEASE}`)}>
-                        Create new release
-                                    <NewReleasesIcon fontSize="small" style={{ marginLeft: '10px' }} />
-                    </Button>
-                    <Button onClick={() => props.history.push(`${ROUTES.EDIT_PROJECT_PAGE}/${userId}/${projectData.projectId}`)}>
-                        Edit Project
-                                    <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
-                    </Button>
-                    <Button onClick={() => methods.showDeleteProjectDialog()}>
-                        Delete project
-                                    <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
-                    </Button>
-                </ButtonGroup>
-            </CardActions>}
-            <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
-                    <Button onClick={() => history.push(`${ROUTES.PROJECT_REVIEW_PAGE}/${userId}/${projectData.projectId}`)}>
-                        Write Review
-                                    <RateReviewIcon fontSize="small" style={{ marginLeft: '10px' }} />
-                    </Button>
-                </ButtonGroup>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography color="inherit" variant="body1">{projectStats.numberOfReviews}</Typography>
-                    <Rating style={{ margin: '10px 10px' }} value={projectStats.averageRating} readOnly />
+                    </CardContent>
                 </div>
-            </CardActions>
-        </Card>
-
+                <CardContent>
+                    {Object.keys(projectData).length &&
+                        (<React.Fragment>
+                            <Chip label={`Downloads: ${projectStats.numberOfDownloads}`} variant="outlined" size="small" icon={<CloudDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
+                            <Chip label={`Category: ${projectData.category}`} variant="outlined" size="small" icon={<CategoryIcon style={chipDownloadIcon} />} style={chipStyle} />
+                            <Chip label={`Created: ${moment(projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}`} variant="outlined" size="small" icon={<EditDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
+                            <Chip label={`Last updated: ${moment(projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}`} variant="outlined" size="small" icon={<UpdateDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
+                        </React.Fragment>)}
+                </CardContent>
+                {isOwner && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
+                        <Button onClick={() => props.history.push(`${ROUTES.NEW_RELEASE}/${userId}/${projectData.projectId}/${POST_SLUG.NEW_RELEASE}`)}>
+                            Create new release
+                                    <NewReleasesIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                        </Button>
+                        <Button onClick={() => props.history.push(`${ROUTES.EDIT_PROJECT_PAGE}/${userId}/${projectData.projectId}`)}>
+                            Edit Project
+                                    <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                        </Button>
+                        <Button onClick={() => methods.showDeleteProjectDialog()}>
+                            Delete project
+                                    <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                        </Button>
+                    </ButtonGroup>
+                </CardActions>}
+                <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
+                        <Button onClick={() => history.push(`${ROUTES.PROJECT_REVIEW_PAGE}/${userId}/${projectData.projectId}`)}>
+                            Write Review
+                        <RateReviewIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                        </Button>
+                    </ButtonGroup>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography color="inherit" variant="body1">{projectStats.numberOfReviews}</Typography>
+                        <Rating style={{ margin: '10px 10px' }} value={projectStats.averageRating} readOnly />
+                    </div>
+                </CardActions>
+            </Card>
+        </React.Fragment>
     )
 }

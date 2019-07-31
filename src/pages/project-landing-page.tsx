@@ -15,6 +15,7 @@ import { RatingsComponent } from '../components/ratings-component';
 import { AdditionalInformationComponent } from '../components/aditional-information-component';
 import { ProjectCardComponent } from '../components/project-card-component';
 import { ReleaseNotesComponent } from '../components/release-notes-component';
+import { CrouselComponent } from '../components/crousel-component';
 
 interface StateType {
     userId: string,
@@ -158,20 +159,8 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
             <React.Fragment>
                 <Container maxWidth="lg">
                     <ProjectCardComponent {...this.props} latestRelease={this.state.latestRelease} projectData={this.state.projectData} projectStats={this.state.projectStats} methods={{ showDeleteProjectDialog: this.showDeleteProjectDialog.bind(this) }} userId={this.state.userId} />
+                    <CrouselComponent images={this.state.images} />
                     <RatingsComponent {...this.state.projectStats} />
-                    <Container maxWidth="md" style={{ marginTop: '20px' }}>
-                        <Carousel useKeyboardArrows autoPlay infiniteLoop >
-                            {
-                                this.state.images.map((img) => {
-                                    return (
-                                        <div key={img}>
-                                            <img src={img} />
-                                        </div>
-                                    )
-                                })
-                            }
-                        </Carousel>
-                    </Container>
                     {this.state.releaseExists && <ReleaseNotesComponent notes={this.state.latestRelease.notes} style={{ margin: '100px 0px' }} />}
                     <AdditionalInformationComponent {...this.props} projectData={this.state.projectData} projectStats={this.state.projectStats} publisherId={this.state.userId} />
                 </Container>
