@@ -16,24 +16,23 @@ import { progress } from '../components/header-component';
 
 
 interface StateType {
-    projectId: string;
+    // projectId: string;
     review: Partial<ProjectReviewInterface>
 }
 
 class LocalComponent extends Component<basePropType, Partial<StateType>> {
 
     INITIAL_STATE: StateType = {
-        projectId: '',
+        // projectId: '',
         review: {}
     }
 
     constructor(props: basePropType) {
         super(props);
         const userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
-        this.state.projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
 
         progress.showProgressBar();
-        this.props.firebase.firestore.doc(getProjectReviewsDocPath(userId, this.state.projectId, this.props.firebase.auth.currentUser!.uid)).get()
+        this.props.firebase.firestore.doc(getProjectReviewsDocPath(userId, this.props.urlProjectId!, this.props.firebase.auth.currentUser!.uid)).get()
             .then((snap) => {
                 this.setState({ review: snap.data() || {} })
             })
@@ -46,12 +45,12 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
     onSubmit(e: any) {
         e.preventDefault();
 
-        const userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
-        this.props.firebase.firestore.doc(getProjectReviewsDocPath(userId, this.state.projectId, this.props.firebase.auth.currentUser!.uid))
+        this.state.review.userId = this.props.firebase.auth.currentUser!.uid;
+        this.props.firebase.firestore.doc(getProjectReviewsDocPath(this.props.urlUserId!, this.props.urlProjectId!, this.props.firebase.auth.currentUser!.uid))
             .set(this.state.review)
             .then(() => {
                 this.props.enqueueSnackbar('Submitted review', { variant: 'success' });
-                this.props.history.push(`${ROUTES.PROJECT_PAGE}/${userId}/${this.state.projectId}`);
+                this.props.history.push(`${ROUTES.PROJECT_PAGE}/${this.props.urlUserId!}/${this.props.urlProjectId!}`);
             })
             .catch((err) => handleFirebaseError(this.props, err, 'Failed to submit review'))
     }

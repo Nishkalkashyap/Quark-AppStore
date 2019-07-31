@@ -56,6 +56,9 @@ export interface ProjectReviewInterface {
     rating: number;
     title: string;
     content: string;
+    userId: string;
+    createdAt: firebase.firestore.Timestamp;
+    updatedAt: firebase.firestore.Timestamp;
 }
 
 export interface ReleaseItem {

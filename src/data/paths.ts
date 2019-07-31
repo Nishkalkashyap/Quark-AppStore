@@ -34,6 +34,10 @@ export function getProjectReviewsCollectionPath(userId: string, projectId: strin
     return `Users/${userId}/projects/${projectId}/reviews`;
 }
 
+export function getProjectReviewDocPath(userId: string, projectId: string, reviewerId : string) {
+    return `Users/${userId}/projects/${projectId}/reviews/${reviewerId}`;
+}
+
 
 // export function getStorageBucketReleaseUrl(userId: string, projectId: string, releaseId: string) {
 //     return `User/${userId}/projects/${projectId}/releases/${releaseId}`;

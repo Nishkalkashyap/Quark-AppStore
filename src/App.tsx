@@ -27,6 +27,7 @@ import { EditProjectPage } from './pages/edit-project-page';
 import { WriteProjectReviewPage } from './pages/write-project-review-page';
 import { PRIMARY_COLOR } from './util';
 import { ProjectLandingPage } from './pages/project-landing-page';
+import { ReviewsListPage } from './pages/reviews-list-page';
 // import { NotFoundComponent } from './components/common';
 
 const Routing = () => (
@@ -50,6 +51,7 @@ const Routing = () => (
     <Route exact path={`${ROUTES.EDIT_PROJECT_PAGE}/${SLUGS.Project}`} component={EditProjectPage} />
     <Route exact path={ROUTES.CREATE_NEW_PROJECT_PAGE} component={CreateNewProjectPage} />
     <Route exact path={`${ROUTES.PROJECT_REVIEW_PAGE}/${SLUGS.PROJECT_REVIEW_PAGE}`} component={WriteProjectReviewPage} />
+    <Route exact path={`${ROUTES.REVIEW_LIST_PAGE}/${SLUGS.PROJECT_REVIEW_PAGE}`} component={ReviewsListPage} />
 
     <Route exact path={ROUTES.NOT_FOUND} component={NotFoundComponent} />
   </React.Fragment>

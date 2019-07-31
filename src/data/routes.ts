@@ -22,6 +22,7 @@ export const ROUTES = {
 
     PROJECT_REVIEW_PAGE: '/review',
     RELEASE_LIST_PAGE: '/releases',
+    REVIEW_LIST_PAGE: '/reviews',
 }
 
 export const MATCH_PARAMS = {
