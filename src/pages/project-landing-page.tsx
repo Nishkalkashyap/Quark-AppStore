@@ -157,7 +157,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         return (
             <React.Fragment>
                 <Container maxWidth="lg">
-                    <ProjectCardComponent {...this.props} projectData={this.state.projectData} projectStats={this.state.projectStats} methods={{ showDeleteProjectDialog: this.showDeleteProjectDialog.bind(this) }} userId={this.state.userId} />
+                    <ProjectCardComponent {...this.props} latestRelease={this.state.latestRelease} projectData={this.state.projectData} projectStats={this.state.projectStats} methods={{ showDeleteProjectDialog: this.showDeleteProjectDialog.bind(this) }} userId={this.state.userId} />
                     <RatingsComponent {...this.state.projectStats} />
                     <Container maxWidth="md" style={{ marginTop: '20px' }}>
                         <Carousel useKeyboardArrows autoPlay infiniteLoop >

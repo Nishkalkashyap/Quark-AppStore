@@ -1,6 +1,6 @@
 import React from 'react'
 import { basePropType } from '../basePropType';
-import { ProjectData, ProjectStats } from '../interfaces';
+import { ProjectData, ProjectStats, ReleaseItem } from '../interfaces';
 import { Card, Typography, CardContent, Chip, CardActions, ButtonGroup, Button } from '@material-ui/core';
 import MainBgComponent, { MainBgContainerStyles } from './main-background-component';
 import { ROUTES, POST_SLUG } from '../data/routes';
@@ -22,6 +22,7 @@ function LocalComponent(props: basePropType & {
     projectData: ProjectData,
     userId: string,
     projectStats: ProjectStats,
+    latestRelease?: ReleaseItem,
     methods: {
         showDeleteProjectDialog: () => void
     }
@@ -41,17 +42,27 @@ function LocalComponent(props: basePropType & {
             <Typography variant="h2" component="h1" color="inherit">
                 {projectData.projectName || 'Project'}
             </Typography>
-            <CardContent>
-                <Typography component="h3" color="inherit" style={{ marginBottom: '20px' }}>
-                    {projectData.tagline || 'Tag line'}
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <CardContent style={{ flexGrow: 2, flexBasis: 66 }}>
+                    <Typography component="h3" color="inherit" style={{ marginBottom: '20px' }}>
+                        {projectData.tagline || 'Tag line'}
+                    </Typography>
+                    <Typography variant="h5" color="inherit">
+                        Description
                 </Typography>
-                <Typography variant="h5" color="inherit">
-                    Description
-                            </Typography>
-                <Typography component="p" color="inherit">
-                    {projectData.description}
-                </Typography>
-            </CardContent>
+                    <Typography component="p" color="inherit">
+                        {projectData.description}
+                    </Typography>
+                </CardContent>
+                <CardContent style={{ minWidth: '200px' }}>
+                    <Button variant="contained" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%', boxShadow : 'none' }}>
+                        Download project
+                    </Button>
+                    <Button variant="outlined" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%' }}>
+                        Download build
+                    </Button>
+                </CardContent>
+            </div>
             <CardContent>
                 {Object.keys(projectData).length &&
                     (<React.Fragment>
