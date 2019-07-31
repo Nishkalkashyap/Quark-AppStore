@@ -5,9 +5,11 @@ export interface basePropType {
     firebase: Firebase;
     history: History;
     enqueueSnackbar: WithSnackbarProps['enqueueSnackbar'];
-    match: Match
-    location: Location
+    match: Match;
+    location: Location;
     classes?: Record<string, string>
+    userId?: string;
+    projectId?: string;
 }
 
 interface Match {
