@@ -19,7 +19,7 @@ import { CreateNewRelease } from './pages/create-new-release-page';
 import changePasswordPage from './pages/change-password-page';
 import { ProjectsListPage } from './pages/project-list-page';
 import { CreateNewProjectPage } from './pages/create-new-project-page';
-import { ReleaseListPage } from './pages/release-list-page';
+import { ReleaseListPage } from './pages/release-list-page-2';
 import { NotFoundComponent } from './components/common-components';
 import { PageContainer } from './components/page-container';
 import MainBgComponent from './components/main-background-component';
@@ -45,6 +45,7 @@ const Routing = () => (
 
     <Route exact path={`${ROUTES.NEW_RELEASE}/${SLUGS.NEW_RELEASE}/${POST_SLUG.NEW_RELEASE}`} component={CreateNewRelease} />
     <Route exact path={`${ROUTES.PROJECT_PAGE}/${SLUGS.Project}`} component={ProjectLandingPage} />
+    <Route exact path={`${ROUTES.RELEASE_LIST_PAGE}/${SLUGS.Project}`} component={ReleaseListPage} />
     {/* <Route exact path={`${ROUTES.PROJECT_PAGE}/${SLUGS.Project}`} component={ReleaseListPage} /> */}
     <Route exact path={`${ROUTES.EDIT_PROJECT_PAGE}/${SLUGS.Project}`} component={EditProjectPage} />
     <Route exact path={ROUTES.CREATE_NEW_PROJECT_PAGE} component={CreateNewProjectPage} />

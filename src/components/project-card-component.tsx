@@ -23,12 +23,13 @@ function LocalComponent(props: basePropType & {
     userId: string,
     projectStats: ProjectStats,
     latestRelease?: ReleaseItem,
-    methods: {
+    children ?: any,
+    methods?: {
         showDeleteProjectDialog: () => void
     }
 }) {
 
-    const { projectData, projectStats, methods, userId, isOwner, history } = props;
+    const { projectData, projectStats, methods, userId, isOwner, history , children} = props;
     const chipStyle: StandardProperties = {
         color: 'inherit', borderColor: 'inherit', marginTop: '15px', marginRight: '15px'
     }
@@ -73,7 +74,7 @@ function LocalComponent(props: basePropType & {
                             <Chip label={`Last updated: ${moment(projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}`} variant="outlined" size="small" icon={<UpdateDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
                         </React.Fragment>)}
                 </CardContent>
-                {isOwner && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                {(isOwner && methods) && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
                         <Button onClick={() => props.history.push(`${ROUTES.NEW_RELEASE}/${userId}/${projectData.projectId}/${POST_SLUG.NEW_RELEASE}`)}>
                             Create new release
@@ -89,7 +90,7 @@ function LocalComponent(props: basePropType & {
                         </Button>
                     </ButtonGroup>
                 </CardActions>}
-                <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                {(isOwner && methods) && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
                         <Button onClick={() => history.push(`${ROUTES.PROJECT_REVIEW_PAGE}/${userId}/${projectData.projectId}`)}>
                             Write Review
@@ -100,7 +101,8 @@ function LocalComponent(props: basePropType & {
                         <Typography color="inherit" variant="body1">{projectStats.numberOfReviews}</Typography>
                         <Rating style={{ margin: '10px 10px' }} value={projectStats.averageRating} readOnly />
                     </div>
-                </CardActions>
+                </CardActions>}
+                {children}
             </Card>
         </React.Fragment>
     )

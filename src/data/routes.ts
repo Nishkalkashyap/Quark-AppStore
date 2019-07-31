@@ -21,6 +21,7 @@ export const ROUTES = {
     NOT_FOUND: '/404',
 
     PROJECT_REVIEW_PAGE: '/review',
+    RELEASE_LIST_PAGE: '/releases',
 }
 
 export const MATCH_PARAMS = {

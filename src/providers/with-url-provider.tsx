@@ -9,12 +9,12 @@ export const withMatchParams = (Component: any) => {
             super(props);
             const userId = this.props.match.params[MATCH_PARAMS.USER_ID];
             const projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
-            this.state = { userId, projectId };
+            this.state = { urlUserId: userId, urlProjectId: projectId };
         }
 
         state: {
-            userId: string;
-            projectId: string;
+            urlUserId: string;
+            urlProjectId: string;
         }
 
         render() {
