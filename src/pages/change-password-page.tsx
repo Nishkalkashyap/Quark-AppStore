@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { basePropType } from "../basePropType";
-import { Button, TextField, Avatar, Container, Typography, Grid } from '@material-ui/core';
+import { Button, TextField, Avatar, Container, Typography, Grid, Card } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { ROUTES } from '../data/routes';
 import { useStyles } from '../components/common-components';
@@ -58,61 +58,63 @@ const PasswordChangeElement = (obj: { onSubmit: any, onChange: any, state: typeo
     const isInvalid = passwordOne !== passwordTwo;
 
     return (
-        <Container component="section" maxWidth="xs">
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h3">
-                    Change Password
+        <Container component="section" maxWidth="sm">
+            <Card style={{ padding: '10px 40px' }}>
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h3">
+                        Change Password
                 </Typography>
-                <form className={classes.form} onSubmit={obj.onSubmit}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                autoComplete="password"
-                                name="passwordOne"
-                                variant="outlined"
-                                required
+                    <form className={classes.form} onSubmit={obj.onSubmit}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    autoComplete="password"
+                                    name="passwordOne"
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="password1"
+                                    label="New Password"
+                                    type="password"
+
+                                    value={passwordOne}
+                                    onChange={obj.onChange}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <TextField
+                                    autoComplete="password"
+                                    name="passwordTwo"
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="password2"
+                                    label="Confirm Password"
+                                    type="password"
+
+                                    value={passwordTwo}
+                                    onChange={obj.onChange}
+                                />
+                            </Grid>
+
+                            <Button
+                                type="submit"
                                 fullWidth
-                                id="password1"
-                                label="New Password"
-                                type="password"
-
-                                value={passwordOne}
-                                onChange={obj.onChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <TextField
-                                autoComplete="password"
-                                name="passwordTwo"
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="password2"
-                                label="Confirm Password"
-                                type="password"
-
-                                value={passwordTwo}
-                                onChange={obj.onChange}
-                            />
-                        </Grid>
-
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            disabled={isInvalid}
-                        >
-                            Change Password
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                                disabled={isInvalid}
+                            >
+                                Change Password
                         </Button>
-                    </Grid>
-                </form>
-            </div>
+                        </Grid>
+                    </form>
+                </div>
+            </Card>
         </Container>
     )
 }

@@ -11,6 +11,7 @@ import { basePropType } from '../basePropType';
 import { useStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
 import { TextField, Card } from '@material-ui/core';
+import { ROUTES } from '../data/routes';
 
 
 const EditProfilePage = () => <EditProfile />
@@ -62,6 +63,7 @@ class EditProfileBase extends Component<basePropType> {
 
         Promise.all(promises).then((val) => {
             this.props.enqueueSnackbar('Updated profile', { variant: 'success' });
+            this.props.history.push(`${ROUTES.ACCOUNT_PAGE}`);
         }).catch((err) => {
             console.error(err);
             this.props.enqueueSnackbar('Failed to update profile', { variant: 'error' });

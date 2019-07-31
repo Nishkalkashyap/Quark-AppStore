@@ -106,7 +106,6 @@ const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof IN
                             label="Tag line"
                             name="tagline"
                             type="text"
-                            autoFocus
 
                             value={tagline}
                             onChange={obj.onChange}
