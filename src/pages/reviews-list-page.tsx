@@ -12,9 +12,10 @@ import { progress } from '../components/header-component';
 import { ProjectCardComponent } from '../components/project-card-component';
 import Rating from '@material-ui/lab/Rating';
 import moment from 'moment';
+import ReviewItemComponent from '../components/review-item-component';
 
 type PaginationType = ProjectReviewInterface;
-type extraState = {  }
+type extraState = {}
 
 interface StateType extends extraState {
     paginationArray: PaginationType[],
@@ -29,7 +30,7 @@ interface StateType extends extraState {
 
 
 export default class LocalComponent extends Component<basePropType, Partial<StateType>> {
-    
+
     getPaginationCollection = getProjectReviewsCollectionPath;
     getPaginationDocument = getProjectReviewDocPath;
     redirectRoute = ROUTES.PROJECT_PAGE;
@@ -208,24 +209,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                             {
                                 this.state.paginationArray.map((review) => {
                                     return (
-                                        <Card style={{ padding: '20px' }} key={review.userId + review.content}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                <Typography variant="body2">
-                                                    {review.userId}
-                                                </Typography>
-                                                <Typography variant="body2">
-                                                    Created: {moment(review.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
-                                                </Typography>
-                                            </div>
-                                            <Divider style={{ margin: '10px 0px 10px 0px' }} />
-                                            <Rating size="small" color="inherit" style={{ margin: '10px 0px' }} value={Number(review.rating) || 1} readOnly />
-                                            <Typography variant="h5">
-                                                {review.title}
-                                            </Typography>
-                                            <Typography variant="body2">
-                                                {review.content}
-                                            </Typography>
-                                        </Card>
+                                        <ReviewItemComponent key={review.userId} {...this.props} review={review} />
                                     )
                                 })
                             }
