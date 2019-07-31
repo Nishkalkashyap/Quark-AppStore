@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Typography } from '@material-ui/core';
 import { ProjectData } from '../interfaces';
 import moment from 'moment';
-import { withFirebase } from '../providers/firebase-provider';
 import { basePropType } from '../basePropType';
 import { getProfilePath } from '../data/paths';
 import { handleFirebaseError } from '../util';
@@ -12,12 +11,10 @@ export const AdditionalInformationComponent = withAllProviders(LocalComponent) a
 
 function LocalComponent(props: { projectData: ProjectData, publisherId: string } & basePropType) {
 
-    // const props = propss as (typeof propss & basePropType);
-
     const [userData, setUserData] = useState({} as firebase.User);
     props.firebase!.firestore.doc(getProfilePath(props.publisherId)).get()
         .then((snap) => {
-            console.log(snap.data(), props.publisherId);
+            // console.log(snap.data(), props.publisherId);
             const data = (snap.data() || {}) as any;
             if (userData.uid !== data.uid) {
                 setUserData(data);

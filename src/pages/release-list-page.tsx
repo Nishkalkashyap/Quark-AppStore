@@ -9,7 +9,6 @@ import queryString from 'query-string';
 import { getReleaseListCollectionPath, getProjectDocPath, getProjectReleaseDocPath, getProjectStatsDocPath, getProjectStorageImagesPath } from '../data/paths';
 import { handleFirebaseError, downloadFile, scrollToTop } from '../util';
 import { ReleaseItem, ProjectData, ProjectStats } from '../interfaces';
-import { useStylesList } from './project-list-page';
 import moment from 'moment';
 import { cloneDeep } from 'lodash';
 import * as firebase from 'firebase';
@@ -27,6 +26,7 @@ import { StandardProperties } from 'csstype';
 import Rating from '@material-ui/lab/Rating';
 import { RatingsComponent } from '../components/ratings-component';
 import { AdditionalInformationComponent } from '../components/aditional-information-component';
+import { ReleaseItemComponent } from '../components/release-item-component';
 
 interface StateType {
     releases: ReleaseItem[],
@@ -411,8 +411,6 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                     </Card>
                     <AdditionalInformationComponent projectData={this.state.projectData} publisherId={this.state.userId} />
                     <RatingsComponent {...this.state.projectStats} />
-                    {/* <AdditionalInformationComponent {...{ projectData: { ...this.state.projectData }, publisherId: this.state.userId }} /> */}
-
                     <Container maxWidth="md" style={{ marginTop: '20px' }}>
                         <Carousel useKeyboardArrows autoPlay infiniteLoop >
                             {
@@ -430,9 +428,8 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                         <List style={{ marginTop: '30px' }}>
                             {
                                 this.state.releases.map((release) => {
-                                    const obj = { release, history: this.props.history, userID: this.state.userId, props: this.props, state: this.state, downloadFile: this.downloadFile, allData: this };
                                     return (
-                                        <ReleaseCard {...obj} key={release.releaseId} />
+                                        <ReleaseItemComponent key={release.releaseId}  {...this.props} release={release} isOwner={this.state.isOwner} methods={{ showEditReleaseDialog: this.showEditReleaseDialog.bind(this), showDeleteReleaseDialog: this.showDeleteReleaseDialog.bind(this) }} />
                                     )
                                 })
                             }
@@ -458,71 +455,6 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
             </React.Fragment>
         )
     }
-}
-
-const ReleaseCard = (obj: { release: ReleaseItem, history: basePropType['history'], userID: string, props: basePropType, state: StateType, downloadFile: typeof LocalComponent['prototype']['downloadFile'], allData: LocalComponent }) => {
-    const classes = useStylesList();
-    const { release, history, userID, props, state, downloadFile: getDownloadUrl, allData } = obj;
-    return (
-        <React.Fragment key={release.projectId}>
-            <Card className={classes.card}>
-                <CardContent>
-                    <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Created: {moment(release.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
-                    </Typography>
-                    <Typography className={classes.title} gutterBottom>
-                        <strong>Notes</strong>
-                    </Typography>
-                    <Typography variant="body2" component="p" color="textSecondary" className={classes.pos}>
-                        {release.notes}
-                    </Typography>
-
-                    <Typography className={classes.inline} color="textSecondary" component="span">
-                        Last updated: {moment(release.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
-                    </Typography>
-                    <Typography className={classes.inline} color="textSecondary" component="span">
-                        Release ID: {release.releaseId}
-                    </Typography>
-                </CardContent>
-                <DownloadsComponent {...{ release, props, state, downloadFile: getDownloadUrl }} />
-                {state.isOwner && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    {/* {<CardActions style={{ display: 'flex', justifyContent: 'space-between' }}> */}
-                    <ButtonGroup size="small" aria-label="small outlined button group">
-                        <Button onClick={() => allData.showEditReleaseDialog(userID, release.projectId, release.releaseId, release.notes)}>
-                            Edit Notes
-                            <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
-                        </Button>
-                        <Button onClick={() => allData.showDeleteReleaseDialog(userID, release.projectId, release.releaseId)}>
-                            Delete Release
-                            <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
-                        </Button>
-                    </ButtonGroup>
-                </CardActions>}
-            </Card>
-        </React.Fragment>
-    )
-}
-
-const DownloadsComponent = (obj: { release: ReleaseItem, props: basePropType, state: StateType, downloadFile: LocalComponent['downloadFile'] }) => {
-    const release = obj.release;
-    const userId = obj.state.userId;
-    const projectId = obj.state.projectId;
-    const releaseId = release.releaseId;
-
-    return (release.assets && release.assets.length) ? (
-        <React.Fragment>
-            <CardContent>
-                <strong>All Downloads</strong>
-                {(release.assets).map((rel) => (
-                    <div key={rel}>
-                        <Link variant="body2" color="primary" target="_blanck" onClick={() => obj.downloadFile(userId, projectId, releaseId, rel)} style={{ cursor: 'pointer', display: 'inline-block' }}>
-                            {rel}
-                        </Link>
-                    </div>
-                ))}
-            </CardContent>
-        </React.Fragment>
-    ) : (<React.Fragment></React.Fragment>)
 }
 
 const ReleaseListPage = withAllProviders(LocalComponent);
