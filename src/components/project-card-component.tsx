@@ -23,13 +23,13 @@ function LocalComponent(props: basePropType & {
     userId: string,
     projectStats: ProjectStats,
     latestRelease?: ReleaseItem,
-    children ?: any,
+    children?: any,
     methods?: {
         showDeleteProjectDialog: () => void
     }
 }) {
 
-    const { projectData, projectStats, methods, userId, isOwner, history , children} = props;
+    const { projectData, projectStats, methods, userId, isOwner, history, children } = props;
     const chipStyle: StandardProperties = {
         color: 'inherit', borderColor: 'inherit', marginTop: '15px', marginRight: '15px'
     }
@@ -59,10 +59,13 @@ function LocalComponent(props: basePropType & {
                     <CardContent style={{ minWidth: '200px' }}>
                         <Button variant="contained" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%', boxShadow: 'none' }}>
                             Download project
-                    </Button>
+                        </Button>
                         <Button variant="outlined" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%' }}>
                             Download build
-                    </Button>
+                        </Button>
+                        <Button variant="text" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%' }} onClick={() => props.history.push(`${ROUTES.RELEASE_LIST_PAGE}/${props.urlUserId}/${props.urlProjectId}`)}>
+                            See all releases
+                        </Button>
                     </CardContent>
                 </div>
                 <CardContent>
@@ -78,15 +81,15 @@ function LocalComponent(props: basePropType & {
                     <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
                         <Button onClick={() => props.history.push(`${ROUTES.NEW_RELEASE}/${userId}/${projectData.projectId}/${POST_SLUG.NEW_RELEASE}`)}>
                             Create new release
-                                    <NewReleasesIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                        <NewReleasesIcon fontSize="small" style={{ marginLeft: '10px' }} />
                         </Button>
                         <Button onClick={() => props.history.push(`${ROUTES.EDIT_PROJECT_PAGE}/${userId}/${projectData.projectId}`)}>
                             Edit Project
-                                    <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                        <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
                         </Button>
                         <Button onClick={() => methods.showDeleteProjectDialog()}>
                             Delete project
-                                    <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                        <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
                         </Button>
                     </ButtonGroup>
                 </CardActions>}
