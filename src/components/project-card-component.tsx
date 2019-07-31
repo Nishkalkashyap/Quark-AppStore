@@ -29,12 +29,20 @@ function LocalComponent(props: basePropType & {
     }
 }) {
 
-    const { projectData, projectStats, methods, userId, isOwner, history, children } = props;
+    const { projectData, projectStats, methods, userId, isOwner, history, children, latestRelease } = props;
     const chipStyle: StandardProperties = {
         color: 'inherit', borderColor: 'inherit', marginTop: '15px', marginRight: '15px'
     }
     const chipDownloadIcon: StandardProperties = {
         color: 'inherit'
+    }
+
+    let buildFile: string | undefined;
+    let projectFile: string | undefined;
+
+    if (latestRelease && latestRelease.assets) {
+        buildFile = latestRelease.assets.find((val) => val.endsWith('.build.qrk'));
+        projectFile = latestRelease.assets.find((val) => val.endsWith('.qrk') && !val.endsWith('.build.qrk'));
     }
 
     return (
@@ -51,22 +59,22 @@ function LocalComponent(props: basePropType & {
                         </Typography>
                         <Typography variant="h5" color="inherit">
                             Description
-                </Typography>
+                        </Typography>
                         <Typography component="p" color="inherit">
                             {projectData.description}
                         </Typography>
                     </CardContent>
-                    <CardContent style={{ minWidth: '200px' }}>
-                        <Button variant="contained" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%', boxShadow: 'none' }}>
+                    {(latestRelease && latestRelease.assets) && <CardContent style={{ minWidth: '200px' }}>
+                        {projectFile && <Button variant="contained" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%', boxShadow: 'none' }}>
                             Download project
-                        </Button>
-                        <Button variant="outlined" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%' }}>
+                        </Button>}
+                        {buildFile && <Button variant="outlined" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%' }}>
                             Download build
-                        </Button>
+                        </Button>}
                         <Button variant="text" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%' }} onClick={() => props.history.push(`${ROUTES.RELEASE_LIST_PAGE}/${props.urlUserId}/${props.urlProjectId}`)}>
                             See all releases
                         </Button>
-                    </CardContent>
+                    </CardContent>}
                 </div>
                 <CardContent>
                     {Object.keys(projectData).length &&
