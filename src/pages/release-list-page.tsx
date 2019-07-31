@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, List, Typography, Card, CardContent, Button, CardActions, Link, ButtonGroup, Chip, CardHeader } from '@material-ui/core';
+import { Container, List, Typography, Card, CardContent, Button, CardActions, ButtonGroup, Chip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { withAllProviders } from '../providers/all-providers';
@@ -140,13 +140,6 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         this.props.firebase.auth.onAuthStateChanged((e) => {
             if (e) {
                 this.setState({ isOwner: e.uid === userId });
-                // cant do this
-                // if (e.uid !== userId) {
-                //     console.log('Sending view');
-                //     this.props.firebase.firestore.doc(getProjectStatsDocPath(userId, projectId)).set(({
-                //         numberOfViews: firebase.firestore.FieldValue.increment(1) as any
-                //     } as Partial<ProjectStats>), { merge: true });
-                // }
             }
         });
     }
