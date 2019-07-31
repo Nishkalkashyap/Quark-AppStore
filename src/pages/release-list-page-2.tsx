@@ -4,7 +4,7 @@ import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES } from '../data/routes';
 import queryString from 'query-string';
-import { getReleaseListCollectionPath, getProjectDocPath, getProjectReleaseDocPath, getProjectStatsDocPath, getProjectStorageImagesPath } from '../data/paths';
+import { getProjectDocPath, getProjectStatsDocPath, getProjectStorageImagesPath, getReleaseListCollectionPath, getProjectReleaseDocPath } from '../data/paths';
 import { handleFirebaseError, downloadFile, scrollToTop } from '../util';
 import { ReleaseItem, ProjectData, ProjectStats } from '../interfaces';
 import { cloneDeep } from 'lodash';
@@ -49,17 +49,20 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         this._setReleaseArray();
     }
 
+    getPaginationCollection = getReleaseListCollectionPath;
+    getPaginationDocument = getProjectReleaseDocPath;
+
     state: StateType = {} as any;
 
     listeners: Function[] = [];
-    releaseListeners: Function[] = [];
+    paginationListeners: Function[] = [];
     componentWillUnmount() {
         this.listeners.map((listener) => { listener() });
-        this.releaseListeners.map((listener) => { listener() });
+        this.paginationListeners.map((listener) => { listener() });
     };
 
     private _setReleaseArray() {
-        this.releaseListeners.map((listener) => { listener() });//clear releaseListeners
+        this.paginationListeners.map((listener) => { listener() });//clear releaseListeners
 
         const values = queryString.parse(this.props.history.location.search);
         const startAfter = values['startAfter'];
@@ -67,7 +70,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
 
         if (startAfter && typeof startAfter == 'string') {
             const topListener = this.props.firebase.firestore
-                .doc(getProjectReleaseDocPath(this.state.userId, this.state.projectId, startAfter))
+                .doc(this.getPaginationDocument(this.state.userId, this.state.projectId, startAfter))
                 .onSnapshot((snap) => {
 
                     if (!snap.exists) {
@@ -76,7 +79,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
 
                     const StartType = this.state.goingBackwards ? 'asc' : 'desc';
                     const subListener = this.props.firebase.firestore
-                        .collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId))
+                        .collection(this.getPaginationCollection(this.state.userId, this.state.projectId))
                         .orderBy('createdAt', StartType)
                         .startAfter(snap)
                         .limit(this.state.loadLimit)
@@ -93,14 +96,14 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                             progress.hideProgressBar();
                         });
 
-                    this.releaseListeners.push(subListener);
+                    this.paginationListeners.push(subListener);
 
                 }, ((err) => handleFirebaseError(this.props, err, 'Could not fetch document')));
 
-            this.releaseListeners.push(topListener);
+            this.paginationListeners.push(topListener);
         } else {
-            this.releaseListeners.push(
-                this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId))
+            this.paginationListeners.push(
+                this.props.firebase.firestore.collection(this.getPaginationCollection(this.state.userId, this.state.projectId))
                     .orderBy('createdAt', 'desc')
                     .limit(this.state.loadLimit)
                     .onSnapshot((snap) => {
@@ -178,80 +181,18 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         const nextDoc = snap[this.state.releases.length - 1];
         const prevDoc = snap[0];
 
-        // const next = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).get();
-        // const prev = this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).get();
-
-        // const [nextExists, previousExists] = (await Promise.all([next, prev])).map((res) => (res.docs[0] && res.docs[0].exists));
-
-        // const state: Partial<StateType> = {
-        //     nextExists,
-        //     previousExists
-        // }
-
-        // this.setState(state);
-
-        const subs1 = (this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).onSnapshot((snap) => {
+        const subs1 = (this.props.firebase.firestore.collection(this.getPaginationCollection(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).onSnapshot((snap) => {
             const nextExists = snap.docs[0] && snap.docs[0].exists;
             this.setState({ nextExists });
             subs1();
         }));
 
-        const subs2 = (this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).onSnapshot((snap) => {
+        const subs2 = (this.props.firebase.firestore.collection(this.getPaginationCollection(this.state.userId, this.state.projectId)).orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).onSnapshot((snap) => {
             const previousExists = snap.docs[0] && snap.docs[0].exists;
             this.setState({ previousExists });
             subs2();
         }));
 
-    }
-
-    async showEditReleaseDialog(userId: string, projectId: string, releaseId: string, notes: string) {
-
-        if (!this.props.isOwner) {
-            return;
-        }
-
-        const self = this;
-        const result = await dialog.showFormDialog<'Yes' | 'Cancel'>('Delete release', 'Are you sure you want to delete this release. This action is irreversible', 'Notes', ['Yes', 'Cancel'], notes);
-        if (result.result.button == 'Yes') {
-            editRelease(result.result.text);
-        }
-
-        function editRelease(updatedNotes: string) {
-            const findIndex = self.state.releases.findIndex((rel) => rel.releaseId == releaseId);
-            if (findIndex !== -1) {
-                self.props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, releaseId)).update({
-                    notes: updatedNotes
-                }).then(() => {
-                    self.state.releases[findIndex].notes = updatedNotes;
-                    self.setState({ releases: self.state.releases });
-                    self.props.enqueueSnackbar('Release updated', { variant: 'success' });
-                }).catch((err) => handleFirebaseError(self.props, err, 'Failed to delete release'));
-            }
-        }
-    }
-
-    async showDeleteReleaseDialog(userId: string, projectId: string, releaseId: string) {
-
-        if (!this.props.isOwner) {
-            return;
-        }
-
-        const self = this;
-        const result = await dialog.showMessageBox<'Yes' | 'Cancel'>('Delete release', 'Are you sure you want to delete this release. This action is irreversible', ['Yes', 'Cancel'], 'warning');
-        if (result == 'Yes') {
-            deleteRelease();
-        }
-
-        function deleteRelease() {
-            const findIndex = self.state.releases.findIndex((rel) => rel.releaseId == releaseId);
-            if (findIndex !== -1) {
-                self.props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, releaseId)).delete().then(() => {
-                    self.state.releases.splice(findIndex, 1);
-                    self.setState({ releases: self.state.releases });
-                    self.props.enqueueSnackbar('Release deleted', { variant: 'success' });
-                }).catch((err) => handleFirebaseError(self.props, err, 'Failed to delete release'));
-            }
-        }
     }
 
     goToNextPage() {
@@ -275,7 +216,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
     }
 
     downloadFile(userId: string, projectId: string, releaseId: string, fileName: string) {
-        this.props.firebase.storage.ref(`${getProjectReleaseDocPath(userId, projectId, releaseId)}/${fileName}`).getDownloadURL()
+        this.props.firebase.storage.ref(`${this.getPaginationDocument(userId, projectId, releaseId)}/${fileName}`).getDownloadURL()
             .then((val) => {
                 return downloadFile(val, fileName);
             })
@@ -307,7 +248,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                             {
                                 this.state.releases.map((release) => {
                                     return (
-                                        <ReleaseItemComponent key={release.releaseId}  {...this.props} release={release} methods={{ showEditReleaseDialog: this.showEditReleaseDialog.bind(this), showDeleteReleaseDialog: this.showDeleteReleaseDialog.bind(this) }} />
+                                        <ReleaseItemComponent key={release.releaseId}  {...this.props} release={release} />
                                     )
                                 })
                             }

@@ -9,17 +9,51 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import { getProjectReleaseDocPath, getProjectStatsDocPath } from '../data/paths';
 import firebase from 'firebase';
-import { handleFirebaseError, downloadFile } from '../util';
+import { handleFirebaseError } from '../util';
+import { dialog } from './header-component';
 
 type ReleaseComponentType = basePropType & {
-    release: ReleaseItem, methods?: {
-        showEditReleaseDialog: (userId: string, projectId: string, releaseId: string, notes: string) => void,
-        showDeleteReleaseDialog: (userId: string, projectId: string, releaseId: string) => void,
-    }
+    release: ReleaseItem
 }
 export function ReleaseItemComponent(props: ReleaseComponentType) {
     const classes = useStylesList();
-    const { release, isOwner, methods } = props;
+    const { release, isOwner } = props;
+
+    async function showEditReleaseNotesDialog(userId: string, projectId: string, releaseId: string, notes: string) {
+        if (!props.isOwner) {
+            return;
+        }
+
+        const result = await dialog.showFormDialog<'Yes' | 'Cancel'>('Delete release', 'Are you sure you want to delete this release. This action is irreversible', 'Notes', ['Yes', 'Cancel'], notes);
+        if (result.result.button == 'Yes') {
+            editRelease(result.result.text);
+        }
+
+        function editRelease(updatedNotes: string) {
+            props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, releaseId)).update({
+                notes: updatedNotes
+            }).then(() => {
+                props.enqueueSnackbar('Release updated', { variant: 'success' });
+            }).catch((err) => handleFirebaseError(props, err, 'Failed to delete release'));
+        }
+    }
+
+    async function showDeleteReleaseDialog(userId: string, projectId: string, releaseId: string) {
+        if (!props.isOwner) {
+            return;
+        }
+
+        const result = await dialog.showMessageBox<'Yes' | 'Cancel'>('Delete release', 'Are you sure you want to delete this release. This action is irreversible', ['Yes', 'Cancel'], 'warning');
+        if (result == 'Yes') {
+            deleteRelease();
+        }
+
+        function deleteRelease() {
+            props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, releaseId)).delete().then(() => {
+                props.enqueueSnackbar('Release deleted', { variant: 'success' });
+            }).catch((err) => handleFirebaseError(props, err, 'Failed to delete release'));
+        }
+    }
 
     return (
         <React.Fragment key={release.projectId}>
@@ -43,14 +77,14 @@ export function ReleaseItemComponent(props: ReleaseComponentType) {
                     </Typography>
                 </CardContent>
                 <DownloadsComponent {...props} />
-                {(isOwner && !!methods) && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                {(isOwner) && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                     {/* {<CardActions style={{ display: 'flex', justifyContent: 'space-between' }}> */}
                     <ButtonGroup size="small" aria-label="small outlined button group">
-                        <Button onClick={() => methods.showEditReleaseDialog(props.urlUserId!, release.projectId, release.releaseId, release.notes)}>
+                        <Button onClick={() => showEditReleaseNotesDialog(props.urlUserId!, release.projectId, release.releaseId, release.notes)}>
                             Edit Notes
                             <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
                         </Button>
-                        <Button onClick={() => methods.showDeleteReleaseDialog(props.urlUserId!, release.projectId, release.releaseId)}>
+                        <Button onClick={() => showDeleteReleaseDialog(props.urlUserId!, release.projectId, release.releaseId)}>
                             Delete Release
                             <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
                         </Button>
