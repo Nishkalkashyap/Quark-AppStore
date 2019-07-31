@@ -67,7 +67,8 @@ const theme = createMuiTheme({
     // primary: { main: '#2196F3' },
     primary: { main: PRIMARY_COLOR },
     background: {
-      default: '#f5f5f5'
+      // default: '#f5f5f5'
+      default: '#ffffff'
     }
   }
 });
@@ -77,7 +78,8 @@ const App: React.FC = () => {
   return (
     <Router>
       {/* <MainBgComponent bgColor='linear-gradient(90deg ,#f6f6ff 0,#afc1cd 100%)' position="fixed"/> */}
-      <MainBgComponent bgColor='linear-gradient(90deg ,#f6f6ff 0,rgba(0,0,0,0.2) 100%)' position="fixed" />
+      {/* <MainBgComponent bgColor='' position="fixed"/> */}
+      {/* <MainBgComponent bgColor='linear-gradient(90deg ,#f6f6ff 0,rgba(0,0,0,0.2) 100%)' position="fixed" /> */}
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <StupidPageContainer>

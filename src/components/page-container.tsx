@@ -20,7 +20,7 @@ import { LinearProgress, Button, Typography } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
 import { HeaderAvatarComponent } from './header-avatar-component';
 import MainBgComponent from './main-background-component';
-import { GradientBackground } from '../util';
+import { GradientBackground, PRIMARY_COLOR } from '../util';
 
 const drawerWidth = 240;
 
@@ -137,7 +137,8 @@ export function PageContainer(props: basePropType & { children: any }) {
                 className={clsx(classes.appBar, {
                     [classes.appBarShift]: open,
                 })}
-                style={{backgroundColor : '#100e17'}}
+                style={{ backgroundColor: '#ffffff', color: '#333333', borderBottom: 'solid 1px rgba(0,0,0,0.23)' }}
+            // style={{backgroundColor : '#100e17', color : PRIMARY_COLOR}}
             >
                 {_showProgressBar && <LinearProgress style={{ position: 'absolute', width: '100%', top: '0px', height: '2px' }} />}
                 <Toolbar>
@@ -153,7 +154,7 @@ export function PageContainer(props: basePropType & { children: any }) {
                         <MenuIcon />
                     </IconButton>
                     <HeaderComponent>
-                        <Button variant="outlined" size="small" color="inherit">
+                        <Button variant="outlined" size="small" color="inherit" onClick={()=>window.open('https://quarkjs.io')}>
                             Go to docs
                         </Button>
                         {!isAuthenticated && <Button color="inherit" onClick={() => props.history.push(ROUTES.SIGN_IN)}>Login</Button>}
