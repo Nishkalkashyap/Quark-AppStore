@@ -61,7 +61,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
     };
 
     private _setReleaseArray() {
-        this.componentWillUnmount();//clear listeners
+        this.releaseListeners.map((listener) => { listener() });//clear releaseListeners
 
         const values = queryString.parse(this.props.history.location.search);
         const startAfter = values['startAfter'];
