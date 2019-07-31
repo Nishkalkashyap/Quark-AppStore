@@ -2,9 +2,11 @@ import React from 'react'
 import { ProjectStats } from '../interfaces';
 import { withStyles } from '@material-ui/styles';
 import { lighten } from '@material-ui/core/styles';
-import { LinearProgress, Typography } from '@material-ui/core';
+import { LinearProgress, Typography, Link } from '@material-ui/core';
 import StarIcon from '@material-ui/icons/Star'
 import Rating from '@material-ui/lab/Rating';
+import { basePropType } from '../basePropType';
+import { ROUTES } from '../data/routes';
 
 const BorderLinearProgress = withStyles({
     root: {
@@ -17,7 +19,7 @@ const BorderLinearProgress = withStyles({
     },
 })(LinearProgress);
 
-export function RatingsComponent(props: ProjectStats) {
+export function RatingsComponent(props: ProjectStats & basePropType) {
     // const stars = Object.keys(props).filter((val) => !!val.match(/Stars/gi));
     const stars = [props.numberOfStars_1, props.numberOfStars_2, props.numberOfStars_3, props.numberOfStars_4, props.numberOfStars_5];
     let total = 0;
@@ -43,6 +45,7 @@ export function RatingsComponent(props: ProjectStats) {
                             {props.numberOfReviews || 0}
                         </Typography>
                     </div>
+                    <Link onClick={()=>props.history.push(`${ROUTES.REVIEW_LIST_PAGE}/${props.urlUserId}/${props.urlProjectId}`)} style={{ cursor: 'pointer', display: 'block', textAlign : 'center' }}>See all reviews</Link>
                 </div>
                 <div style={{ flexGrow: 1 }}>
                     {

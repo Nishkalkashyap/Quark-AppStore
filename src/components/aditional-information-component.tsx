@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Typography } from '@material-ui/core';
+import React, { useState, useEffect, Children } from 'react'
+import { Typography, Link } from '@material-ui/core';
 import { ProjectData, ProjectStats, UserProfileInterface } from '../interfaces';
 import moment from 'moment';
 import { basePropType } from '../basePropType';
@@ -7,6 +7,7 @@ import { getProfilePath } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import { StandardProperties } from 'csstype';
 import { isEqual } from 'lodash';
+import { ROUTES } from '../data/routes';
 
 export const AdditionalInformationComponent = (LocalComponent);
 
@@ -46,7 +47,9 @@ function LocalComponent(props: { projectData: ProjectData, projectStats: Project
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={boxStyle}>
                     {/* <Item heading="User ID" content={props.publisherId}></Item> */}
-                    <Item heading="Publisher" content={userData.name || props.publisherId}></Item>
+                    <Item heading="Publisher">
+                        <Link onClick={() => props.history.push(`${ROUTES.PROJECTS_LIST_PAGE}/${props.urlUserId}`)} style={{ cursor: 'pointer'}}>{userData.name || props.publisherId}</Link>
+                    </Item>
                     <Item heading="Release Date" content={moment(props.projectData.createdAt.toDate().toISOString(), moment.ISO_8601).toLocaleString()}></Item>
                     <Item heading="Last updated" content={moment(props.projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).toLocaleString()}></Item>
                 </div>
@@ -64,12 +67,13 @@ function LocalComponent(props: { projectData: ProjectData, projectStats: Project
     )
 }
 
-const Item = (props: { heading: string, content: string | number }) => {
-    const { heading, content } = props;
+const Item = (props: { heading: string, content?: string | number, children?: any }) => {
+    const { heading, content, children } = props;
     return (
         <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '40px' }}>
             <Typography component="h6">{heading}</Typography>
-            <Typography variant="body1">{content}</Typography>
+            {content && <Typography variant="body1">{content}</Typography>}
+            {children}
         </div>
     )
 }

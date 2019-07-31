@@ -61,7 +61,7 @@ export default class LocalComponent extends Component<basePropType> {
         return (
             <Container maxWidth="md">
                 <Typography variant="h2" component="h1">
-                    Your Projects
+                    All projects
                 </Typography>
                 <Button
                     style={{ marginTop: '30px' }}

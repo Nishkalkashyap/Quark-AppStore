@@ -38,7 +38,10 @@ const Routing = () => (
 
     <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
     <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
+
+    {/* project-list */}
     <Route exact path={ROUTES.PROJECTS_LIST_PAGE} component={ProjectsListPage} />
+    <Route exact path={`${ROUTES.PROJECTS_LIST_PAGE}/${SLUGS.PROJECTS_LIST_PAGE}`} component={ProjectsListPage} />
 
     <Route exact path={ROUTES.PASSWORD_FORGET_PAGE} component={ForgotPasswordPage} />
     <Route exact path={ROUTES.CHANGE_PASSWORD_PAGE} component={changePasswordPage} />
