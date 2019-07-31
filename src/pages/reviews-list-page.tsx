@@ -14,10 +14,10 @@ import { ProjectCardComponent } from '../components/project-card-component';
 import Rating from '@material-ui/lab/Rating';
 import moment from 'moment';
 
+type PaginationType = ProjectReviewInterface;
+
 interface StateType {
-    reviews: ProjectReviewInterface[],
-    userId: string,
-    projectId: string,
+    paginationArray: PaginationType[],
     projectData: ProjectData,
     projectStats: ProjectStats,
     loadLimit: number,
@@ -29,10 +29,42 @@ interface StateType {
 
 
 export default class LocalComponent extends Component<basePropType, Partial<StateType>> {
-    INITIAL_STATE: StateType = {
-        reviews: [],
-        userId: '',
-        projectId: '',
+    getPaginationCollection = getProjectReviewsCollectionPath;
+    getPaginationDocument = getProjectReviewDocPath;
+    redirectRoute = ROUTES.PROJECT_PAGE;
+
+
+    constructor(props: basePropType) {
+        super(props);
+        this._setProjectData();
+        this._setPaginationArray();
+    }
+
+    // only this could be different
+    private _setProjectData() {
+        this.listeners.push(
+            this.props.firebase.firestore.doc(getProjectDocPath(this.props.urlUserId!, this.props.urlProjectId!))
+                .onSnapshot((snap) => {
+                    if (!snap.exists) {
+                        this.props.history.push(ROUTES.NOT_FOUND);
+                        return;
+                    }
+                    this.setState({ projectData: snap.data() as ProjectData });
+                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project data')))
+
+        this.listeners.push(
+            this.props.firebase.firestore.doc(getProjectStatsDocPath(this.props.urlUserId!, this.props.urlProjectId!))
+                .onSnapshot((snap) => {
+                    if (!snap.exists) {
+                        return;
+                    }
+                    this.setState({ projectStats: snap.data() as ProjectStats });
+                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project stats'))
+        )
+    }
+
+    state: StateType = {
+        paginationArray: [],
         projectData: {} as any,
         projectStats: {} as any,
         loadLimit: 3,
@@ -41,24 +73,15 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         goingBackwards: false,
     }
 
-    constructor(props: basePropType) {
-        super(props);
-        this._setInitialState();
-        this._setProjectData();
-        this._setReviewArray();
-    }
-
-    state: StateType = {} as any;
-
     listeners: Function[] = [];
-    reviewListeners: Function[] = [];
+    paginationListeners: Function[] = [];
     componentWillUnmount() {
         this.listeners.map((listener) => { listener() });
-        this.reviewListeners.map((listener) => { listener() });
+        this.paginationListeners.map((listener) => { listener() });
     };
 
-    private _setReviewArray() {
-        this.reviewListeners.map((listener) => { listener() });//remove listeners
+    private _setPaginationArray() {
+        this.paginationListeners.map((listener) => { listener() });//clear releaseListeners
 
         const values = queryString.parse(this.props.history.location.search);
         const startAfter = values['startAfter'];
@@ -66,7 +89,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
 
         if (startAfter && typeof startAfter == 'string') {
             const topListener = this.props.firebase.firestore
-                .doc(getProjectReviewDocPath(this.state.userId, this.state.projectId, startAfter))
+                .doc(this.getPaginationDocument(this.props.urlUserId!, this.props.urlProjectId!, startAfter))
                 .onSnapshot((snap) => {
 
                     if (!snap.exists) {
@@ -75,7 +98,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
 
                     const StartType = this.state.goingBackwards ? 'asc' : 'desc';
                     const subListener = this.props.firebase.firestore
-                        .collection(getProjectReviewsCollectionPath(this.state.userId, this.state.projectId))
+                        .collection(this.getPaginationCollection(this.props.urlUserId!, this.props.urlProjectId!))
                         .orderBy('createdAt', StartType)
                         .startAfter(snap)
                         .limit(this.state.loadLimit)
@@ -85,66 +108,37 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                                 this.props.history.push(ROUTES.NOT_FOUND);
                             }
 
-                            const arr = subSnap.docs.map((doc) => doc.data()) as ProjectReviewInterface[];
+                            const arr = subSnap.docs.map((doc) => doc.data()) as PaginationType[];
                             scrollToTop();
-                            this.setState({ reviews: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: subSnap });
+                            this.setState({ paginationArray: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: subSnap });
                             this._fetchNextAndPreviousDocuments();
                             progress.hideProgressBar();
                         });
 
-                    this.reviewListeners.push(subListener);
+                    this.paginationListeners.push(subListener);
 
                 }, ((err) => handleFirebaseError(this.props, err, 'Could not fetch document')));
 
-            this.reviewListeners.push(topListener);
+            this.paginationListeners.push(topListener);
         } else {
-            this.reviewListeners.push(this.props.firebase.firestore.collection(getProjectReviewsCollectionPath(this.state.userId, this.state.projectId))
-                .orderBy('createdAt', 'desc')
-                .limit(this.state.loadLimit)
-                .onSnapshot((snap) => {
-                    const arr = snap.docs.map((doc) => doc.data()) as ProjectReviewInterface[];
-                    scrollToTop();
-                    this.setState({ reviews: arr, querySnapshot: snap });
-                    this._fetchNextAndPreviousDocuments();
-                    progress.hideProgressBar();
-                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch document')))
+            this.paginationListeners.push(
+                this.props.firebase.firestore.collection(this.getPaginationCollection(this.props.urlUserId!, this.props.urlProjectId!))
+                    .orderBy('createdAt', 'desc')
+                    .limit(this.state.loadLimit)
+                    .onSnapshot((snap) => {
+                        const arr = snap.docs.map((doc) => doc.data()) as PaginationType[];
+                        scrollToTop();
+                        this.setState({ paginationArray: arr, querySnapshot: snap });
+                        this._fetchNextAndPreviousDocuments();
+                        progress.hideProgressBar();
+                    }, (err) => handleFirebaseError(this.props, err, 'Could not fetch document'))
+            );
         }
-    }
-
-
-    private _setInitialState() {
-        const userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
-        const projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
-
-        this.state = cloneDeep(this.INITIAL_STATE);
-        this.state.userId = userId;
-        this.state.projectId = projectId;
-    }
-
-    private _setProjectData() {
-        this.listeners.push(this.props.firebase.firestore.doc(getProjectDocPath(this.state.userId, this.state.projectId))
-            .onSnapshot((snap) => {
-                if (!snap.exists) {
-                    this.props.history.push(ROUTES.NOT_FOUND);
-                    return;
-                }
-                this.setState({ projectData: snap.data() as ProjectData });
-            }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project data'))
-        );
-
-        this.listeners.push(this.props.firebase.firestore.doc(getProjectStatsDocPath(this.state.userId, this.state.projectId))
-            .onSnapshot((snap) => {
-                if (!snap.exists) {
-                    return;
-                }
-                this.setState({ projectStats: snap.data() as ProjectStats });
-            }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project stats'))
-        );
     }
 
     private async _fetchNextAndPreviousDocuments() {
 
-        if (!this.state.reviews.length) {
+        if (!this.state.paginationArray.length) {
             const state: Partial<StateType> = {
                 nextExists: false,
                 previousExists: false
@@ -159,39 +153,40 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
             snap = snap.reverse();
         }
 
-        const nextDoc = snap[this.state.reviews.length - 1];
+        const nextDoc = snap[this.state.paginationArray.length - 1];
         const prevDoc = snap[0];
 
-        const subs1 = (this.props.firebase.firestore.collection(getProjectReviewsCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).onSnapshot((snap) => {
+        const subs1 = (this.props.firebase.firestore.collection(this.getPaginationCollection(this.props.urlUserId!, this.props.urlProjectId!)).orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).onSnapshot((snap) => {
             const nextExists = snap.docs[0] && snap.docs[0].exists;
             this.setState({ nextExists });
             subs1();
         }));
 
-        const subs2 = (this.props.firebase.firestore.collection(getProjectReviewsCollectionPath(this.state.userId, this.state.projectId)).orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).onSnapshot((snap) => {
+        const subs2 = (this.props.firebase.firestore.collection(this.getPaginationCollection(this.props.urlUserId!, this.props.urlProjectId!)).orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).onSnapshot((snap) => {
             const previousExists = snap.docs[0] && snap.docs[0].exists;
             this.setState({ previousExists });
             subs2();
         }));
+
     }
 
     goToNextPage() {
-        const { userId, projectId, reviews: reviews } = this.state;
-        if (reviews.length) {
-            const index = reviews.length - 1;
-            this.props.history.push(`${ROUTES.PROJECT_PAGE}/${userId}/${projectId}?startAfter=${reviews[index].userId}`);
+        const { paginationArray } = this.state;
+        if (paginationArray.length) {
+            const index = paginationArray.length - 1;
+            this.props.history.push(`${this.redirectRoute}/${this.props.urlUserId}/${this.props.urlProjectId}?startAfter=${paginationArray[index].userId}`);
             this.setState({ goingBackwards: false });
-            this._setReviewArray();
+            this._setPaginationArray();
         }
     }
 
     goToPreviousPage() {
-        const { userId, projectId, reviews: reviews } = this.state;
-        if (reviews.length) {
+        const { paginationArray } = this.state;
+        if (paginationArray.length) {
             const index = 0;
-            this.props.history.push(`${ROUTES.PROJECT_PAGE}/${userId}/${projectId}?startAfter=${reviews[index].userId}`);
+            this.props.history.push(`${this.redirectRoute}/${this.props.urlUserId}/${this.props.urlProjectId}?startAfter=${paginationArray[index].userId}`);
             this.setState({ goingBackwards: true });
-            this._setReviewArray();
+            this._setPaginationArray();
         }
     }
 
@@ -199,7 +194,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         return (
             <React.Fragment>
                 <Container maxWidth="lg">
-                    <ProjectCardComponent {...this.props} projectData={this.state.projectData} projectStats={this.state.projectStats} userId={this.state.userId}>
+                    <ProjectCardComponent {...this.props} projectData={this.state.projectData} projectStats={this.state.projectStats} userId={this.props.urlUserId!}>
                         <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
                                 <Button onClick={() => this.props.history.push(`${ROUTES.PROJECT_PAGE}/${this.props.urlUserId}/${this.props.urlProjectId}`)}>
@@ -211,7 +206,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                     <Container maxWidth="md">
                         <List style={{ marginTop: '30px' }}>
                             {
-                                this.state.reviews.map((review) => {
+                                this.state.paginationArray.map((review) => {
                                     return (
                                         <Card style={{ padding: '20px' }} key={review.userId + review.content}>
                                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>

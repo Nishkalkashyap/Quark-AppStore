@@ -12,8 +12,10 @@ import { progress } from '../components/header-component';
 import { ReleaseItemComponent } from '../components/release-item-component';
 import { ProjectCardComponent } from '../components/project-card-component';
 
+type PaginationType = ReleaseItem;
+
 interface StateType {
-    paginationArray: ReleaseItem[],
+    paginationArray: PaginationType[],
     projectData: ProjectData,
     projectStats: ProjectStats,
     loadLimit: number,
@@ -104,7 +106,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                                 this.props.history.push(ROUTES.NOT_FOUND);
                             }
 
-                            const arr = subSnap.docs.map((doc) => doc.data()) as ReleaseItem[];
+                            const arr = subSnap.docs.map((doc) => doc.data()) as PaginationType[];
                             scrollToTop();
                             this.setState({ paginationArray: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: subSnap });
                             this._fetchNextAndPreviousDocuments();
@@ -122,7 +124,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                     .orderBy('createdAt', 'desc')
                     .limit(this.state.loadLimit)
                     .onSnapshot((snap) => {
-                        const arr = snap.docs.map((doc) => doc.data()) as ReleaseItem[];
+                        const arr = snap.docs.map((doc) => doc.data()) as PaginationType[];
                         scrollToTop();
                         this.setState({ paginationArray: arr, querySnapshot: snap });
                         this._fetchNextAndPreviousDocuments();
