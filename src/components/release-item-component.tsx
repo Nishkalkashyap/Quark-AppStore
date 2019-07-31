@@ -12,7 +12,7 @@ import firebase from 'firebase';
 import { handleFirebaseError, downloadFile } from '../util';
 
 type ReleaseComponentType = basePropType & {
-    release: ReleaseItem, isOwner: boolean, methods: {
+    release: ReleaseItem, methods: {
         showEditReleaseDialog: (userId: string, projectId: string, releaseId: string, notes: string) => void,
         showDeleteReleaseDialog: (userId: string, projectId: string, releaseId: string) => void,
     }
@@ -46,11 +46,11 @@ export function ReleaseItemComponent(props: ReleaseComponentType) {
                 {isOwner && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                     {/* {<CardActions style={{ display: 'flex', justifyContent: 'space-between' }}> */}
                     <ButtonGroup size="small" aria-label="small outlined button group">
-                        <Button onClick={() => methods.showEditReleaseDialog(props.userId!, release.projectId, release.releaseId, release.notes)}>
+                        <Button onClick={() => methods.showEditReleaseDialog(props.urlUserId!, release.projectId, release.releaseId, release.notes)}>
                             Edit Notes
                             <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
                         </Button>
-                        <Button onClick={() => methods.showDeleteReleaseDialog(props.userId!, release.projectId, release.releaseId)}>
+                        <Button onClick={() => methods.showDeleteReleaseDialog(props.urlUserId!, release.projectId, release.releaseId)}>
                             Delete Release
                             <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
                         </Button>
@@ -82,13 +82,13 @@ const DownloadsComponent = (props: ReleaseComponentType) => {
 function downloadReleaseItem(props: ReleaseComponentType & { filename: string }) {
     const { filename, isOwner } = props;
     const releaseId = props.release.releaseId;
-    props.firebase.storage.ref(`${getProjectReleaseDocPath(props.userId!, props.projectId!, releaseId)}/${filename}`).getDownloadURL()
+    props.firebase.storage.ref(`${getProjectReleaseDocPath(props.urlUserId!, props.urlProjectId!, releaseId)}/${filename}`).getDownloadURL()
         .then((val) => {
             return downloadFile(val, filename);
         })
         .then(() => {
             if (!isOwner) {
-                return props.firebase.firestore.doc(getProjectStatsDocPath(props.userId!, props.projectId!)).set(({
+                return props.firebase.firestore.doc(getProjectStatsDocPath(props.urlUserId!, props.urlProjectId!)).set(({
                     numberOfDownloads: firebase.firestore.FieldValue.increment(1) as any
                 } as Partial<ProjectData>), { merge: true });
             }

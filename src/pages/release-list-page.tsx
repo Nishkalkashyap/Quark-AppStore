@@ -422,7 +422,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                             {
                                 this.state.releases.map((release) => {
                                     return (
-                                        <ReleaseItemComponent key={release.releaseId}  {...this.props} release={release} isOwner={this.state.isOwner} methods={{ showEditReleaseDialog: this.showEditReleaseDialog.bind(this), showDeleteReleaseDialog: this.showDeleteReleaseDialog.bind(this) }} />
+                                        <ReleaseItemComponent key={release.releaseId}  {...this.props} release={release} methods={{ showEditReleaseDialog: this.showEditReleaseDialog.bind(this), showDeleteReleaseDialog: this.showDeleteReleaseDialog.bind(this) }} />
                                     )
                                 })
                             }

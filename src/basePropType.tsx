@@ -8,9 +8,9 @@ export interface basePropType {
     match: Match;
     location: Location;
     classes?: Record<string, string>
-    userId?: string;
-    projectId?: string;
-    isOwner?: string;
+    urlUserId?: string;
+    urlProjectId?: string;
+    isOwner?: boolean;
 }
 
 interface Match {
