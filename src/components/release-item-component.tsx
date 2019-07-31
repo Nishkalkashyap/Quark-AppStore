@@ -2,7 +2,7 @@ import React from 'react'
 import { basePropType } from '../basePropType';
 import { ReleaseItem, ProjectData } from '../interfaces';
 import { useStylesList } from '../pages/project-list-page';
-import { Card, CardContent, Typography, CardActions, ButtonGroup, Button, Link } from '@material-ui/core';
+import { Card, CardContent, Typography, CardActions, ButtonGroup, Button, Link, Chip, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
 import moment from 'moment';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -11,6 +11,13 @@ import { getProjectReleaseDocPath, getProjectStatsDocPath } from '../data/paths'
 import firebase from 'firebase';
 import { handleFirebaseError } from '../util';
 import { dialog } from './header-component';
+import { StandardProperties } from 'csstype';
+
+import EditDownloadIcon from '@material-ui/icons/Edit';
+import FiberNewIcon from '@material-ui/icons/FiberNew';
+import UpdateDownloadIcon from '@material-ui/icons/Update';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 
 type ReleaseComponentType = basePropType & {
     release: ReleaseItem
@@ -38,6 +45,9 @@ export function ReleaseItemComponent(props: ReleaseComponentType) {
         }
     }
 
+    const buildFile = release.assets.find((file) => file.endsWith('.build.qrk'));
+    const projectFile = release.assets.find((file) => file.endsWith('.qrk') && !file.endsWith('.build.qrk'));
+
     async function showDeleteReleaseDialog(userId: string, projectId: string, releaseId: string) {
         if (!props.isOwner) {
             return;
@@ -55,41 +65,54 @@ export function ReleaseItemComponent(props: ReleaseComponentType) {
         }
     }
 
+    const chipStyle: StandardProperties = {
+        color: 'inherit', borderColor: 'transparent', marginTop: '15px', marginRight: '15px'
+    }
+    const chipDownloadIcon: StandardProperties = {
+        color: 'inherit'
+    }
+
     return (
         <React.Fragment key={release.projectId}>
-            <Card className={classes.card}>
+            <Card className={classes.card} style={{ padding: '20px 10px' }}>
+                <CardContent style={{ padding: '0px 20px' }}>
+                    <Chip label={`Created: ${moment(release.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}`} variant="outlined" size="small" icon={<EditDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
+                    <Chip label={`Last updated: ${moment(release.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}`} variant="outlined" size="small" icon={<UpdateDownloadIcon style={chipDownloadIcon} />} style={chipStyle} />
+                    <Chip label={`Release ID: ${release.releaseId}`} variant="outlined" size="small" icon={<FiberNewIcon style={chipDownloadIcon} />} style={chipStyle} />
+                </CardContent>
                 <CardContent>
-                    <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Created: {moment(release.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
-                    </Typography>
                     <Typography className={classes.title} gutterBottom>
                         <strong>Notes</strong>
                     </Typography>
                     <Typography variant="body2" component="p" color="textSecondary" className={classes.pos}>
                         {release.notes}
                     </Typography>
-
-                    <Typography className={classes.inline} color="textSecondary" component="span">
-                        Last updated: {moment(release.updatedAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
-                    </Typography>
-                    <Typography className={classes.inline} color="textSecondary" component="span">
-                        Release ID: {release.releaseId}
-                    </Typography>
+                    <DownloadsComponent {...props} />
                 </CardContent>
-                <DownloadsComponent {...props} />
-                {(isOwner) && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    {/* {<CardActions style={{ display: 'flex', justifyContent: 'space-between' }}> */}
-                    <ButtonGroup size="small" aria-label="small outlined button group">
-                        <Button onClick={() => showEditReleaseNotesDialog(props.urlUserId!, release.projectId, release.releaseId, release.notes)}>
-                            Edit Notes
+                <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    {(isOwner) &&
+                        <ButtonGroup size="small" variant="outlined" aria-label="small outlined button group">
+                            <Button onClick={() => showEditReleaseNotesDialog(props.urlUserId!, release.projectId, release.releaseId, release.notes)}>
+                                Edit Notes
                             <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
-                        </Button>
-                        <Button onClick={() => showDeleteReleaseDialog(props.urlUserId!, release.projectId, release.releaseId)}>
-                            Delete Release
+                            </Button>
+                            <Button onClick={() => showDeleteReleaseDialog(props.urlUserId!, release.projectId, release.releaseId)}>
+                                Delete Release
                             <DeleteIcon fontSize="small" style={{ marginLeft: '10px' }} />
-                        </Button>
-                    </ButtonGroup>
-                </CardActions>}
+                            </Button>
+                        </ButtonGroup>
+                    }
+                    {(buildFile || projectFile) &&
+                        <ButtonGroup size="small" color="primary" variant="outlined" aria-label="small outlined button group">
+                            {(projectFile) && <Button onClick={() => downloadReleaseItem({ ...props, filename: projectFile })}>
+                                Download Project
+                        </Button>}
+                            {(buildFile) && <Button onClick={() => downloadReleaseItem({ ...props, filename: buildFile })}>
+                                Download Build
+                        </Button>}
+                        </ButtonGroup>
+                    }
+                </CardActions>
             </Card>
         </React.Fragment>
     )
@@ -99,16 +122,24 @@ const DownloadsComponent = (props: ReleaseComponentType) => {
     const { release } = props;
     return (release.assets && release.assets.length) ? (
         <React.Fragment>
-            <CardContent>
-                <strong>All Downloads</strong>
-                {(release.assets).map((rel) => (
-                    <div key={rel}>
-                        <Link variant="body2" color="primary" target="_blanck" onClick={() => downloadReleaseItem({ ...props, filename: rel })} style={{ cursor: 'pointer', display: 'inline-block' }}>
-                            {rel}
-                        </Link>
-                    </div>
-                ))}
-            </CardContent>
+            <ExpansionPanel style={{ boxShadow: 'none', border: 'solid 1px rgba(0,0,0,0.23)', borderRadius: '4px' }}>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                >
+                    <Typography>All downloads</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails style={{ display: 'flex', flexDirection: 'column' }}>
+                    {(release.assets).map((rel) => (
+                        <div key={rel}>
+                            <Link variant="body2" color="primary" target="_blanck" onClick={() => downloadReleaseItem({ ...props, filename: rel })} style={{ cursor: 'pointer', display: 'inline-block' }}>
+                                {rel}
+                            </Link>
+                        </div>
+                    ))}
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
         </React.Fragment>
     ) : (<React.Fragment></React.Fragment>)
 }
