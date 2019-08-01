@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { ProjectStats } from '../interfaces';
 import { withStyles } from '@material-ui/styles';
 import { lighten } from '@material-ui/core/styles';
@@ -7,6 +7,9 @@ import StarIcon from '@material-ui/icons/Star'
 import Rating from '@material-ui/lab/Rating';
 import { basePropType } from '../basePropType';
 import { ROUTES } from '../data/routes';
+import { getProjectDocPath, getProjectStatsDocPath } from '../data/paths';
+import { isEqual } from 'lodash';
+import { handleFirebaseError } from '../util';
 
 const BorderLinearProgress = withStyles({
     root: {
@@ -19,15 +22,29 @@ const BorderLinearProgress = withStyles({
     },
 })(LinearProgress);
 
-export function RatingsComponent(props: ProjectStats & basePropType) {
-    // const stars = Object.keys(props).filter((val) => !!val.match(/Stars/gi));
-    const stars = [props.numberOfStars_1, props.numberOfStars_2, props.numberOfStars_3, props.numberOfStars_4, props.numberOfStars_5];
-    let total = 0;
-    stars.map((star) => {
-        if (star) {
-            total = total + star;
-        }
-    })
+export function RatingsComponent(props: { userId: string, projectId: string } & basePropType) {
+
+    const [starsData, setStarsData] = useState({ total: 0, stars: [] as any[] });
+
+    const [projectStats, setProjectStats] = useState({} as ProjectStats);
+    const { projectId, userId } = props;
+
+    useEffect(() => {
+        const listener = props.firebase.firestore.doc(getProjectStatsDocPath(userId, projectId))
+            .onSnapshot((snap) => {
+                const stats = (snap.data() || {}) as any;
+                if (!isEqual(projectStats, stats)) {
+                    
+                    let total = 0;
+                    const stars = [stats.numberOfStars_1!, stats.numberOfStars_2!, stats.numberOfStars_3!, stats.numberOfStars_4!, stats.numberOfStars_5!];
+                    stars.map((star) => { if (star) { total = total + star; } });
+                    
+                    setProjectStats(stats);
+                    setStarsData({ stars, total });
+                }
+            }, (err) => handleFirebaseError(props, err, 'Failed to fetch project stats'));
+        return listener
+    });
 
     return (
         <div style={{ margin: '100px 0px' }}>
@@ -37,20 +54,20 @@ export function RatingsComponent(props: ProjectStats & basePropType) {
             <div style={{ margin: '30px 0px', display: 'flex' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-around', flexDirection: 'column', marginRight: '30px' }}>
                     <Typography component="p" variant="h1" style={{ textAlign: 'center' }}>
-                        {props.averageRating || 0}
+                        {projectStats.averageRating || 0}
                     </Typography>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Rating size="small" style={{ margin: '10px 10px' }} value={props.averageRating || 0} readOnly />
+                        <Rating size="small" style={{ margin: '10px 10px' }} value={projectStats.averageRating || 0} readOnly />
                         <Typography component="p">
-                            {props.numberOfReviews || 0}
+                            {projectStats.numberOfReviews || 0}
                         </Typography>
                     </div>
-                    <Link onClick={()=>props.history.push(`${ROUTES.REVIEW_LIST_PAGE}/${props.urlUserId}/${props.urlProjectId}`)} style={{ cursor: 'pointer', display: 'block', textAlign : 'center' }}>See all reviews</Link>
+                    <Link onClick={() => props.history.push(`${ROUTES.REVIEW_LIST_PAGE}/${props.urlUserId}/${props.urlProjectId}`)} style={{ cursor: 'pointer', display: 'block', textAlign: 'center' }}>See all reviews</Link>
                 </div>
                 <div style={{ flexGrow: 1 }}>
                     {
-                        stars.map((star, index) => {
-                            const percent = ((star || 0) / (total || 1)) * 100;
+                        starsData.stars.map((star, index) => {
+                            const percent = ((star || 0) / (starsData.total || 1)) * 100;
                             return (
                                 <div key={index} style={{ display: 'flex', alignItems: 'center', margin: '10px 0px' }}>
                                     <Typography variant="body1" style={{ margin: '0px 10px' }}>{index + 1}</Typography>

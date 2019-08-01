@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Typography, CardContent, Button, CardActions, Link, Chip } from '@material-ui/core';
+import { Card, Typography, CardContent, Button, CardActions, Link, Chip, ButtonGroup } from '@material-ui/core';
 import MainBgComponent, { MainBgContainerStyles } from './main-background-component';
 import { ROUTES, POST_SLUG } from '../data/routes';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
@@ -53,14 +53,16 @@ export default function UserCardComponent(props: basePropType & { userId: string
                         <Typography component="p" color="inherit" style={{ marginTop: '10px' }}>
                             {userData.location || ''}
                         </Typography>
-                        {userData.site && <Link onClick={() => window.open(userData.site)} style={{ cursor: 'pointer', marginTop: '10px', display: 'block' }}>{userData.site}</Link>}
+                        {userData.site && <Link color="secondary" onClick={() => window.open(userData.site)} style={{ cursor: 'pointer', marginTop: '10px', display: 'block' }}>{userData.site}</Link>}
                     </CardContent>
                 </div>
                 {(isOwner) && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Button onClick={() => props.history.push(ROUTES.CREATE_NEW_PROJECT_PAGE)}>
-                        Create new project
+                    <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
+                        <Button onClick={() => props.history.push(ROUTES.CREATE_NEW_PROJECT_PAGE)}>
+                            Create new project
                         <NewReleasesIcon fontSize="small" style={{ marginLeft: '10px' }} />
-                    </Button>
+                        </Button>
+                    </ButtonGroup>
                 </CardActions>}
             </Card>
         </React.Fragment>

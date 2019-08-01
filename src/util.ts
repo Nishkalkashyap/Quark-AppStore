@@ -6,11 +6,18 @@ import { allCategories, ProjectData, ReleaseItem } from "./interfaces";
 import { getProjectReleaseDocPath, getProjectStatsDocPath } from "./data/paths";
 import firebase from "firebase";
 
+// export const PRIMARY_COLOR = '#283443';
+// export const PRIMARY_COLOR_LIGHT = '#030915';
+// export const ON_PRIMARY_COLOR = '#ffffff';
+
+// export const PRIMARY_COLOR = '#4487fe';
+// export const PRIMARY_COLOR_LIGHT = '#679ff0';
+// export const ON_PRIMARY_COLOR = '#ffffff';
+
 export const PRIMARY_COLOR = '#6f5cfc';
+export const SECONDARY_COLOR = '#1f2631';
 export const PRIMARY_COLOR_LIGHT = '#8d9ef7';
 export const ON_PRIMARY_COLOR = '#ffffff';
-
-// export const PRIMARY_COLOR = '#055af9';
 
 export function handleFirebaseError(props: basePropType, err: any, message: string) {
     if (message) {

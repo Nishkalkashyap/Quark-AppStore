@@ -50,7 +50,6 @@ function LocalComponent(props: basePropType & {
             .onSnapshot((snap) => {
                 const data = (snap.data() || {}) as any;
                 if (!isEqual(projectStats, data)) {
-                    console.log('here');
                     setProjectStats(data);
                 }
             }, (err) => handleFirebaseError(props, err, 'Failed to fetch project stats'));
@@ -130,7 +129,7 @@ function LocalComponent(props: basePropType & {
                         </Button>
                     </ButtonGroup>
                 </CardActions>}
-                {(isOwner && methods) && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                {<CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
                         <Button onClick={() => history.push(`${ROUTES.PROJECT_REVIEW_PAGE}/${userId}/${projectData.projectId}`)}>
                             Write Review

@@ -19,7 +19,7 @@ import { NotFoundComponent } from './components/common-components';
 import { PageContainer } from './components/page-container';
 import { EditProjectPage } from './pages/edit-project-page';
 import { WriteProjectReviewPage } from './pages/write-project-review-page';
-import { PRIMARY_COLOR } from './util';
+import { PRIMARY_COLOR, SECONDARY_COLOR } from './util';
 import { ProjectLandingPage } from './pages/project-landing-page';
 import { ReviewsListPage } from './pages/reviews-list-page-2';
 import { BrowseProjectsPage } from './pages/browse-projects-list-page';
@@ -64,6 +64,7 @@ const theme = createMuiTheme({
   palette: {
     // primary: { main: '#2196F3' },
     primary: { main: PRIMARY_COLOR },
+    secondary: { main: SECONDARY_COLOR },
     background: {
       // default: '#f5f5f5'
       // default: '#ffffff'

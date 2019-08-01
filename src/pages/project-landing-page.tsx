@@ -5,22 +5,19 @@ import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES } from '../data/routes';
 import { getProjectDocPath, getProjectReleaseDocPath, getProjectStatsDocPath, getProjectStorageImagesPath, getReleaseListCollectionPath } from '../data/paths';
 import { handleFirebaseError, downloadFile } from '../util';
-import { ProjectData, ProjectStats, ReleaseItem } from '../interfaces';
+import { ProjectData, ReleaseItem } from '../interfaces';
 import { cloneDeep } from 'lodash';
 import * as firebase from 'firebase';
 import { dialog } from '../components/header-component';
-import { Carousel } from 'react-responsive-carousel';
-import { RatingsComponent } from '../components/ratings-component';
 import { AdditionalInformationComponent } from '../components/aditional-information-component';
 import { ProjectCardComponent } from '../components/project-card-component';
 import { ReleaseNotesComponent } from '../components/release-notes-component';
 import { CrouselComponent } from '../components/crousel-component';
+import { RatingsComponent } from '../components/ratings-component';
 
 interface StateType {
     userId: string,
     projectId: string,
-    projectData: ProjectData,
-    projectStats: ProjectStats,
     latestRelease: ReleaseItem,
     releaseExists: boolean,
     loadLimit: number,
@@ -36,8 +33,6 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
     INITIAL_STATE: StateType = {
         userId: '',
         projectId: '',
-        projectData: {} as any,
-        projectStats: {} as any,
         latestRelease: {} as any,
         releaseExists: false,
         loadLimit: 3,
@@ -80,29 +75,6 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
     }
 
     private _setProjectData() {
-        // fetch project data
-        this.listeners.push(
-            this.props.firebase.firestore.doc(getProjectDocPath(this.state.userId, this.state.projectId))
-                .onSnapshot((snap) => {
-                    if (!snap.exists) {
-                        this.props.history.push(ROUTES.NOT_FOUND);
-                        return;
-                    }
-                    this.setState({ projectData: snap.data() as ProjectData });
-                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project data'))
-        );
-
-        // fetch project stats 
-        this.listeners.push(
-            this.props.firebase.firestore.doc(getProjectStatsDocPath(this.state.userId, this.state.projectId))
-                .onSnapshot((snap) => {
-                    if (!snap.exists) {
-                        return;
-                    }
-                    this.setState({ projectStats: snap.data() as ProjectStats });
-                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project stats'))
-        )
-
         // fetch latest release 
         this.listeners.push(
             this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId))
@@ -160,12 +132,11 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         return (
             <React.Fragment>
                 <Container maxWidth="lg">
-                    {/* <ProjectCardComponent {...this.props} latestRelease={this.state.latestRelease} projectData={this.state.projectData} projectStats={this.state.projectStats} methods={{ showDeleteProjectDialog: this.showDeleteProjectDialog.bind(this) }} userId={this.state.userId} /> */}
                     <ProjectCardComponent {...this.props} latestRelease={this.state.latestRelease} projectId={this.state.projectId} methods={{ showDeleteProjectDialog: this.showDeleteProjectDialog.bind(this) }} userId={this.state.userId} />
                     <CrouselComponent images={this.state.images} />
-                    <RatingsComponent {...this.state.projectStats} {...this.props} />
+                    <RatingsComponent projectId={this.state.projectId} userId={this.state.userId} {...this.props} />
                     {this.state.releaseExists && <ReleaseNotesComponent notes={this.state.latestRelease.notes} style={{ margin: '100px 0px' }} {...this.props} />}
-                    <AdditionalInformationComponent {...this.props} projectData={this.state.projectData} projectStats={this.state.projectStats} publisherId={this.state.userId} />
+                    <AdditionalInformationComponent {...this.props} projectId={this.state.projectId} publisherId={this.state.userId} />
                 </Container>
             </React.Fragment>
         )
