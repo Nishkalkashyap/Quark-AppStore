@@ -26,7 +26,6 @@ export default function UserCardComponent(props: basePropType & { userId: string
     }
 
     useEffect(() => {
-        console.log('here');
         const listener = props.firebase.firestore.doc(getProfilePath(userId))
             .onSnapshot((snap) => {
                 const data = (snap.data() || {}) as any;
