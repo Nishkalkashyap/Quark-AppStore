@@ -61,7 +61,7 @@ export class LocalComponent extends Component<basePropType & { classes: any }, L
                 }
                 return `${ROUTES.DASHBOARD_PAGE}?startAfter=${params.projectId}`
             },
-            loadLimit: 1,
+            loadLimit: 20,
             upperComponent: () => {
                 return (
                     <Card style={Object.assign({ marginBottom: '100px' }, MainBgContainerStyles)} elevation={4}>

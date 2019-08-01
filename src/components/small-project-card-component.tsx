@@ -47,7 +47,7 @@ export function SmallProjectCardComponent(props: basePropType & { projectData: P
     });
 
     return (
-        <Card className={classes.card} style={{ minWidth: '300px',maxWidth : '400px',flexGrow : 1, margin: '20px 30px' }}>
+        <Card className={classes.card} style={{ minWidth: '300px',maxWidth : '340px',flexGrow : 1, margin: '20px 10px' }}>
             <CardHeader
                 avatar={
                     <Avatar aria-label="recipe">

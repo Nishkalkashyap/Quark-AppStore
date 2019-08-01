@@ -20,10 +20,8 @@ interface StateType {
     projectId: string,
     latestRelease: ReleaseItem,
     releaseExists: boolean,
-    loadLimit: number,
     nextExists: boolean,
     previousExists: boolean,
-    querySnapshot?: firebase.firestore.QuerySnapshot,
     goingBackwards: boolean,
     images: string[]
 }
@@ -35,7 +33,6 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         projectId: '',
         latestRelease: {} as any,
         releaseExists: false,
-        loadLimit: 3,
         nextExists: false,
         previousExists: false,
         goingBackwards: false,

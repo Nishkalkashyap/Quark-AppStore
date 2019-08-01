@@ -17,7 +17,7 @@ export class LocalComponent extends Component<basePropType> {
             getCollectionRef: () => { return this.firestore.collection(getProjectsCollectionPath(this.props.urlUserId || this.props.firebase.auth.currentUser!.uid)) },
             getDocRef: () => { return this.firestore.doc(getProjectDocPath(this.props.urlProjectId || this.props.firebase.auth.currentUser!.uid, queryString.parse(this.props.history.location.search)['startAfter'] as string)) },
             getRedirectRoute: (params) => { return `${ROUTES.PROJECTS_LIST_PAGE}/${this.props.urlUserId}/${this.props.urlProjectId}?startAfter=${params.projectId}` },
-            loadLimit: 3,
+            loadLimit: 10,
             upperComponent: (data: { state: StateType<ProjectData> }) => (
                 <UserCardComponent {...this.props} userId={this.props.urlUserId || this.props.firebase.auth.currentUser!.uid}></UserCardComponent>
             ),
