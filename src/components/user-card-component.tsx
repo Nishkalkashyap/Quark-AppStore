@@ -39,7 +39,7 @@ export default function UserCardComponent(props: basePropType & { userId: string
 
     return (
         <React.Fragment>
-            <Card style={Object.assign({}, MainBgContainerStyles, { color: null, margin: '60px 0px', padding: '80px 40px' })} elevation={4}>
+            <Card style={Object.assign({}, MainBgContainerStyles, { margin: '60px 0px', padding: '80px 40px' })} elevation={4}>
                 <MainBgComponent bgColor='linear-gradient(90deg,#ffffffff,#488aff99 100%)' />
                 <Typography variant="h2" component="h1" color="inherit">
                     {userData.name || userId}

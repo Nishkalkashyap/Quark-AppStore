@@ -24,7 +24,7 @@ export class LocalComponent extends Component<basePropType> {
             loadLimit: 3,
             upperComponent: () => {
                 return (
-                    <Card style={Object.assign({ marginBottom: '100px' }, MainBgContainerStyles, { color: null })} elevation={4}>
+                    <Card style={Object.assign({ marginBottom: '100px' }, MainBgContainerStyles)} elevation={4}>
                         <MainBgComponent />
                         <div style={{ textAlign: 'center', margin: '80px 0px' }}>
                             <Typography variant="h3" component="p">

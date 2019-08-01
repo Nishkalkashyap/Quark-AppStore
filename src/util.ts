@@ -6,7 +6,11 @@ import { allCategories, ProjectData, ReleaseItem } from "./interfaces";
 import { getProjectReleaseDocPath, getProjectStatsDocPath } from "./data/paths";
 import firebase from "firebase";
 
-export const PRIMARY_COLOR = '#055af9';
+export const PRIMARY_COLOR = '#6f5cfc';
+export const PRIMARY_COLOR_LIGHT = '#8d9ef7';
+export const ON_PRIMARY_COLOR = '#ffffff';
+
+// export const PRIMARY_COLOR = '#055af9';
 
 export function handleFirebaseError(props: basePropType, err: any, message: string) {
     if (message) {

@@ -76,7 +76,7 @@ function LocalComponent(props: basePropType & {
 
     return (
         <React.Fragment>
-            <Card style={Object.assign({}, MainBgContainerStyles, { color: null })} elevation={4}>
+            <Card style={Object.assign({}, MainBgContainerStyles)} elevation={4}>
                 <MainBgComponent bgColor='linear-gradient(90deg,#ffffffff,#488aff99 100%)' />
                 <Typography variant="h2" component="h1" color="inherit">
                     {projectData.projectName || 'Project'}

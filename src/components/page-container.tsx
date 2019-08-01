@@ -19,11 +19,12 @@ import { getSidebarItems } from './sidebar-component';
 import { LinearProgress, Button } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
 import { HeaderAvatarComponent } from './header-avatar-component';
+import { PRIMARY_COLOR } from '../util';
 
 const drawerWidth = 240;
 
 const sidebarData = {
-    backgroundColor: '#1f2631',
+    backgroundColor: PRIMARY_COLOR,
     color: '#e8e9ea'
 }
 
