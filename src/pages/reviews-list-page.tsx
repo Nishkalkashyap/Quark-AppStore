@@ -195,7 +195,8 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         return (
             <React.Fragment>
                 <Container maxWidth="lg">
-                    <ProjectCardComponent {...this.props} projectData={this.state.projectData} projectStats={this.state.projectStats} userId={this.props.urlUserId!}>
+                    {/* <ProjectCardComponent {...this.props} projectData={this.state.projectData} projectStats={this.state.projectStats} userId={this.props.urlUserId!}> */}
+                    <ProjectCardComponent {...this.props} projectId={this.state.projectData.projectId} userId={this.props.urlUserId!}>
                         <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
                                 <Button onClick={() => this.props.history.push(`${ROUTES.PROJECT_PAGE}/${this.props.urlUserId}/${this.props.urlProjectId}`)}>

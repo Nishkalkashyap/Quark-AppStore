@@ -160,7 +160,8 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         return (
             <React.Fragment>
                 <Container maxWidth="lg">
-                    <ProjectCardComponent {...this.props} latestRelease={this.state.latestRelease} projectData={this.state.projectData} projectStats={this.state.projectStats} methods={{ showDeleteProjectDialog: this.showDeleteProjectDialog.bind(this) }} userId={this.state.userId} />
+                    {/* <ProjectCardComponent {...this.props} latestRelease={this.state.latestRelease} projectData={this.state.projectData} projectStats={this.state.projectStats} methods={{ showDeleteProjectDialog: this.showDeleteProjectDialog.bind(this) }} userId={this.state.userId} /> */}
+                    <ProjectCardComponent {...this.props} latestRelease={this.state.latestRelease} projectId={this.state.projectId} methods={{ showDeleteProjectDialog: this.showDeleteProjectDialog.bind(this) }} userId={this.state.userId} />
                     <CrouselComponent images={this.state.images} />
                     <RatingsComponent {...this.state.projectStats} {...this.props} />
                     {this.state.releaseExists && <ReleaseNotesComponent notes={this.state.latestRelease.notes} style={{ margin: '100px 0px' }} {...this.props} />}

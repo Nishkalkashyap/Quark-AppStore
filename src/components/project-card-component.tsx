@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { basePropType } from '../basePropType';
 import { ProjectData, ProjectStats, ReleaseItem } from '../interfaces';
 import { Card, Typography, CardContent, Chip, CardActions, ButtonGroup, Button } from '@material-ui/core';
@@ -15,22 +15,51 @@ import RateReviewIcon from '@material-ui/icons/RateReview';
 import UpdateDownloadIcon from '@material-ui/icons/Update';
 import moment from 'moment';
 import { StandardProperties } from 'csstype';
-import { downloadReleaseItem } from '../util';
+import { downloadReleaseItem, handleFirebaseError } from '../util';
+import { getProjectDocPath, getProjectStatsDocPath } from '../data/paths';
+import { isEqual } from 'lodash';
 
 export const ProjectCardComponent = (LocalComponent);
 
 function LocalComponent(props: basePropType & {
-    projectData: ProjectData,
     userId: string,
-    projectStats: ProjectStats,
     latestRelease?: ReleaseItem,
     children?: any,
+    projectId: string,
     methods?: {
         showDeleteProjectDialog: () => void
     }
 }) {
 
-    const { projectData, projectStats, methods, userId, isOwner, history, children, latestRelease } = props;
+    const { methods, userId, projectId, isOwner, history, children, latestRelease } = props;
+
+    const [projectData, setProjectData] = useState({} as ProjectData);
+    const [projectStats, setProjectStats] = useState({} as ProjectStats);
+
+    useEffect(() => {
+        const listener1 = props.firebase.firestore.doc(getProjectDocPath(userId, projectId))
+            .onSnapshot((snap) => {
+                const data = (snap.data() || {}) as any;
+                if (!isEqual(projectData, data)) {
+                    console.log('here');
+                    setProjectData(data);
+                }
+            }, (err) => handleFirebaseError(props, err, 'Failed to fetch project data'));
+
+
+        const listener2 = props.firebase.firestore.doc(getProjectStatsDocPath(userId, projectId))
+            .onSnapshot((snap) => {
+                const data = (snap.data() || {}) as any;
+                if (!isEqual(projectStats, data)) {
+                    console.log('here');
+                    setProjectStats(data);
+                }
+            }, (err) => handleFirebaseError(props, err, 'Failed to fetch project stats'));
+
+        return () => { listener1(); listener2() };
+    });
+
+
     const chipStyle: StandardProperties = {
         color: 'inherit', borderColor: 'inherit', marginTop: '15px', marginRight: '15px'
     }
