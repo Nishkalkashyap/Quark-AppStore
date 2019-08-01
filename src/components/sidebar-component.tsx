@@ -27,32 +27,36 @@ const useStyles = makeStyles(theme => ({
     },
     avatar: {
         margin: theme.spacing(1),
-        marginBottom : '20px',
+        marginBottom: '20px',
         color: theme.palette.primary.main,
         backgroundColor: 'transparent'
     }
 }));
 
-export const sidebarItems: SidebarItems[] = [
-    {
-        label: 'Dashboard',
-        icon: DashboardIcon,
-        private: false,
-        clickRoute: ROUTES.DASHBOARD_PAGE
-    },
-    {
-        label: 'Account',
-        icon: AccountBoxIcon,
-        private: true,
-        clickRoute: ROUTES.ACCOUNT_PAGE
-    },
-    {
-        label: 'Projects',
-        icon: AppsIcon,
-        private: true,
-        clickRoute: ROUTES.PROJECTS_LIST_PAGE
-    }
-]
+export function getSidebarItems(props: basePropType) {
+    const sidebarItems: SidebarItems[] = [
+        {
+            label: 'Dashboard',
+            icon: DashboardIcon,
+            private: false,
+            clickRoute: ROUTES.DASHBOARD_PAGE
+        },
+        {
+            label: 'Account',
+            icon: AccountBoxIcon,
+            private: true,
+            clickRoute: ROUTES.ACCOUNT_PAGE
+        },
+        {
+            label: 'Projects',
+            icon: AppsIcon,
+            private: true,
+            clickRoute: `${ROUTES.PROJECTS_LIST_PAGE}/${props.firebase.auth.currentUser!.uid}`
+        }
+    ];
+    return sidebarItems;
+}
+
 export default class Sidebar extends Component<basePropType> {
 
     constructor(props: basePropType) {
@@ -73,6 +77,8 @@ export default class Sidebar extends Component<basePropType> {
 const SidebarElement = (obj: { firebase: Firebase, props: any }) => {
     const { firebase } = obj;
     const classes = useStyles();
+    const sidebarItems = getSidebarItems(obj.props);
+
     return (
         <div style={SidebarContainerStyle}>
             {sidebarItems.map((item) => {
@@ -87,7 +93,7 @@ const SidebarElement = (obj: { firebase: Firebase, props: any }) => {
                         }
                     }}>
                         <IconButton className={classes.avatar}>
-                            {<item.icon style={{fontSize : '30px'}}></item.icon>}
+                            {<item.icon style={{ fontSize: '30px' }}></item.icon>}
                         </IconButton>
                     </Tooltip>
                 )

@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import { createStyles, makeStyles, useTheme, Theme, createMuiTheme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, useTheme, Theme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -15,12 +15,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import HeaderComponent, { progress } from './header-component';
 import { basePropType } from '../basePropType';
-import { sidebarItems } from './sidebar-component';
-import { LinearProgress, Button, Typography } from '@material-ui/core';
+import { getSidebarItems } from './sidebar-component';
+import { LinearProgress, Button } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
 import { HeaderAvatarComponent } from './header-avatar-component';
-import MainBgComponent from './main-background-component';
-import { GradientBackground, PRIMARY_COLOR } from '../util';
 
 const drawerWidth = 240;
 
@@ -127,6 +125,8 @@ export function PageContainer(props: basePropType & { children: any }) {
     function hideProgressBar() {
         setShowProgressBar(false);
     }
+
+    const sidebarItems = getSidebarItems(props);
 
     return (
         <div className={classes.root}>

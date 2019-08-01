@@ -29,6 +29,7 @@ import { PRIMARY_COLOR } from './util';
 import { ProjectLandingPage } from './pages/project-landing-page';
 import { ReviewsListPage } from './pages/reviews-list-page-2';
 import { BrowseProjectsPage } from './pages/browse-projects-list-page';
+import { withAllProviders } from './providers/all-providers';
 // import { NotFoundComponent } from './components/common';
 
 const Routing = () => (
@@ -61,8 +62,8 @@ const Routing = () => (
     <Route exact path={ROUTES.NOT_FOUND} component={NotFoundComponent} />
   </React.Fragment>
 )
-const StupidSidebar: any = withRouter(withFirebase(Sidebar));
-const StupidPageContainer: any = withRouter(withFirebase(PageContainer));
+const StupidSidebar: any = withAllProviders((Sidebar));
+const StupidPageContainer: any = withAllProviders((PageContainer));
 
 const theme = createMuiTheme({
   palette: {
