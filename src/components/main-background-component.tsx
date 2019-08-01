@@ -8,7 +8,7 @@ export default function MainBgComponent(props?: { bgColor?: string, position?: '
     // const color = props!.bgColor ? props!.bgColor : 'linear-gradient(90deg,PRIMARY_COLOR 0,#21CBF3 100%)';
     // const color = props!.bgColor ? props!.bgColor : 'linear-gradient(90deg,#000000ff 0,#000000aa 100%)';
     // const color = 'linear-gradient(90deg,#ffffffff 0,#99999999 100%)';
-    const backgroundColor = `linear-gradient(90deg,${PRIMARY_COLOR} 0,${PRIMARY_COLOR_LIGHT}  100%)`;
+    const backgroundColor = `linear-gradient(90deg,${PRIMARY_COLOR} 0,${PRIMARY_COLOR_LIGHT} 100%)`;
     const position = props!.position ? props!.position : 'absolute';
     return (
         <div style={Object.assign(cloneDeep(CommonStyles), { background: backgroundColor, transform: undefined, borderRadius: '5px', position })}>
