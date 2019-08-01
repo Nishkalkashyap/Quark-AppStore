@@ -46,12 +46,12 @@ export function AnimatedTextComponent(props: { text: string[] }) {
     });
 
     return (
-        <h1 className="ml4">
+        <div className="ml4" style={{ display: 'inline-block' }}>
             {
                 props.text.map((val, index) => {
                     return <span key={val + index} className={`letters letters-${index}`}>{val}</span>
                 })
             }
-        </h1>
+        </div>
     )
 }
