@@ -8,7 +8,7 @@ import { globalStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
 import { MATCH_PARAMS, ROUTES } from '../data/routes';
 import { ProjectData, ProjectReviewInterface } from '../interfaces';
-import { getProjectDocPath, getProjectReviewsDocPath } from '../data/paths';
+import { getProjectDocPath, getProjectReviewDocPath } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
@@ -33,7 +33,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
 
         progress.showProgressBar();
         this.listeners.push(
-            this.props.firebase.firestore.doc(getProjectReviewsDocPath(userId, this.props.urlProjectId!, this.props.firebase.auth.currentUser!.uid))
+            this.props.firebase.firestore.doc(getProjectReviewDocPath(userId, this.props.urlProjectId!, this.props.firebase.auth.currentUser!.uid))
                 .onSnapshot((snap) => {
                     this.setState({ review: snap.data() || {} });
                     progress.hideProgressBar();
@@ -49,7 +49,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
         e.preventDefault();
 
         this.state.review.userId = this.props.firebase.auth.currentUser!.uid;
-        this.props.firebase.firestore.doc(getProjectReviewsDocPath(this.props.urlUserId!, this.props.urlProjectId!, this.props.firebase.auth.currentUser!.uid))
+        this.props.firebase.firestore.doc(getProjectReviewDocPath(this.props.urlUserId!, this.props.urlProjectId!, this.props.firebase.auth.currentUser!.uid))
             .set(this.state.review)
             .then(() => {
                 this.props.enqueueSnackbar('Submitted review', { variant: 'success' });

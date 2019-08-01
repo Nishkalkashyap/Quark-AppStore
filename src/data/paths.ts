@@ -26,10 +26,6 @@ export function getProjectStorageImagesPath(userId: string, projectId: string) {
     return `Users/${userId}/projects/${projectId}/images`;
 }
 
-export function getProjectReviewsDocPath(userId: string, projectId: string, currentUserId: string) {
-    return `Users/${userId}/projects/${projectId}/reviews/${currentUserId}`;
-}
-
 export function getProjectReviewsCollectionPath(userId: string, projectId: string) {
     return `Users/${userId}/projects/${projectId}/reviews`;
 }
