@@ -41,7 +41,6 @@ function LocalComponent(props: basePropType & {
             .onSnapshot((snap) => {
                 const data = (snap.data() || {}) as any;
                 if (!isEqual(projectData, data)) {
-                    console.log('here');
                     setProjectData(data);
                 }
             }, (err) => handleFirebaseError(props, err, 'Failed to fetch project data'));
