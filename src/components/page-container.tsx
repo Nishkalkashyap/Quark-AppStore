@@ -22,6 +22,11 @@ import { HeaderAvatarComponent } from './header-avatar-component';
 
 const drawerWidth = 240;
 
+const sidebarData = {
+    backgroundColor: '#1f2631',
+    color: '#e8e9ea'
+}
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -177,7 +182,7 @@ export function PageContainer(props: basePropType & { children: any }) {
 
                 open={open}
             >
-                <div style={{ background: '#ffffff', height: '100%' }}>
+                <div style={{ background: sidebarData.backgroundColor, height: '100%' }}>
                     <div className={classes.toolbar} style={{ justifyContent: 'space-between' }}>
                         {/* <Typography component="h3" color="inherit" style={{ marginLeft: '20px' }}>
                             Quark
@@ -187,16 +192,15 @@ export function PageContainer(props: basePropType & { children: any }) {
                         </IconButton>
                     </div>
                     <Divider />
-                    <List>
+                    <List style={{ color: sidebarData.color }}>
                         {sidebarItems.map((item, index) => (
                             <ListItem button key={item.label} onClick={() => {
                                 if (item.clickRoute) {
                                     (props).history.push(item.clickRoute);
                                 }
                             }}>
-                                {/* <item.icon  style={{color : '#ffffff'}} /> */}
                                 <ListItemIcon>
-                                    <item.icon />
+                                    <item.icon style={{ color: sidebarData.color }} />
                                 </ListItemIcon>
                                 <ListItemText primary={item.label} />
                             </ListItem>

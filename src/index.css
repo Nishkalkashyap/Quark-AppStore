@@ -25,7 +25,6 @@ hr {
 
 .MuiDrawer-paperAnchorDockedLeft {
   border-right: solid 1px var(--border-color) !important;
-  /* border-right: none !important; */
 }
 
 ul.thumbs.animated {
