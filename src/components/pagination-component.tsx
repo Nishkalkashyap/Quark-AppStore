@@ -9,7 +9,6 @@ import { progress } from './header-component';
 
 export interface StateType<T> {
     paginationArray: T[],
-    loadLimit: number,
     nextExists: boolean,
     previousExists: boolean,
     querySnapshot?: firebase.firestore.QuerySnapshot,
@@ -40,7 +39,6 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
 
     state: StateType<T> = {
         paginationArray: [],
-        loadLimit: 3,
         nextExists: false,
         previousExists: false,
         goingBackwards: false,
@@ -53,7 +51,7 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
         this.paginationListeners.map((listener) => { listener() });
     };
 
-    private _setPaginationArray() {
+    public _setPaginationArray() {
         this.paginationListeners.map((listener) => { listener() });//clear releaseListeners
 
         const values = queryString.parse(this.props.history.location.search);
@@ -72,7 +70,7 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
                     const subListener = this.props.pagination.getCollectionRef()
                         .orderBy('createdAt', StartType)
                         .startAfter(snap)
-                        .limit(this.state.loadLimit)
+                        .limit(this.props.pagination.loadLimit)
                         .onSnapshot((subSnap) => {
 
                             if (subSnap.docs.length === 0) {
@@ -95,7 +93,7 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
             this.paginationListeners.push(
                 this.props.pagination.getCollectionRef()
                     .orderBy('createdAt', 'desc')
-                    .limit(this.state.loadLimit)
+                    .limit(this.props.pagination.loadLimit)
                     .onSnapshot((snap) => {
                         const arr = snap.docs.map((doc) => doc.data()) as T[];
                         scrollToTop();
