@@ -1,5 +1,4 @@
 import { StandardProperties } from 'csstype';
-import { withFirebase } from '../providers/firebase-provider';
 import { basePropType } from "../basePropType";
 import React, { Component } from 'react';
 
@@ -16,6 +15,8 @@ import NoteIcon from '@material-ui/icons/Note';
 import { MessageDialogInterface, FormDialogInterface } from '../interfaces';
 import { MessageDialogComponent } from './message-dialog-component';
 import { FormDialogComponent } from './form-dialog-component';
+import { ROUTES } from '../data/routes';
+import { withAllProviders } from '../providers/all-providers';
 
 const options = [
     {
@@ -139,9 +140,9 @@ class Header extends Component<basePropType> {
         return (
             <React.Fragment>
                 <div style={MainContainerStyle}>
-                    <div style={LeftHeaderStyle}>
+                    <div style={LeftHeaderStyle} onClick={() => this.props.history.push(ROUTES.LANDING_PAGE)}>
                         {/* <img src={logo} alt="logo" style={ImageStyles} /> */}
-                        <Typography component="h3" id="appbar-title" style={{ margin: '0px 10px 0px 10px', verticalAlign: 'middle', fontSize: '1.3rem', color : 'inherit' }}>
+                        <Typography component="h3" id="appbar-title" style={{ margin: '0px 10px 0px 10px', verticalAlign: 'middle', fontSize: '1.3rem', color: 'inherit' }}>
                             Quark
                         </Typography>
                     </div>
@@ -156,7 +157,7 @@ class Header extends Component<basePropType> {
     }
 }
 
-export default withFirebase(Header);
+export default withAllProviders(Header);
 
 const MainContainerStyle: StandardProperties = {
     display: 'flex',
