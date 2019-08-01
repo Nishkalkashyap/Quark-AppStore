@@ -2,7 +2,7 @@
   "name": "quark-appstore",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://quarkjs.io/appstore",
+  "homepage": "https://dash.quarkjs.io",
   "dependencies": {
     "@material-ui/core": "^4.2.1",
     "@material-ui/icons": "^4.2.1",

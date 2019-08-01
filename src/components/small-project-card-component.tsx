@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { basePropType } from '../basePropType';
-import { ProjectData, UserProfileInterface, ProjectStats } from '../interfaces';
+import { ProjectData, ProjectStats } from '../interfaces';
 import logo from './../assets/logo.svg';
 import { Card, CardActionArea, CardMedia, CardContent, Typography, CardActions, Button, makeStyles, createStyles, CardHeader, Avatar } from '@material-ui/core';
 import { ROUTES } from '../data/routes';

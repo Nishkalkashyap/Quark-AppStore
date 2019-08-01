@@ -3,7 +3,7 @@ import * as recc from 'recursive-readdir';
 import * as path from 'path';
 import { printConsoleStatus } from 'print-console-status';
 
-const bucketName = 'quarkjs.io';
+const bucketName = 'dash.quarkjs.io';
 const folder = 'build';
 process.env.GOOGLE_APPLICATION_CREDENTIALS = path.resolve('./cloud-storage-key.json');
 process.chdir(folder);
@@ -29,7 +29,7 @@ async function uploadFileToBucket() {
         const f = await bucket.upload((`${file}`), {
             gzip: true,
             public: true,
-            destination: (`appstore/${file}`),
+            destination: file,
             metadata: {
                 cacheControl: `public, max-age=${getCacheControlForFile(file)}`,
             }
