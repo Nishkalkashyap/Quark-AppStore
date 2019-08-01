@@ -20,8 +20,13 @@ html {
 } */
 
 :root {
-  --border-color: rgba(0, 0, 0, 0.23);
+  /* --border-color: rgba(0, 0, 0, 0.23); */
+  --border-color: rgba(0, 0, 0, 0);
   --card-color: #ffffff;
+}
+
+.MuiDrawer-paperAnchorDockedLeft {
+  border-color: var(--border-color) !important;
 }
 
 ul.thumbs.animated {
