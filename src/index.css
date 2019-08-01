@@ -13,15 +13,14 @@ html {
   height: 100vh;
 }
 
-#root,
-.makeStyles-root-1 {
-  height: 100%;
-}
-
 :root {
   --border-color: rgba(0, 0, 0, 0.03);
   --paper-color: #f8f9f9;
   --bg-color : #ffffff;
+}
+
+hr {
+  background-color: var(--border-color) !important;
 }
 
 .MuiDrawer-paperAnchorDockedLeft {

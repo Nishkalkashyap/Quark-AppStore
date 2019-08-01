@@ -50,11 +50,11 @@ export function SmallProjectCardComponent(props: basePropType & { projectData: P
                 title={projectData.category}
                 subheader={moment(projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
             />
-            <CardActionArea>
+            <CardActionArea onClick={() => props.history.push(`${ROUTES.PROJECT_PAGE}/${projectData.userId}/${projectData.projectId}`)}>
                 <CardMedia
                     className={classes.media}
                     image={projectData.coverImageUrl || logo}
-                    title="Contemplative Reptile"
+                    title={projectData.tagline}
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
@@ -71,7 +71,7 @@ export function SmallProjectCardComponent(props: basePropType & { projectData: P
                 </Button>
             </CardActions>
             {projectStats.numberOfReviews && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Button size="small" color="primary" onClick={() => props.history.push(`${ROUTES.PROJECT_PAGE}/${projectData.userId}/${projectData.projectId}`)}>
+                <Button size="small" color="primary" onClick={() => props.history.push(`${ROUTES.RELEASE_LIST_PAGE}/${projectData.userId}/${projectData.projectId}`)}>
                     reviews
                 </Button>
                 <Rating size="small" style={{ margin: '10px 10px' }} value={projectStats.averageRating || 0} readOnly />
