@@ -19,7 +19,7 @@ export const withOriginalOwner = (Component: any) => {
             const userID = this.props.match.params[MATCH_PARAMS.USER_ID]
             this.listener = this.props.firebase.auth.onAuthStateChanged(
                 (authUser) => {
-                    if (authUser!.uid != userID) {
+                    if (authUser!.uid !== userID) {
                         this.props.history.push(ROUTES.NOT_FOUND);
                         return;
                     } else {

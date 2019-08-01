@@ -16,24 +16,30 @@ interface SidebarItems {
     clickRoute: string;
 }
 
-const useStyles = makeStyles(theme => ({
-    '@global': {
-        body: {
-            backgroundColor: theme.palette.common.white,
-        },
-    },
-    button: {
-        margin: theme.spacing(1)
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        marginBottom: '20px',
-        color: theme.palette.primary.main,
-        backgroundColor: 'transparent'
-    }
-}));
+// const useStyles = makeStyles(theme => ({
+//     '@global': {
+//         body: {
+//             backgroundColor: theme.palette.common.white,
+//         },
+//     },
+//     button: {
+//         margin: theme.spacing(1)
+//     },
+//     avatar: {
+//         margin: theme.spacing(1),
+//         marginBottom: '20px',
+//         color: theme.palette.primary.main,
+//         backgroundColor: 'transparent'
+//     }
+// }));
 
 export function getSidebarItems(props: basePropType) {
+
+    let path: string = ROUTES.PROJECTS_LIST_PAGE;
+    if (props.firebase.auth.currentUser) {
+        path = `${ROUTES.PROJECTS_LIST_PAGE}/${props.firebase.auth.currentUser.uid}`
+    }
+
     const sidebarItems: SidebarItems[] = [
         {
             label: 'Dashboard',
@@ -51,61 +57,62 @@ export function getSidebarItems(props: basePropType) {
             label: 'Projects',
             icon: AppsIcon,
             private: true,
-            clickRoute: `${ROUTES.PROJECTS_LIST_PAGE}/${props.firebase.auth.currentUser!.uid}`
+            clickRoute: path
+            // clickRoute: ''
         }
     ];
     return sidebarItems;
 }
 
-export default class Sidebar extends Component<basePropType> {
+// export default class Sidebar extends Component<basePropType> {
 
-    constructor(props: basePropType) {
-        super(props);
-        this.props.firebase.auth.onAuthStateChanged((e) => {
-            this.forceUpdate();
-        });
-    }
+//     constructor(props: basePropType) {
+//         super(props);
+//         this.props.firebase.auth.onAuthStateChanged((e) => {
+//             this.forceUpdate();
+//         });
+//     }
 
 
-    render() {
-        return (
-            <SidebarElement firebase={this.props.firebase} props={this.props}></SidebarElement>
-        )
-    }
-}
+//     render() {
+//         return (
+//             <SidebarElement firebase={this.props.firebase} props={this.props}></SidebarElement>
+//         )
+//     }
+// }
 
-const SidebarElement = (obj: { firebase: Firebase, props: any }) => {
-    const { firebase } = obj;
-    const classes = useStyles();
-    const sidebarItems = getSidebarItems(obj.props);
+// const SidebarElement = (obj: { firebase: Firebase, props: any }) => {
+//     const { firebase } = obj;
+//     const classes = useStyles();
+//     const sidebarItems = getSidebarItems(obj.props);
 
-    return (
-        <div style={SidebarContainerStyle}>
-            {sidebarItems.map((item) => {
-                if (item.private && !firebase.auth.currentUser) {
-                    return null;
-                }
+//     return (
+//         <div style={SidebarContainerStyle}>
+//             {sidebarItems.map((item) => {
+//                 if (item.private && !firebase.auth.currentUser) {
+//                     return null;
+//                 }
 
-                return (
-                    <Tooltip title={item.label} placement="right" key={item.label} onClick={() => {
-                        if (item.clickRoute) {
-                            (obj.props).history.push(item.clickRoute);
-                        }
-                    }}>
-                        <IconButton className={classes.avatar}>
-                            {<item.icon style={{ fontSize: '30px' }}></item.icon>}
-                        </IconButton>
-                    </Tooltip>
-                )
-            })}
-        </div>
-    )
-}
+//                 return (
+//                     <Tooltip title={item.label} placement="right" key={item.label} onClick={() => {
+//                         if (item.clickRoute) {
+//                             (obj.props).history.push(item.clickRoute);
+//                         }
+//                     }}>
+//                         <IconButton className={classes.avatar}>
+//                             {<item.icon style={{ fontSize: '30px' }}></item.icon>}
+//                         </IconButton>
+//                     </Tooltip>
+//                 )
+//             })}
+//         </div>
+//     )
+// }
 
-const SidebarContainerStyle: StandardProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    flexWrap: 'nowrap',
-    width: '70px',
-    height: '100%'
-}
+// const SidebarContainerStyle: StandardProperties = {
+//     display: 'flex',
+//     flexDirection: 'column',
+//     flexWrap: 'nowrap',
+//     width: '70px',
+//     height: '100%'
+// }

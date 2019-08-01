@@ -1,6 +1,6 @@
 import React from 'react';
-import Sidebar from './components/sidebar-component';
-import Dashboard from './pages/dashboard-page';
+// import Sidebar from './components/sidebar-component';
+// import Dashboard from './pages/dashboard-page';
 import Landing from './pages/landing-page';
 import { BrowserRouter as Router, Route, withRouter } from 'react-router-dom';
 import { ROUTES, SLUGS, POST_SLUG } from './data/routes';
@@ -10,7 +10,6 @@ import SignInPage from './pages/sign-in-page';
 import Account from './pages/account-page';
 import EditProfilePage from './pages/edit-profile-page';
 import ForgotPasswordPage from './pages/forgot-password-page';
-import { withFirebase } from './providers/firebase-provider';
 
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme, CssBaseline } from '@material-ui/core';
@@ -22,7 +21,6 @@ import { CreateNewProjectPage } from './pages/create-new-project-page';
 import { ReleaseListPage } from './pages/release-list-page-2';
 import { NotFoundComponent } from './components/common-components';
 import { PageContainer } from './components/page-container';
-import MainBgComponent from './components/main-background-component';
 import { EditProjectPage } from './pages/edit-project-page';
 import { WriteProjectReviewPage } from './pages/write-project-review-page';
 import { PRIMARY_COLOR } from './util';
@@ -30,6 +28,9 @@ import { ProjectLandingPage } from './pages/project-landing-page';
 import { ReviewsListPage } from './pages/reviews-list-page-2';
 import { BrowseProjectsPage } from './pages/browse-projects-list-page';
 import { withAllProviders } from './providers/all-providers';
+import { withFirebase } from './providers/firebase-provider';
+import { withMatchParams } from './providers/with-url-provider';
+import { withSnackbar } from 'notistack';
 // import { NotFoundComponent } from './components/common';
 
 const Routing = () => (
@@ -62,8 +63,7 @@ const Routing = () => (
     <Route exact path={ROUTES.NOT_FOUND} component={NotFoundComponent} />
   </React.Fragment>
 )
-const StupidSidebar: any = withAllProviders((Sidebar));
-const StupidPageContainer: any = withAllProviders((PageContainer));
+const StupidPageContainer: any = withRouter(withFirebase(withSnackbar(withMatchParams(PageContainer) as any)));
 
 const theme = createMuiTheme({
   palette: {
