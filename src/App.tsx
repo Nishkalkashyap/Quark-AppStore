@@ -1,13 +1,10 @@
 import React from 'react';
-// import Sidebar from './components/sidebar-component';
-// import Dashboard from './pages/dashboard-page';
 import Landing from './pages/landing-page';
 import { BrowserRouter as Router, Route, withRouter } from 'react-router-dom';
 import { ROUTES, SLUGS, POST_SLUG } from './data/routes';
 
 import SignUpPage from './pages/signup-page';
 import SignInPage from './pages/sign-in-page';
-import Account from './pages/account-page';
 import EditProfilePage from './pages/edit-profile-page';
 import ForgotPasswordPage from './pages/forgot-password-page';
 
@@ -15,7 +12,6 @@ import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme, CssBaseline } from '@material-ui/core';
 import { CreateNewRelease } from './pages/create-new-release-page';
 import changePasswordPage from './pages/change-password-page';
-// import { ProjectsListPage } from './pages/project-list-page';
 import { ProjectsListPage } from './pages/project-list-page-2';
 import { CreateNewProjectPage } from './pages/create-new-project-page';
 import { ReleaseListPage } from './pages/release-list-page-2';
@@ -36,7 +32,6 @@ import { withSnackbar } from 'notistack';
 const Routing = () => (
   <React.Fragment>
     <Route exact path={ROUTES.LANDING_PAGE} component={Landing} />
-    <Route exact path={ROUTES.ACCOUNT_PAGE} component={Account} />
     <Route exact path={ROUTES.EDIT_PROFILE_PAGE} component={EditProfilePage} />
 
     <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
