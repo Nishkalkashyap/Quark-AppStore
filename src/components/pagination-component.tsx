@@ -18,8 +18,8 @@ export interface StateType<T> {
 
 export interface Pagination<T> {
     pagination: {
-        getCollectionPath: () => string;
-        getDocPath: () => string;
+        getCollectionRef: () => firebase.firestore.CollectionReference;
+        getDocRef: () => firebase.firestore.DocumentReference;
         getRedirectRoute: (params: T) => string;
         loadLimit: number;
         upperComponent?: any;
@@ -60,8 +60,7 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
         progress.showProgressBar();
 
         if (startAfter && typeof startAfter == 'string') {
-            const topListener = this.props.firebase.firestore
-                .doc(this.props.pagination.getDocPath())
+            const topListener = this.props.pagination.getDocRef()
                 .onSnapshot((snap) => {
 
                     if (!snap.exists) {
@@ -69,8 +68,7 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
                     }
 
                     const StartType = this.state.goingBackwards ? 'asc' : 'desc';
-                    const subListener = this.props.firebase.firestore
-                        .collection(this.props.pagination.getCollectionPath())
+                    const subListener = this.props.pagination.getCollectionRef()
                         .orderBy('createdAt', StartType)
                         .startAfter(snap)
                         .limit(this.state.loadLimit)
@@ -94,7 +92,7 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
             this.paginationListeners.push(topListener);
         } else {
             this.paginationListeners.push(
-                this.props.firebase.firestore.collection(this.props.pagination.getCollectionPath())
+                this.props.pagination.getCollectionRef()
                     .orderBy('createdAt', 'desc')
                     .limit(this.state.loadLimit)
                     .onSnapshot((snap) => {
@@ -128,13 +126,13 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
         const nextDoc = snap[this.state.paginationArray.length - 1];
         const prevDoc = snap[0];
 
-        const subs1 = (this.props.firebase.firestore.collection(this.props.pagination.getCollectionPath()).orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).onSnapshot((snap) => {
+        const subs1 = (this.props.pagination.getCollectionRef().orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).onSnapshot((snap) => {
             const nextExists = snap.docs[0] && snap.docs[0].exists;
             this.setState({ nextExists });
             subs1();
         }));
 
-        const subs2 = (this.props.firebase.firestore.collection(this.props.pagination.getCollectionPath()).orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).onSnapshot((snap) => {
+        const subs2 = (this.props.pagination.getCollectionRef().orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).onSnapshot((snap) => {
             const previousExists = snap.docs[0] && snap.docs[0].exists;
             this.setState({ previousExists });
             subs2();

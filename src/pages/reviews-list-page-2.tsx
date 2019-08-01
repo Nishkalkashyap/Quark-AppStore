@@ -13,11 +13,12 @@ import ReviewItemComponent from '../components/review-item-component';
 type PaginationType = ProjectReviewInterface;
 
 export class LocalComponent extends Component<basePropType> {
+    firestore = this.props.firebase.firestore;
 
     pagination: Pagination<PaginationType> = {
         pagination: {
-            getCollectionPath: () => { return getProjectReviewsCollectionPath(this.props.urlUserId!, this.props.urlProjectId!) },
-            getDocPath: () => { return getProjectReviewDocPath(this.props.urlUserId!, this.props.urlProjectId!, queryString.parse(this.props.history.location.search)['startAfter'] as string) },
+            getCollectionRef: () => { return this.firestore.collection(getProjectReviewsCollectionPath(this.props.urlUserId!, this.props.urlProjectId!)) },
+            getDocRef: () => { return this.firestore.doc(getProjectReviewDocPath(this.props.urlUserId!, this.props.urlProjectId!, queryString.parse(this.props.history.location.search)['startAfter'] as string)) },
             getRedirectRoute: (params) => { return `${ROUTES.PROJECT_PAGE}/${this.props.urlUserId}/${this.props.urlProjectId}?startAfter=${params.userId}` },
             loadLimit: 3,
             upperComponent: (data: { state: StateType<PaginationType> }) => (

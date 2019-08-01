@@ -13,11 +13,12 @@ import { ReleaseItemComponent } from '../components/release-item-component';
 type PaginationType = ReleaseItem;
 
 export class LocalComponent extends Component<basePropType> {
+    firestore = this.props.firebase.firestore;
 
     pagination: Pagination<PaginationType> = {
         pagination: {
-            getCollectionPath: () => { return getReleaseListCollectionPath(this.props.urlUserId!, this.props.urlProjectId!) },
-            getDocPath: () => { return getProjectReleaseDocPath(this.props.urlUserId!, this.props.urlProjectId!, queryString.parse(this.props.history.location.search)['startAfter'] as string) },
+            getCollectionRef: () => { return this.firestore.collection(getReleaseListCollectionPath(this.props.urlUserId!, this.props.urlProjectId!)) },
+            getDocRef: () => { return this.firestore.doc(getProjectReleaseDocPath(this.props.urlUserId!, this.props.urlProjectId!, queryString.parse(this.props.history.location.search)['startAfter'] as string)) },
             getRedirectRoute: (params) => { return `${ROUTES.PROJECTS_LIST_PAGE}/${this.props.urlUserId}/${this.props.urlProjectId}?startAfter=${params.projectId}` },
             loadLimit: 3,
             upperComponent: (data: { state: StateType<PaginationType> }) => (
