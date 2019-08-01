@@ -16,7 +16,7 @@ html {
 :root {
   --border-color: rgba(0, 0, 0, 0.03);
   --paper-color: #f8f9f9;
-  --bg-color : #ffffff;
+  --bg-color: #ffffff;
 }
 
 hr {
@@ -50,4 +50,18 @@ ul.thumbs.animated {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* animated component css */
+.ml4 {
+  position: relative;
+  font-weight: 900;
+  font-size: 4.5em;
+  width: 100%;
+}
+
+.ml4 .letters {
+  position: absolute;
+  opacity: 0;
+  left: 0px;
 }
