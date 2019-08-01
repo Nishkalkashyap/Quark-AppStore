@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import Sidebar from './components/sidebar-component';
 import Dashboard from './pages/dashboard-page';
 import Landing from './pages/landing-page';
@@ -68,7 +67,8 @@ const theme = createMuiTheme({
     primary: { main: PRIMARY_COLOR },
     background: {
       // default: '#f5f5f5'
-      default: '#ffffff'
+      // default: '#ffffff'
+      default: '#f8f9f9'
     }
   }
 });

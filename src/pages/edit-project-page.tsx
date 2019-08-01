@@ -271,7 +271,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
                                     </Select>
                                 </FormControl>
                                 {images.length > 0 &&
-                                    <Paper elevation={0} style={{ border: 'solid 1px rgba(0,0,0,0.23)', padding: '15px 10px', margin: '15px 0px' }}>
+                                    <Paper elevation={0} style={{ border: 'solid 1px var(--border-color)', padding: '15px 10px', margin: '15px 0px' }}>
                                         <Typography color="textSecondary"> Existing images</Typography>
                                         <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto' }}>
                                             {images.map((img, index) => (
@@ -280,7 +280,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
                                         </div>
                                     </Paper>}
                                 {Object.keys(filesToUpload).length > 0 &&
-                                    <Paper elevation={0} style={{ border: 'solid 1px rgba(0,0,0,0.23)', padding: '15px 10px', margin: '15px 0px' }}>
+                                    <Paper elevation={0} style={{ border: 'solid 1px var(--border-color)', padding: '15px 10px', margin: '15px 0px' }}>
                                         <Typography color="textSecondary"> Images to upload</Typography>
                                         <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto' }}>
                                             {Object.keys(filesToUpload).map((file, index) => {
@@ -315,7 +315,7 @@ const ImageComponent = (props: { img: string, index: number, onDelete: Function,
     const { img, index, onDelete, makeCover } = props;
     const classes = useStyles();
     const isCover = img === props.coverUrl;
-    // const coverStyles: StandardProperties = { border: `solid 1px ${isCover ? 'var(--ion-color-primary)' : 'rgba(0,0,0,0.23)'}` };
+    // const coverStyles: StandardProperties = { border: `solid 1px ${isCover ? 'var(--ion-color-primary)' : 'var(--border-color)'}` };
     const coverStyles: StandardProperties = { border: `solid 1px ${isCover ? 'var(--ion-color-primary)' : 'rgba(0,0,0,0)'}` };
     const baseStyles: StandardProperties = { padding: '10px 10px 10px 10px', borderRadius: '4px' };
     const allStyles = Object.assign(coverStyles, baseStyles);

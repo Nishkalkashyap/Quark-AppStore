@@ -145,7 +145,7 @@ const DownloadsComponent = (props: basePropType & { release: ReleaseItem }) => {
     const { release } = props;
     return (release.assets && release.assets.length) ? (
         <React.Fragment>
-            <ExpansionPanel style={{ boxShadow: 'none', border: 'solid 1px rgba(0,0,0,0.23)', borderRadius: '4px' }}>
+            <ExpansionPanel style={{ boxShadow: 'none', border: 'solid 1px var(--border-color)', borderRadius: '4px' }}>
                 <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"

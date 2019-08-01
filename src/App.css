@@ -1,9 +1,0 @@
-.App {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-
-:root {
-  --border-color: #edf2f6;
-}
