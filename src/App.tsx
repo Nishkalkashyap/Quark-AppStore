@@ -19,7 +19,7 @@ import changePasswordPage from './pages/change-password-page';
 // import { ProjectsListPage } from './pages/project-list-page';
 import { ProjectsListPage } from './pages/project-list-page-2';
 import { CreateNewProjectPage } from './pages/create-new-project-page';
-import { ReleaseListPage } from './pages/release-list-page';
+import { ReleaseListPage } from './pages/release-list-page-2';
 import { NotFoundComponent } from './components/common-components';
 import { PageContainer } from './components/page-container';
 import MainBgComponent from './components/main-background-component';
@@ -27,7 +27,7 @@ import { EditProjectPage } from './pages/edit-project-page';
 import { WriteProjectReviewPage } from './pages/write-project-review-page';
 import { PRIMARY_COLOR } from './util';
 import { ProjectLandingPage } from './pages/project-landing-page';
-import { ReviewsListPage } from './pages/reviews-list-page';
+import { ReviewsListPage } from './pages/reviews-list-page-2';
 // import { NotFoundComponent } from './components/common';
 
 const Routing = () => (
@@ -70,7 +70,7 @@ const theme = createMuiTheme({
       // default: '#f5f5f5'
       // default: '#ffffff'
       paper: '#f8f9f9',
-      default : '#ffffff'
+      default: '#ffffff'
     }
   }
 });
