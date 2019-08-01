@@ -4,7 +4,7 @@ import { basePropType } from '../basePropType';
 import { getProjectDocPath } from '../data/paths';
 import { ROUTES } from '../data/routes';
 import queryString from 'query-string';
-import { SmallProjectCardComponent } from '../components/small-project-card-component';
+import { SmallProjectCardComponent, smallProjectContainerStyles } from '../components/small-project-card-component';
 import { withAllProviders } from '../providers/all-providers';
 import { ProjectData } from '../interfaces';
 
@@ -21,7 +21,7 @@ export class LocalComponent extends Component<basePropType> {
             getRedirectRoute: (params) => { return `${ROUTES.PROJECTS_LIST_PAGE}/${this.props.urlUserId}/${this.props.urlProjectId}?startAfter=${params.projectId}` },
             loadLimit: 3,
             iteratorComponent: (data: { state: StateType<PaginationType> }) => (
-                <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                <div style={smallProjectContainerStyles}>
                     {data.state.paginationArray.map((arr) => {
                         return (
                             <SmallProjectCardComponent key={arr.projectId} {...this.props} projectData={arr} />

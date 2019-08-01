@@ -6,7 +6,7 @@ import { getProjectsCollectionPath, getProjectDocPath } from '../data/paths';
 import { ROUTES } from '../data/routes';
 import queryString from 'query-string';
 import UserCardComponent from '../components/user-card-component';
-import { SmallProjectCardComponent } from '../components/small-project-card-component';
+import { SmallProjectCardComponent, smallProjectContainerStyles } from '../components/small-project-card-component';
 import { withAllProviders } from '../providers/all-providers';
 
 export class LocalComponent extends Component<basePropType> {
@@ -22,13 +22,13 @@ export class LocalComponent extends Component<basePropType> {
                 <UserCardComponent {...this.props} userId={this.props.urlUserId || this.props.firebase.auth.currentUser!.uid}></UserCardComponent>
             ),
             iteratorComponent: (data: { state: StateType<ProjectData> }) => (
-                <React.Fragment>
+                <div style={smallProjectContainerStyles}>
                     {data.state.paginationArray.map((arr) => {
                         return (
                             <SmallProjectCardComponent key={arr.projectId} {...this.props} projectData={arr} />
                         )
                     })}
-                </React.Fragment>
+                </div>
             )
         }
     }

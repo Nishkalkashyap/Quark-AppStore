@@ -9,6 +9,7 @@ import { isEqual } from 'lodash';
 import { handleFirebaseError } from '../util';
 import Rating from '@material-ui/lab/Rating';
 import moment from 'moment';
+import { StandardProperties } from 'csstype';
 
 const useStyles = makeStyles(
     createStyles({
@@ -20,6 +21,12 @@ const useStyles = makeStyles(
         },
     }),
 );
+
+export const smallProjectContainerStyles: StandardProperties = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap'
+}
 
 export function SmallProjectCardComponent(props: basePropType & { projectData: ProjectData }) {
 
@@ -40,7 +47,7 @@ export function SmallProjectCardComponent(props: basePropType & { projectData: P
     });
 
     return (
-        <Card className={classes.card} style={{ minWidth: '300px', margin: '20px 30px' }}>
+        <Card className={classes.card} style={{ minWidth: '300px',maxWidth : '400px',flexGrow : 1, margin: '20px 30px' }}>
             <CardHeader
                 avatar={
                     <Avatar aria-label="recipe">
