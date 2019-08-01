@@ -15,6 +15,7 @@ export function handleFirebaseError(props: basePropType, err: any, message: stri
     if (err.message && typeof err.message == 'string') {
         props.enqueueSnackbar(err.message, { variant: 'error' });
     }
+    console.error(err);
 }
 
 export function getRandomId() {
