@@ -19,7 +19,7 @@ import changePasswordPage from './pages/change-password-page';
 // import { ProjectsListPage } from './pages/project-list-page';
 import { ProjectsListPage } from './pages/project-list-page-2';
 import { CreateNewProjectPage } from './pages/create-new-project-page';
-import { ReleaseListPage } from './pages/release-list-page-2';
+import { ReleaseListPage } from './pages/release-list-page';
 import { NotFoundComponent } from './components/common-components';
 import { PageContainer } from './components/page-container';
 import MainBgComponent from './components/main-background-component';
