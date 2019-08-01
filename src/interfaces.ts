@@ -39,7 +39,11 @@ export type allCategories =
     'Social Networking' |
     'Sports' |
     'Travel' |
-    'Utilities'
+    'Utilities' | 
+
+    'Tutorial'|
+    'Example'
+    ;
 
 export interface ProjectStats {
     numberOfDownloads?: number;

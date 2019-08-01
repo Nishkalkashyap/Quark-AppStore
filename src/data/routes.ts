@@ -5,6 +5,7 @@
 // }
 
 export const ROUTES = {
+    // LANDING_PAGE: '/',
     LANDING_PAGE: '/',
     DASHBOARD_PAGE: '/dashboard',
     SIGN_UP: '/signup',

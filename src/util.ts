@@ -74,7 +74,10 @@ export const allProjectCategories: allCategories[] = [
     'Social Networking',
     'Sports',
     'Travel',
-    'Utilities'
+    'Utilities',
+    
+    'Tutorial',
+    'Example'
 ]
 
 export function downloadReleaseItem(props: basePropType & { release: ReleaseItem; filename: string }) {
