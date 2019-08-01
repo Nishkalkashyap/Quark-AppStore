@@ -13,20 +13,20 @@ html {
   height: 100vh;
 }
 
-/* #root {
-  width: 100%;
+#root,
+.makeStyles-root-1 {
   height: 100%;
-  overflow: hidden;
-} */
+}
 
 :root {
-  /* --border-color: rgba(0, 0, 0, 0.23); */
-  --border-color: rgba(0, 0, 0, 0);
-  --card-color: #ffffff;
+  --border-color: rgba(0, 0, 0, 0.03);
+  --paper-color: #f8f9f9;
+  --bg-color : #ffffff;
 }
 
 .MuiDrawer-paperAnchorDockedLeft {
-  border-color: var(--border-color) !important;
+  border-right: solid 1px var(--border-color) !important;
+  /* border-right: none !important; */
 }
 
 ul.thumbs.animated {

@@ -101,6 +101,5 @@ const SidebarContainerStyle: StandardProperties = {
     flexDirection: 'column',
     flexWrap: 'nowrap',
     width: '70px',
-    height: '100%',
-    borderRight: `1px solid var(--border-color)`
+    height: '100%'
 }

@@ -137,7 +137,7 @@ export function PageContainer(props: basePropType & { children: any }) {
                 className={clsx(classes.appBar, {
                     [classes.appBarShift]: open,
                 })}
-                style={{ backgroundColor: '#ffffff', color: '#333333', borderBottom: 'solid 1px var(--border-color)' }}
+                style={{ backgroundColor: 'var(--bg-color)', color: '#333333', borderBottom: 'solid 1px var(--border-color)' }}
             // style={{backgroundColor : '#100e17', color : PRIMARY_COLOR}}
             >
                 {_showProgressBar && <LinearProgress style={{ position: 'absolute', width: '100%', top: '0px', height: '2px' }} />}
