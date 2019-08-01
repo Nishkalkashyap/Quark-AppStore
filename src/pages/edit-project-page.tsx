@@ -25,7 +25,7 @@ interface StateType {
 }
 
 const FILE_UPLOAD_LIMIT = 10000000;
-const ALLOWED_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif'];
+const ALLOWED_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.mp4'];
 class LocalComponent extends Component<basePropType, Partial<StateType>> {
 
     INITIAL_STATE: StateType = {
@@ -275,7 +275,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
                                         <Typography color="textSecondary"> Existing images</Typography>
                                         <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto' }}>
                                             {images.map((img, index) => (
-                                                <ImageComponent key={img.url + index} img={img.url} index={index} onDelete={() => this.deleteCloudImage(img.url)} coverUrl={this.state.projectData.coverImageUrl} makeCover={() => this.setCoverImage(img.url)} />
+                                                <ImageComponent filename={img.url} key={img.url + index} img={img.url} index={index} onDelete={() => this.deleteCloudImage(img.url)} coverUrl={this.state.projectData.coverImageUrl} makeCover={() => this.setCoverImage(img.url)} />
                                             ))}
                                         </div>
                                     </Paper>}
@@ -286,7 +286,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
                                             {Object.keys(filesToUpload).map((file, index) => {
                                                 const url = URL.createObjectURL(new Blob([filesToUpload[file].buffer]));
                                                 return (
-                                                    <ImageComponent key={url + index} img={url} index={index} onDelete={() => this.deleteLocalImage(file)} />
+                                                    <ImageComponent filename={file} key={url + index} img={url} index={index} onDelete={() => this.deleteLocalImage(file)} />
                                                 )
                                             })}
                                         </div>
@@ -311,8 +311,8 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
     }
 }
 
-const ImageComponent = (props: { img: string, index: number, onDelete: Function, coverUrl?: string, makeCover?: Function }) => {
-    const { img, index, onDelete, makeCover } = props;
+const ImageComponent = (props: { img: string, filename: string, index: number, onDelete: Function, coverUrl?: string, makeCover?: Function }) => {
+    const { img, index, onDelete, makeCover, filename } = props;
     const classes = useStyles();
     const isCover = img === props.coverUrl;
     // const coverStyles: StandardProperties = { border: `solid 1px ${isCover ? 'var(--ion-color-primary)' : 'var(--border-color)'}` };
@@ -332,7 +332,8 @@ const ImageComponent = (props: { img: string, index: number, onDelete: Function,
                     </Button>
                 </ButtonGroup>
                 <Paper elevation={4} className={classes.paper} style={{ position: 'relative' }}>
-                    <img src={img} alt="" width="200px" style={{ margin: 'auto', borderRadius: '4px' }} />
+                    {filename.includes('.mp4') && <video src={img} autoPlay loop muted width="200px" style={{ margin: 'auto', borderRadius: '4px' }} ></video>}
+                    {!filename.includes('.mp4') && <img src={img} alt="" width="200px" style={{ margin: 'auto', borderRadius: '4px' }} />}
                 </Paper>
             </div>
         </Zoom>

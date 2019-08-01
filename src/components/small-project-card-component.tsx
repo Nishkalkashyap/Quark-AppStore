@@ -59,9 +59,16 @@ export function SmallProjectCardComponent(props: basePropType & { projectData: P
             />
             <CardActionArea onClick={() => props.history.push(`${ROUTES.PROJECT_PAGE}/${projectData.userId}/${projectData.projectId}`)}>
                 <CardMedia
+                    component={(projectData.coverImageUrl || logo).includes('.mp4')? "video" : 'img'}
                     className={classes.media}
                     image={projectData.coverImageUrl || logo}
                     title={projectData.tagline}
+                    
+                    autoPlay
+                    muted
+                    loop
+                    style={{minHeight : '200px'}}
+
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
