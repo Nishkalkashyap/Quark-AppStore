@@ -2,7 +2,9 @@ import { basePropType } from "./basePropType";
 import { useState } from "react";
 import download from 'downloadjs';
 import { StandardProperties } from "csstype";
-import { allCategories } from "./interfaces";
+import { allCategories, ProjectData, ReleaseItem } from "./interfaces";
+import { getProjectReleaseDocPath, getProjectStatsDocPath } from "./data/paths";
+import firebase from "firebase";
 
 export const PRIMARY_COLOR = '#055af9';
 
@@ -69,3 +71,21 @@ export const allProjectCategories: allCategories[] = [
     'Travel',
     'Utilities'
 ]
+
+export function downloadReleaseItem(props: basePropType & { release: ReleaseItem; filename: string }) {
+    const { filename, isOwner } = props;
+    const releaseId = props.release.releaseId;
+    props.firebase.storage.ref(`${getProjectReleaseDocPath(props.urlUserId!, props.urlProjectId!, releaseId)}/${filename}`).getDownloadURL()
+        .then((val) => {
+            // return downloadFile(val, filename);
+            window.open(val);
+        })
+        .then(() => {
+            if (!isOwner) {
+                return props.firebase.firestore.doc(getProjectStatsDocPath(props.urlUserId!, props.urlProjectId!)).set(({
+                    numberOfDownloads: firebase.firestore.FieldValue.increment(1) as any
+                } as Partial<ProjectData>), { merge: true });
+            }
+        })
+        .catch(err => handleFirebaseError(err, props, 'Failed to fetch download url'));
+}

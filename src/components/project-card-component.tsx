@@ -15,6 +15,7 @@ import RateReviewIcon from '@material-ui/icons/RateReview';
 import UpdateDownloadIcon from '@material-ui/icons/Update';
 import moment from 'moment';
 import { StandardProperties } from 'csstype';
+import { downloadReleaseItem } from '../util';
 
 export const ProjectCardComponent = (LocalComponent);
 
@@ -65,10 +66,10 @@ function LocalComponent(props: basePropType & {
                         </Typography>
                     </CardContent>
                     {(latestRelease && latestRelease.assets) && <CardContent style={{ minWidth: '200px' }}>
-                        {projectFile && <Button variant="contained" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%', boxShadow: 'none' }}>
+                        {projectFile && <Button variant="contained" onClick={() => downloadReleaseItem({ ...props, release: latestRelease, filename: projectFile! })} color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%', boxShadow: 'none' }}>
                             Download project
                         </Button>}
-                        {buildFile && <Button variant="outlined" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%' }}>
+                        {buildFile && <Button variant="outlined" onClick={() => downloadReleaseItem({ ...props, release: latestRelease, filename: buildFile! })} color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%' }}>
                             Download build
                         </Button>}
                         <Button variant="text" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%' }} onClick={() => props.history.push(`${ROUTES.RELEASE_LIST_PAGE}/${props.urlUserId}/${props.urlProjectId}`)}>

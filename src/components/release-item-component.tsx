@@ -8,7 +8,7 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import { getProjectReleaseDocPath, getProjectStatsDocPath } from '../data/paths';
 import firebase from 'firebase';
-import { handleFirebaseError } from '../util';
+import { handleFirebaseError, downloadReleaseItem } from '../util';
 import { dialog } from './header-component';
 import { StandardProperties } from 'csstype';
 
@@ -43,11 +43,9 @@ const useStylesList = makeStyles(
     }),
 );
 
-
-type ReleaseComponentType = basePropType & {
+export function ReleaseItemComponent(props: basePropType & {
     release: ReleaseItem
-}
-export function ReleaseItemComponent(props: ReleaseComponentType) {
+}) {
     const classes = useStylesList();
     const { release, isOwner } = props;
 
@@ -115,6 +113,16 @@ export function ReleaseItemComponent(props: ReleaseComponentType) {
                     <DownloadsComponent {...props} />
                 </CardContent>
                 <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    {(buildFile || projectFile) &&
+                        <ButtonGroup size="small" color="primary" variant="outlined" aria-label="small outlined button group">
+                            {(projectFile) && <Button onClick={() => downloadReleaseItem({ ...props, filename: projectFile })}>
+                                Download Project
+                        </Button>}
+                            {(buildFile) && <Button onClick={() => downloadReleaseItem({ ...props, filename: buildFile })}>
+                                Download Build
+                        </Button>}
+                        </ButtonGroup>
+                    }
                     {(isOwner) &&
                         <ButtonGroup size="small" variant="outlined" aria-label="small outlined button group">
                             <Button onClick={() => showEditReleaseNotesDialog(props.urlUserId!, release.projectId, release.releaseId, release.notes)}>
@@ -127,23 +135,13 @@ export function ReleaseItemComponent(props: ReleaseComponentType) {
                             </Button>
                         </ButtonGroup>
                     }
-                    {(buildFile || projectFile) &&
-                        <ButtonGroup size="small" color="primary" variant="outlined" aria-label="small outlined button group">
-                            {(projectFile) && <Button onClick={() => downloadReleaseItem({ ...props, filename: projectFile })}>
-                                Download Project
-                        </Button>}
-                            {(buildFile) && <Button onClick={() => downloadReleaseItem({ ...props, filename: buildFile })}>
-                                Download Build
-                        </Button>}
-                        </ButtonGroup>
-                    }
                 </CardActions>
             </Card>
         </React.Fragment>
     )
 }
 
-const DownloadsComponent = (props: ReleaseComponentType) => {
+const DownloadsComponent = (props: basePropType & { release: ReleaseItem }) => {
     const { release } = props;
     return (release.assets && release.assets.length) ? (
         <React.Fragment>
@@ -167,22 +165,4 @@ const DownloadsComponent = (props: ReleaseComponentType) => {
             </ExpansionPanel>
         </React.Fragment>
     ) : (<React.Fragment></React.Fragment>)
-}
-
-function downloadReleaseItem(props: ReleaseComponentType & { filename: string }) {
-    const { filename, isOwner } = props;
-    const releaseId = props.release.releaseId;
-    props.firebase.storage.ref(`${getProjectReleaseDocPath(props.urlUserId!, props.urlProjectId!, releaseId)}/${filename}`).getDownloadURL()
-        .then((val) => {
-            // return downloadFile(val, filename);
-            window.open(val);
-        })
-        .then(() => {
-            if (!isOwner) {
-                return props.firebase.firestore.doc(getProjectStatsDocPath(props.urlUserId!, props.urlProjectId!)).set(({
-                    numberOfDownloads: firebase.firestore.FieldValue.increment(1) as any
-                } as Partial<ProjectData>), { merge: true });
-            }
-        })
-        .catch(err => handleFirebaseError(err, props, 'Failed to fetch download url'));
 }
