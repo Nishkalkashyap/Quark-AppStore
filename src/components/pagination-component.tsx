@@ -18,10 +18,11 @@ export interface StateType<T> {
 
 export interface Pagination<T> {
     pagination: {
-        getCollectionRef: () => firebase.firestore.CollectionReference;
+        getCollectionRef: () => firebase.firestore.CollectionReference | firebase.firestore.Query;
         getDocRef: () => firebase.firestore.DocumentReference;
         getRedirectRoute: (params: T) => string;
         loadLimit: number;
+        isGroupQuery?: boolean,
         upperComponent?: any;
         // upperComponent: () => React.ComponentType<basePropType>;
         iteratorComponent?: any;
@@ -63,7 +64,7 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
             const topListener = this.props.pagination.getDocRef()
                 .onSnapshot((snap) => {
 
-                    if (!snap.exists) {
+                    if (!snap.exists && !this.props.pagination.isGroupQuery) {
                         this.props.history.push(ROUTES.NOT_FOUND);
                     }
 
@@ -164,8 +165,8 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
         return (
             <React.Fragment>
                 <Container maxWidth="lg">
-                    {<this.props.pagination.upperComponent state={this.state} />}
-                    {<this.props.pagination.iteratorComponent state={this.state} />}
+                    {this.props.pagination.upperComponent && <this.props.pagination.upperComponent state={this.state} />}
+                    {this.props.pagination.iteratorComponent && <this.props.pagination.iteratorComponent state={this.state} />}
                 </Container>
                 <Container maxWidth="sm" style={{ marginTop: '100px' }}>
                     <ButtonGroup

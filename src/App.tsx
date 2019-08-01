@@ -28,6 +28,7 @@ import { WriteProjectReviewPage } from './pages/write-project-review-page';
 import { PRIMARY_COLOR } from './util';
 import { ProjectLandingPage } from './pages/project-landing-page';
 import { ReviewsListPage } from './pages/reviews-list-page-2';
+import { BrowseProjectsPage } from './pages/browse-projects-list-page';
 // import { NotFoundComponent } from './components/common';
 
 const Routing = () => (
@@ -45,7 +46,8 @@ const Routing = () => (
 
     <Route exact path={ROUTES.PASSWORD_FORGET_PAGE} component={ForgotPasswordPage} />
     <Route exact path={ROUTES.CHANGE_PASSWORD_PAGE} component={changePasswordPage} />
-    <Route exact path={ROUTES.DASHBOARD_PAGE} component={Dashboard} />
+    {/* <Route exact path={ROUTES.DASHBOARD_PAGE} component={Dashboard} /> */}
+    <Route exact path={ROUTES.DASHBOARD_PAGE} component={BrowseProjectsPage} />
 
     <Route exact path={`${ROUTES.NEW_RELEASE}/${SLUGS.NEW_RELEASE}/${POST_SLUG.NEW_RELEASE}`} component={CreateNewRelease} />
     <Route exact path={`${ROUTES.PROJECT_PAGE}/${SLUGS.Project}`} component={ProjectLandingPage} />

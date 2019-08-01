@@ -16,13 +16,14 @@ export class LocalComponent extends Component<basePropType> {
 
     pagination: Pagination<PaginationType> = {
         pagination: {
-            getCollectionRef: () => { return this.firestore.collection(getProjectsCollectionPath(this.props.urlProjectId || this.props.firebase.auth.currentUser!.uid)) },
+            isGroupQuery : true,
+            getCollectionRef: () => { return this.firestore.collectionGroup('projects') },
             getDocRef: () => { return this.firestore.doc(getProjectDocPath(this.props.urlProjectId || this.props.firebase.auth.currentUser!.uid, queryString.parse(this.props.history.location.search)['startAfter'] as string)) },
             getRedirectRoute: (params) => { return `${ROUTES.PROJECTS_LIST_PAGE}/${this.props.urlUserId}/${this.props.urlProjectId}?startAfter=${params.projectId}` },
             loadLimit: 3,
-            upperComponent: (data: { state: StateType<PaginationType> }) => (
-                <UserCardComponent {...this.props} userId={this.props.urlUserId || this.props.firebase.auth.currentUser!.uid}></UserCardComponent>
-            ),
+            // upperComponent: (data: { state: StateType<PaginationType> }) => (
+            //     <UserCardComponent {...this.props} userId={this.props.urlUserId || this.props.firebase.auth.currentUser!.uid}></UserCardComponent>
+            // ),
             iteratorComponent: (data: { state: StateType<PaginationType> }) => (
                 <React.Fragment>
                     {data.state.paginationArray.map((arr) => {
@@ -45,6 +46,6 @@ export class LocalComponent extends Component<basePropType> {
     }
 }
 
-const ProjectsListPage = withAllProviders(LocalComponent);
-export { ProjectsListPage }
+const BrowseProjectsPage = withAllProviders(LocalComponent);
+export { BrowseProjectsPage }
 
