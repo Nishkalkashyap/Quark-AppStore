@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { Container, List, Button, ButtonGroup, CardActions, Card, Typography, Divider } from '@material-ui/core';
+import { Container, List, Button, ButtonGroup, CardActions } from '@material-ui/core';
 import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
 import { ROUTES } from '../data/routes';
 import queryString from 'query-string';
-import { getProjectDocPath, getProjectStatsDocPath, getProjectReviewsCollectionPath, getProjectReviewDocPath } from '../data/paths';
+import { getProjectReviewsCollectionPath, getProjectReviewDocPath } from '../data/paths';
 import { handleFirebaseError, scrollToTop } from '../util';
-import { ProjectData, ProjectStats, ProjectReviewInterface } from '../interfaces';
+import { ProjectReviewInterface } from '../interfaces';
 import * as firebase from 'firebase';
 import { progress } from '../components/header-component';
 import { ProjectCardComponent } from '../components/project-card-component';
@@ -19,8 +19,6 @@ type extraState = {}
 
 interface StateType extends extraState {
     paginationArray: PaginationType[],
-    projectData: ProjectData,
-    projectStats: ProjectStats,
     loadLimit: number,
     nextExists: boolean,
     previousExists: boolean,
@@ -37,37 +35,11 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
 
     constructor(props: basePropType) {
         super(props);
-        this._setProjectData();
         this._setPaginationArray();
-    }
-
-    // only this could be different
-    private _setProjectData() {
-        this.listeners.push(
-            this.props.firebase.firestore.doc(getProjectDocPath(this.props.urlUserId!, this.props.urlProjectId!))
-                .onSnapshot((snap) => {
-                    if (!snap.exists) {
-                        this.props.history.push(ROUTES.NOT_FOUND);
-                        return;
-                    }
-                    this.setState({ projectData: snap.data() as ProjectData });
-                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project data')))
-
-        this.listeners.push(
-            this.props.firebase.firestore.doc(getProjectStatsDocPath(this.props.urlUserId!, this.props.urlProjectId!))
-                .onSnapshot((snap) => {
-                    if (!snap.exists) {
-                        return;
-                    }
-                    this.setState({ projectStats: snap.data() as ProjectStats });
-                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project stats'))
-        )
     }
 
     state: StateType = {
         paginationArray: [],
-        projectData: {} as any,
-        projectStats: {} as any,
         loadLimit: 3,
         nextExists: false,
         previousExists: false,
@@ -195,8 +167,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         return (
             <React.Fragment>
                 <Container maxWidth="lg">
-                    {/* <ProjectCardComponent {...this.props} projectData={this.state.projectData} projectStats={this.state.projectStats} userId={this.props.urlUserId!}> */}
-                    <ProjectCardComponent {...this.props} projectId={this.state.projectData.projectId} userId={this.props.urlUserId!}>
+                    <ProjectCardComponent {...this.props} projectId={this.props.urlProjectId!} userId={this.props.urlUserId!}>
                         <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
                                 <Button onClick={() => this.props.history.push(`${ROUTES.PROJECT_PAGE}/${this.props.urlUserId}/${this.props.urlProjectId}`)}>
