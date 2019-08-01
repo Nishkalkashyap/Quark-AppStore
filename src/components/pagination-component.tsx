@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import { Container, Button, ButtonGroup } from '@material-ui/core';
-import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
 import { ROUTES } from '../data/routes';
 import queryString from 'query-string';
 import { handleFirebaseError, scrollToTop } from '../util';
 import * as firebase from 'firebase';
-import { progress } from '../components/header-component';
+import { progress } from './header-component';
 
 export interface StateType<T> {
     paginationArray: T[],
@@ -190,5 +189,5 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
     }
 }
 
-const PaginationPage = (LocalPaginationComponent);
-export { PaginationPage }
+const PaginationComponent = (LocalPaginationComponent);
+export { PaginationComponent }

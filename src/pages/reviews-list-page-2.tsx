@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
-import { PaginationPage, Pagination, StateType } from './pagination-page';
+import { PaginationComponent, Pagination, StateType } from '../components/pagination-component';
 import { basePropType } from '../basePropType';
 import { ProjectReviewInterface } from '../interfaces';
-import { getReleaseListCollectionPath, getProjectReleaseDocPath, getProjectReviewsCollectionPath, getProjectReviewDocPath } from '../data/paths';
+import { getProjectReviewsCollectionPath, getProjectReviewDocPath } from '../data/paths';
 import { ROUTES } from '../data/routes';
 import queryString from 'query-string';
 import { withAllProviders } from '../providers/all-providers';
 import { ProjectCardComponent } from '../components/project-card-component';
 import { CardActions, ButtonGroup, Button, Container, List } from '@material-ui/core';
-import { ReleaseItemComponent } from '../components/release-item-component';
 import ReviewItemComponent from '../components/review-item-component';
 
 type PaginationType = ProjectReviewInterface;
@@ -50,7 +49,7 @@ export class LocalComponent extends Component<basePropType> {
 
     render() {
         return (
-            <PaginationPage
+            <PaginationComponent
                 {...this.props}
                 {...this.pagination}
             />

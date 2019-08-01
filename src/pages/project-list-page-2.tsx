@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { PaginationPage, Pagination, StateType } from './pagination-page';
+import { PaginationComponent, Pagination, StateType } from '../components/pagination-component';
 import { basePropType } from '../basePropType';
 import { ProjectData } from '../interfaces';
 import { getProjectsCollectionPath, getProjectDocPath } from '../data/paths';
@@ -34,7 +34,7 @@ export class LocalComponent extends Component<basePropType> {
 
     render() {
         return (
-            <PaginationPage
+            <PaginationComponent
                 {...this.props}
                 {...this.pagination}
             />
