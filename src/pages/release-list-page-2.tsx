@@ -19,7 +19,7 @@ export class LocalComponent extends Component<basePropType> {
         pagination: {
             getCollectionRef: () => { return this.firestore.collection(getReleaseListCollectionPath(this.props.urlUserId!, this.props.urlProjectId!)) },
             getDocRef: () => { return this.firestore.doc(getProjectReleaseDocPath(this.props.urlUserId!, this.props.urlProjectId!, queryString.parse(this.props.history.location.search)['startAfter'] as string)) },
-            getRedirectRoute: (params) => { return `${ROUTES.PROJECTS_LIST_PAGE}/${this.props.urlUserId}/${this.props.urlProjectId}?startAfter=${params.projectId}` },
+            getRedirectRoute: (params) => { return `${ROUTES.RELEASE_LIST_PAGE}/${this.props.urlUserId}/${params.projectId}?startAfter=${params.releaseId}` },
             loadLimit: 10,
             upperComponent: (data: { state: StateType<PaginationType> }) => (
                 <ProjectCardComponent {...this.props} userId={this.props.urlUserId!} projectId={this.props.urlProjectId!}>
