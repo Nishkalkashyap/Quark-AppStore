@@ -34,7 +34,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "ts-node --skip-project ./scripts/hosting.ts"
+    "deploy": "ts-node --skip-project ./scripts/hosting.ts",
+    "bad": "npm run build && npm run deploy"
   },
   "eslintConfig": {
     "extends": "react-app"
