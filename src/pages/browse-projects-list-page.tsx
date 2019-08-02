@@ -44,7 +44,6 @@ export class LocalComponent extends Component<basePropType & { classes: any }, L
         pagination: {
             isGroupQuery: true,
             getCollectionRef: () => {
-                console.log(this.state.category);
                 return (() => {
                     if (this.state.category) {
                         return this.firestore.collectionGroup('projects').where('category', '==', this.state.category!)
