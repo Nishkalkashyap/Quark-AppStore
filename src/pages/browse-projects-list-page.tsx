@@ -67,7 +67,7 @@ export class LocalComponent extends Component<basePropType & { classes: any }, L
                     <Card style={Object.assign({ marginBottom: '100px' }, MainBgContainerStyles)} elevation={4}>
                         <MainBgComponent />
                         <div style={{ textAlign: 'center', margin: '80px 0px' }}>
-                            <Typography variant="h3" component="p">
+                            <Typography variant="h2" component="h1" color="inherit">
                                 Discover and share Quark projects
                             </Typography>
                             <Typography variant="body1" component="p" style={{ margin: '40px 0px' }}>

@@ -50,16 +50,16 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         drawerOpen: {
             width: drawerWidth,
-            transition: theme.transitions.create('width', {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
+            // transition: theme.transitions.create('width', {
+            //     easing: theme.transitions.easing.sharp,
+            //     duration: theme.transitions.duration.enteringScreen,
+            // }),
         },
         drawerClose: {
-            transition: theme.transitions.create('width', {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen,
-            }),
+            // transition: theme.transitions.create('width', {
+            //     easing: theme.transitions.easing.sharp,
+            //     duration: theme.transitions.duration.leavingScreen,
+            // }),
             overflowX: 'hidden',
             width: theme.spacing(7) + 1,
             [theme.breakpoints.up('sm')]: {
@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         content: {
             flexGrow: 1,
-            padding: theme.spacing(3),
+            paddingTop: theme.spacing(3),
         },
     }),
 );
@@ -183,7 +183,7 @@ export function PageContainer(props: basePropType & { children: any }) {
                     <Divider />
                     <List style={{ color: sidebarData.color }}>
                         {sidebarItems.map((item, index) => (
-                            <ListItem button key={item.label} onClick={() => {
+                            <ListItem button key={item.label} disableRipple={true} onClick={() => {
                                 if (item.clickRoute) {
                                     (props).history.push(item.clickRoute);
                                 }
