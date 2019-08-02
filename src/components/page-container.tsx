@@ -19,7 +19,7 @@ import { getSidebarItems } from './sidebar-component';
 import { LinearProgress, Button } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
 import { HeaderAvatarComponent } from './header-avatar-component';
-import { PRIMARY_COLOR } from '../util';
+import { PRIMARY_COLOR, SECONDARY_COLOR } from '../util';
 
 const drawerWidth = 240;
 
@@ -40,19 +40,8 @@ const useStyles = makeStyles((theme: Theme) =>
                 duration: theme.transitions.duration.leavingScreen,
             }),
         },
-        appBarShift: {
-            marginLeft: drawerWidth,
-            width: `calc(100% - ${drawerWidth}px)`,
-            transition: theme.transitions.create(['width', 'margin'], {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-        },
         menuButton: {
             marginRight: 36,
-        },
-        hide: {
-            display: 'none',
         },
         drawer: {
             width: drawerWidth,
@@ -116,7 +105,11 @@ export function PageContainer(props: basePropType & { children: any }) {
     );
 
     function handleDrawerOpen() {
-        setOpen(true);
+        if (open) {
+            setOpen(false);
+        } else {
+            setOpen(true);
+        }
     }
 
     function handleDrawerClose() {
@@ -140,11 +133,8 @@ export function PageContainer(props: basePropType & { children: any }) {
                 position="fixed"
                 color="primary"
                 elevation={0}
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
-                })}
+                className={clsx(classes.appBar)}
                 style={{ backgroundColor: 'var(--bg-color)', color: '#333333', borderBottom: 'solid 1px var(--border-color)', boxShadow: `0 4px 12px 0 rgba(0, 0, 0, 0.05)` }}
-            // style={{backgroundColor : '#100e17', color : PRIMARY_COLOR}}
             >
                 {_showProgressBar && <LinearProgress style={{ position: 'absolute', width: '100%', top: '0px', height: '2px' }} />}
                 <Toolbar>
@@ -153,11 +143,9 @@ export function PageContainer(props: basePropType & { children: any }) {
                         aria-label="open drawer"
                         onClick={handleDrawerOpen}
                         edge="start"
-                        className={clsx(classes.menuButton, {
-                            [classes.hide]: open,
-                        })}
+                        className={clsx(classes.menuButton)}
                     >
-                        <MenuIcon />
+                        {open ? <ChevronLeftIcon /> : <MenuIcon />}
                     </IconButton>
                     <HeaderComponent>
                         <Button variant="outlined" size="small" color="inherit" onClick={() => window.open('https://quarkjs.io')}>
