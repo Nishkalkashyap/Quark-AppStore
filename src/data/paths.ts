@@ -2,6 +2,10 @@ export function getDocument_userData(currentUserID: string) {
     return `Users/${currentUserID}/profile/userData`
 }
 
+export function getDocument_metaData(currentUserID: string) {
+    return `Users/${currentUserID}/profile/metaData`
+}
+
 export function getDocument_project(userId: string, projectId: string) {
     return `Users/${userId}/projects/${projectId}`
 }
