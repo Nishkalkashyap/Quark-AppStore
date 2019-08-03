@@ -17,14 +17,14 @@ export default function GenericFormComponent(props: GenericFormData) {
                         <Typography component="h1" variant="h3">
                             {props.headingText}
                         </Typography>
-                        <form className={classes.form} onSubmit={() => props.onSubmit()}>
+                        <form className={classes.form} onSubmit={props.onSubmit as any}>
                             <Grid container spacing={2}>
                                 {
-                                    Object.keys(props.data).map((key) => {
+                                    Object.keys(props.data).map((key, index) => {
 
                                         if (props.data[key].component) {
                                             const CurrentComponent = props.data[key].component;
-                                            return (<CurrentComponent />)
+                                            return (<CurrentComponent key={key} />)
                                         }
 
                                         return (
@@ -33,8 +33,9 @@ export default function GenericFormComponent(props: GenericFormData) {
                                                     variant="outlined"
                                                     fullWidth
 
-                                                    {...props.data[key]}
+                                                    {...props.data[key].formData}
                                                     name={key}
+                                                    autoFocus={index == 0}
 
                                                     onChange={(e) => props.onChange(e)}
                                                 />

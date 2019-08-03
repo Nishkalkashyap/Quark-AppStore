@@ -64,97 +64,56 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
     }
 
     render() {
-        const classes = this.props.classes!;
         const { rating, title, content } = this.state.review;
         const isInvalid = !title || !content || !rating;
 
         const data: GenericFormData['data'] = {
+            hello: {
+                component: () => {
+                    return (
+                        <Box component="fieldset" mb={3} borderColor="transparent">
+                            <Typography component="legend">Review</Typography>
+                            <Rating
+                                name="rating"
+                                value={rating ? Number(rating) : 0}
+                                onChange={this.onChange.bind(this)}
+                            />
+                        </Box>
+                    )
+                }
+            },
             title: {
-                label: "Title",
-                type: "text",
-                value: title || ''
+                formData: {
+                    label: "Title",
+                    type: "text",
+                    required: true,
+                    value: title || ''
+                }
+            },
+            content: {
+                formData: {
+                    label: "Content",
+                    type: "text",
+                    required: true,
+                    value: content || '',
+
+                    multiline: true,
+                    rows: "4"
+                }
             }
         }
 
-        if (true) {
-            return (
-                <GenericFormComponent
-                    headingText="Review"
-                    icon={RateReviewIcon}
-                    isInvalid={isInvalid}
-                    onChange={this.onChange.bind(this)}
-                    onSubmit={this.onSubmit.bind(this)}
-                    submitButtonText="Submit"
-                    data={data}
-                />
-            )
-        }
-
         return (
-            <Container component="section" maxWidth="sm">
-                <Card style={{ padding: '10px 40px' }}>
-                    <div className={classes.paper}>
-                        <Avatar className={classes.avatar}>
-                            <RateReviewIcon />
-                        </Avatar>
-                        <Typography component="h1" variant="h3">
-                            Review
-                        </Typography>
-                        <form className={classes.form} onSubmit={this.onSubmit.bind(this)}>
-                            <Box component="fieldset" mb={3} borderColor="transparent">
-                                <Typography component="legend">Review</Typography>
-                                <Rating
-                                    name="rating"
-                                    value={rating ? Number(rating) : 0}
-                                    onChange={this.onChange.bind(this)}
-                                />
-                            </Box>
-                            <TextField
-                                variant="outlined"
-                                margin="normal"
-                                required
-                                fullWidth
-
-                                label="Title"
-                                name="title"
-                                type="text"
-                                autoFocus
-
-                                value={title || ''}
-                                onChange={this.onChange.bind(this)}
-                            />
-                            <TextField
-                                variant="outlined"
-                                margin="normal"
-                                required
-                                fullWidth
-
-                                label="Content"
-                                name="content"
-                                type="text"
-
-                                multiline
-                                rows="4"
-
-                                value={content || ''}
-                                onChange={this.onChange.bind(this)}
-
-                            />
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                                disabled={isInvalid}
-                            >
-                                Submit
-                            </Button>
-                        </form>
-                    </div>
-                </Card>
-            </Container>
-        )
+            <GenericFormComponent
+                headingText="Review"
+                icon={RateReviewIcon}
+                isInvalid={isInvalid}
+                onChange={this.onChange.bind(this)}
+                onSubmit={this.onSubmit.bind(this)}
+                submitButtonText="Submit"
+                data={data}
+            />
+        );
     }
 }
 

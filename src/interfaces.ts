@@ -39,9 +39,9 @@ export type allCategories =
     'Social Networking' |
     'Sports' |
     'Travel' |
-    'Utilities' | 
+    'Utilities' |
 
-    'Tutorial'|
+    'Tutorial' |
     'Example'
     ;
 
@@ -104,18 +104,15 @@ export interface UserProfileInterface {
 export interface GenericFormData {
     data: {
         [key: string]: ({
-            label: string;
-            type: string;
-            value: string;
-
-            autoComplete?: string;
-            // variant?: "filled" | "outlined" | "standard" | undefined;
-            // variant: any
-            required?: boolean;
-
-            multiline?: boolean
-            rows?: string;
-
+            formData?: {
+                label: string;
+                type: string;
+                value: string;
+                required: boolean;
+                autoComplete?: string;
+                multiline?: boolean
+                rows?: string;
+            }
             component?: any
         }),
     }
