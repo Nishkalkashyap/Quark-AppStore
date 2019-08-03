@@ -1,5 +1,7 @@
 import React from 'react';
 import { getSvgs } from '../data/svgs';
+/* eslint import/no-webpack-loader-syntax: off */
+import '!!style-loader!css-loader!stylus-loader!./../styles/mixins.styl';
 
 export function SwagBackgroundComponent() {
 

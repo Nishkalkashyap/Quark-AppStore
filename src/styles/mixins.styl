@@ -1,0 +1,47 @@
+random(a,b)
+  return math(math(0, 'random')*(b - a + 1) + a, 'floor')
+
+makeMeFly(duration=5s, delay=0s, negative=-50px, positive=50px)
+    animation-duration: duration;
+    animation-timing-function: ease-in-out;
+    animation-delay: delay;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-fill-mode: none;
+    animation-play-state: running;
+    $rand = myMove + random(10,1000000);
+    animation-name: $rand;
+    @keyframes {$rand}
+        0% 
+            transform: translateY(negative);
+            -webkit-transform: translateY(negative);
+            -moz-transform: translateY(negative);
+            -o-transform: translateY(negative);
+        100% 
+            transform: translateY(positive);
+            -webkit-transform: translateY(positive);
+            -moz-transform: translateY(positive);
+            -o-transform: translateY(positive);
+
+makeMeRotate(duration=5s, delay=0s, deg1=0deg, deg2=359deg)
+    $rand = myMove + random(10,1000000);
+    animation-name: $rand;
+    animation: duration linear delay infinite normal none running $rand;
+    animation-timing-function: ease-in-out;
+
+    @keyframes {$rand} 
+        from {
+            transform: rotate(deg1);
+        }
+        to {
+            transform: rotate(deg2);
+        }
+
+.random-svg.box.right
+    makeMeRotate(12s, 0s, 0deg, 360deg)
+
+.random-svg.hexa
+    makeMeRotate(12s, 0s, 0deg, 360deg)
+
+.random-svg.triangle
+    makeMeRotate(5s, 0s, 0deg, 360deg)
