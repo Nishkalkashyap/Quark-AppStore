@@ -44,6 +44,7 @@ class LocalComponent extends Component<GenericFormData & { classes: any }> {
                                                     <TextField
                                                         variant="outlined"
                                                         fullWidth
+                                                        margin="normal"
 
                                                         {...props.data[key].formData}
                                                         name={key}
@@ -69,6 +70,7 @@ class LocalComponent extends Component<GenericFormData & { classes: any }> {
                                 </Grid>
                             </form>
                         </div>
+                        {props.postSubmit}
                     </Card>
                 </Container>
             </div>

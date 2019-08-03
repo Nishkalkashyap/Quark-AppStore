@@ -122,4 +122,5 @@ export interface GenericFormData {
     icon: any;
     submitButtonText: string;
     headingText: string;
+    postSubmit ?: JSX.Element;
 }
