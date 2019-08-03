@@ -17,6 +17,8 @@ import Container from '@material-ui/core/Container';
 import { withSnackbar } from 'notistack';
 import { useStyles } from '../components/common-components';
 import { Card } from '@material-ui/core';
+import { GenericFormData } from '../interfaces';
+import GenericFormComponent from '../components/generic-form-component';
 
 const SignInPage = () => <SignInForm />;
 
@@ -75,76 +77,50 @@ const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof IN
     const { email, password } = obj.state;
     const isInvalid = password === '' || email === '' || password.length < 8;
 
+    const data: GenericFormData['data'] = {
+        email: {
+            formData: {
+                label: "Email Address",
+                type: "email",
+                required: true,
+                value: email,
+
+                autoComplete: "email"
+            }
+        },
+        password: {
+            formData: {
+                label: "Password",
+                type: "password",
+                required: true,
+                value: password,
+
+                autoComplete: "password"
+            }
+        }
+    }
+
     return (
-        <Container component="section" maxWidth="sm">
-            <Card style={{ padding: '10px 40px' }}>
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h3">
-                    Sign in
-                </Typography>
-                <form className={classes.form} onSubmit={obj.onSubmit}>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        type="email"
-                        autoFocus
-
-                        value={email}
-                        onChange={obj.onChange}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-
-                        id="password"
-                        label="Password"
-                        name="password"
-                        autoComplete="current-password"
-                        type="password"
-
-                        value={password}
-                        onChange={obj.onChange}
-
-                    />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        disabled={isInvalid}
-                    >
-                        Sign In
-                    </Button>
-                    <Grid container>
-                        <Grid item xs>
-                            <PasswordForgetLink></PasswordForgetLink>
-                        </Grid>
-                        <Grid item>
-                            <SignUpLink></SignUpLink>
-                        </Grid>
+        <GenericFormComponent
+            headingText="Sign in"
+            icon={LockOutlinedIcon}
+            isInvalid={isInvalid}
+            onChange={obj.onChange}
+            onSubmit={obj.onSubmit}
+            submitButtonText="Sign In"
+            data={data}
+            postSubmit={(
+                <Grid container>
+                    <Grid item xs>
+                        <PasswordForgetLink></PasswordForgetLink>
                     </Grid>
-                </form>
-                {/* <ButtonGroup fullWidth aria-label="full width outlined button group" style={{marginTop : '30px'}}>
-                    <Button>Google</Button>
-                    <Button>GitHub</Button>
-                </ButtonGroup> */}
-            </div>
-            </Card>
-        </Container>
-    )
+                    <Grid item>
+                        <SignUpLink></SignUpLink>
+                    </Grid>
+                </Grid>
+            )}
+        />
+    );
 };
 
 const SignInForm = withRouter(withFirebase(withSnackbar(SignInFormBase as any)));

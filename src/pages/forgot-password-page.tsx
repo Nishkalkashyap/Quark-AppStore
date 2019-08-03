@@ -6,10 +6,8 @@ import { ROUTES } from '../data/routes';
 import { SignUpLink } from './signup-page';
 import { basePropType } from "../basePropType";
 import { default as MaterialLink } from '@material-ui/core/Link';
-import { TextField, Button, Container, Avatar, Typography, Card } from '@material-ui/core';
 import { withSnackbar } from 'notistack';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { useStyles } from '../components/common-components';
 import { GenericFormData } from '../interfaces';
 import GenericFormComponent from '../components/generic-form-component';
 
@@ -73,9 +71,6 @@ const ForgotPasswordElement = (props: { onSubmit: any, onChange: any, state: typ
 
                 autoComplete: "email"
             }
-        },
-        backButton: {
-            component: (<SignUpLink></SignUpLink>)
         }
     }
 
@@ -88,6 +83,7 @@ const ForgotPasswordElement = (props: { onSubmit: any, onChange: any, state: typ
             onSubmit={props.onSubmit}
             submitButtonText="Send password reset email"
             data={data}
+            postSubmit={<SignUpLink></SignUpLink>}
         />
     );
 }
