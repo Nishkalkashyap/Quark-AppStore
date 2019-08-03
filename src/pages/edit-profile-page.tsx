@@ -13,12 +13,13 @@ import { withAllProviders } from '../providers/all-providers';
 import { TextField, Card } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
 import { handleFirebaseError } from '../util';
-import { UserProfileInterface } from '../interfaces';
+import { UserProfileInterface, GenericFormData } from '../interfaces';
+import GenericFormComponent from '../components/generic-form-component';
 
 
 const EditProfilePage = () => <EditProfile />
 
-const INITIAL_STATE : UserProfileInterface = {
+const INITIAL_STATE: UserProfileInterface = {
     name: '',
     bio: '',
     location: '',
@@ -53,6 +54,8 @@ class EditProfileBase extends Component<basePropType> {
     state: typeof INITIAL_STATE;
 
     onSubmit = (event: any) => {
+        event.preventDefault();
+        
         const { name, bio, location, site } = this.state;
 
         const currentUser = this.props.firebase.auth.currentUser!;
@@ -72,8 +75,6 @@ class EditProfileBase extends Component<basePropType> {
             console.error(err);
             this.props.enqueueSnackbar('Failed to update profile', { variant: 'error' });
         });
-
-        event.preventDefault();
     }
 
     onChange = (event: any) => {
@@ -87,93 +88,63 @@ class EditProfileBase extends Component<basePropType> {
     }
 }
 
-const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INITIAL_STATE }) => {
-    const classes = useStyles();
+const SignUpComponent = (props: { onSubmit: any, onChange: any, state: typeof INITIAL_STATE }) => {
     const {
         name,
         bio,
         location,
         site
-    } = obj.state;
+    } = props.state;
+
+    const data: GenericFormData['data'] = {
+        name: {
+            formData: {
+                label: "Name",
+                type: "text",
+                required: false,
+                value: name!
+            }
+        },
+        bio: {
+            formData: {
+                label: "Bio",
+                type: "text",
+                required: false,
+                value: bio!,
+
+                multiline: true,
+                rows: '4'
+            }
+        },
+        location: {
+            formData: {
+                label: "Location",
+                type: "text",
+                required: false,
+                value: location!,
+            }
+        },
+        site: {
+            formData: {
+                label: "Site",
+                type: "text",
+                required: false,
+                value: site!,
+            }
+        }
+    }
 
     return (
-        <Container component="section" maxWidth="sm">
-            <Card style={{ padding: '10px 40px' }}>
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <AccountBoxIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h3">
-                        Edit Profile
-                </Typography>
-                    <form className={classes.form} onSubmit={obj.onSubmit}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth
-                                    id="name"
-                                    label="Name"
-                                    name="name"
-
-                                    value={name}
-                                    onChange={obj.onChange}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth
-                                    id="bio"
-                                    label="Bio"
-                                    name="bio"
-
-                                    multiline
-                                    rows="4"
-
-                                    value={bio}
-                                    onChange={obj.onChange}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth
-                                    id="location"
-                                    label="Location"
-                                    name="location"
-
-                                    value={location}
-                                    onChange={obj.onChange}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth
-                                    id="site"
-                                    label="Site"
-                                    name="site"
-
-                                    value={site}
-                                    onChange={obj.onChange}
-                                />
-                            </Grid>
-                        </Grid>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                        >
-                            Save
-                    </Button>
-                    </form>
-                </div>
-            </Card>
-        </Container>
-    )
+        <GenericFormComponent
+            headingText="Edit Profile"
+            icon={AccountBoxIcon}
+            isInvalid={false}
+            onChange={props.onChange}
+            onSubmit={props.onSubmit}
+            submitButtonText="Submit"
+            data={data}
+        />
+    );
 }
 
 const EditProfile = withAllProviders(EditProfileBase);
