@@ -69,18 +69,16 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
 
         const data: GenericFormData['data'] = {
             hello: {
-                component: () => {
-                    return (
-                        <Box component="fieldset" mb={3} borderColor="transparent">
-                            <Typography component="legend">Review</Typography>
-                            <Rating
-                                name="rating"
-                                value={rating ? Number(rating) : 0}
-                                onChange={this.onChange.bind(this)}
-                            />
-                        </Box>
-                    )
-                }
+                component: (
+                    <Box component="fieldset" mb={3} borderColor="transparent">
+                        <Typography component="legend">Review</Typography>
+                        <Rating
+                            name="rating"
+                            value={rating ? Number(rating) : 0}
+                            onChange={this.onChange.bind(this)}
+                        />
+                    </Box>
+                )
             },
             title: {
                 formData: {

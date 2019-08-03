@@ -113,7 +113,7 @@ export interface GenericFormData {
                 multiline?: boolean
                 rows?: string;
             }
-            component?: any
+            component?: JSX.Element
         }),
     }
     onSubmit: Function;
