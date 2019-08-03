@@ -8,6 +8,10 @@ export function SwagBackgroundComponent() {
     const svgs = getSvgs().concat(darkSvgs);
 
     return (
+        <div></div>
+    )
+
+    return (
         <div style={{ position: 'absolute', zIndex: -2 }} className="swag-background">
             {
                 svgs.map((_svg, index) => {
