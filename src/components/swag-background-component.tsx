@@ -1,11 +1,18 @@
 import React from 'react';
-import large from './../../src/assets/dots-large.svg';
-import small from './../../src/assets/dots-small.svg';
+import { getSvgs } from '../data/svgs';
 
 export function SwagBackgroundComponent() {
-    return (
-        <div style={{ position: 'absolute' }} className="swag-background">
 
+    const svgs = getSvgs();
+
+    return (
+        <div style={{ position: 'absolute', zIndex: -2 }} className="swag-background">
+            {
+                svgs.map((_svg, index) => {
+                    return (<svg key={_svg.svg.shape + index} dangerouslySetInnerHTML={{ __html: _svg.svg.shape }} className={`${_svg.svg.className}`} viewBox={_svg.svg.viewBox} style={_svg.style}>
+                    </svg>)
+                })
+            }
         </div>
     )
 }
