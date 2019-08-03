@@ -24,7 +24,11 @@ export default function GenericFormComponent(props: GenericFormData) {
 
                                         if (props.data[key].component) {
                                             const CurrentComponent = props.data[key].component;
-                                            return (<CurrentComponent key={key} />)
+                                            return (
+                                                <Grid item xs={12} key={key}>
+                                                    <CurrentComponent />
+                                                </Grid>
+                                            )
                                         }
 
                                         return (
