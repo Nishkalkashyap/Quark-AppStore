@@ -100,3 +100,29 @@ export interface UserProfileInterface {
     location?: string,
     site?: string
 }
+
+export interface GenericFormData {
+    data: {
+        [key: string]: ({
+            label: string;
+            type: string;
+            value: string;
+
+            autoComplete?: string;
+            // variant?: "filled" | "outlined" | "standard" | undefined;
+            // variant: any
+            required?: boolean;
+
+            multiline?: boolean
+            rows?: string;
+
+            component?: any
+        }),
+    }
+    onSubmit: Function;
+    onChange: Function;
+    isInvalid: boolean;
+    icon: any;
+    submitButtonText: string;
+    headingText: string;
+}

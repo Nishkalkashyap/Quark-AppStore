@@ -7,12 +7,13 @@ import { basePropType } from '../basePropType';
 import { globalStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
 import { MATCH_PARAMS, ROUTES } from '../data/routes';
-import { ProjectData, ProjectReviewInterface } from '../interfaces';
+import { ProjectData, ProjectReviewInterface, GenericFormData } from '../interfaces';
 import { getDocument_project, getDocument_review } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
 import { progress } from '../components/header-component';
+import GenericFormComponent from '../components/generic-form-component';
 
 
 interface StateType {
@@ -66,6 +67,28 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
         const classes = this.props.classes!;
         const { rating, title, content } = this.state.review;
         const isInvalid = !title || !content || !rating;
+
+        const data: GenericFormData['data'] = {
+            title: {
+                label: "Title",
+                type: "text",
+                value: title || ''
+            }
+        }
+
+        if (true) {
+            return (
+                <GenericFormComponent
+                    headingText="Review"
+                    icon={RateReviewIcon}
+                    isInvalid={isInvalid}
+                    onChange={this.onChange.bind(this)}
+                    onSubmit={this.onSubmit.bind(this)}
+                    submitButtonText="Submit"
+                    data={data}
+                />
+            )
+        }
 
         return (
             <Container component="section" maxWidth="sm">
