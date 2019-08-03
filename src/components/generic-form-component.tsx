@@ -16,7 +16,7 @@ class LocalComponent extends Component<GenericFormData & { classes: any }> {
 
         return (
             <div>
-                <Container component="section" maxWidth="sm">
+                <Container component="section" maxWidth={props.maxWidth || "sm"}>
                     <Card style={{ padding: '10px 40px' }}>
                         <div className={classes.paper}>
                             <Avatar className={classes.avatar}>

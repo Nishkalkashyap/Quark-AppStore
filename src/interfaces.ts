@@ -102,6 +102,7 @@ export interface UserProfileInterface {
 }
 
 export interface GenericFormData {
+    maxWidth?: "md" | "sm";
     data: {
         [key: string]: ({
             formData?: {

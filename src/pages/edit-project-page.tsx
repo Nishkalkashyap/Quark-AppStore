@@ -1,18 +1,20 @@
 import React, { Component } from 'react'
 import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES } from '../data/routes';
-import { ProjectData } from '../interfaces';
+import { ProjectData, GenericFormData } from '../interfaces';
 import { cloneDeep } from 'lodash';
 import { getDocument_project, getStorageRef_images } from '../data/paths';
 import { handleFirebaseError, allProjectCategories } from '../util';
 import { withAllProviders } from '../providers/all-providers';
 import { withOriginalOwner } from '../providers/owner-guard';
-import { Container, Card, Typography, TextField, Button, Zoom, Paper, Fab, Tooltip, ButtonGroup, IconButton, FormControl, InputLabel, Select, OutlinedInput, MenuItem } from '@material-ui/core';
+import { Container, Card, Typography, TextField, Button, Zoom, Paper, Fab, Tooltip, ButtonGroup, IconButton, FormControl, InputLabel, Select, OutlinedInput, MenuItem, Grid } from '@material-ui/core';
 import { globalStyles, useStyles } from '../components/common-components';
 import { withStyles } from '@material-ui/styles';
 import { DropZoneComponent, FilesToUpload } from '../components/drop-zone';
 import { progress, dialog } from '../components/header-component';
 import { StandardProperties } from 'csstype';
+import GenericFormComponent from '../components/generic-form-component';
+import FiberNewIcon from '@material-ui/icons/FiberNew';
 
 interface StateType {
     userId: string,
@@ -199,115 +201,97 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
         const { projectData, images, filesToUpload } = this.state;
         const { description, projectName, tagline, category } = projectData!;
 
-        return (
-            <div>
-                <Container component="section" maxWidth="md">
-                    <Card style={{ padding: '10px 40px' }}>
-                        <div className={classes.paper}>
-                            <Typography component="h1" variant="h3">
-                                Edit Project
-                            </Typography>
-                            <form className={classes.form} onSubmit={this.onSubmit}>
-                                <TextField
-                                    variant="outlined"
-                                    margin="normal"
-                                    required
-                                    fullWidth
+        const data: GenericFormData['data'] = {
+            projectName: {
+                formData: {
+                    label: "Name",
+                    type: "text",
+                    required: true,
+                    value: projectName!,
 
-                                    label="Name"
-                                    name="projectName"
-                                    type="text"
-                                    autoFocus
+                    autoComplete: "projectName"
+                }
+            },
+            tagline: {
+                formData: {
+                    label: "Tag line",
+                    type: "text",
+                    required: true,
+                    value: tagline!,
 
-                                    value={projectName || ''}
-                                    onChange={this.onChange}
-                                />
-                                <TextField
-                                    variant="outlined"
-                                    margin="normal"
-                                    required
-                                    fullWidth
+                    autoComplete: "tagline"
+                }
+            },
+            description: {
+                formData: {
+                    label: "Description",
+                    type: "text",
+                    required: true,
+                    value: description!,
 
-                                    label="Tag line"
-                                    name="tagline"
-                                    type="text"
-                                    autoFocus
-
-                                    value={tagline || ''}
-                                    onChange={this.onChange}
-                                />
-                                <TextField
-                                    variant="outlined"
-                                    margin="normal"
-                                    required
-                                    fullWidth
-
-                                    label="Description"
-                                    name="description"
-                                    type="text"
-                                    autoFocus
-
-                                    multiline
-                                    rows="4"
-
-
-                                    value={description || ''}
-                                    onChange={this.onChange}
-                                />
-                                <FormControl variant="outlined" margin="normal" className={classes.formControl}>
-                                    <InputLabel>
-                                        Category
+                    autoComplete: "description",
+                    multiline: true,
+                    rows: "4"
+                }
+            },
+            dropzone: {
+                component: (
+                    <React.Fragment>
+                        <FormControl variant="outlined" margin="normal" className={classes.formControl}>
+                            <InputLabel>
+                                Category
                                     </InputLabel>
-                                    <Select
-                                        value={category || ''}
-                                        onChange={this.onChange}
-                                        input={<OutlinedInput labelWidth={10} name="category" />}
-                                    >
-                                        {
-                                            allProjectCategories.map((cat) => (
-                                                <MenuItem value={cat} key={cat}>{cat}</MenuItem>
-                                            ))
-                                        }
-                                    </Select>
-                                </FormControl>
-                                {images.length > 0 &&
-                                    <Paper elevation={0} style={{ border: 'solid 1px var(--border-color)', padding: '15px 10px', margin: '15px 0px' }}>
-                                        <Typography color="textSecondary"> Existing images</Typography>
-                                        <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto' }}>
-                                            {images.map((img, index) => (
-                                                <ImageComponent filename={img.url} key={img.url + index} img={img.url} index={index} onDelete={() => this.deleteCloudImage(img.url)} coverUrl={this.state.projectData.coverImageUrl} makeCover={() => this.setCoverImage(img.url)} />
-                                            ))}
-                                        </div>
-                                    </Paper>}
-                                {Object.keys(filesToUpload).length > 0 &&
-                                    <Paper elevation={0} style={{ border: 'solid 1px var(--border-color)', padding: '15px 10px', margin: '15px 0px' }}>
-                                        <Typography color="textSecondary"> Images to upload</Typography>
-                                        <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto' }}>
-                                            {Object.keys(filesToUpload).map((file, index) => {
-                                                const url = URL.createObjectURL(new Blob([filesToUpload[file].buffer]));
-                                                return (
-                                                    <ImageComponent filename={file} key={url + index} img={url} index={index} onDelete={() => this.deleteLocalImage(file)} />
-                                                )
-                                            })}
-                                        </div>
-                                    </Paper>}
-                                <DropZoneComponent addFiles={this.addFiles.bind(this)} forceUpdate={this.forceUpdate.bind(this)} uploadLimit={FILE_UPLOAD_LIMIT} props={this.props} allowedExtensions={ALLOWED_EXTENSIONS} ></DropZoneComponent>
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    color="primary"
-                                    className={classes.submit}
-                                    disabled={!!this.isDisabled()}
-                                >
-                                    Update
-                                </Button>
-                            </form>
-                        </div>
-                    </Card>
-                </Container>
-            </div>
-        )
+                            <Select
+                                value={category || ''}
+                                onChange={this.onChange}
+                                input={<OutlinedInput labelWidth={10} name="category" />}
+                            >
+                                {
+                                    allProjectCategories.map((cat) => (
+                                        <MenuItem value={cat} key={cat}>{cat}</MenuItem>
+                                    ))
+                                }
+                            </Select>
+                        </FormControl>
+                        {images.length > 0 &&
+                            <Paper elevation={0} style={{ border: 'solid 1px var(--border-color)', padding: '15px 10px', margin: '15px 0px' }}>
+                                <Typography color="textSecondary"> Existing images</Typography>
+                                <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto' }}>
+                                    {images.map((img, index) => (
+                                        <ImageComponent filename={img.url} key={img.url + index} img={img.url} index={index} onDelete={() => this.deleteCloudImage(img.url)} coverUrl={this.state.projectData.coverImageUrl} makeCover={() => this.setCoverImage(img.url)} />
+                                    ))}
+                                </div>
+                            </Paper>}
+                        {Object.keys(filesToUpload).length > 0 &&
+                            <Paper elevation={0} style={{ border: 'solid 1px var(--border-color)', padding: '15px 10px', margin: '15px 0px' }}>
+                                <Typography color="textSecondary"> Images to upload</Typography>
+                                <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'auto' }}>
+                                    {Object.keys(filesToUpload).map((file, index) => {
+                                        const url = URL.createObjectURL(new Blob([filesToUpload[file].buffer]));
+                                        return (
+                                            <ImageComponent filename={file} key={url + index} img={url} index={index} onDelete={() => this.deleteLocalImage(file)} />
+                                        )
+                                    })}
+                                </div>
+                            </Paper>}
+                        <DropZoneComponent addFiles={this.addFiles.bind(this)} forceUpdate={this.forceUpdate.bind(this)} uploadLimit={FILE_UPLOAD_LIMIT} props={this.props} allowedExtensions={ALLOWED_EXTENSIONS} ></DropZoneComponent>
+                    </React.Fragment>
+                )
+            }
+        }
+
+        return (
+            <GenericFormComponent
+                headingText="Edit Project"
+                icon={FiberNewIcon}
+                isInvalid={!!this.isDisabled()}
+                onChange={this.onChange.bind(this)}
+                onSubmit={this.onSubmit.bind(this)}
+                submitButtonText="Update"
+                data={data}
+                maxWidth="md"
+            />
+        );
     }
 }
 
