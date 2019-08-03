@@ -2,8 +2,8 @@ export function getDocument_userData(currentUserID: string) {
     return `Users/${currentUserID}/profile/userData`
 }
 
-export function getDocument_metaData(currentUserID: string) {
-    return `Users/${currentUserID}/profile/metaData`
+export function getDocument_userMeta(currentUserID: string) {
+    return `Users/${currentUserID}/profile/userMeta`
 }
 
 export function getDocument_project(userId: string, projectId: string) {
@@ -34,7 +34,7 @@ export function getCollection_reviews(userId: string, projectId: string) {
     return `Users/${userId}/projects/${projectId}/reviews`;
 }
 
-export function getDocument_review(userId: string, projectId: string, reviewerId : string) {
+export function getDocument_review(userId: string, projectId: string, reviewerId: string) {
     return `Users/${userId}/projects/${projectId}/reviews/${reviewerId}`;
 }
 
