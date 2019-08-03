@@ -325,8 +325,8 @@ export function getSvgs() {
             svg: svgs.triangle,
             style: {
                 width: '4%',
-                top: 10 + '%',
-                left: 30 + '%',
+                top: 5 + '%',
+                right: 3 + '%',
                 stroke: colors['white'],
                 fill: colors['transparent'],
             }

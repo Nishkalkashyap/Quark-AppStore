@@ -1,11 +1,11 @@
 import React from 'react';
-import { getSvgs } from '../data/svgs';
+import { getSvgs, darkSvgs } from '../data/svgs';
 /* eslint import/no-webpack-loader-syntax: off */
 import '!!style-loader!css-loader!stylus-loader!./../styles/mixins.styl';
 
 export function SwagBackgroundComponent() {
 
-    const svgs = getSvgs();
+    const svgs = getSvgs().concat(darkSvgs);
 
     return (
         <div style={{ position: 'absolute', zIndex: -2 }} className="swag-background">
