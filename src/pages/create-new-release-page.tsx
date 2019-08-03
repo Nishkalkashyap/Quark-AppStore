@@ -114,7 +114,7 @@ const LocalComponent = (props: basePropType) => {
             formData: {
                 label: "Notes",
                 type: "text",
-                required: false,
+                required: true,
                 value: notes!,
 
                 multiline: true,

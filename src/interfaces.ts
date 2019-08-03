@@ -106,7 +106,7 @@ export interface GenericFormData {
         [key: string]: ({
             formData?: {
                 label: string;
-                type: string;
+                type: "text" | "password";
                 value: string;
                 required: boolean;
                 autoComplete?: string;

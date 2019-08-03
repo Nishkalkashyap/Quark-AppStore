@@ -8,8 +8,8 @@ import firebase from 'firebase';
 import { ROUTES } from '../data/routes';
 import { useStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
-import { ProjectData, allCategories } from '../interfaces';
-import { values } from 'lodash';
+import { ProjectData, allCategories, GenericFormData } from '../interfaces';
+import GenericFormComponent from '../components/generic-form-component';
 
 const INITIAL_STATE = {
     projectName: '',
@@ -66,99 +66,73 @@ class LocalComponent extends Component<basePropType, typeof INITIAL_STATE> {
     }
 }
 
-const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof INITIAL_STATE }) => {
+const MaterialComponent = (props: { onSubmit: any, onChange: any, state: typeof INITIAL_STATE }) => {
     const classes = useStyles();
-    const { projectName, description, tagline, category } = obj.state;
+    const { projectName, description, tagline, category } = props.state;
     const isInvalid = projectName === '' || description === '' || tagline === '';
 
-    return (
-        <Container component="section" maxWidth="sm">
-            <Card style={{ padding: '10px 40px' }}>
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <FiberNewIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h3">
-                        New Project
-                </Typography>
-                    <form className={classes.form} onSubmit={obj.onSubmit}>
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
+    const data: GenericFormData['data'] = {
+        projectName: {
+            formData: {
+                label: "Project Name",
+                type: "text",
+                required: true,
+                value: projectName!
+            }
+        },
+        tagline: {
+            formData: {
+                label: "Tag line",
+                type: "text",
+                required: true,
+                value: tagline!
+            }
+        },
+        description: {
+            formData: {
+                label: "Description",
+                type: "text",
+                required: true,
+                value: description!,
 
-                            id="projectName"
-                            label="Project Name"
-                            name="projectName"
-                            type="text"
-                            autoFocus
-
-                            value={projectName}
-                            onChange={obj.onChange}
-                        />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-
-                            id="tagline"
-                            label="Tag line"
-                            name="tagline"
-                            type="text"
-
-                            value={tagline}
-                            onChange={obj.onChange}
-                        />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-
-                            id="description"
-                            label="Description"
-                            name="description"
-                            type="text"
-
-                            multiline
-                            rows="4"
-
-                            value={description}
-                            onChange={obj.onChange}
-                        />
-                        <FormControl variant="outlined" margin="normal" className={classes.formControl}>
-                            <InputLabel>
-                                Category
+                multiline: true,
+                rows: "4"
+            }
+        },
+        category: {
+            component: (
+                <FormControl variant="outlined" margin="normal" className={classes.formControl}>
+                    <InputLabel>
+                        Category
                             </InputLabel>
-                            <Select
-                                value={category || ''}
-                                onChange={obj.onChange}
-                                input={<OutlinedInput labelWidth={10} name="category" />}
-                            >
-                                {
-                                    allProjectCategories.map((cat) => (
-                                        <MenuItem value={cat} key={cat}>{cat}</MenuItem>
-                                    ))
-                                }
-                            </Select>
-                        </FormControl>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            disabled={isInvalid}
-                        >
-                            Create
-                    </Button>
-                    </form>
-                </div>
-            </Card>
-        </Container>
-    )
+                    <Select
+                        value={category || ''}
+                        onChange={props.onChange}
+                        input={<OutlinedInput labelWidth={10} name="category" />}
+                    >
+                        {
+                            allProjectCategories.map((cat) => (
+                                <MenuItem value={cat} key={cat}>{cat}</MenuItem>
+                            ))
+                        }
+                    </Select>
+                </FormControl>
+            )
+        }
+    }
+
+    return (
+        <GenericFormComponent
+            headingText="Create Project"
+            icon={FiberNewIcon}
+            isInvalid={isInvalid}
+            onChange={props.onChange}
+            onSubmit={props.onSubmit}
+            submitButtonText="Create"
+            data={data}
+        />
+    );
+
 };
 
 export const CreateNewProjectPage = withAllProviders(LocalComponent);
