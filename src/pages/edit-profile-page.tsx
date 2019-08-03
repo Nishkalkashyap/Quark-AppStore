@@ -102,7 +102,7 @@ const SignUpComponent = (props: { onSubmit: any, onChange: any, state: typeof IN
                 label: "Name",
                 type: "text",
                 required: false,
-                value: name!
+                value: name || ''
             }
         },
         bio: {
@@ -110,7 +110,7 @@ const SignUpComponent = (props: { onSubmit: any, onChange: any, state: typeof IN
                 label: "Bio",
                 type: "text",
                 required: false,
-                value: bio!,
+                value: bio || '',
 
                 multiline: true,
                 rows: '4'
@@ -121,7 +121,7 @@ const SignUpComponent = (props: { onSubmit: any, onChange: any, state: typeof IN
                 label: "Location",
                 type: "text",
                 required: false,
-                value: location!,
+                value: location || '',
             }
         },
         site: {
@@ -129,7 +129,7 @@ const SignUpComponent = (props: { onSubmit: any, onChange: any, state: typeof IN
                 label: "Site",
                 type: "text",
                 required: false,
-                value: site!,
+                value: site || '',
             }
         }
     }

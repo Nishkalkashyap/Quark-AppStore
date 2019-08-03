@@ -84,7 +84,7 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
                 label: "Email Address",
                 type: "email",
                 required: true,
-                value: email,
+                value: email || '',
 
                 autoComplete: "email"
             }
@@ -94,7 +94,7 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
                 label: "Password",
                 type: "password",
                 required: true,
-                value: passwordOne,
+                value: passwordOne || '',
 
                 autoComplete: "password"
             }
@@ -104,7 +104,7 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
                 label: "Confirm password",
                 type: "password",
                 required: true,
-                value: passwordTwo,
+                value: passwordTwo || '',
 
                 autoComplete: "password"
             }

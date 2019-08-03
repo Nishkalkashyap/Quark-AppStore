@@ -207,7 +207,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
                     label: "Name",
                     type: "text",
                     required: true,
-                    value: projectName!,
+                    value: projectName || '',
 
                     autoComplete: "projectName"
                 }
@@ -217,7 +217,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
                     label: "Tag line",
                     type: "text",
                     required: true,
-                    value: tagline!,
+                    value: tagline || '',
 
                     autoComplete: "tagline"
                 }
@@ -227,7 +227,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
                     label: "Description",
                     type: "text",
                     required: true,
-                    value: description!,
+                    value: description || '',
 
                     autoComplete: "description",
                     multiline: true,

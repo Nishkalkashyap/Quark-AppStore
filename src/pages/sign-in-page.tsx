@@ -82,7 +82,7 @@ const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof IN
                 label: "Email Address",
                 type: "email",
                 required: true,
-                value: email,
+                value: email || '',
 
                 autoComplete: "email"
             }
@@ -92,7 +92,7 @@ const MaterialComponent = (obj: { onSubmit: any, onChange: any, state: typeof IN
                 label: "Password",
                 type: "password",
                 required: true,
-                value: password,
+                value: password || '',
 
                 autoComplete: "password"
             }

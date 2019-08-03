@@ -77,7 +77,7 @@ const MaterialComponent = (props: { onSubmit: any, onChange: any, state: typeof 
                 label: "Project Name",
                 type: "text",
                 required: true,
-                value: projectName!
+                value: projectName || ''
             }
         },
         tagline: {
@@ -85,7 +85,7 @@ const MaterialComponent = (props: { onSubmit: any, onChange: any, state: typeof 
                 label: "Tag line",
                 type: "text",
                 required: true,
-                value: tagline!
+                value: tagline || ''
             }
         },
         description: {
@@ -93,7 +93,7 @@ const MaterialComponent = (props: { onSubmit: any, onChange: any, state: typeof 
                 label: "Description",
                 type: "text",
                 required: true,
-                value: description!,
+                value: description || '',
 
                 multiline: true,
                 rows: "4"

@@ -67,7 +67,7 @@ const ForgotPasswordElement = (props: { onSubmit: any, onChange: any, state: typ
                 label: "Email Address",
                 type: "email",
                 required: true,
-                value: email,
+                value: email || '',
 
                 autoComplete: "email"
             }

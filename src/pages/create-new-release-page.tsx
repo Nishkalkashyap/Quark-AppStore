@@ -115,7 +115,7 @@ const LocalComponent = (props: basePropType) => {
                 label: "Notes",
                 type: "text",
                 required: true,
-                value: notes!,
+                value: notes || '',
 
                 multiline: true,
                 rows: "4"
