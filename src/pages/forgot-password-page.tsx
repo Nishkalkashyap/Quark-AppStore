@@ -10,6 +10,8 @@ import { TextField, Button, Container, Avatar, Typography, Card } from '@materia
 import { withSnackbar } from 'notistack';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { useStyles } from '../components/common-components';
+import { GenericFormData } from '../interfaces';
+import GenericFormComponent from '../components/generic-form-component';
 
 const ForgotPasswordPage = () => <PasswordForgetForm></PasswordForgetForm>
 
@@ -57,55 +59,37 @@ class PasswordForgetFormBase extends Component<basePropType> {
     }
 }
 
-const ForgotPasswordElement = (obj: { onSubmit: any, onChange: any, state: typeof INITIAL_STATE }) => {
-    const classes = useStyles();
-    const { email } = obj.state;
+const ForgotPasswordElement = (props: { onSubmit: any, onChange: any, state: typeof INITIAL_STATE }) => {
+    const { email } = props.state;
     const isInvalid = email === '';
 
+    const data: GenericFormData['data'] = {
+        email: {
+            formData: {
+                label: "Email Address",
+                type: "email",
+                required: true,
+                value: email,
+
+                autoComplete: "email"
+            }
+        },
+        backButton: {
+            component: (<SignUpLink></SignUpLink>)
+        }
+    }
+
     return (
-        <Container component="section" maxWidth="sm">
-            <Card style={{ padding: '10px 40px' }}>
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h3">
-                        Forgot Password
-                </Typography>
-                    <form className={classes.form} onSubmit={obj.onSubmit}>
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
-                            type="email"
-                            autoFocus
-
-                            value={email}
-                            onChange={obj.onChange}
-                        />
-
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            disabled={isInvalid}
-                        >
-                            Send password reset email
-                    </Button>
-                        <SignUpLink></SignUpLink>
-                    </form>
-                </div>
-            </Card>
-        </Container>
-    )
+        <GenericFormComponent
+            headingText="Forgot Password"
+            icon={LockOutlinedIcon}
+            isInvalid={isInvalid}
+            onChange={props.onChange}
+            onSubmit={props.onSubmit}
+            submitButtonText="Send password reset email"
+            data={data}
+        />
+    );
 }
 
 
