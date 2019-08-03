@@ -149,7 +149,7 @@ export function PageContainer(props: basePropType & { children: any }) {
                         {open ? <ChevronLeftIcon /> : <MenuIcon />}
                     </IconButton>
                     <HeaderComponent>
-                        <Button variant="outlined" size="small" color="inherit" onClick={() => window.open('https://quarkjs.io')}>
+                        <Button variant="contained" size="small" color="primary" style={{boxShadow : 'none'}} onClick={() => window.open('https://quarkjs.io')}>
                             Go to docs
                         </Button>
                         {!isAuthenticated && <Button color="inherit" onClick={() => props.history.push(ROUTES.SIGN_IN)}>Login</Button>}

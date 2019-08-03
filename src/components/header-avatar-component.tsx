@@ -43,7 +43,7 @@ export function HeaderAvatarComponent(props: basePropType) {
             >
                 <MenuItem onClick={() => props.history.push(ROUTES.ACCOUNT_PAGE)}>My account</MenuItem>
                 <MenuItem onClick={() => props.history.push(ROUTES.EDIT_PROFILE_PAGE)}>Edit profile</MenuItem>
-                <MenuItem onClick={() => props.history.push(ROUTES.EDIT_PROFILE_PAGE)}>Change password</MenuItem>
+                <MenuItem onClick={() => props.history.push(ROUTES.CHANGE_PASSWORD_PAGE)}>Change password</MenuItem>
                 <Divider/>
                 <MenuItem onClick={() => props.firebase.auth.signOut()}>Sign Out</MenuItem>
             </Menu>
