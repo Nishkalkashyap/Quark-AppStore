@@ -34,17 +34,11 @@ export class LocalComponent extends Component<basePropType> {
             ),
             iteratorComponent: (data: { state: StateType<PaginationType> }) => (
                 <React.Fragment>
-                    {data.state.paginationArray.map((arr) => {
+                    {data.state.paginationArray.map((release) => {
                         return (
-                            <Container maxWidth="md" key={arr.projectId}>
+                            <Container maxWidth="md" key={release.releaseId}>
                                 <List style={{ marginTop: '30px' }}>
-                                    {
-                                        data.state.paginationArray.map((release) => {
-                                            return (
-                                                <ReleaseItemComponent key={release.releaseId}  {...this.props} release={release} />
-                                            )
-                                        })
-                                    }
+                                    <ReleaseItemComponent key={release.releaseId}  {...this.props} release={release} />
                                 </List>
                             </Container>
                         )
