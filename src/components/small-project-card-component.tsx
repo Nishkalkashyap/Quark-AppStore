@@ -4,7 +4,7 @@ import { ProjectData, ProjectStats } from '../interfaces';
 import logo from './../assets/logo.svg';
 import { Card, CardActionArea, CardMedia, CardContent, Typography, CardActions, Button, makeStyles, createStyles, CardHeader, Avatar } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
-import { getProjectStatsDocPath } from '../data/paths';
+import { getDocument_stats } from '../data/paths';
 import { isEqual } from 'lodash';
 import { handleFirebaseError } from '../util';
 import Rating from '@material-ui/lab/Rating';
@@ -35,7 +35,7 @@ export function SmallProjectCardComponent(props: basePropType & { projectData: P
 
     const [projectStats, setProjectStats] = useState({} as ProjectStats);
     useEffect(() => {
-        const listener = props.firebase.firestore.doc(getProjectStatsDocPath(projectData.userId, projectData.projectId))
+        const listener = props.firebase.firestore.doc(getDocument_stats(projectData.userId, projectData.projectId))
             .onSnapshot((snap) => {
                 const data = (snap.data() || {}) as any;
                 if (!isEqual(projectStats, data)) {

@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { getProfilePath } from '../data/paths';
+import { getDocument_userData } from '../data/paths';
 import { basePropType } from '../basePropType';
 import { useStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
@@ -40,7 +40,7 @@ class EditProfileBase extends Component<basePropType> {
     componentDidMount() {
         const currentUser = this.props.firebase.auth.currentUser!;
         this.listeners.push(
-            this.props.firebase.firestore.doc(getProfilePath(currentUser.uid))
+            this.props.firebase.firestore.doc(getDocument_userData(currentUser.uid))
                 .onSnapshot((snap) => {
                     const data = (snap.data() || {}) as any;
                     Object.keys(data).map((key) => {
@@ -60,7 +60,7 @@ class EditProfileBase extends Component<basePropType> {
             currentUser.updateProfile({
                 displayName: name
             }),
-            this.props.firebase.firestore.doc(getProfilePath(currentUser.uid)).set({
+            this.props.firebase.firestore.doc(getDocument_userData(currentUser.uid)).set({
                 name, bio, location, site
             })
         ];

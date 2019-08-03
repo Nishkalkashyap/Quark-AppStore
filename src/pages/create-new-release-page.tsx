@@ -5,7 +5,7 @@ import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import { useForceUpdate, getRandomId, handleFirebaseError } from '../util';
 import { MATCH_PARAMS, ROUTES } from '../data/routes';
 import firebase from 'firebase';
-import { getProjectReleaseDocPath } from '../data/paths';
+import { getDocument_release } from '../data/paths';
 import { ReleaseItem } from '../interfaces';
 import { useStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
@@ -45,7 +45,7 @@ const LocalComponent = (props: basePropType) => {
             assets: Object.keys(state.filesToUpload)
         }
 
-        props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, releaseId)).set(releaseData)
+        props.firebase.firestore.doc(getDocument_release(userId, projectId, releaseId)).set(releaseData)
             .then(() => {
                 props.enqueueSnackbar('Release created', { variant: 'success' });
                 props.enqueueSnackbar('Uploading files. Please wait.', { variant: 'info' });
@@ -64,7 +64,7 @@ const LocalComponent = (props: basePropType) => {
             })
 
         async function uploadFilesToBucket() {
-            const releaseBucketFolder = getProjectReleaseDocPath(userId, projectId, releaseId);
+            const releaseBucketFolder = getDocument_release(userId, projectId, releaseId);
             const bucketUploadPromises = Object.keys(state.filesToUpload).map((key) => {
                 const file = state.filesToUpload[key];
                 const ref = props.firebase.storage.ref(`${releaseBucketFolder}/${file.file.name}`);

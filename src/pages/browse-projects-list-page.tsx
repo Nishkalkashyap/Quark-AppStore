@@ -1,7 +1,7 @@
 import React, { Component, ChangeEvent } from 'react'
 import { PaginationComponent, Pagination, StateType, LocalPaginationComponent } from '../components/pagination-component';
 import { basePropType } from '../basePropType';
-import { getProjectDocPath } from '../data/paths';
+import { getDocument_project } from '../data/paths';
 import { ROUTES } from '../data/routes';
 import queryString from 'query-string';
 import { SmallProjectCardComponent, smallProjectContainerStyles } from '../components/small-project-card-component';
@@ -52,7 +52,7 @@ export class LocalComponent extends Component<basePropType & { classes: any }, L
                 })();
             },
             getDocRef: () => {
-                return this.firestore.doc(getProjectDocPath(this.props.urlProjectId || this.props.firebase.auth.currentUser!.uid, queryString.parse(this.props.history.location.search)['startAfter'] as string))
+                return this.firestore.doc(getDocument_project(this.props.urlProjectId || this.props.firebase.auth.currentUser!.uid, queryString.parse(this.props.history.location.search)['startAfter'] as string))
             },
             getRedirectRoute: (params) => {
                 if (this.state.category) {

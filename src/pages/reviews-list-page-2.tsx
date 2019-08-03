@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { PaginationComponent, Pagination, StateType } from '../components/pagination-component';
 import { basePropType } from '../basePropType';
 import { ProjectReviewInterface } from '../interfaces';
-import { getProjectReviewsCollectionPath, getProjectReviewDocPath } from '../data/paths';
+import { getCollection_reviews, getDocument_review } from '../data/paths';
 import { ROUTES } from '../data/routes';
 import queryString from 'query-string';
 import { withAllProviders } from '../providers/all-providers';
@@ -17,8 +17,8 @@ export class LocalComponent extends Component<basePropType> {
 
     pagination: Pagination<PaginationType> = {
         pagination: {
-            getCollectionRef: () => { return this.firestore.collection(getProjectReviewsCollectionPath(this.props.urlUserId!, this.props.urlProjectId!)) },
-            getDocRef: () => { return this.firestore.doc(getProjectReviewDocPath(this.props.urlUserId!, this.props.urlProjectId!, queryString.parse(this.props.history.location.search)['startAfter'] as string)) },
+            getCollectionRef: () => { return this.firestore.collection(getCollection_reviews(this.props.urlUserId!, this.props.urlProjectId!)) },
+            getDocRef: () => { return this.firestore.doc(getDocument_review(this.props.urlUserId!, this.props.urlProjectId!, queryString.parse(this.props.history.location.search)['startAfter'] as string)) },
             getRedirectRoute: (params) => { return `${ROUTES.REVIEW_LIST_PAGE}/${this.props.urlUserId}/${this.props.urlProjectId!}?startAfter=${params.userId}` },
             loadLimit: 3,
             upperComponent: (data: { state: StateType<PaginationType> }) => (

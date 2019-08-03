@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { PaginationComponent, Pagination, StateType } from '../components/pagination-component';
 import { basePropType } from '../basePropType';
 import { ProjectData } from '../interfaces';
-import { getProjectsCollectionPath, getProjectDocPath } from '../data/paths';
+import { getCollection_projects, getDocument_project } from '../data/paths';
 import { ROUTES } from '../data/routes';
 import queryString from 'query-string';
 import UserCardComponent from '../components/user-card-component';
@@ -14,8 +14,8 @@ export class LocalComponent extends Component<basePropType> {
 
     pagination: Pagination<ProjectData> = {
         pagination: {
-            getCollectionRef: () => { return this.firestore.collection(getProjectsCollectionPath(this.props.urlUserId || this.props.firebase.auth.currentUser!.uid)) },
-            getDocRef: () => { return this.firestore.doc(getProjectDocPath(this.props.urlProjectId || this.props.firebase.auth.currentUser!.uid, queryString.parse(this.props.history.location.search)['startAfter'] as string)) },
+            getCollectionRef: () => { return this.firestore.collection(getCollection_projects(this.props.urlUserId || this.props.firebase.auth.currentUser!.uid)) },
+            getDocRef: () => { return this.firestore.doc(getDocument_project(this.props.urlProjectId || this.props.firebase.auth.currentUser!.uid, queryString.parse(this.props.history.location.search)['startAfter'] as string)) },
             getRedirectRoute: (params) => { return `${ROUTES.PROJECTS_LIST_PAGE}/${params.userId}?startAfter=${params.projectId}` },
             loadLimit: 10,
             upperComponent: (data: { state: StateType<ProjectData> }) => (

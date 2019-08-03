@@ -13,7 +13,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
-import { getProjectsCollectionPath } from '../data/paths';
+import { getCollection_projects } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import { TableHead } from '@material-ui/core';
 import { ProjectData } from '../interfaces';
@@ -121,7 +121,7 @@ export default function CustomPaginationActionsTable(props: basePropType) {
     const user = props.firebase.auth.currentUser!;
 
     if (!wasUpdatedOnce) {
-        props.firebase.firestore.collection(getProjectsCollectionPath(user.uid)).get()
+        props.firebase.firestore.collection(getCollection_projects(user.uid)).get()
             .then((val) => {
                 const arr = val.docs.map((doc) => {
                     return doc.data();

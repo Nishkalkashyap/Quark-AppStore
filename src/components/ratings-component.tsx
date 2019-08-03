@@ -7,7 +7,7 @@ import StarIcon from '@material-ui/icons/Star'
 import Rating from '@material-ui/lab/Rating';
 import { basePropType } from '../basePropType';
 import { ROUTES } from '../data/routes';
-import { getProjectDocPath, getProjectStatsDocPath } from '../data/paths';
+import { getDocument_project, getDocument_stats } from '../data/paths';
 import { isEqual } from 'lodash';
 import { handleFirebaseError } from '../util';
 
@@ -30,7 +30,7 @@ export function RatingsComponent(props: { userId: string, projectId: string } & 
     const { projectId, userId } = props;
 
     useEffect(() => {
-        const listener = props.firebase.firestore.doc(getProjectStatsDocPath(userId, projectId))
+        const listener = props.firebase.firestore.doc(getDocument_stats(userId, projectId))
             .onSnapshot((snap) => {
                 const stats = (snap.data() || {}) as any;
                 if (!isEqual(projectStats, stats)) {

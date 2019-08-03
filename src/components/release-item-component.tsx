@@ -6,7 +6,7 @@ import moment from 'moment';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
-import { getProjectReleaseDocPath, getProjectStatsDocPath } from '../data/paths';
+import { getDocument_release, getDocument_stats } from '../data/paths';
 import firebase from 'firebase';
 import { handleFirebaseError, downloadReleaseItem } from '../util';
 import { dialog } from './header-component';
@@ -60,7 +60,7 @@ export function ReleaseItemComponent(props: basePropType & {
         }
 
         function editRelease(updatedNotes: string) {
-            props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, releaseId)).update({
+            props.firebase.firestore.doc(getDocument_release(userId, projectId, releaseId)).update({
                 notes: updatedNotes
             }).then(() => {
                 props.enqueueSnackbar('Release updated', { variant: 'success' });
@@ -82,7 +82,7 @@ export function ReleaseItemComponent(props: basePropType & {
         }
 
         function deleteRelease() {
-            props.firebase.firestore.doc(getProjectReleaseDocPath(userId, projectId, releaseId)).delete().then(() => {
+            props.firebase.firestore.doc(getDocument_release(userId, projectId, releaseId)).delete().then(() => {
                 props.enqueueSnackbar('Release deleted', { variant: 'success' });
             }).catch((err) => handleFirebaseError(props, err, 'Failed to delete release'));
         }

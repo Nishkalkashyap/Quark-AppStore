@@ -3,7 +3,7 @@ import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES } from '../data/routes';
 import { ProjectData } from '../interfaces';
 import { cloneDeep } from 'lodash';
-import { getProjectDocPath, getProjectStorageImagesPath } from '../data/paths';
+import { getDocument_project, getStorageRef_images } from '../data/paths';
 import { handleFirebaseError, allProjectCategories } from '../util';
 import { withAllProviders } from '../providers/all-providers';
 import { withOriginalOwner } from '../providers/owner-guard';
@@ -53,7 +53,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
         this.state.projectId = projectId;
 
         progress.showProgressBar();
-        this.props.firebase.storage.ref(getProjectStorageImagesPath(userId, projectId))
+        this.props.firebase.storage.ref(getStorageRef_images(userId, projectId))
             .list()
             .then((list) => {
                 const promises = list.items.map((item) => {
@@ -88,7 +88,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
 
     private _setProjectData() {
         this.listeners.push(
-            this.props.firebase.firestore.doc(getProjectDocPath(this.state.userId, this.state.projectId))
+            this.props.firebase.firestore.doc(getDocument_project(this.state.userId, this.state.projectId))
                 .onSnapshot((snap) => {
                     if (!snap.exists) {
                         this.props.history.push(ROUTES.NOT_FOUND);
@@ -112,7 +112,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
 
         uploadFilesToBucket()
             .then(() => {
-                return this.props.firebase.firestore.doc(getProjectDocPath(this.props.firebase.auth.currentUser!.uid, this.state.projectId)).set(dataToSend, { merge: true })
+                return this.props.firebase.firestore.doc(getDocument_project(this.props.firebase.auth.currentUser!.uid, this.state.projectId)).set(dataToSend, { merge: true })
             })
             .then(() => {
                 this.props.enqueueSnackbar('Project updated', { variant: 'success' });
@@ -121,7 +121,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
             .catch((err) => { handleFirebaseError(this.props, err, 'Failed to update project'); })
 
         async function uploadFilesToBucket() {
-            const releaseBucketFolder = getProjectStorageImagesPath(userId, projectId);
+            const releaseBucketFolder = getStorageRef_images(userId, projectId);
             const bucketUploadPromises = Object.keys(self.state.filesToUpload).map((key) => {
                 const file = self.state.filesToUpload[key];
                 const ref = self.props.firebase.storage.ref(`${releaseBucketFolder}/${file.file.name}`);

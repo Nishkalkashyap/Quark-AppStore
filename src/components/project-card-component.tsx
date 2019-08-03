@@ -16,7 +16,7 @@ import UpdateDownloadIcon from '@material-ui/icons/Update';
 import moment from 'moment';
 import { StandardProperties } from 'csstype';
 import { downloadReleaseItem, handleFirebaseError } from '../util';
-import { getProjectDocPath, getProjectStatsDocPath } from '../data/paths';
+import { getDocument_project, getDocument_stats } from '../data/paths';
 import { isEqual } from 'lodash';
 
 export const ProjectCardComponent = (LocalComponent);
@@ -37,7 +37,7 @@ function LocalComponent(props: basePropType & {
     const [projectStats, setProjectStats] = useState({} as ProjectStats);
 
     useEffect(() => {
-        const listener1 = props.firebase.firestore.doc(getProjectDocPath(userId, projectId))
+        const listener1 = props.firebase.firestore.doc(getDocument_project(userId, projectId))
             .onSnapshot((snap) => {
                 const data = (snap.data() || {}) as any;
                 if (!isEqual(projectData, data)) {
@@ -46,7 +46,7 @@ function LocalComponent(props: basePropType & {
             }, (err) => handleFirebaseError(props, err, 'Failed to fetch project data'));
 
 
-        const listener2 = props.firebase.firestore.doc(getProjectStatsDocPath(userId, projectId))
+        const listener2 = props.firebase.firestore.doc(getDocument_stats(userId, projectId))
             .onSnapshot((snap) => {
                 const data = (snap.data() || {}) as any;
                 if (!isEqual(projectStats, data)) {

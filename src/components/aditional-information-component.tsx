@@ -3,7 +3,7 @@ import { Typography, Link } from '@material-ui/core';
 import { ProjectData, ProjectStats, UserProfileInterface } from '../interfaces';
 import moment from 'moment';
 import { basePropType } from '../basePropType';
-import { getProfilePath, getProjectDocPath, getProjectStatsDocPath } from '../data/paths';
+import { getDocument_userData, getDocument_project, getDocument_stats } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import { StandardProperties } from 'csstype';
 import { isEqual } from 'lodash';
@@ -19,7 +19,7 @@ function LocalComponent(props: { publisherId: string, projectId: string } & base
     const { projectId, publisherId } = props;
 
     useEffect(() => {
-        const listener1 = props.firebase.firestore.doc(getProjectDocPath(publisherId, projectId))
+        const listener1 = props.firebase.firestore.doc(getDocument_project(publisherId, projectId))
             .onSnapshot((snap) => {
                 const data = (snap.data() || {}) as any;
                 if (!isEqual(projectData, data)) {
@@ -28,7 +28,7 @@ function LocalComponent(props: { publisherId: string, projectId: string } & base
             }, (err) => handleFirebaseError(props, err, 'Failed to fetch project data'));
 
 
-        const listener2 = props.firebase.firestore.doc(getProjectStatsDocPath(publisherId, projectId))
+        const listener2 = props.firebase.firestore.doc(getDocument_stats(publisherId, projectId))
             .onSnapshot((snap) => {
                 const data = (snap.data() || {}) as any;
                 if (!isEqual(projectStats, data)) {
@@ -36,7 +36,7 @@ function LocalComponent(props: { publisherId: string, projectId: string } & base
                 }
             }, (err) => handleFirebaseError(props, err, 'Failed to fetch project stats'));
 
-        const listener3 = props.firebase!.firestore.doc(getProfilePath(props.publisherId))
+        const listener3 = props.firebase!.firestore.doc(getDocument_userData(props.publisherId))
             .onSnapshot((snap) => {
                 const data = (snap.data() || {}) as any;
                 if (!isEqual(userData, data)) {

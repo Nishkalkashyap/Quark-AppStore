@@ -5,7 +5,7 @@ import { ROUTES, POST_SLUG } from '../data/routes';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import { basePropType } from '../basePropType';
-import { getProfilePath } from '../data/paths';
+import { getDocument_userData } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import { isEqual } from 'lodash';
 import { UserProfileInterface } from '../interfaces';
@@ -26,7 +26,7 @@ export default function UserCardComponent(props: basePropType & { userId: string
     }
 
     useEffect(() => {
-        const listener = props.firebase.firestore.doc(getProfilePath(userId))
+        const listener = props.firebase.firestore.doc(getDocument_userData(userId))
             .onSnapshot((snap) => {
                 const data = (snap.data() || {}) as any;
                 if (!isEqual(userData, data)) {

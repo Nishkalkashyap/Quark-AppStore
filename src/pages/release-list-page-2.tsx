@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { PaginationComponent, Pagination, StateType } from '../components/pagination-component';
 import { basePropType } from '../basePropType';
 import { ReleaseItem } from '../interfaces';
-import { getReleaseListCollectionPath, getProjectReleaseDocPath } from '../data/paths';
+import { getCollection_releases, getDocument_release } from '../data/paths';
 import { ROUTES } from '../data/routes';
 import queryString from 'query-string';
 import { withAllProviders } from '../providers/all-providers';
@@ -17,8 +17,8 @@ export class LocalComponent extends Component<basePropType> {
 
     pagination: Pagination<PaginationType> = {
         pagination: {
-            getCollectionRef: () => { return this.firestore.collection(getReleaseListCollectionPath(this.props.urlUserId!, this.props.urlProjectId!)) },
-            getDocRef: () => { return this.firestore.doc(getProjectReleaseDocPath(this.props.urlUserId!, this.props.urlProjectId!, queryString.parse(this.props.history.location.search)['startAfter'] as string)) },
+            getCollectionRef: () => { return this.firestore.collection(getCollection_releases(this.props.urlUserId!, this.props.urlProjectId!)) },
+            getDocRef: () => { return this.firestore.doc(getDocument_release(this.props.urlUserId!, this.props.urlProjectId!, queryString.parse(this.props.history.location.search)['startAfter'] as string)) },
             getRedirectRoute: (params) => { return `${ROUTES.RELEASE_LIST_PAGE}/${this.props.urlUserId}/${params.projectId}?startAfter=${params.releaseId}` },
             loadLimit: 10,
             upperComponent: (data: { state: StateType<PaginationType> }) => (

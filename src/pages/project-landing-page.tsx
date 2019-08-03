@@ -3,7 +3,7 @@ import { Container } from '@material-ui/core';
 import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES } from '../data/routes';
-import { getProjectDocPath, getProjectReleaseDocPath, getProjectStatsDocPath, getProjectStorageImagesPath, getReleaseListCollectionPath } from '../data/paths';
+import { getDocument_project, getDocument_release, getDocument_stats, getStorageRef_images, getCollection_releases } from '../data/paths';
 import { handleFirebaseError, downloadFile } from '../util';
 import { ProjectData, ReleaseItem } from '../interfaces';
 import { cloneDeep } from 'lodash';
@@ -58,7 +58,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         this.state.userId = userId;
         this.state.projectId = projectId;
 
-        this.props.firebase.storage.ref(getProjectStorageImagesPath(userId, projectId)).list()
+        this.props.firebase.storage.ref(getStorageRef_images(userId, projectId)).list()
             .then((list) => {
                 const promises = list.items.map((item) => {
                     return item.getDownloadURL()
@@ -74,7 +74,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
     private _setProjectData() {
         // fetch latest release 
         this.listeners.push(
-            this.props.firebase.firestore.collection(getReleaseListCollectionPath(this.state.userId, this.state.projectId))
+            this.props.firebase.firestore.collection(getCollection_releases(this.state.userId, this.state.projectId))
                 .orderBy('createdAt')
                 .limit(1)
                 .onSnapshot((snap) => {
@@ -100,7 +100,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
         }
 
         function deleteRelease() {
-            self.props.firebase.firestore.doc(getProjectDocPath(self.state.userId, self.state.projectId))
+            self.props.firebase.firestore.doc(getDocument_project(self.state.userId, self.state.projectId))
                 .delete()
                 .then(() => {
                     self.props.enqueueSnackbar('Project deleted', { variant: 'success' });
@@ -111,13 +111,13 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
     }
 
     downloadFile(userId: string, projectId: string, releaseId: string, fileName: string) {
-        this.props.firebase.storage.ref(`${getProjectReleaseDocPath(userId, projectId, releaseId)}/${fileName}`).getDownloadURL()
+        this.props.firebase.storage.ref(`${getDocument_release(userId, projectId, releaseId)}/${fileName}`).getDownloadURL()
             .then((val) => {
                 return downloadFile(val, fileName);
             })
             .then(() => {
                 if (!this.props.isOwner) {
-                    return this.props.firebase.firestore.doc(getProjectStatsDocPath(userId, projectId)).set(({
+                    return this.props.firebase.firestore.doc(getDocument_stats(userId, projectId)).set(({
                         numberOfDownloads: firebase.firestore.FieldValue.increment(1) as any
                     } as Partial<ProjectData>), { merge: true });
                 }
