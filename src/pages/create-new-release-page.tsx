@@ -6,11 +6,12 @@ import { useForceUpdate, getRandomId, handleFirebaseError } from '../util';
 import { MATCH_PARAMS, ROUTES } from '../data/routes';
 import firebase from 'firebase';
 import { getDocument_release } from '../data/paths';
-import { ReleaseItem } from '../interfaces';
+import { ReleaseItem, GenericFormData } from '../interfaces';
 import { useStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
 import { withOriginalOwner } from '../providers/owner-guard';
 import { DropZoneComponent } from '../components/drop-zone';
+import GenericFormComponent from '../components/generic-form-component';
 
 type FilesToUpload = { [key: string]: { buffer: ArrayBuffer, file: File, percent: number } };
 
@@ -107,56 +108,43 @@ const LocalComponent = (props: basePropType) => {
         return false;
     }
 
+    const { notes } = state;
+    const data: GenericFormData['data'] = {
+        notes: {
+            formData: {
+                label: "Notes",
+                type: "text",
+                required: false,
+                value: notes!,
+
+                multiline: true,
+                rows: "4"
+            }
+        },
+        dropzone: {
+            component: (
+                <DropZoneComponent
+                    addFiles={addFiles}
+                    allowedExtensions={['qrk', 'ino', 'package.json']}
+                    uploadLimit={FILE_UPLOAD_LIMIT}
+                    forceUpdate={forceUpdate}
+                    props={props}
+                />
+            )
+        }
+    }
+
     return (
-        <Container component="section" maxWidth="sm">
-            <Card style={{ padding: '10px 40px' }}>
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <NewReleasesIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h3">
-                        Create Release
-                    </Typography>
-                    <form className={classes.form} onSubmit={onSubmit}>
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-
-                            id="notes"
-                            label="Notes"
-                            name="notes"
-                            type="text"
-                            autoFocus
-
-                            multiline
-                            rows="4"
-
-                            onChange={onChange}
-                        />
-                        <DropZoneComponent
-                            addFiles={addFiles}
-                            allowedExtensions={['qrk', 'ino', 'package.json']}
-                            uploadLimit={FILE_UPLOAD_LIMIT}
-                            forceUpdate={forceUpdate}
-                            props={props}
-                        />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            disabled={!!isDisabled()}
-                        >
-                            Publish
-                    </Button>
-                    </form>
-                </div>
-            </Card>
-        </Container>
-    )
+        <GenericFormComponent
+            headingText="Create Release"
+            icon={NewReleasesIcon}
+            isInvalid={!!isDisabled()}
+            onChange={onChange}
+            onSubmit={onSubmit}
+            submitButtonText="Publish"
+            data={data}
+        />
+    );
 }
 
 export const CreateNewRelease = withAllProviders(withOriginalOwner(LocalComponent));
