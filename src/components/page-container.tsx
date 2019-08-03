@@ -20,6 +20,7 @@ import { LinearProgress, Button } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
 import { HeaderAvatarComponent } from './header-avatar-component';
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../util';
+import { SwagBackgroundComponent } from './swag-background-component';
 
 const drawerWidth = 240;
 
@@ -149,7 +150,7 @@ export function PageContainer(props: basePropType & { children: any }) {
                         {open ? <ChevronLeftIcon /> : <MenuIcon />}
                     </IconButton>
                     <HeaderComponent>
-                        <Button variant="contained" size="small" color="primary" style={{boxShadow : 'none'}} onClick={() => window.open('https://quarkjs.io')}>
+                        <Button variant="contained" size="small" color="primary" style={{ boxShadow: 'none' }} onClick={() => window.open('https://quarkjs.io')}>
                             Go to docs
                         </Button>
                         {!isAuthenticated && <Button color="inherit" onClick={() => props.history.push(ROUTES.SIGN_IN)}>Login</Button>}
@@ -200,6 +201,7 @@ export function PageContainer(props: basePropType & { children: any }) {
             </Drawer>
             <main className={classes.content} style={{ position: 'relative' }}>
                 {/* <MainBgComponent /> */}
+                <SwagBackgroundComponent />
                 <div className={classes.toolbar} />
                 {childrenWithProps}
             </main>
