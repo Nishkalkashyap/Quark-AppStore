@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { basePropType } from "../basePropType";
-import { Button, TextField, Avatar, Container, Typography, Grid, Card } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { ROUTES } from '../data/routes';
 import { useStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
+import { GenericFormData } from '../interfaces';
+import { title } from 'process';
+import GenericFormComponent from '../components/generic-form-component';
 
 const INITIAL_STATE = {
     passwordOne: '',
@@ -52,71 +54,44 @@ class PasswordChangeForm extends Component<basePropType> {
     }
 }
 
-const PasswordChangeElement = (obj: { onSubmit: any, onChange: any, state: typeof INITIAL_STATE }) => {
-    const classes = useStyles();
-    const { passwordOne, passwordTwo } = obj.state;
-    const isInvalid = passwordOne !== passwordTwo;
+const PasswordChangeElement = (props: { onSubmit: any, onChange: any, state: typeof INITIAL_STATE }) => {
+    const { passwordOne, passwordTwo } = props.state;
+    const isInvalid = passwordOne !== passwordTwo || !passwordOne || !passwordTwo
+
+    const data: GenericFormData['data'] = {
+        passwordOne: {
+            formData: {
+                label: "New Password",
+                type: "password",
+                required: true,
+                value: passwordOne,
+
+                autoComplete: "password"
+            }
+        },
+        passwordTwo: {
+            formData: {
+                label: "Confirm Password",
+                type: "password",
+                required: true,
+                value: passwordTwo,
+
+                autoComplete: "password"
+            }
+        }
+    }
 
     return (
-        <Container component="section" maxWidth="sm">
-            <Card style={{ padding: '10px 40px' }}>
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h3">
-                        Change Password
-                </Typography>
-                    <form className={classes.form} onSubmit={obj.onSubmit}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    autoComplete="password"
-                                    name="passwordOne"
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="password1"
-                                    label="New Password"
-                                    type="password"
-
-                                    value={passwordOne}
-                                    onChange={obj.onChange}
-                                />
-                            </Grid>
-
-                            <Grid item xs={12}>
-                                <TextField
-                                    autoComplete="password"
-                                    name="passwordTwo"
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="password2"
-                                    label="Confirm Password"
-                                    type="password"
-
-                                    value={passwordTwo}
-                                    onChange={obj.onChange}
-                                />
-                            </Grid>
-
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                                disabled={isInvalid}
-                            >
-                                Change Password
-                        </Button>
-                        </Grid>
-                    </form>
-                </div>
-            </Card>
-        </Container>
-    )
+        <GenericFormComponent
+            headingText="Change Password"
+            icon={LockOutlinedIcon}
+            isInvalid={isInvalid}
+            onChange={props.onChange}
+            onSubmit={props.onSubmit}
+            submitButtonText="Submit"
+            data={data}
+        />
+    );
 }
 
 export default withAllProviders(PasswordChangeForm);
