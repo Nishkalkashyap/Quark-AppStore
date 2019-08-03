@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import './docs.css';
+import './styles/swag-background.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Firebase, FirebaseContext } from './providers/firebase-provider';

@@ -64,37 +64,3 @@ code {
   opacity: 0;
   left: 0px;
 }
-
-/* swag-component */
-.swag-background {
-  display: block;
-  height: 100vh;
-  width: 100%;
-}
-
-
-.swag-background::before {
-  background: url("assets/dots-small.svg");
-  content: "";
-  display: block !important;
-  position: absolute;
-  z-index: -1;
-  
-  top: 20%;
-  height: 80%;
-  left: 5%;
-  width: 45%;
-}
-
-.swag-background::after {
-  background: url("assets/dots-large.svg");
-  content: "";
-  display: block !important;
-  position: absolute;
-  z-index: -1;
-  
-  top: 0%;
-  height: 90%;
-  left: 50%;
-  width: 45%;
-}
