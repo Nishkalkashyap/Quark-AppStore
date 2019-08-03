@@ -15,6 +15,9 @@ import { withSnackbar } from 'notistack'
 import { basePropType } from '../basePropType';
 import { useStyles } from '../components/common-components';
 import { Card } from '@material-ui/core';
+import { GenericFormData } from '../interfaces';
+import GenericFormComponent from '../components/generic-form-component';
+import { PasswordForgetLink } from './forgot-password-page';
 
 
 const SignUpPage = () => <SignUpForm />
@@ -75,85 +78,59 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
         obj.state.passwordOne === '' ||
         obj.state.email === '';
 
+    const data: GenericFormData['data'] = {
+        email: {
+            formData: {
+                label: "Email Address",
+                type: "email",
+                required: true,
+                value: email,
+
+                autoComplete: "email"
+            }
+        },
+        passwordOne: {
+            formData: {
+                label: "Password",
+                type: "password",
+                required: true,
+                value: passwordOne,
+
+                autoComplete: "password"
+            }
+        },
+        passwordTwo: {
+            formData: {
+                label: "Confirm password",
+                type: "password",
+                required: true,
+                value: passwordTwo,
+
+                autoComplete: "password"
+            }
+        }
+    }
+
     return (
-        <Container component="section" maxWidth="sm">
-            <Card style={{ padding: '10px 40px' }}>
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h3">
-                    Sign up
-                </Typography>
-                <form className={classes.form} onSubmit={obj.onSubmit}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                autoComplete="email"
-                                name="email"
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="email"
-                                label="Email Address"
-
-                                value={email}
-                                onChange={obj.onChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                autoComplete="password"
-                                name="passwordOne"
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="password1"
-                                label="Password"
-                                type="password"
-
-                                value={passwordOne}
-                                onChange={obj.onChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                autoComplete="password"
-                                name="passwordTwo"
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="password2"
-                                label="Confirm Password"
-                                type="password"
-
-                                value={passwordTwo}
-                                onChange={obj.onChange}
-                            />
-                        </Grid>
+        <GenericFormComponent
+            headingText="Sign In"
+            icon={LockOutlinedIcon}
+            isInvalid={isInvalid}
+            onChange={obj.onChange}
+            onSubmit={obj.onSubmit}
+            submitButtonText="Sign In"
+            data={data}
+            postSubmit={(
+                <Grid container justify="flex-end">
+                    <Grid item>
+                        <StupidTypescript variant="body2" to={ROUTES.SIGN_IN} component={Link}>
+                            Already have an account? Sign in
+                        </StupidTypescript>
                     </Grid>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        disabled={isInvalid}
-                    >
-                        Sign Up
-                    </Button>
-                    <Grid container justify="flex-end">
-                        <Grid item>
-                            <StupidTypescript variant="body2" to={ROUTES.SIGN_IN} component={Link}>
-                                Already have an account? Sign in
-                            </StupidTypescript>
-                        </Grid>
-                    </Grid>
-                </form>
-            </div>
-            </Card>
-        </Container>
-    )
+                </Grid>
+            )}
+        />
+    );
 }
 
 const StupidTypescript = MaterialLink as any;
