@@ -176,7 +176,7 @@ export function PageContainer(props: basePropType & { children: any }) {
                 {_showProgressBar && <LinearProgress style={{ position: 'absolute', width: '100%', top: '0px', height: '2px' }} />}
                 <Toolbar>
                     <IconButton
-                        color="inherit"
+                        color="primary"
                         aria-label="open drawer"
                         onClick={handleDrawerOpen}
                         edge="start"
@@ -185,7 +185,7 @@ export function PageContainer(props: basePropType & { children: any }) {
                         {open ? <ChevronLeftIcon /> : <MenuIcon />}
                     </IconButton>
                     <HeaderComponent>
-                        <Button variant="contained" size="small" color="inherit" style={{ boxShadow: 'none' }} onClick={() => window.open('https://quarkjs.io')}>
+                        <Button variant="outlined" size="small" color="primary" style={{ boxShadow: 'none' }} onClick={() => window.open('https://quarkjs.io')}>
                             Go to docs
                         </Button>
                         {!isAuthenticated && <Button color="inherit" onClick={() => props.history.push(ROUTES.SIGN_IN)}>Login</Button>}
@@ -210,9 +210,6 @@ export function PageContainer(props: basePropType & { children: any }) {
             >
                 <div style={{ background: sidebarData.backgroundColor, height: '100%' }}>
                     <div className={classes.toolbar} style={{ justifyContent: 'space-between' }}>
-                        {/* <Typography component="h3" color="inherit" style={{ marginLeft: '20px' }}>
-                            Quark
-                        </Typography> */}
                         <IconButton onClick={handleDrawerClose}>
                             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                         </IconButton>

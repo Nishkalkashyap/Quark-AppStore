@@ -22,7 +22,7 @@ export function HeaderAvatarComponent(props: basePropType) {
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 onClick={handleMenu}
-                color="inherit"
+                color="primary"
             >
                 <AccountCircle />
             </IconButton>

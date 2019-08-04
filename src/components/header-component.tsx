@@ -129,7 +129,6 @@ class Header extends Component<basePropType> {
 
         if (this.formOnResolve) {
             const resolveVal = typeof num == 'number' ? num : 100000000;
-            // this.formOnResolve(formDialogOptions.buttons[resolveVal]);
             this.formOnResolve({ result: { button: formDialogOptions.buttons[resolveVal], text } });
         }
     }
@@ -141,8 +140,7 @@ class Header extends Component<basePropType> {
             <React.Fragment>
                 <div style={MainContainerStyle}>
                     <div style={LeftHeaderStyle} onClick={() => this.props.history.push(ROUTES.LANDING_PAGE)}>
-                        {/* <img src={logo} alt="logo" style={ImageStyles} /> */}
-                        <Typography component="h3" id="appbar-title" style={{ margin: '0px 10px 0px 10px', verticalAlign: 'middle', fontSize: '1.3rem', color: 'inherit' }}>
+                        <Typography component="h3" id="appbar-title" color="primary" style={{ margin: '0px 10px 0px 10px', verticalAlign: 'middle', fontSize: '1.3rem' }}>
                             Quark
                         </Typography>
                     </div>
