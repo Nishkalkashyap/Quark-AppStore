@@ -35,7 +35,7 @@ export default function UserCardComponent(props: basePropType & { userId: string
                     {userData.name || (props.firebase.auth.currentUser!.email!).split('@')[0]}
                 </Typography>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <CardContent style={{ flexGrow: 2, flexBasis: 66 }}>
+                    <CardContent style={{ flexGrow: 2, flexBasis: 66, padding : '20px 0px 0px 0px' }}>
                         <Typography component="p" color="inherit">
                             {userData.bio || ''}
                         </Typography>
@@ -49,22 +49,22 @@ export default function UserCardComponent(props: basePropType & { userId: string
                                 {userData.twitterUrl && <Chip label="Twitter" variant="outlined" size="small" onClick={() => window.open(userData.twitterUrl)} style={{ cursor: 'pointer', marginRight: '10px' }} />}
                             </div>
                         }
+                        <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <ButtonGroup style={{ flexGrow: 1, justifyContent: 'center' }} size="small" aria-label="small button group" color="primary">
+                                {(isOwner) &&
+                                    <Button onClick={() => props.history.push(ROUTES.CREATE_NEW_PROJECT_PAGE)}>
+                                        <NewReleasesIcon fontSize="small" style={{ marginRight: '10px' }} />
+                                        Create new project
+                                    </Button>
+                                }
+                                <Button onClick={() => props.history.push(ROUTES.EDIT_PROFILE_PAGE)}>
+                                    <AccountBoxIcon fontSize="small" style={{ marginRight: '10px' }} />
+                                    Edit Profile
+                                </Button>
+                            </ButtonGroup>
+                        </CardActions>
                     </CardContent>
                 </div>
-                <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <ButtonGroup style={{ flexGrow: 1, justifyContent: 'center' }} size="small" aria-label="small outlined button group" color="inherit">
-                        {(isOwner) &&
-                            <Button onClick={() => props.history.push(ROUTES.CREATE_NEW_PROJECT_PAGE)}>
-                                <NewReleasesIcon fontSize="small" style={{ marginRight: '10px' }} />
-                                Create new project
-                            </Button>
-                        }
-                        <Button onClick={() => props.history.push(ROUTES.EDIT_PROFILE_PAGE)}>
-                            <AccountBoxIcon fontSize="small" style={{ marginRight: '10px' }} />
-                            Edit Profile
-                        </Button>
-                    </ButtonGroup>
-                </CardActions>
             </Card>
         </React.Fragment>
     )
