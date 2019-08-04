@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Typography, CardContent, Button, CardActions, Link, Chip, ButtonGroup } from '@material-ui/core';
+import { Card, Typography, CardContent, Button, CardActions, Link, ButtonGroup } from '@material-ui/core';
 import MainBgComponent, { MainBgContainerStyles } from './main-background-component';
-import { ROUTES, POST_SLUG } from '../data/routes';
+import { ROUTES } from '../data/routes';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
 import { basePropType } from '../basePropType';
 import { getDocument_userData } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import { isEqual } from 'lodash';
 import { UserProfileInterface } from '../interfaces';
-import { StandardProperties } from 'csstype';
 
 
 export default function UserCardComponent(props: basePropType & { userId: string }) {
@@ -17,13 +15,6 @@ export default function UserCardComponent(props: basePropType & { userId: string
     const { isOwner, userId } = props;
 
     const [userData, setUserData] = useState({} as UserProfileInterface);
-
-    const chipStyle: StandardProperties = {
-        color: 'inherit', borderColor: 'transparent', marginTop: '15px', marginRight: '15px'
-    }
-    const chipDownloadIcon: StandardProperties = {
-        color: 'inherit'
-    }
 
     useEffect(() => {
         const listener = props.firebase.firestore.doc(getDocument_userData(userId))
@@ -54,6 +45,8 @@ export default function UserCardComponent(props: basePropType & { userId: string
                             {userData.location || ''}
                         </Typography>
                         {userData.site && <Link color="secondary" onClick={() => window.open(userData.site)} style={{ cursor: 'pointer', marginTop: '10px', display: 'block' }}>{userData.site}</Link>}
+                        {userData.githubUrl && <Link color="secondary" onClick={() => window.open(userData.githubUrl)} style={{ cursor: 'pointer', marginTop: '10px', display: 'block' }}>GitHub</Link>}
+                        {userData.twitterUrl && <Link color="secondary" onClick={() => window.open(userData.twitterUrl)} style={{ cursor: 'pointer', marginTop: '10px', display: 'block' }}>Twitter</Link>}
                     </CardContent>
                 </div>
                 {(isOwner) && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>

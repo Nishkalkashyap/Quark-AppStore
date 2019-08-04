@@ -98,7 +98,10 @@ export interface UserProfileInterface {
     name?: string,
     bio?: string,
     location?: string,
-    site?: string
+    site?: string,
+
+    githubUrl?: string,
+    twitterUrl?: string,
 }
 
 export interface GenericFormData {
@@ -107,7 +110,7 @@ export interface GenericFormData {
         [key: string]: ({
             formData?: {
                 label: string;
-                type: "text" | "password" | "email";
+                type: "text" | "password" | "email" | "url";
                 value: string;
                 required: boolean;
                 autoComplete?: string;
@@ -123,5 +126,5 @@ export interface GenericFormData {
     icon: any;
     submitButtonText: string;
     headingText: string;
-    postSubmit ?: JSX.Element;
+    postSubmit?: JSX.Element;
 }

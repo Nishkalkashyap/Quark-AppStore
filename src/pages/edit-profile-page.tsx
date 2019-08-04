@@ -1,16 +1,8 @@
 import React, { Component } from 'react';
-
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
 import { getDocument_userData } from '../data/paths';
 import { basePropType } from '../basePropType';
-import { useStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
-import { TextField, Card } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
 import { handleFirebaseError } from '../util';
 import { UserProfileInterface, GenericFormData } from '../interfaces';
@@ -23,10 +15,13 @@ const INITIAL_STATE: UserProfileInterface = {
     name: '',
     bio: '',
     location: '',
-    site: ''
+    site: '',
+
+    githubUrl: '',
+    twitterUrl: ''
 };
 
-class EditProfileBase extends Component<basePropType> {
+class EditProfileBase extends Component<basePropType, UserProfileInterface> {
     constructor(props: basePropType) {
         super(props);
         this.state = { ...INITIAL_STATE };
@@ -51,20 +46,18 @@ class EditProfileBase extends Component<basePropType> {
         )
     }
 
-    state: typeof INITIAL_STATE;
+    state: UserProfileInterface;
 
     onSubmit = (event: any) => {
         event.preventDefault();
-        
-        const { name, bio, location, site } = this.state;
 
         const currentUser = this.props.firebase.auth.currentUser!;
         const promises = [
             currentUser.updateProfile({
-                displayName: name
+                displayName: this.state.name
             }),
             this.props.firebase.firestore.doc(getDocument_userData(currentUser.uid)).set({
-                name, bio, location, site
+                ...this.state
             })
         ];
 
@@ -93,7 +86,9 @@ const SignUpComponent = (props: { onSubmit: any, onChange: any, state: typeof IN
         name,
         bio,
         location,
-        site
+        site,
+        githubUrl,
+        twitterUrl
     } = props.state;
 
     const data: GenericFormData['data'] = {
@@ -127,9 +122,25 @@ const SignUpComponent = (props: { onSubmit: any, onChange: any, state: typeof IN
         site: {
             formData: {
                 label: "Site",
-                type: "text",
+                type: "url",
                 required: false,
                 value: site || '',
+            }
+        },
+        githubUrl: {
+            formData: {
+                label: "GitHub",
+                type: "url",
+                required: false,
+                value: githubUrl || '',
+            }
+        },
+        twitterUrl: {
+            formData: {
+                label: "Twitter",
+                type: "url",
+                required: false,
+                value: twitterUrl || '',
             }
         }
     }
