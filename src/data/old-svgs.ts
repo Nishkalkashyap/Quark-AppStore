@@ -272,19 +272,30 @@ export function getSvgs() {
         {
             svg: svgs.circle,
             style: {
+                // width: '18rem',
                 width: '20%',
-                top: 8 + '%',
-                left: -14 + '%',
+                top: 10 + '%',
+                left: -16 + '%',
                 stroke: colors['yellow'],
                 fill: colors['yellow']
+            }
+        },
+        {
+            svg: svgs.circle,
+            style: {
+                width: '3%',
+                top: 10 + '%',
+                left: 0 + '%',
+                stroke: colors['blue-grey'],
+                fill: colors['blue-grey']
             }
         },
         {
             svg: svgs.cross,
             style: {
                 width: '5%',
-                top: 5 + '%',
-                left: 6 + '%',
+                top: 20 + '%',
+                left: 10 + '%',
                 stroke: colors['pink'],
                 strokeWidth: 4,
                 fill: colors['transparent']
@@ -294,7 +305,7 @@ export function getSvgs() {
             svg: svgs.hexa,
             style: {
                 width: '13%',
-                top: 90 + '%',
+                top: 70 + '%',
                 left: 0 + '%',
                 stroke: colors['orange'],
                 fill: colors['transparent'],
@@ -304,8 +315,8 @@ export function getSvgs() {
             svg: svgs.upDown,
             style: {
                 width: '7%',
-                top: 63 + '%',
-                right: 10 + '%',
+                top: 83 + '%',
+                left: 30 + '%',
                 stroke: colors['purple'],
                 fill: colors['transparent'],
             }
@@ -314,7 +325,7 @@ export function getSvgs() {
             svg: svgs.triangle,
             style: {
                 width: '4%',
-                top: 8 + '%',
+                top: 5 + '%',
                 right: 3 + '%',
                 stroke: colors['white'],
                 fill: colors['transparent'],

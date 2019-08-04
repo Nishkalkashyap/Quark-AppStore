@@ -3,10 +3,6 @@ import { basePropType } from "../basePropType";
 import React, { Component } from 'react';
 
 import Typography from '@material-ui/core/Typography';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import PersonIcon from '@material-ui/icons/Person';
-import NoteIcon from '@material-ui/icons/Note';
 import { MessageDialogInterface, FormDialogInterface } from '../interfaces';
 import { MessageDialogComponent } from './message-dialog-component';
 import { FormDialogComponent } from './form-dialog-component';
