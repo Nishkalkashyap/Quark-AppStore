@@ -1,5 +1,4 @@
 import React from 'react';
-import Landing from './pages/landing-page';
 import { BrowserRouter as Router, Route, withRouter } from 'react-router-dom';
 import { ROUTES, SLUGS, POST_SLUG } from './data/routes';
 

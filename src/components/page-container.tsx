@@ -17,11 +17,12 @@ import HeaderComponent, { progress } from './header-component';
 import { basePropType } from '../basePropType';
 import { getSidebarItems } from './sidebar-component';
 import { LinearProgress, Button } from '@material-ui/core';
-import { ROUTES } from '../data/routes';
+import { ROUTES, SLUGS } from '../data/routes';
 import { HeaderAvatarComponent } from './header-avatar-component';
 import { SwagBackgroundComponent } from './swag-background-component';
 import { COLORS } from '../util';
 import { ReactGA } from '..';
+import { matchPath } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -96,7 +97,20 @@ export function PageContainer(props: basePropType & { children: any }) {
         // UA-112064718-9
         const listener1 = props.history.listen((location, action) => {
             if (lastValue !== location.pathname) {
-                console.log(location.pathname);
+
+                const match = matchPath(location.pathname, {
+                    exact: true,
+                    path: `${ROUTES.PROJECT_PAGE}/${SLUGS.Project}`
+                });
+
+                if (match) {
+                    ReactGA.event({
+                        category: 'project',
+                        action: 'view',
+                        label: match.url
+                    });
+                }
+
                 setLastValue(location.pathname);
                 ReactGA.pageview(location.pathname);
             }
