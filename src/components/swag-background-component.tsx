@@ -2,8 +2,6 @@ import React from 'react';
 import { getSvgs, darkSvgs } from '../data/svgs';
 /* eslint import/no-webpack-loader-syntax: off */
 import '!!style-loader!css-loader!stylus-loader!./../styles/mixins.styl';
-import dots from './../assets/dots-small.svg';
-import { COLORS } from '../util';
 
 export function SwagBackgroundComponent() {
 
@@ -19,7 +17,8 @@ export function SwagBackgroundComponent() {
                 }
             </div>
             <div style={{ position: 'absolute', height: '100%', zIndex: -4, width: '100%', background: `linear-gradient(to bottom, #ffffff00, #ffffff)` }}></div>
-            <div style={{ position: 'absolute', height: '100%', zIndex: -5, width: '100%', background: `url("${dots}")` }}> </div>
+            <div style={{ position: 'absolute', height: '100%', zIndex: -5, width: '100%', backgroundImage: `radial-gradient(#999999 1px, transparent 1px), radial-gradient(#999999 1px, transparent 1px)`, backgroundPosition: '0 0, 25px 25px', backgroundSize: '50px 50px' }}> </div>
+            {/* <div style={{ position: 'absolute', height: '100%', zIndex: -5, width: '100%', background: `url("${dots}")`, backgroundSize: '30px' }}> </div> */}
         </div>
     )
 }

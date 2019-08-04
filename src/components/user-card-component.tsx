@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Typography, CardContent, Button, CardActions, Link, ButtonGroup } from '@material-ui/core';
-import MainBgComponent, { MainBgContainerStyles } from './main-background-component';
+import { Card, Typography, CardContent, Button, CardActions, Link, ButtonGroup, Chip } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import { basePropType } from '../basePropType';
 import { getDocument_userData } from '../data/paths';
-import { handleFirebaseError } from '../util';
+import { handleFirebaseError, COLORS } from '../util';
 import { isEqual } from 'lodash';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import { UserProfileInterface } from '../interfaces';
 
 
@@ -30,33 +30,41 @@ export default function UserCardComponent(props: basePropType & { userId: string
 
     return (
         <React.Fragment>
-            {/* <Card style={Object.assign({}, MainBgContainerStyles, { margin: '60px 0px', padding: '80px 40px' })} elevation={4}> */}
-            <Card style={{ margin: '60px 0px', padding: '80px 40px', background : 'transparent', boxShadow : 'none' }} elevation={4}>
+            <Card style={{ margin: '40px 0px', padding: '40px 40px', background: '#ffffff', color: COLORS.BACKGROUND, textAlign: 'center' }} elevation={4}>
                 <Typography variant="h2" component="h1" color="inherit">
-                    {userData.name || userId}
+                    {userData.name || (props.firebase.auth.currentUser!.email!).split('@')[0]}
                 </Typography>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <CardContent style={{ flexGrow: 2, flexBasis: 66 }}>
                         <Typography component="p" color="inherit">
                             {userData.bio || ''}
                         </Typography>
-                        {/* <Chip label={userData.location} variant="outlined" size="small" icon={<LocationOnIcon style={chipDownloadIcon} />} style={chipStyle} /> */}
                         <Typography component="p" color="inherit" style={{ marginTop: '10px' }}>
                             {userData.location || ''}
                         </Typography>
-                        {userData.site && <Link color="inherit" onClick={() => window.open(userData.site)} style={{ cursor: 'pointer', marginTop: '10px', display: 'block' }}>{userData.site}</Link>}
-                        {userData.githubUrl && <Link color="inherit" onClick={() => window.open(userData.githubUrl)} style={{ cursor: 'pointer', marginTop: '10px', display: 'block' }}>GitHub</Link>}
-                        {userData.twitterUrl && <Link color="inherit" onClick={() => window.open(userData.twitterUrl)} style={{ cursor: 'pointer', marginTop: '10px', display: 'block' }}>Twitter</Link>}
+                        {(userData.site || userData.githubUrl || userData.twitterUrl) &&
+                            <div style={{ margin: '10px 0px' }}>
+                                {userData.site && <Chip label="Website" variant="outlined" size="small" onClick={() => window.open(userData.site)} style={{ cursor: 'pointer', marginRight: '10px' }} />}
+                                {userData.githubUrl && <Chip label="GitHub" variant="outlined" size="small" onClick={() => window.open(userData.githubUrl)} style={{ cursor: 'pointer', marginRight: '10px' }} />}
+                                {userData.twitterUrl && <Chip label="Twitter" variant="outlined" size="small" onClick={() => window.open(userData.twitterUrl)} style={{ cursor: 'pointer', marginRight: '10px' }} />}
+                            </div>
+                        }
                     </CardContent>
                 </div>
-                {(isOwner) && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
-                        <Button onClick={() => props.history.push(ROUTES.CREATE_NEW_PROJECT_PAGE)}>
-                            Create new project
-                        <NewReleasesIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <ButtonGroup style={{ flexGrow: 1, justifyContent: 'center' }} size="small" aria-label="small outlined button group" color="inherit">
+                        {(isOwner) &&
+                            <Button onClick={() => props.history.push(ROUTES.CREATE_NEW_PROJECT_PAGE)}>
+                                <NewReleasesIcon fontSize="small" style={{ marginRight: '10px' }} />
+                                Create new project
+                            </Button>
+                        }
+                        <Button onClick={() => props.history.push(ROUTES.EDIT_PROFILE_PAGE)}>
+                            <AccountBoxIcon fontSize="small" style={{ marginRight: '10px' }} />
+                            Edit Profile
                         </Button>
                     </ButtonGroup>
-                </CardActions>}
+                </CardActions>
             </Card>
         </React.Fragment>
     )
