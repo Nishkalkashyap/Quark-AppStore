@@ -79,11 +79,11 @@ export function SmallProjectCardComponent(props: basePropType & { projectData: P
                     </Typography>
                 </CardContent>
             </CardActionArea>
-            <CardActions>
+            {/* <CardActions>
                 <Button size="small" color="primary" onClick={() => props.history.push(`${ROUTES.PROJECT_PAGE}/${projectData.userId}/${projectData.projectId}`)}>
                     View
                 </Button>
-            </CardActions>
+            </CardActions> */}
             {projectStats.numberOfReviews && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Button size="small" color="primary" onClick={() => props.history.push(`${ROUTES.RELEASE_LIST_PAGE}/${projectData.userId}/${projectData.projectId}`)}>
                     reviews
