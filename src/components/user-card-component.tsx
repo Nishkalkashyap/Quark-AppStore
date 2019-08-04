@@ -31,8 +31,8 @@ export default function UserCardComponent(props: basePropType & { userId: string
 
     return (
         <React.Fragment>
-            <Card style={{ position: 'relative', margin: '40px 0px', padding: '40px 40px', background: COLORS.ON_BACKGROUND, color: COLORS.BACKGROUND, textAlign: 'center' }} elevation={4}>
-                {/* <CardBgComponent dotColor={COLORS.BACKGROUND} type="linear" bgColor={COLORS.ON_PRIMARY} /> */}
+            <Card style={{ position: 'relative', margin: '40px 0px', padding: '40px 40px', background: 'transparent', color: COLORS.BACKGROUND, textAlign: 'center' }} elevation={4}>
+                <CardBgComponent dotColor="transparent" bgColor="transparent" type="radial" />
                 <Typography variant="h2" component="h1" color="inherit">
                     {userData.name || (props.firebase.auth.currentUser!.email!).split('@')[0]}
                 </Typography>
