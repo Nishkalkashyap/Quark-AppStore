@@ -27,22 +27,22 @@ export class LocalComponent extends Component<basePropType> {
                         <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
                             <Button onClick={() => this.props.history.push(`${ROUTES.PROJECT_PAGE}/${this.props.urlUserId}/${this.props.urlProjectId}`)}>
                                 Project home
-                                </Button>
+                            </Button>
                         </ButtonGroup>
                     </CardActions>
                 </ProjectCardComponent>
             ),
             iteratorComponent: (data: { state: StateType<PaginationType> }) => (
                 <React.Fragment>
-                    {data.state.paginationArray.map((release) => {
-                        return (
-                            <Container maxWidth="md" key={release.releaseId}>
-                                <List style={{ marginTop: '30px' }}>
+                    <Container maxWidth="md">
+                        <List style={{ marginTop: '30px' }}>
+                            {data.state.paginationArray.map((release) => {
+                                return (
                                     <ReleaseItemComponent key={release.releaseId}  {...this.props} release={release} />
-                                </List>
-                            </Container>
-                        )
-                    })}
+                                )
+                            })}
+                        </List>
+                    </Container>
                 </React.Fragment>
             )
         }

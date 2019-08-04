@@ -6,15 +6,15 @@ import { allCategories, ProjectData, ReleaseItem } from "./interfaces";
 import { getDocument_release, getDocument_stats } from "./data/paths";
 import firebase from "firebase";
 
+export const COLORS = {
+    PRIMARY: '#488aff',
+    ON_PRIMARY: '#ffffff',
+    SECONDARY: '#fec042',
+    ON_SECONDARY: '#ffffff',
 
-export const PRIMARY_COLOR = '#1f2631';
-export const PRIMARY_COLOR_LIGHT = '#1f2631';
-export const SECONDARY_COLOR = '#488aff';
-export const ON_PRIMARY_COLOR = '#ffffff';
-// export const PRIMARY_COLOR = '#6f5cfc';
-// export const SECONDARY_COLOR = '#1f2631';
-// export const PRIMARY_COLOR_LIGHT = '#8d9ef7';
-// export const ON_PRIMARY_COLOR = '#ffffff';
+    BACKGROUND: '#1f2631',
+    ON_BACKGROUND: '#e8e9ea'
+}
 
 export function handleFirebaseError(props: basePropType, err: any, message: string) {
     if (message) {
@@ -79,7 +79,7 @@ export const allProjectCategories: allCategories[] = [
     'Sports',
     'Travel',
     'Utilities',
-    
+
     'Tutorial',
     'Example'
 ]

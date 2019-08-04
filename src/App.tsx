@@ -19,7 +19,7 @@ import { NotFoundComponent } from './components/common-components';
 import { PageContainer } from './components/page-container';
 import { EditProjectPage } from './pages/edit-project-page';
 import { WriteProjectReviewPage } from './pages/write-project-review-page';
-import { PRIMARY_COLOR, SECONDARY_COLOR } from './util';
+import { COLORS } from './util';
 import { ProjectLandingPage } from './pages/project-landing-page';
 import { ReviewsListPage } from './pages/reviews-list-page-2';
 import { BrowseProjectsPage } from './pages/browse-projects-list-page';
@@ -62,11 +62,9 @@ const StupidPageContainer: any = withRouter(withFirebase(withSnackbar(withMatchP
 const theme = createMuiTheme({
   palette: {
     // primary: { main: '#2196F3' },
-    primary: { main: PRIMARY_COLOR },
-    secondary: { main: SECONDARY_COLOR },
+    primary: { main: COLORS.PRIMARY },
+    secondary: { main: COLORS.ON_PRIMARY },
     background: {
-      // default: '#f5f5f5'
-      // default: '#ffffff'
       paper: '#f8f9f9',
       default: '#ffffff'
     }

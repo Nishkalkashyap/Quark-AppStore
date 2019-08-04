@@ -19,14 +19,14 @@ import { getSidebarItems } from './sidebar-component';
 import { LinearProgress, Button } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
 import { HeaderAvatarComponent } from './header-avatar-component';
-import { PRIMARY_COLOR, SECONDARY_COLOR } from '../util';
 import { SwagBackgroundComponent } from './swag-background-component';
+import { COLORS } from '../util';
 
 const drawerWidth = 240;
 
 const sidebarData = {
-    backgroundColor: PRIMARY_COLOR,
-    color: '#e8e9ea'
+    backgroundColor: COLORS.BACKGROUND,
+    color: COLORS.ON_BACKGROUND
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -164,7 +164,7 @@ export function PageContainer(props: basePropType & { children: any }) {
                         {open ? <ChevronLeftIcon /> : <MenuIcon />}
                     </IconButton>
                     <HeaderComponent>
-                        <Button variant="contained" size="small" color="primary" style={{ boxShadow: 'none' }} onClick={() => window.open('https://quarkjs.io')}>
+                        <Button variant="contained" size="small" color="inherit" style={{ boxShadow: 'none' }} onClick={() => window.open('https://quarkjs.io')}>
                             Go to docs
                         </Button>
                         {!isAuthenticated && <Button color="inherit" onClick={() => props.history.push(ROUTES.SIGN_IN)}>Login</Button>}

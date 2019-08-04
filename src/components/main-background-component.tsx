@@ -1,14 +1,10 @@
 import React from 'react'
 import { StandardProperties } from 'csstype';
 import { cloneDeep } from 'lodash';
-import { PRIMARY_COLOR, PRIMARY_COLOR_LIGHT, ON_PRIMARY_COLOR } from '../util';
+import { COLORS } from '../util';
 
 export default function MainBgComponent(props?: { bgColor?: string, position?: 'fixed' | 'absolute' }) {
-    // const color = props!.bgColor ? props!.bgColor : 'linear-gradient(90deg,#2196F3 0,#21CBF3 100%)';
-    // const color = props!.bgColor ? props!.bgColor : 'linear-gradient(90deg,PRIMARY_COLOR 0,#21CBF3 100%)';
-    // const color = props!.bgColor ? props!.bgColor : 'linear-gradient(90deg,#000000ff 0,#000000aa 100%)';
-    // const color = 'linear-gradient(90deg,#ffffffff 0,#99999999 100%)';
-    const backgroundColor = `linear-gradient(90deg,${PRIMARY_COLOR} 0,${PRIMARY_COLOR_LIGHT} 100%)`;
+    const backgroundColor = `linear-gradient(90deg,${COLORS.BACKGROUND} 0,${COLORS.BACKGROUND} 100%)`;
     const position = props!.position ? props!.position : 'absolute';
     return (
         <div style={Object.assign(cloneDeep(CommonStyles), { background: backgroundColor, transform: undefined, borderRadius: '5px', position })}>
@@ -24,7 +20,7 @@ export default function MainBgComponent(props?: { bgColor?: string, position?: '
 
 export const MainBgContainerStyles: StandardProperties = {
     padding: '20px 30px',
-    color: ON_PRIMARY_COLOR,
+    color: COLORS.ON_BACKGROUND,
     position: 'relative',
     zIndex: 20
 }
