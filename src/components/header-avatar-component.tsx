@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconButton, Menu, MenuItem, Divider } from '@material-ui/core';
+import { IconButton, Menu, MenuItem, Divider, ListItemText } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { basePropType } from '../basePropType';
 import { ROUTES } from '../data/routes';
@@ -41,11 +41,19 @@ export function HeaderAvatarComponent(props: basePropType) {
                 open={open}
                 onClose={handleClose}
             >
-                <MenuItem onClick={() => props.history.push(ROUTES.ACCOUNT_PAGE)}>My account</MenuItem>
-                <MenuItem onClick={() => props.history.push(ROUTES.EDIT_PROFILE_PAGE)}>Edit profile</MenuItem>
-                <MenuItem onClick={() => props.history.push(ROUTES.CHANGE_PASSWORD_PAGE)}>Change password</MenuItem>
-                <Divider/>
-                <MenuItem onClick={() => props.firebase.auth.signOut()}>Sign Out</MenuItem>
+                <MenuItem dense={true} onClick={() => props.history.push(ROUTES.ACCOUNT_PAGE)}>
+                    <ListItemText primary="My account" />
+                </MenuItem>
+                <MenuItem dense={true} onClick={() => props.history.push(ROUTES.EDIT_PROFILE_PAGE)}>
+                    <ListItemText primary="Edit profile" />
+                </MenuItem>
+                <MenuItem dense={true} onClick={() => props.history.push(ROUTES.CHANGE_PASSWORD_PAGE)}>
+                    <ListItemText primary="Change password" />
+                </MenuItem>
+                <Divider />
+                <MenuItem dense={true} onClick={() => props.firebase.auth.signOut()}>
+                    <ListItemText primary="Sign Out" />
+                </MenuItem>
             </Menu>
         </div>
     )

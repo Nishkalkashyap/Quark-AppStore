@@ -2,12 +2,7 @@ import { StandardProperties } from 'csstype';
 import { basePropType } from "../basePropType";
 import React, { Component } from 'react';
 
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PersonIcon from '@material-ui/icons/Person';
@@ -17,26 +12,6 @@ import { MessageDialogComponent } from './message-dialog-component';
 import { FormDialogComponent } from './form-dialog-component';
 import { ROUTES } from '../data/routes';
 import { withAllProviders } from '../providers/all-providers';
-
-const options = [
-    {
-        label: 'My Profile',
-        icon: <PersonIcon />
-    },
-    {
-        label: 'Dashboard',
-        icon: <DashboardIcon />
-    },
-    {
-        label: 'Documentation',
-        icon: <NoteIcon />
-    },
-    {
-        label: 'Sign out',
-        icon: <ExitToAppIcon />
-    }
-]
-
 
 export const progress: {
     _showProgressBar: boolean;
@@ -83,8 +58,6 @@ class Header extends Component<basePropType> {
 
     messageOnResolve: <T = any>(text: T) => void = (t) => { }
     formOnResolve: <T = any>(res: FormResolveType<T>) => void = (t) => { }
-    // messageOnResolve: Function = () => null;
-    // formOnResolve: Function = () => null;
 
     async _showMessageBox<T = any>(title: string, text: string, buttons: T[], type: MessageDialogInterface['type']): Promise<T> {
         return new Promise<T>((resolve) => {
@@ -174,60 +147,4 @@ const LeftHeaderStyle: StandardProperties = {
     alignItems: 'center',
     display: 'flex',
     cursor: 'pointer'
-}
-
-const ImageStyles: StandardProperties = {
-    // maxWidth: '35.2px',
-    maxWidth: '30.2px',
-    // marginLeft: '24px',
-}
-
-
-const ITEM_HEIGHT = 48;
-function LongMenu() {
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-
-    function handleClick(event: any) {
-        setAnchorEl(event.currentTarget);
-    }
-
-    function handleClose() {
-        setAnchorEl(null);
-    }
-
-    return (
-        <div>
-            <IconButton
-                aria-label="More"
-                aria-controls="long-menu"
-                aria-haspopup="true"
-                onClick={handleClick}
-            >
-                <MoreVertIcon />
-            </IconButton>
-            <Menu
-                id="long-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={open}
-                onClose={handleClose}
-                PaperProps={{
-                    style: {
-                        maxHeight: ITEM_HEIGHT * 4.5,
-                        width: 200,
-                    },
-                }}
-            >
-                {options.map(option => (
-                    <MenuItem key={option.label} onClick={handleClose}>
-                        <ListItemIcon>
-                            {option.icon}
-                        </ListItemIcon>
-                        <Typography variant="inherit">{option.label}</Typography>
-                    </MenuItem>
-                ))}
-            </Menu>
-        </div>
-    );
 }
