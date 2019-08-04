@@ -64,12 +64,12 @@ export class LocalComponent extends Component<basePropType & { classes: any }, L
             upperComponent: () => {
                 return (
                     <Card style={{ position: 'relative', margin: '40px 0px', padding: '40px 40px', background: 'transparent', color: COLORS.BACKGROUND }} elevation={4}>
-                        <CardBgComponent dotColor="transparent" bgColor="transparent" type="radial" />
+                        <CardBgComponent dotColor={COLORS.PRIMARY} bgColor={COLORS.ON_PRIMARY} type="linear" />
                         <div style={{ textAlign: 'center', margin: '80px 0px' }}>
                             <Typography variant="h2" component="h1" color="inherit">
                                 Discover and share Quark projects
                             </Typography>
-                            <Typography variant="body1" component="p" style={{ margin: '40px 0px' }}>
+                            <Typography variant="h4" component="p" style={{ margin: '40px 0px' }}>
                                 Find all the best community-made resources
                             </Typography>
                         </div>
