@@ -40,12 +40,12 @@ export default function CardBgComponent(props?: { dotColor?: string, type?: 'lin
     )
 }
 
-export const MainBgContainerStyles: StandardProperties = {
-    padding: '20px 30px',
-    color: COLORS.BACKGROUND,
-    position: 'relative',
-    zIndex: 20
-}
+// export const MainBgContainerStyles: StandardProperties = {
+//     padding: '20px 30px',
+//     color: COLORS.BACKGROUND,
+//     position: 'relative',
+//     zIndex: 20
+// }
 
 const CommonStyles: StandardProperties = {
     width: 'calc(100% - 0px)',

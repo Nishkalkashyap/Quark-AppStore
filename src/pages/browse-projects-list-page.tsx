@@ -8,8 +8,8 @@ import { SmallProjectCardComponent, smallProjectContainerStyles } from '../compo
 import { withAllProviders } from '../providers/all-providers';
 import { ProjectData, allCategories } from '../interfaces';
 import { Typography, Card, FormControl, InputLabel, Select, OutlinedInput, MenuItem } from '@material-ui/core';
-import { MainBgContainerStyles } from '../components/main-background-component';
-import { allProjectCategories } from '../util';
+import { allProjectCategories, COLORS } from '../util';
+import CardBgComponent from '../components/main-background-component';
 
 type PaginationType = ProjectData;
 type LocalStateType = {
@@ -63,7 +63,8 @@ export class LocalComponent extends Component<basePropType & { classes: any }, L
             loadLimit: 20,
             upperComponent: () => {
                 return (
-                    <Card style={Object.assign({ marginBottom: '100px' }, MainBgContainerStyles)} elevation={4}>
+                    <Card style={{ position: 'relative', margin: '40px 0px', padding: '40px 40px', background: 'transparent', color: COLORS.BACKGROUND }} elevation={4}>
+                        <CardBgComponent dotColor="transparent" bgColor="transparent" type="radial" />
                         <div style={{ textAlign: 'center', margin: '80px 0px' }}>
                             <Typography variant="h2" component="h1" color="inherit">
                                 Discover and share Quark projects
@@ -72,25 +73,23 @@ export class LocalComponent extends Component<basePropType & { classes: any }, L
                                 Find all the best community-made resources
                             </Typography>
                         </div>
-                        <div>
-                            <FormControl variant="outlined" margin="normal">
-                                <InputLabel>
-                                    Category
-                                </InputLabel>
-                                <Select
-                                    value={this.state.category || ''}
-                                    onChange={this.onChange.bind(this)}
-                                    style={{ minWidth: '120px' }}
-                                    input={<OutlinedInput labelWidth={10} name="category" />}
-                                >
-                                    {
-                                        allProjectCategories.map((cat) => (
-                                            <MenuItem value={cat} key={cat}>{cat}</MenuItem>
-                                        ))
-                                    }
-                                </Select>
-                            </FormControl>
-                        </div>
+                        <FormControl variant="outlined" margin="normal">
+                            <InputLabel>
+                                Category
+                            </InputLabel>
+                            <Select
+                                value={this.state.category || ''}
+                                onChange={this.onChange.bind(this)}
+                                style={{ minWidth: '120px' }}
+                                input={<OutlinedInput labelWidth={10} name="category" />}
+                            >
+                                {
+                                    allProjectCategories.map((cat) => (
+                                        <MenuItem value={cat} key={cat}>{cat}</MenuItem>
+                                    ))
+                                }
+                            </Select>
+                        </FormControl>
                     </Card>
                 )
             },
