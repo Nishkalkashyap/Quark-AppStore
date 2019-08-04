@@ -7,12 +7,12 @@ import { getDocument_release, getDocument_stats } from "./data/paths";
 import firebase from "firebase";
 
 export const COLORS = {
-    PRIMARY: '#488aff',
+    PRIMARY: '#055af9',
     ON_PRIMARY: '#ffffff',
     SECONDARY: '#fec042',
     ON_SECONDARY: '#ffffff',
 
-    BACKGROUND: '#1f2631',
+    BACKGROUND: '#020814',
     ON_BACKGROUND: '#e8e9ea'
 }
 

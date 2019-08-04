@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { useStyles, globalStyles } from './common-components';
+import { globalStyles } from './common-components';
 import { Container, Card, Avatar, Typography, Grid, TextField, Button } from '@material-ui/core';
 import { GenericFormData } from '../interfaces';
 import { withStyles } from '@material-ui/styles';
@@ -17,7 +17,7 @@ class LocalComponent extends Component<GenericFormData & { classes: any }> {
         return (
             <div>
                 <Container component="section" maxWidth={props.maxWidth || "sm"}>
-                    <Card style={{ padding: '10px 40px' }}>
+                    <Card style={{ padding: '40px 40px' }}>
                         <div className={classes.paper}>
                             <Avatar className={classes.avatar}>
                                 <props.icon />

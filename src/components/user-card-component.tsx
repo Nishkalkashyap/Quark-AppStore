@@ -44,9 +44,9 @@ export default function UserCardComponent(props: basePropType & { userId: string
                         <Typography component="p" color="inherit" style={{ marginTop: '10px' }}>
                             {userData.location || ''}
                         </Typography>
-                        {userData.site && <Link color="secondary" onClick={() => window.open(userData.site)} style={{ cursor: 'pointer', marginTop: '10px', display: 'block' }}>{userData.site}</Link>}
-                        {userData.githubUrl && <Link color="secondary" onClick={() => window.open(userData.githubUrl)} style={{ cursor: 'pointer', marginTop: '10px', display: 'block' }}>GitHub</Link>}
-                        {userData.twitterUrl && <Link color="secondary" onClick={() => window.open(userData.twitterUrl)} style={{ cursor: 'pointer', marginTop: '10px', display: 'block' }}>Twitter</Link>}
+                        {userData.site && <Link color="inherit" onClick={() => window.open(userData.site)} style={{ cursor: 'pointer', marginTop: '10px', display: 'block' }}>{userData.site}</Link>}
+                        {userData.githubUrl && <Link color="inherit" onClick={() => window.open(userData.githubUrl)} style={{ cursor: 'pointer', marginTop: '10px', display: 'block' }}>GitHub</Link>}
+                        {userData.twitterUrl && <Link color="inherit" onClick={() => window.open(userData.twitterUrl)} style={{ cursor: 'pointer', marginTop: '10px', display: 'block' }}>Twitter</Link>}
                     </CardContent>
                 </div>
                 {(isOwner) && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
