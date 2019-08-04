@@ -7,13 +7,22 @@ import { getDocument_release, getDocument_stats } from "./data/paths";
 import firebase from "firebase";
 
 export const COLORS = {
-    PRIMARY: '#055af9',
+    PRIMARY: '#6574cd',
     ON_PRIMARY: '#ffffff',
     SECONDARY: '#fec042',
     ON_SECONDARY: '#ffffff',
 
     BACKGROUND: '#020814',
     ON_BACKGROUND: '#ffffff'
+}
+
+export function SetCssVariables() {
+    document.documentElement.style.setProperty('--accent-color', COLORS.PRIMARY);
+    document.documentElement.style.setProperty('--on-accent-color', COLORS.ON_PRIMARY);
+    document.documentElement.style.setProperty('--secondary-color', COLORS.SECONDARY);
+    document.documentElement.style.setProperty('--on-secondary-color', COLORS.ON_SECONDARY);
+    document.documentElement.style.setProperty('--background-color', COLORS.BACKGROUND);
+    document.documentElement.style.setProperty('--on-background-color', COLORS.ON_BACKGROUND);
 }
 
 export function handleFirebaseError(props: basePropType, err: any, message: string) {

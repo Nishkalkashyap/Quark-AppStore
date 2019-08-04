@@ -8,9 +8,12 @@ import * as serviceWorker from './serviceWorker';
 import { Firebase, FirebaseContext } from './providers/firebase-provider';
 import { SnackbarProvider } from 'notistack';
 import 'typeface-roboto';
+import { SetCssVariables } from './util';
 import ReactGA from 'react-ga';
 ReactGA.initialize('UA-112064718-9');
 export { ReactGA };
+
+SetCssVariables();
 
 ReactDOM.render(
     <FirebaseContext.Provider value={new Firebase()}>
