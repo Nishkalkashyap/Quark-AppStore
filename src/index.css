@@ -7,6 +7,16 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+#appbar-title::after {
+  content: '(beta)';
+  font-size: 10px;
+  position: relative;
+  top: -15px;
+  left: 6px;
+  font-style: italic;
+  color: var(--secondary-color);
+}
+
 ::selection {
   color: #f8f9f9;
   background: var(--accent-color);

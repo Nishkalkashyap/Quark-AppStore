@@ -9,7 +9,7 @@ import firebase from "firebase";
 export const COLORS = {
     PRIMARY: '#055af9',
     ON_PRIMARY: '#ffffff',
-    SECONDARY: '#fec042',
+    SECONDARY: '#eb5286',
     ON_SECONDARY: '#ffffff',
 
     BACKGROUND: '#020814',

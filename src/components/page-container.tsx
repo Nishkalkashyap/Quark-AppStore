@@ -23,6 +23,7 @@ import { SwagBackgroundComponent } from './swag-background-component';
 import { COLORS } from '../util';
 import { ReactGA } from '..';
 import { matchPath } from 'react-router-dom';
+import { StandardProperties } from 'csstype';
 
 const drawerWidth = 240;
 
@@ -73,7 +74,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 width: theme.spacing(0),
             },
             overflowX: 'hidden',
-            width: theme.spacing(9) + 1,
+            width: theme.spacing(9),
         },
         toolbar: {
             display: 'flex',
@@ -93,7 +94,22 @@ const useStyles = makeStyles((theme: Theme) =>
 export function PageContainer(props: basePropType & { children: any }) {
 
     const [lastValue, setLastValue] = React.useState('');
+    const [currentPath, setCurrentPath] = React.useState(props.location.pathname);
+    const sidebarItems = getSidebarItems(props);
+
     useEffect(() => {
+        const listener0 = props.history.listen((location, action) => {
+            sidebarItems.map((item) => {
+                const match = matchPath(location.pathname, {
+                    exact: true,
+                    path: item.clickRoute
+                });
+                if (match) {
+                    setCurrentPath(item.clickRoute);
+                }
+            });
+        });
+
         // UA-112064718-9
         const listener1 = props.history.listen((location, action) => {
             if (lastValue !== location.pathname) {
@@ -124,7 +140,7 @@ export function PageContainer(props: basePropType & { children: any }) {
             }
         });
 
-        return () => { listener1(); listener2() };
+        return () => { listener0(); listener1(); listener2() };
     });
 
     const initial = progress._showProgressBar;
@@ -161,8 +177,6 @@ export function PageContainer(props: basePropType & { children: any }) {
     function hideProgressBar() {
         setShowProgressBar(false);
     }
-
-    const sidebarItems = getSidebarItems(props);
 
     return (
         <div className={classes.root}>
@@ -215,19 +229,23 @@ export function PageContainer(props: basePropType & { children: any }) {
                         </IconButton>
                     </div>
                     <Divider />
-                    <List style={{ color: sidebarData.color }}>
-                        {sidebarItems.map((item, index) => (
-                            <ListItem button key={item.label} disableRipple={true} onClick={() => {
-                                if (item.clickRoute) {
-                                    (props).history.push(item.clickRoute);
-                                }
-                            }}>
-                                <ListItemIcon>
-                                    <item.icon style={{ color: sidebarData.color }} />
-                                </ListItemIcon>
-                                <ListItemText primary={item.label} />
-                            </ListItem>
-                        ))}
+                    <List style={{ paddingTop: '0px', color: sidebarData.color }}>
+                        {sidebarItems.map((item) => {
+                            const style: StandardProperties = { color: currentPath == item.clickRoute ? COLORS.PRIMARY : sidebarData.color };
+                            return (
+                                <ListItem button
+                                    style={{ margin : '10px 0px', borderLeft: currentPath == item.clickRoute ? `solid 2px ${COLORS.PRIMARY}` : `solid 2px transparent` }}
+                                    key={item.label}
+                                    onClick={() => {
+                                        (props).history.push(item.clickRoute);
+                                    }}>
+                                    <ListItemIcon>
+                                        <item.icon style={style} />
+                                    </ListItemIcon>
+                                    <ListItemText primary={item.label} style={style} />
+                                </ListItem>
+                            )
+                        })}
                     </List>
                 </div>
             </Drawer>
