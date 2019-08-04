@@ -49,13 +49,13 @@ const useStyles = makeStyles((theme: Theme) =>
             width: drawerWidth,
             flexShrink: 0,
             whiteSpace: 'nowrap',
-            [theme.breakpoints.down('sm')]: {
+            [theme.breakpoints.down('xs')]: {
                 position: 'absolute'
             },
         },
         drawerOpen: {
             width: drawerWidth,
-            [theme.breakpoints.down('sm')]: {
+            [theme.breakpoints.down('xs')]: {
                 transition: theme.transitions.create('width', {
                     easing: theme.transitions.easing.sharp,
                     duration: theme.transitions.duration.enteringScreen,
@@ -63,17 +63,15 @@ const useStyles = makeStyles((theme: Theme) =>
             },
         },
         drawerClose: {
-            [theme.breakpoints.down('sm')]: {
+            [theme.breakpoints.down('xs')]: {
                 transition: theme.transitions.create('width', {
                     easing: theme.transitions.easing.sharp,
                     duration: theme.transitions.duration.leavingScreen,
-                })
+                }),
+                width: theme.spacing(0) + 1,
             },
             overflowX: 'hidden',
-            width: theme.spacing(0) + 1,
-            [theme.breakpoints.up('sm')]: {
-                width: theme.spacing(9) + 1,
-            },
+            width: theme.spacing(9) + 1,
         },
         toolbar: {
             display: 'flex',
