@@ -15,7 +15,12 @@ export const withAuthorization = (Component: any) => {
                 (authUser) => {
                     if (!authUser) {
                         this.setState({ isOwner: false });
-                        this.props.history.push(ROUTES.SIGN_IN);
+                        this.props.history.replace({
+                            pathname: ROUTES.SIGN_IN,
+                            state: {
+                                nextPathname: this.props.history.location.pathname + (this.props.history.location.search || '')
+                            }
+                        })
                         return;
                     }
                     this.setState({ isOwner: userId == authUser.uid });

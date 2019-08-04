@@ -35,8 +35,11 @@ class SignInFormBase extends Component<basePropType> {
 
         this.listener = this.props.firebase.auth.onAuthStateChanged((e) => {
             if (e) {
-                (this.props).history.push(ROUTES.DASHBOARD_PAGE);
-                return;
+                if (this.props.location.state && this.props.location.state.nextPathname) {
+                    this.props.history.push(this.props.location.state.nextPathname);
+                } else {
+                    this.props.history.push(ROUTES.DASHBOARD_PAGE);
+                }
             }
         });
     }
