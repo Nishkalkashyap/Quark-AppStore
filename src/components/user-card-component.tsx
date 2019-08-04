@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Typography, CardContent, Button, CardActions, Link, ButtonGroup, Chip } from '@material-ui/core';
+import { Card, Typography, CardContent, Button, CardActions, ButtonGroup, Chip } from '@material-ui/core';
 import { ROUTES } from '../data/routes';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import { basePropType } from '../basePropType';
@@ -30,12 +30,12 @@ export default function UserCardComponent(props: basePropType & { userId: string
 
     return (
         <React.Fragment>
-            <Card style={{ margin: '40px 0px', padding: '40px 40px', background: '#ffffff', color: COLORS.BACKGROUND, textAlign: 'center' }} elevation={4}>
+            <Card style={{ margin: '40px 0px', padding: '40px 40px', background: COLORS.ON_BACKGROUND, color: COLORS.BACKGROUND, textAlign: 'center' }} elevation={4}>
                 <Typography variant="h2" component="h1" color="inherit">
                     {userData.name || (props.firebase.auth.currentUser!.email!).split('@')[0]}
                 </Typography>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <CardContent style={{ flexGrow: 2, flexBasis: 66, padding : '20px 0px 0px 0px' }}>
+                    <CardContent style={{ flexGrow: 2, flexBasis: 66, padding: '20px 0px 0px 0px' }}>
                         <Typography component="p" color="inherit">
                             {userData.bio || ''}
                         </Typography>
@@ -44,13 +44,13 @@ export default function UserCardComponent(props: basePropType & { userId: string
                         </Typography>
                         {(userData.site || userData.githubUrl || userData.twitterUrl) &&
                             <div style={{ margin: '10px 0px' }}>
-                                {userData.site && <Chip label="Website" variant="outlined" size="small" onClick={() => window.open(userData.site)} style={{ cursor: 'pointer', marginRight: '10px' }} />}
-                                {userData.githubUrl && <Chip label="GitHub" variant="outlined" size="small" onClick={() => window.open(userData.githubUrl)} style={{ cursor: 'pointer', marginRight: '10px' }} />}
-                                {userData.twitterUrl && <Chip label="Twitter" variant="outlined" size="small" onClick={() => window.open(userData.twitterUrl)} style={{ cursor: 'pointer', marginRight: '10px' }} />}
+                                {userData.site && <Chip label="Website" variant="outlined" size="small" onClick={() => window.open(userData.site)} style={{ cursor: 'pointer', marginRight: '10px', color: 'inherit', borderColor: 'inherit' }} />}
+                                {userData.githubUrl && <Chip label="GitHub" variant="outlined" size="small" onClick={() => window.open(userData.githubUrl)} style={{ cursor: 'pointer', marginRight: '10px', color: 'inherit', borderColor: 'inherit' }} />}
+                                {userData.twitterUrl && <Chip label="Twitter" variant="outlined" size="small" onClick={() => window.open(userData.twitterUrl)} style={{ cursor: 'pointer', marginRight: '10px', color: 'inherit', borderColor: 'inherit' }} />}
                             </div>
                         }
                         <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <ButtonGroup style={{ flexGrow: 1, justifyContent: 'center' }} size="small" aria-label="small button group" color="primary">
+                            <ButtonGroup style={{ flexGrow: 1, justifyContent: 'center' }} size="small" aria-label="small button group" color="inherit">
                                 {(isOwner) &&
                                     <Button onClick={() => props.history.push(ROUTES.CREATE_NEW_PROJECT_PAGE)}>
                                         <NewReleasesIcon fontSize="small" style={{ marginRight: '10px' }} />
