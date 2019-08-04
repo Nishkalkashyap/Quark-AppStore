@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import { createStyles, makeStyles, useTheme, Theme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -84,6 +84,22 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function PageContainer(props: basePropType & { children: any }) {
 
+    useEffect(() => {
+        const listener1 = props.history.listen((location, action) => {
+            // console.log(location, action);
+        });
+
+        const listener2 = props.firebase.auth.onAuthStateChanged((e) => {
+            if (e) {
+                setIsAuthenticated(true);
+            } else {
+                setIsAuthenticated(false);
+            }
+        });
+
+        return () => { listener1(); listener2() };
+    });
+
     const initial = progress._showProgressBar;
     progress.showProgressBar = showProgressBar;
     progress.hideProgressBar = hideProgressBar;
@@ -93,14 +109,6 @@ export function PageContainer(props: basePropType & { children: any }) {
     const [open, setOpen] = React.useState(false);
     const [isAuthenticated, setIsAuthenticated] = React.useState(false);
     const [_showProgressBar, setShowProgressBar] = React.useState(initial);
-
-    props.firebase.auth.onAuthStateChanged((e) => {
-        if (e) {
-            setIsAuthenticated(true);
-        } else {
-            setIsAuthenticated(false);
-        }
-    });
 
     const childrenWithProps = React.Children.map(props.children, child =>
         React.cloneElement(child, { ...props })
