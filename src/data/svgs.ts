@@ -293,8 +293,8 @@ export function getSvgs() {
         {
             svg: svgs.hexa,
             style: {
-                width: '13%',
-                top: 90 + '%',
+                width: '9%',
+                top: 80 + '%',
                 left: 0 + '%',
                 stroke: colors['orange'],
                 fill: colors['transparent'],

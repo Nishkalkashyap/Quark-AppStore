@@ -2,11 +2,16 @@ import React from 'react';
 import { getSvgs, darkSvgs } from '../data/svgs';
 /* eslint import/no-webpack-loader-syntax: off */
 import '!!style-loader!css-loader!stylus-loader!./../styles/mixins.styl';
-import { COLORS } from '../util';
 
 export function SwagBackgroundComponent() {
 
-    const svgs = getSvgs();
+    const svgs = getSvgs().map((val) => {
+        if (val.style.stroke !== val.style.fill) {
+            val.style.stroke = '#000';
+        }
+        return val;
+    });
+    // const svgs = getSvgs();
     // const svgs = getSvgs().concat(darkSvgs);
     // const svgs = darkSvgs;
     // const dotColor = COLORS.PRIMARY;

@@ -76,7 +76,7 @@ function LocalComponent(props: basePropType & {
     return (
         <React.Fragment>
             <Card style={{ position: 'relative', margin: '40px 0px', padding: '40px 40px', background: 'transparent', color: COLORS.BACKGROUND }} elevation={4}>
-                <CardBgComponent dotColor="transparent" bgColor="transparent" type="radial" />
+                <CardBgComponent dotColor={COLORS.PRIMARY} bgColor={COLORS.ON_PRIMARY} type="linear" />
                 <Typography variant="h2" component="h1" color="inherit">
                     {projectData.projectName || 'Project'}
                 </Typography>
