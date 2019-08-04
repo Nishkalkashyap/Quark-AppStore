@@ -4,7 +4,7 @@ import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
 import { MATCH_PARAMS, ROUTES } from '../data/routes';
 import { getDocument_project, getDocument_release, getDocument_stats, getStorageRef_images, getCollection_releases } from '../data/paths';
-import { handleFirebaseError, downloadFile } from '../util';
+import { handleFirebaseError, downloadFile, scrollToTop } from '../util';
 import { ProjectData, ReleaseItem } from '../interfaces';
 import { cloneDeep } from 'lodash';
 import * as firebase from 'firebase';
@@ -49,6 +49,9 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
 
     listeners: Function[] = [];
     componentWillUnmount() { this.listeners.map((listener) => { listener() }) };
+    componentDidMount() {
+        scrollToTop('auto');
+    }
 
     private _setInitialState() {
         const userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
