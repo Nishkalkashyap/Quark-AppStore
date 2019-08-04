@@ -21,6 +21,7 @@ import { ROUTES } from '../data/routes';
 import { HeaderAvatarComponent } from './header-avatar-component';
 import { SwagBackgroundComponent } from './swag-background-component';
 import { COLORS } from '../util';
+import { ReactGA } from '..';
 
 const drawerWidth = 240;
 
@@ -90,9 +91,15 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function PageContainer(props: basePropType & { children: any }) {
 
+    const [lastValue, setLastValue] = React.useState('');
     useEffect(() => {
+        // UA-112064718-9
         const listener1 = props.history.listen((location, action) => {
-            // console.log(location, action);
+            if (lastValue !== location.pathname) {
+                console.log(location.pathname);
+                setLastValue(location.pathname);
+                ReactGA.pageview(location.pathname);
+            }
         });
 
         const listener2 = props.firebase.auth.onAuthStateChanged((e) => {
