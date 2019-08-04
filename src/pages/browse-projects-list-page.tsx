@@ -8,7 +8,7 @@ import { SmallProjectCardComponent, smallProjectContainerStyles } from '../compo
 import { withAllProviders } from '../providers/all-providers';
 import { ProjectData, allCategories } from '../interfaces';
 import { Typography, Card, FormControl, InputLabel, Select, OutlinedInput, MenuItem } from '@material-ui/core';
-import MainBgComponent, { MainBgContainerStyles } from '../components/main-background-component';
+import { MainBgContainerStyles } from '../components/main-background-component';
 import { allProjectCategories } from '../util';
 
 type PaginationType = ProjectData;
@@ -64,7 +64,6 @@ export class LocalComponent extends Component<basePropType & { classes: any }, L
             upperComponent: () => {
                 return (
                     <Card style={Object.assign({ marginBottom: '100px' }, MainBgContainerStyles)} elevation={4}>
-                        <MainBgComponent />
                         <div style={{ textAlign: 'center', margin: '80px 0px' }}>
                             <Typography variant="h2" component="h1" color="inherit">
                                 Discover and share Quark projects

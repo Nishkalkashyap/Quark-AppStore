@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { basePropType } from '../basePropType';
 import { ProjectData, ProjectStats, ReleaseItem } from '../interfaces';
 import { Card, Typography, CardContent, Chip, CardActions, ButtonGroup, Button } from '@material-ui/core';
-import MainBgComponent, { MainBgContainerStyles } from './main-background-component';
+import { MainBgContainerStyles } from './main-background-component';
 import { ROUTES, POST_SLUG } from '../data/routes';
 import Rating from '@material-ui/lab/Rating';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -76,7 +76,6 @@ function LocalComponent(props: basePropType & {
     return (
         <React.Fragment>
             <Card style={Object.assign({}, MainBgContainerStyles)} elevation={4}>
-                <MainBgComponent bgColor='linear-gradient(90deg,#ffffffff,#488aff99 100%)' />
                 <Typography variant="h2" component="h1" color="inherit">
                     {projectData.projectName || 'Project'}
                 </Typography>

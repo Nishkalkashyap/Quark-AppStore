@@ -6,9 +6,7 @@ import { SwagBackgroundComponent } from './swag-background-component';
 import dots from './../assets/dots-small.svg';
 
 export default function MainBgComponent(props?: { bgColor?: string, position?: 'fixed' | 'absolute' }) {
-    // const background = `linear-gradient(90deg,${COLORS.BACKGROUND} 0,${COLORS.BACKGROUND} 100%)`;
     const background = `url("${dots}")`;
-    // const background = `transparent`;
     const position = props!.position ? props!.position : 'absolute';
     return (
         <div style={Object.assign(cloneDeep(CommonStyles), { background, transform: undefined, borderRadius: '5px', position })}>

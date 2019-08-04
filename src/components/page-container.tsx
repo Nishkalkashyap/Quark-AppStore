@@ -232,7 +232,6 @@ export function PageContainer(props: basePropType & { children: any }) {
                 </div>
             </Drawer>
             <main className={classes.content} style={{ position: 'relative' }}>
-                {/* <MainBgComponent /> */}
                 <SwagBackgroundComponent />
                 <div className={classes.toolbar} />
                 {childrenWithProps}
