@@ -2,14 +2,34 @@ import React from 'react'
 import { StandardProperties } from 'csstype';
 import { cloneDeep } from 'lodash';
 import { COLORS } from '../util';
-import { SwagBackgroundComponent } from './swag-background-component';
 import dots from './../assets/dots-small.svg';
 
-export default function MainBgComponent(props?: { bgColor?: string, position?: 'fixed' | 'absolute' }) {
+export default function CardBgComponent(props?: { dotColor?: string, type?: 'linear' | 'radial', bgColor?: string, style?: StandardProperties }) {
     const background = `url("${dots}")`;
-    const position = props!.position ? props!.position : 'absolute';
+    const dotColor = props!.dotColor || COLORS.BACKGROUND;
+    const type = props!.type || 'linear';
+    const bgColor = props!.bgColor || 'transparent';
+    const style = props ? (props.style || {}) : {};
+
     return (
-        <div style={Object.assign(cloneDeep(CommonStyles), { background, transform: undefined, borderRadius: '5px', position })}>
+        <div style={Object.assign(style, { position: 'absolute', backgroundColor: bgColor, width: '100%', height: '100%', zIndex: -5, left: '0px', top: '0px' })}>
+            <div style={{
+                position: 'absolute',
+                left: '0px',
+                height: '100%',
+                zIndex: -4,
+                width: '100%',
+                backgroundImage: `radial-gradient(${dotColor} 1px, transparent 1px), radial-gradient(${dotColor} 1px, transparent 1px)`,
+                backgroundPosition: '0 0, 25px 25px',
+                backgroundSize: '50px 50px'
+            }}> </div>
+            {type == 'linear' && <div style={{ position: 'absolute', height: '100%', zIndex: -3, width: '100%', background: `linear-gradient(to bottom, #ffffff00, #ffffff)` }}></div>}
+            {type == 'radial' && <div style={{ position: 'absolute', height: '100%', zIndex: -3, width: '100%', background: `radial-gradient(#ffffff, #ffffff00)` }}></div>}
+        </div>
+    );
+
+    return (
+        <div style={Object.assign(cloneDeep(CommonStyles), { background, transform: undefined, borderRadius: '5px' })}>
             {/* <div style={Object.assign(cloneDeep(CommonStyles), { opacity: 0.05, top: '75%', left: '0%' })}></div>
             <div style={Object.assign(cloneDeep(CommonStyles), { opacity: 0.1, top: '50%', left: '15%' })}></div>
             <div style={Object.assign(cloneDeep(CommonStyles), { opacity: 0.09, top: '25%', left: '30%' })}></div>

@@ -13,7 +13,7 @@ export const COLORS = {
     ON_SECONDARY: '#ffffff',
 
     BACKGROUND: '#020814',
-    ON_BACKGROUND: '#e8e9ea'
+    ON_BACKGROUND: '#ffffff'
 }
 
 export function handleFirebaseError(props: basePropType, err: any, message: string) {
