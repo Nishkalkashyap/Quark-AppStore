@@ -23,8 +23,8 @@ hr {
   background-color: var(--border-color) !important;
 }
 
-.MuiDrawer-paperAnchorDockedLeft {
-  border-right: solid 1px var(--border-color) !important;
+.makeStyles-drawerClose-6 {
+  border-right: #ffffff00 !important;
 }
 
 ul.thumbs.animated {

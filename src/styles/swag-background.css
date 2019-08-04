@@ -5,7 +5,7 @@
     width: 100%;
 }
 
-
+/* 
 .swag-background::before {
     background: url("./../assets/dots-small.svg");
     content: "";
@@ -30,7 +30,7 @@
     height: 90%;
     left: 50%;
     width: 45%;
-}
+} */
 
 .random-svg {
     position: absolute;
