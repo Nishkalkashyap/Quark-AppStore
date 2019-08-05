@@ -15,6 +15,15 @@ const config = {
     appId: process.env.REACT_APP_ID
 };
 
+type DashboardData = Partial<{
+    feedback: {
+        message: string;
+    },
+    reportAbuse: {
+        message: string;
+    }
+}>
+
 export class Firebase {
 
     constructor() {
@@ -49,10 +58,8 @@ export class Firebase {
     firestore: app.firestore.Firestore;
     private functions: app.functions.Functions;
 
-    callFeedbackFunction(msg: string) {
-        return this.functions.httpsCallable('FeedbackFunction')({
-            message: msg
-        });
+    callFeedbackFunction(msg: DashboardData) {
+        return this.functions.httpsCallable('DashboardFunction')(msg);
     }
 
     doCreateUserWithEmailAndPassword = (email: string, password: string) =>

@@ -57,7 +57,9 @@ export function HeaderAvatarComponent(props: basePropType) {
                         .then((val) => {
                             progress.showProgressBar();
                             if (val.result.button == 'Submit') {
-                                props.firebase.callFeedbackFunction(val.result.text).then(() => {
+                                props.firebase.callFeedbackFunction({
+                                    feedback: { message: val.result.text }
+                                }).then(() => {
                                     props.enqueueSnackbar('Feedback submitted', { variant: 'success' })
                                 }).catch(() => {
                                     props.enqueueSnackbar('Failed to submit feedback', { variant: 'error' })
