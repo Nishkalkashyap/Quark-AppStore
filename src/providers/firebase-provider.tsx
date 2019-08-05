@@ -3,6 +3,7 @@ import * as app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/storage';
 import 'firebase/firestore';
+import 'firebase/functions';
 
 const config = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -21,10 +22,11 @@ export class Firebase {
         this.auth = app.auth();
         this.storage = app.storage();
         this.firestore = app.firestore();
+        this.functions = app.functions();
 
 
         this.firestore.enablePersistence({
-            synchronizeTabs : true
+            synchronizeTabs: true
         })
             .catch(function (err) {
                 if (err.code == 'failed-precondition') {
@@ -45,6 +47,13 @@ export class Firebase {
     auth: app.auth.Auth;
     storage: app.storage.Storage;
     firestore: app.firestore.Firestore;
+    private functions: app.functions.Functions;
+
+    callFeedbackFunction(msg: string) {
+        return this.functions.httpsCallable('FeedbackFunction')({
+            message: msg
+        });
+    }
 
     doCreateUserWithEmailAndPassword = (email: string, password: string) =>
         this.auth.createUserWithEmailAndPassword(email, password);

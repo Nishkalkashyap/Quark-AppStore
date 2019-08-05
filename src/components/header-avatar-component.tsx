@@ -3,6 +3,7 @@ import { IconButton, Menu, MenuItem, Divider, ListItemText } from '@material-ui/
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { basePropType } from '../basePropType';
 import { ROUTES } from '../data/routes';
+import { dialog, progress } from './header-component';
 
 export function HeaderAvatarComponent(props: basePropType) {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -49,6 +50,24 @@ export function HeaderAvatarComponent(props: basePropType) {
                 </MenuItem>
                 <MenuItem dense={true} onClick={() => props.history.push(ROUTES.CHANGE_PASSWORD_PAGE)}>
                     <ListItemText primary="Change password" />
+                </MenuItem>
+                <Divider />
+                <MenuItem dense={true} onClick={() => {
+                    dialog.showFormDialog<'Submit' | 'Cancel'>('Submit feedback', 'What are yout thoughts?', '', ['Submit', 'Cancel'])
+                        .then((val) => {
+                            progress.showProgressBar();
+                            if (val.result.button == 'Submit') {
+                                props.firebase.callFeedbackFunction(val.result.text).then(() => {
+                                    props.enqueueSnackbar('Feedback submitted', { variant: 'success' })
+                                }).catch(() => {
+                                    props.enqueueSnackbar('Failed to submit feedback', { variant: 'error' })
+                                }).finally(() => {
+                                    progress.hideProgressBar();
+                                });
+                            }
+                        });
+                }}>
+                    <ListItemText primary="Submit Feedback" />
                 </MenuItem>
                 <Divider />
                 <MenuItem dense={true} onClick={() => props.firebase.auth.signOut()}>
