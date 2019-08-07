@@ -17,10 +17,17 @@ const config = {
 
 type DashboardData = Partial<{
     feedback: {
+        email : string;
         message: string;
     },
-    reportAbuse: {
-        message: string;
+    abuseReport: {
+        email : string;
+        subject : string;
+        type : string;
+        description : string;
+
+        userId : string;
+        projectId : string;
     }
 }>
 

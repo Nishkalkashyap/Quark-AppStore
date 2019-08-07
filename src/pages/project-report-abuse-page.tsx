@@ -5,6 +5,7 @@ import { GenericFormData } from '../interfaces';
 import GenericFormComponent from '../components/generic-form-component';
 import { FormControl, InputLabel, Select, OutlinedInput, MenuItem } from '@material-ui/core';
 import ReportIcon from '@material-ui/icons/Report'
+import { handleFirebaseError } from '../util';
 
 const allAbuseCategories: StateType['reportReason'][] = ['Spam', 'Abuse', 'Off Topic']
 interface StateType {
@@ -29,9 +30,24 @@ class LocalComponent extends Component<basePropType> {
         this.setState({ [event.target.name]: event.target.value });
     }
 
-    onSubmit(e : ChangeEvent) {
+    onSubmit(e: ChangeEvent) {
         e.preventDefault();
-        console.log(this.state);
+        const currentUser = this.props.firebase.auth.currentUser!;
+        const obj = {
+            abuseReport: {
+                type: this.state.reportReason,
+                description: this.state.description,
+                subject: this.state.subject,
+                email: currentUser.email!,
+
+                userId: this.props.urlUserId!,
+                projectId: this.props.urlProjectId!
+            }
+        };
+        this.props.firebase.callFeedbackFunction(obj)
+            .then((res) => {
+                console.log(res);
+            }).catch((err) => handleFirebaseError(this.props, err, 'Failed to submit report'));
     }
 
     render() {
