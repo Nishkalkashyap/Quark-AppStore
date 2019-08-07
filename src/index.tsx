@@ -7,7 +7,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Firebase, FirebaseContext } from './providers/firebase-provider';
 import { SnackbarProvider } from 'notistack';
-import 'typeface-roboto';
+// import 'typeface-roboto';//500kb
 import { SetCssVariables } from './util';
 import ReactGA from 'react-ga';
 ReactGA.initialize('UA-112064718-9');
