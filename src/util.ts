@@ -13,7 +13,10 @@ export const COLORS = {
     ON_SECONDARY: '#ffffff',
 
     BACKGROUND: '#020814',
-    ON_BACKGROUND: '#ffffff'
+    ON_BACKGROUND: '#ffffff',
+
+    DANGER : '#f04141',
+    ON_DANGER : '#ffffff'
 }
 
 export function SetCssVariables() {

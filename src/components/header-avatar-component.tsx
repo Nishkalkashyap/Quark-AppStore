@@ -4,6 +4,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import { basePropType } from '../basePropType';
 import { ROUTES } from '../data/routes';
 import { dialog, progress } from './header-component';
+import { handleFirebaseError } from '../util';
 
 export function HeaderAvatarComponent(props: basePropType) {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -58,12 +59,10 @@ export function HeaderAvatarComponent(props: basePropType) {
                             progress.showProgressBar();
                             if (val.result.button == 'Submit') {
                                 props.firebase.callFeedbackFunction({
-                                    feedback: { message: val.result.text }
+                                    feedback: { message: val.result.text, email: props.firebase.auth.currentUser!.email || props.firebase.auth.currentUser!.uid }
                                 }).then(() => {
                                     props.enqueueSnackbar('Feedback submitted', { variant: 'success' })
-                                }).catch(() => {
-                                    props.enqueueSnackbar('Failed to submit feedback', { variant: 'error' })
-                                }).finally(() => {
+                                }).catch((err) => handleFirebaseError(props, err, 'Failed to submit feedback')).finally(() => {
                                     progress.hideProgressBar();
                                 });
                             }

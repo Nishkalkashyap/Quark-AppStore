@@ -12,6 +12,7 @@ import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import CategoryIcon from '@material-ui/icons/Category';
 import EditDownloadIcon from '@material-ui/icons/Edit';
 import RateReviewIcon from '@material-ui/icons/RateReview';
+import ReportIcon from '@material-ui/icons/Report';
 import UpdateDownloadIcon from '@material-ui/icons/Update';
 import moment from 'moment';
 import { StandardProperties } from 'csstype';
@@ -134,6 +135,10 @@ function LocalComponent(props: basePropType & {
                         <Button onClick={() => history.push(`${ROUTES.PROJECT_REVIEW_PAGE}/${userId}/${projectData.projectId}`)}>
                             Write Review
                         <RateReviewIcon fontSize="small" style={{ marginLeft: '10px' }} />
+                        </Button>
+                        <Button variant="outlined" color="inherit" style={{ color: COLORS.DANGER }} onClick={() => props.history.push(`${ROUTES.REPORT_ABUSE_PAGE}/${props.urlUserId}/${props.urlProjectId}`)}>
+                            Report abuse
+                        <ReportIcon fontSize="small" style={{ marginLeft: '10px' }} />
                         </Button>
                     </ButtonGroup>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
