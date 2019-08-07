@@ -25,6 +25,7 @@ import { BrowseProjectsPage } from './pages/browse-projects-list-page';
 import { withFirebase } from './providers/firebase-provider';
 import { withMatchParams } from './providers/with-url-provider';
 import { withSnackbar } from 'notistack';
+import { ProjectReportAbusePage } from './pages/project-report-abuse-page';
 // import { NotFoundComponent } from './components/common';
 
 const Routing = () => (
@@ -52,6 +53,7 @@ const Routing = () => (
     <Route exact path={ROUTES.CREATE_NEW_PROJECT_PAGE} component={CreateNewProjectPage} />
     <Route exact path={`${ROUTES.PROJECT_REVIEW_PAGE}/${SLUGS.PROJECT_REVIEW_PAGE}`} component={WriteProjectReviewPage} />
     <Route exact path={`${ROUTES.REVIEW_LIST_PAGE}/${SLUGS.PROJECT_REVIEW_PAGE}`} component={ReviewsListPage} />
+    <Route exact path={`${ROUTES.REPORT_ABUSE_PAGE}/${SLUGS.REPORT_ABUSE_PAGE}`} component={ProjectReportAbusePage} />
 
     <Route exact path={ROUTES.NOT_FOUND} component={NotFoundComponent} />
   </React.Fragment>

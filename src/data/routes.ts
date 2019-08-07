@@ -25,6 +25,7 @@ export const ROUTES = {
     PROJECT_REVIEW_PAGE: '/review',
     RELEASE_LIST_PAGE: '/releases',
     REVIEW_LIST_PAGE: '/reviews',
+    REPORT_ABUSE_PAGE: '/report-abuse',
 }
 
 export const MATCH_PARAMS = {
@@ -38,6 +39,7 @@ export const SLUGS = {
 
     PROJECTS_LIST_PAGE: `:${MATCH_PARAMS.USER_ID}`,
     PROJECT_REVIEW_PAGE: `:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`,
+    REPORT_ABUSE_PAGE: `:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`,
 }
 
 export const POST_SLUG = {
