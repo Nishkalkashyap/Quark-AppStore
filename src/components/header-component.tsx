@@ -7,7 +7,7 @@ import { MessageDialogInterface, FormDialogInterface } from '../interfaces';
 import { MessageDialogComponent } from './message-dialog-component';
 import { FormDialogComponent } from './form-dialog-component';
 import { ROUTES } from '../data/routes';
-import { withAllProviders } from '../providers/all-providers';
+import { withRouter } from 'react-router';
 
 export const progress: {
     _showProgressBar: boolean;
@@ -38,9 +38,9 @@ export let dialog: {
 } = {} as any;
 
 type FormResolveType<T> = { result: { button: T, text: string } };
-class Header extends Component<basePropType> {
+class Header extends Component<{ history: basePropType['history'] }> {
 
-    constructor(props: basePropType) {
+    constructor(props: { history: basePropType['history'] }) {
         super(props);
 
         dialog.showMessageBox = this._showMessageBox.bind(this);
@@ -124,7 +124,7 @@ class Header extends Component<basePropType> {
     }
 }
 
-export default withAllProviders(Header);
+export default withRouter(Header as any);
 
 const MainContainerStyle: StandardProperties = {
     display: 'flex',

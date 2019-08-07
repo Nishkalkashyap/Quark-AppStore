@@ -113,12 +113,12 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
 
     return (
         <GenericFormComponent
-            headingText="Sign In"
+            headingText="Sign Up"
             icon={LockOutlinedIcon}
             isInvalid={isInvalid}
             onChange={obj.onChange}
             onSubmit={obj.onSubmit}
-            submitButtonText="Sign In"
+            submitButtonText="Sign Up"
             data={data}
             postSubmit={(
                 <Grid container justify="flex-end">
