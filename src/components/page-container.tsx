@@ -21,9 +21,9 @@ import { ROUTES, SLUGS } from '../data/routes';
 import { HeaderAvatarComponent } from './header-avatar-component';
 import { SwagBackgroundComponent } from './swag-background-component';
 import { COLORS } from '../util';
-import { ReactGA } from '..';
 import { matchPath } from 'react-router-dom';
 import { StandardProperties } from 'csstype';
+import { analytics } from '../providers/analytics-provider';
 
 const drawerWidth = 240;
 
@@ -120,15 +120,18 @@ export function PageContainer(props: basePropType & { children: any }) {
                 });
 
                 if (match) {
-                    ReactGA.event({
-                        category: 'project',
-                        action: 'view',
-                        label: match.url
-                    });
+                    console.log(match.url, location.pathname);
+                    // location.pathname === match.url (true)
+                    // no need of this in bottom, same as pageview
+                    // ReactGA.event({
+                    //     category: 'project',
+                    //     action: 'view',
+                    //     label: match.url
+                    // });
                 }
 
                 setLastValue(location.pathname);
-                ReactGA.pageview(location.pathname);
+                analytics.pageview(location.pathname);
             }
         });
 
@@ -234,7 +237,7 @@ export function PageContainer(props: basePropType & { children: any }) {
                             const style: StandardProperties = { color: currentPath == item.clickRoute ? COLORS.PRIMARY : sidebarData.color };
                             return (
                                 <ListItem button
-                                    style={{ margin : '10px 0px', borderLeft: currentPath == item.clickRoute ? `solid 2px ${COLORS.PRIMARY}` : `solid 2px transparent` }}
+                                    style={{ margin: '10px 0px', borderLeft: currentPath == item.clickRoute ? `solid 2px ${COLORS.PRIMARY}` : `solid 2px transparent` }}
                                     key={item.label}
                                     onClick={() => {
                                         (props).history.push(item.clickRoute);
