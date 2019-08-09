@@ -4,7 +4,6 @@ import { ProjectData, ProjectStats, UserProfileInterface } from '../interfaces';
 import moment from 'moment';
 import { basePropType } from '../basePropType';
 import { getDocument_userData, getDocument_project, getDocument_stats } from '../data/paths';
-import { handleFirebaseError } from '../util';
 import { StandardProperties } from 'csstype';
 import { isEqual } from 'lodash';
 import { ROUTES } from '../data/routes';
@@ -19,32 +18,28 @@ function LocalComponent(props: { publisherId: string, projectId: string } & base
     const { projectId, publisherId } = props;
 
     useEffect(() => {
-        const listener1 = props.firebase.firestore.doc(getDocument_project(publisherId, projectId))
-            .onSnapshot((snap) => {
-                const data = (snap.data() || {}) as any;
-                if (!isEqual(projectData, data)) {
-                    setProjectData(data);
-                }
-            }, (err) => handleFirebaseError(props, err, 'Failed to fetch project data'));
+        const listener1 = props.firebase.getListenerForDocument(props.firebase.firestore.doc(getDocument_project(publisherId, projectId)), (snap) => {
+            const data = (snap.data() || {}) as any;
+            if (!isEqual(projectData, data)) {
+                setProjectData(data);
+            }
+        });
 
+        const listener2 = props.firebase.getListenerForDocument(props.firebase.firestore.doc(getDocument_stats(publisherId, projectId)), (snap) => {
+            const data = (snap.data() || {}) as any;
+            if (!isEqual(projectStats, data)) {
+                setProjectStats(data);
+            }
+        });
 
-        const listener2 = props.firebase.firestore.doc(getDocument_stats(publisherId, projectId))
-            .onSnapshot((snap) => {
-                const data = (snap.data() || {}) as any;
-                if (!isEqual(projectStats, data)) {
-                    setProjectStats(data);
-                }
-            }, (err) => handleFirebaseError(props, err, 'Failed to fetch project stats'));
+        const listener3 = props.firebase.getListenerForDocument(props.firebase!.firestore.doc(getDocument_userData(props.publisherId)), (snap) => {
+            const data = (snap.data() || {}) as any;
+            if (!isEqual(userData, data)) {
+                setUserData(data);
+            }
+        });
 
-        const listener3 = props.firebase!.firestore.doc(getDocument_userData(props.publisherId))
-            .onSnapshot((snap) => {
-                const data = (snap.data() || {}) as any;
-                if (!isEqual(userData, data)) {
-                    setUserData(data);
-                }
-            }, (err) => handleFirebaseError(props as any, err, 'Failed to fetch user profile'));
-
-            return () => { listener1(); listener2(); listener3() };
+        return () => { listener1(); listener2(); listener3() };
     });
 
     const boxStyle: StandardProperties = {

@@ -36,13 +36,12 @@ class EditProfileBase extends Component<basePropType, UserProfileInterface> {
     componentDidMount() {
         const currentUser = this.props.firebase.auth.currentUser!;
         this.listeners.push(
-            this.props.firebase.firestore.doc(getDocument_userData(currentUser.uid))
-                .onSnapshot((snap) => {
-                    const data = (snap.data() || {}) as any;
-                    Object.keys(data).map((key) => {
-                        return this.setState({ [key]: data[key] })
-                    });
-                }, (err) => handleFirebaseError(this.props, err, 'Failed to fetch profile'))
+            this.props.firebase.getListenerForDocument(this.props.firebase.firestore.doc(getDocument_userData(currentUser.uid)), (snap) => {
+                const data = (snap.data() || {}) as any;
+                Object.keys(data).map((key) => {
+                    return this.setState({ [key]: data[key] })
+                });
+            })
         )
     }
 

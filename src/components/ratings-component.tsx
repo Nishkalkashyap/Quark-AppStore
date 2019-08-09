@@ -7,9 +7,8 @@ import StarIcon from '@material-ui/icons/Star'
 import Rating from '@material-ui/lab/Rating';
 import { basePropType } from '../basePropType';
 import { ROUTES } from '../data/routes';
-import { getDocument_project, getDocument_stats } from '../data/paths';
+import { getDocument_stats } from '../data/paths';
 import { isEqual } from 'lodash';
-import { handleFirebaseError } from '../util';
 
 const BorderLinearProgress = withStyles({
     root: {
@@ -30,19 +29,19 @@ export function RatingsComponent(props: { userId: string, projectId: string } & 
     const { projectId, userId } = props;
 
     useEffect(() => {
-        const listener = props.firebase.firestore.doc(getDocument_stats(userId, projectId))
-            .onSnapshot((snap) => {
-                const stats = (snap.data() || {}) as any;
-                if (!isEqual(projectStats, stats)) {
-                    
-                    let total = 0;
-                    const stars = [stats.numberOfStars_1!, stats.numberOfStars_2!, stats.numberOfStars_3!, stats.numberOfStars_4!, stats.numberOfStars_5!];
-                    stars.map((star) => { if (star) { total = total + star; } });
-                    
-                    setProjectStats(stats);
-                    setStarsData({ stars, total });
-                }
-            }, (err) => handleFirebaseError(props, err, 'Failed to fetch project stats'));
+        const listener = props.firebase.getListenerForDocument(props.firebase.firestore.doc(getDocument_stats(userId, projectId)), (snap) => {
+            const stats = (snap.data() || {}) as any;
+            if (!isEqual(projectStats, stats)) {
+
+                let total = 0;
+                const stars = [stats.numberOfStars_1!, stats.numberOfStars_2!, stats.numberOfStars_3!, stats.numberOfStars_4!, stats.numberOfStars_5!];
+                stars.map((star) => { if (star) { total = total + star; } });
+
+                setProjectStats(stats);
+                setStarsData({ stars, total });
+            }
+        });
+
         return listener
     });
 

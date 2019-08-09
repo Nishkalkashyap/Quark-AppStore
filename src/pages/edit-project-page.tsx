@@ -7,7 +7,7 @@ import { getDocument_project, getStorageRef_images } from '../data/paths';
 import { handleFirebaseError, allProjectCategories } from '../util';
 import { withAllProviders } from '../providers/all-providers';
 import { withOriginalOwner } from '../providers/owner-guard';
-import { Container, Card, Typography, TextField, Button, Zoom, Paper, Fab, Tooltip, ButtonGroup, IconButton, FormControl, InputLabel, Select, OutlinedInput, MenuItem, Grid } from '@material-ui/core';
+import { Typography, Button, Zoom, Paper, ButtonGroup, FormControl, InputLabel, Select, OutlinedInput, MenuItem } from '@material-ui/core';
 import { globalStyles, useStyles } from '../components/common-components';
 import { withStyles } from '@material-ui/styles';
 import { DropZoneComponent, FilesToUpload } from '../components/drop-zone';
@@ -90,14 +90,13 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
 
     private _setProjectData() {
         this.listeners.push(
-            this.props.firebase.firestore.doc(getDocument_project(this.state.userId, this.state.projectId))
-                .onSnapshot((snap) => {
-                    if (!snap.exists) {
-                        this.props.history.push(ROUTES.NOT_FOUND);
-                        return;
-                    }
-                    this.setState({ projectData: snap.data() });
-                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project data'))
+            this.props.firebase.getListenerForDocument(this.props.firebase.firestore.doc(getDocument_project(this.state.userId, this.state.projectId)), (snap) => {
+                if (!snap.exists) {
+                    this.props.history.push(ROUTES.NOT_FOUND);
+                    return;
+                }
+                this.setState({ projectData: snap.data() });
+            })
         );
     }
 

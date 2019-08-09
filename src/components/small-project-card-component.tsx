@@ -35,19 +35,18 @@ export function SmallProjectCardComponent(props: basePropType & { projectData: P
 
     const [projectStats, setProjectStats] = useState({} as ProjectStats);
     useEffect(() => {
-        const listener = props.firebase.firestore.doc(getDocument_stats(projectData.userId, projectData.projectId))
-            .onSnapshot((snap) => {
-                const data = (snap.data() || {}) as any;
-                if (!isEqual(projectStats, data)) {
-                    setProjectStats(data);
-                }
-            }, (err) => handleFirebaseError(props, err, 'Failed to fetch user profile'));
+        const listener = props.firebase.getListenerForDocument(props.firebase.firestore.doc(getDocument_stats(projectData.userId, projectData.projectId)), (snap) => {
+            const data = (snap.data() || {}) as any;
+            if (!isEqual(projectStats, data)) {
+                setProjectStats(data);
+            }
+        });
 
         return listener;
     });
 
     return (
-        <Card className={classes.card} style={{ minWidth: '300px',maxWidth : '340px',flexGrow : 1, margin: '20px 10px' }}>
+        <Card className={classes.card} style={{ minWidth: '300px', maxWidth: '340px', flexGrow: 1, margin: '20px 10px' }}>
             <CardHeader
                 avatar={
                     <Avatar aria-label="recipe">
@@ -59,15 +58,15 @@ export function SmallProjectCardComponent(props: basePropType & { projectData: P
             />
             <CardActionArea onClick={() => props.history.push(`${ROUTES.PROJECT_PAGE}/${projectData.userId}/${projectData.projectId}`)}>
                 <CardMedia
-                    component={(projectData.coverImageUrl || logo).includes('.mp4')? "video" : 'img'}
+                    component={(projectData.coverImageUrl || logo).includes('.mp4') ? "video" : 'img'}
                     className={classes.media}
                     image={projectData.coverImageUrl || logo}
                     title={projectData.tagline}
-                    
+
                     autoPlay
                     muted
                     loop
-                    style={{minHeight : '200px'}}
+                    style={{ minHeight: '200px' }}
 
                 />
                 <CardContent>

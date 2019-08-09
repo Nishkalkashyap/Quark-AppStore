@@ -18,13 +18,12 @@ export default function UserCardComponent(props: basePropType & { userId: string
     const [userData, setUserData] = useState({} as UserProfileInterface);
 
     useEffect(() => {
-        const listener = props.firebase.firestore.doc(getDocument_userData(userId))
-            .onSnapshot((snap) => {
-                const data = (snap.data() || {}) as any;
-                if (!isEqual(userData, data)) {
-                    setUserData(data);
-                }
-            }, (err) => handleFirebaseError(props, err, 'Failed to fetch user profile'));
+        const listener = props.firebase.getListenerForDocument(props.firebase.firestore.doc(getDocument_userData(userId)), (snap) => {
+            const data = (snap.data() || {}) as any;
+            if (!isEqual(userData, data)) {
+                setUserData(data);
+            }
+        });
 
         return listener;
     });

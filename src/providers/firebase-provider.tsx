@@ -98,7 +98,7 @@ export class Firebase {
 
         const existingListener = this._documentListeners.find((val) => { return val.ref.path == ref.path; });
         if (existingListener) {
-            console.log('Using Existing listener');
+            console.log('Using Existing listener', this._documentListeners.length);
             existingListener.listeners.push(onNext);
             if (existingListener.snap) {
                 onNext(existingListener.snap as any);

@@ -34,11 +34,10 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
 
         progress.showProgressBar();
         this.listeners.push(
-            this.props.firebase.firestore.doc(getDocument_review(userId, this.props.urlProjectId!, this.props.firebase.auth.currentUser!.uid))
-                .onSnapshot((snap) => {
-                    this.setState({ review: snap.data() || {} });
-                    progress.hideProgressBar();
-                }, (err) => { handleFirebaseError(this.props, err, 'Failed to fetch project data'); progress.hideProgressBar() })
+            this.props.firebase.getListenerForDocument(this.props.firebase.firestore.doc(getDocument_review(userId, this.props.urlProjectId!, this.props.firebase.auth.currentUser!.uid)), (snap) => {
+                this.setState({ review: snap.data() || {} });
+                progress.hideProgressBar();
+            })
         );
     }
 
