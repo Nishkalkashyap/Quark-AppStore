@@ -76,17 +76,18 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
 
     private _setProjectData() {
         // fetch latest release 
+        const query = this.props.firebase.firestore.collection(getCollection_releases(this.state.userId, this.state.projectId))
+            .orderBy('createdAt')
+            .limit(1);
+
         this.listeners.push(
-            this.props.firebase.firestore.collection(getCollection_releases(this.state.userId, this.state.projectId))
-                .orderBy('createdAt')
-                .limit(1)
-                .onSnapshot((snap) => {
-                    if (snap.docs.length && snap.docs[0].exists) {
-                        this.setState({ releaseExists: true, latestRelease: snap.docs[0].data() as any })
-                    } else {
-                        this.setState({ releaseExists: false });
-                    }
-                }, (err) => handleFirebaseError(this.props, err, 'Could not fetch project stats'))
+            this.props.firebase.getListenerForCollection(query, (snap) => {
+                if (snap.docs.length && snap.docs[0].exists) {
+                    this.setState({ releaseExists: true, latestRelease: snap.docs[0].data() as any })
+                } else {
+                    this.setState({ releaseExists: false });
+                }
+            })
         )
     }
 

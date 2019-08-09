@@ -62,35 +62,33 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
         progress.showProgressBar();
 
         if (startAfter && typeof startAfter == 'string') {
-            const topListener = this.props.pagination.getDocRef()
-                .onSnapshot((snap) => {
+            const topListener = this.props.firebase.getListenerForDocument(this.props.pagination.getDocRef(), (snap) => {
 
-                    if (!snap.exists && !this.props.pagination.isGroupQuery) {
+                if (!snap.exists && !this.props.pagination.isGroupQuery) {
+                    this.props.history.push(ROUTES.NOT_FOUND);
+                }
+
+                const StartType = this.state.goingBackwards ? 'asc' : 'desc';
+                const query = this.props.pagination.getCollectionRef()
+                    .orderBy('createdAt', StartType)
+                    .startAfter(snap)
+                    .limit(this.props.pagination.loadLimit);
+
+                const subListener = this.props.firebase.getListenerForCollection(query, (subSnap) => {
+
+                    if (subSnap.docs.length === 0) {
                         this.props.history.push(ROUTES.NOT_FOUND);
                     }
 
-                    const StartType = this.state.goingBackwards ? 'asc' : 'desc';
-                    const query = this.props.pagination.getCollectionRef()
-                        .orderBy('createdAt', StartType)
-                        .startAfter(snap)
-                        .limit(this.props.pagination.loadLimit);
+                    const arr = subSnap.docs.map((doc) => doc.data()) as T[];
+                    scrollToTop();
+                    this.setState({ paginationArray: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: subSnap });
+                    this._fetchNextAndPreviousDocuments();
+                    progress.hideProgressBar();
+                })
 
-                    const subListener = this.props.firebase.getListenerForCollection(query, (subSnap) => {
-
-                        if (subSnap.docs.length === 0) {
-                            this.props.history.push(ROUTES.NOT_FOUND);
-                        }
-
-                        const arr = subSnap.docs.map((doc) => doc.data()) as T[];
-                        scrollToTop();
-                        this.setState({ paginationArray: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: subSnap });
-                        this._fetchNextAndPreviousDocuments();
-                        progress.hideProgressBar();
-                    })
-
-                    this.paginationListeners.push(subListener);
-
-                }, ((err) => handleFirebaseError(this.props, err, 'Could not fetch document')));
+                this.paginationListeners.push(subListener);
+            });
 
             this.paginationListeners.push(topListener);
         } else {
