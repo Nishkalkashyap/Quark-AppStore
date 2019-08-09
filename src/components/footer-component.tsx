@@ -22,8 +22,10 @@ export function FooterComponent() {
                 </Typography>
                 <div>
                     <Typography variant="body2">
-                        Copyright © 2019 Nishkal Kashyap. All rights reserved.
-                </Typography>
+                    Copyright © 2019
+                    <Link target="_blank" href="mailto:hello@nishkal.in?subject=Hello%20Nishkal" style={{cursor : 'pointer'}}>&nbsp;Nishkal Kashyap.&nbsp;</Link>
+                    All rights reserved.
+                    </Typography>
                 </div>
                 <div onClick={() => window.open('https://quarkjs.io/download/')} style={{ display: 'inline-block', color: COLORS.ON_PRIMARY, marginTop: '50px', padding: '20px 40px', backgroundColor: COLORS.PRIMARY, fontSize: '1.6em', borderRadius: '2px', fontFamily: 'var(--heading-font-family)', cursor: 'pointer' }}>
                     Download Quark
