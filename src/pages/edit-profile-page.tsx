@@ -3,7 +3,7 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import { getDocument_userData } from '../data/paths';
 import { basePropType } from '../basePropType';
 import { withAllProviders } from '../providers/all-providers';
-import { ROUTES } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 import { handleFirebaseError } from '../util';
 import { UserProfileInterface, GenericFormData } from '../interfaces';
 import GenericFormComponent from '../components/generic-form-component';
@@ -62,7 +62,7 @@ class EditProfileBase extends Component<basePropType, UserProfileInterface> {
 
         Promise.all(promises).then((val) => {
             this.props.enqueueSnackbar('Updated profile', { variant: 'success' });
-            this.props.history.push(`${ROUTES.ACCOUNT_PAGE}`);
+            this.props.history.push(`${NEW_ROUTES.ACCOUNT_PAGE.base}`);
         }).catch((err) => {
             console.error(err);
             this.props.enqueueSnackbar('Failed to update profile', { variant: 'error' });

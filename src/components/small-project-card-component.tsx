@@ -3,10 +3,9 @@ import { basePropType } from '../basePropType';
 import { ProjectData, ProjectStats } from '../interfaces';
 import logo from './../assets/logo.svg';
 import { Card, CardActionArea, CardMedia, CardContent, Typography, CardActions, Button, makeStyles, createStyles, CardHeader, Avatar } from '@material-ui/core';
-import { ROUTES } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 import { getDocument_stats } from '../data/paths';
 import { isEqual } from 'lodash';
-import { handleFirebaseError } from '../util';
 import Rating from '@material-ui/lab/Rating';
 import moment from 'moment';
 import { StandardProperties } from 'csstype';
@@ -56,7 +55,7 @@ export function SmallProjectCardComponent(props: basePropType & { projectData: P
                 title={projectData.category}
                 subheader={moment(projectData.createdAt.toDate().toISOString(), moment.ISO_8601).fromNow()}
             />
-            <CardActionArea onClick={() => props.history.push(`${ROUTES.PROJECT_PAGE}/${projectData.userId}/${projectData.projectId}`)}>
+            <CardActionArea onClick={() => props.history.push(`/${projectData.userId}/${projectData.projectId}/${NEW_ROUTES.PROJECT_PAGE.base}`)}>
                 <CardMedia
                     component={(projectData.coverImageUrl || logo).includes('.mp4') ? "video" : 'img'}
                     className={classes.media}
@@ -78,13 +77,8 @@ export function SmallProjectCardComponent(props: basePropType & { projectData: P
                     </Typography>
                 </CardContent>
             </CardActionArea>
-            {/* <CardActions>
-                <Button size="small" color="primary" onClick={() => props.history.push(`${ROUTES.PROJECT_PAGE}/${projectData.userId}/${projectData.projectId}`)}>
-                    View
-                </Button>
-            </CardActions> */}
             {projectStats.numberOfReviews && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Button size="small" color="primary" onClick={() => props.history.push(`${ROUTES.RELEASE_LIST_PAGE}/${projectData.userId}/${projectData.projectId}`)}>
+                <Button size="small" color="primary" onClick={() => props.history.push(`/${projectData.userId}/${projectData.projectId}/${NEW_ROUTES.RELEASE_LIST_PAGE.base}`)}>
                     reviews
                 </Button>
                 <Rating size="small" style={{ margin: '10px 10px' }} value={projectStats.averageRating || 0} readOnly />

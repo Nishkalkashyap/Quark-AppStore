@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { withFirebase } from './firebase-provider';
-import { ROUTES, MATCH_PARAMS } from '../data/routes';
+import { NEW_ROUTES, MATCH_PARAMS } from '../data/routes';
 import { basePropType } from "../basePropType";
 
 export const withAuthorization = (Component: any) => {
@@ -16,7 +16,7 @@ export const withAuthorization = (Component: any) => {
                     if (!authUser) {
                         this.setState({ isOwner: false });
                         this.props.history.replace({
-                            pathname: ROUTES.SIGN_IN,
+                            pathname: NEW_ROUTES.SIGN_IN.base,
                             state: {
                                 nextPathname: this.props.history.location.pathname + (this.props.history.location.search || '')
                             }

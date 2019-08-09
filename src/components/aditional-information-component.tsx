@@ -6,7 +6,7 @@ import { basePropType } from '../basePropType';
 import { getDocument_userData, getDocument_project, getDocument_stats } from '../data/paths';
 import { StandardProperties } from 'csstype';
 import { isEqual } from 'lodash';
-import { ROUTES } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 
 export const AdditionalInformationComponent = (LocalComponent);
 
@@ -59,7 +59,7 @@ function LocalComponent(props: { publisherId: string, projectId: string } & base
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={boxStyle}>
                     <Item heading="Publisher">
-                        <Link onClick={() => props.history.push(`${ROUTES.PROJECTS_LIST_PAGE}/${props.urlUserId}`)} style={{ cursor: 'pointer' }}>{userData.name || props.publisherId}</Link>
+                        <Link onClick={() => props.history.push(`/${props.urlUserId}/${NEW_ROUTES.PROJECTS_LIST_PAGE.base}`)} style={{ cursor: 'pointer' }}>{userData.name || props.publisherId}</Link>
                     </Item>
                     {projectData.createdAt && <Item heading="Release Date" content={moment(projectData.createdAt.toDate().toISOString(), moment.ISO_8601).toLocaleString()}></Item>}
                     {projectData.updatedAt && <Item heading="Last updated" content={moment(projectData.updatedAt.toDate().toISOString(), moment.ISO_8601).toLocaleString()}></Item>}

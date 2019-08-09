@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { SignUpLink } from './signup-page';
 import { basePropType } from "../basePropType";
 import { withFirebase } from '../providers/firebase-provider';
-import { ROUTES } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 import { PasswordForgetLink } from './forgot-password-page';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -38,7 +38,7 @@ class SignInFormBase extends Component<basePropType> {
                 if (this.props.location.state && this.props.location.state.nextPathname) {
                     this.props.history.push(this.props.location.state.nextPathname);
                 } else {
-                    this.props.history.push(ROUTES.DASHBOARD_PAGE);
+                    this.props.history.push(NEW_ROUTES.DASHBOARD_PAGE.base);
                 }
             }
         });
@@ -60,7 +60,6 @@ class SignInFormBase extends Component<basePropType> {
             .then(() => {
                 this.setState({ ...INITIAL_STATE });
                 this.props.enqueueSnackbar('Signing in', { variant: 'success' });
-                // (this.props).history.push(ROUTES.LANDING);
             })
             .catch(error => {
                 this.setState({ error });

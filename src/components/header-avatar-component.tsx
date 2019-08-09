@@ -2,7 +2,7 @@ import React from 'react'
 import { IconButton, Menu, MenuItem, Divider, ListItemText } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { basePropType } from '../basePropType';
-import { ROUTES } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 import { dialog, progress } from './header-component';
 import { handleFirebaseError } from '../util';
 
@@ -43,13 +43,13 @@ export function HeaderAvatarComponent(props: basePropType) {
                 open={open}
                 onClose={handleClose}
             >
-                <MenuItem dense={true} onClick={() => props.history.push(ROUTES.ACCOUNT_PAGE)}>
+                <MenuItem dense={true} onClick={() => props.history.push(NEW_ROUTES.ACCOUNT_PAGE.base)}>
                     <ListItemText primary="My account" />
                 </MenuItem>
-                <MenuItem dense={true} onClick={() => props.history.push(ROUTES.EDIT_PROFILE_PAGE)}>
+                <MenuItem dense={true} onClick={() => props.history.push(NEW_ROUTES.EDIT_PROFILE_PAGE.base)}>
                     <ListItemText primary="Edit profile" />
                 </MenuItem>
-                <MenuItem dense={true} onClick={() => props.history.push(ROUTES.CHANGE_PASSWORD_PAGE)}>
+                <MenuItem dense={true} onClick={() => props.history.push(NEW_ROUTES.CHANGE_PASSWORD_PAGE.base)}>
                     <ListItemText primary="Change password" />
                 </MenuItem>
                 <Divider />

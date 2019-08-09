@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, withRouter } from 'react-router-dom';
-import { ROUTES, SLUGS, POST_SLUG } from './data/routes';
+import { NEW_ROUTES } from './data/routes';
 
 import SignUpPage from './pages/signup-page';
 import SignInPage from './pages/sign-in-page';
@@ -30,32 +30,32 @@ import { ProjectReportAbusePage } from './pages/project-report-abuse-page';
 
 const Routing = () => (
   <React.Fragment>
-    {/* <Route exact path={ROUTES.LANDING_PAGE} component={Landing} /> */}
-    <Route exact path={ROUTES.LANDING_PAGE} component={BrowseProjectsPage} />
-    <Route exact path={ROUTES.DASHBOARD_PAGE} component={BrowseProjectsPage} />
-    <Route exact path={ROUTES.EDIT_PROFILE_PAGE} component={EditProfilePage} />
+    {/* <Route exact path={NEW_ROUTES.LANDING_PAGE.base} component={Landing} /> */}
+    <Route exact path={NEW_ROUTES.LANDING_PAGE.base} component={BrowseProjectsPage} />
+    <Route exact path={NEW_ROUTES.DASHBOARD_PAGE.base} component={BrowseProjectsPage} />
+    <Route exact path={NEW_ROUTES.EDIT_PROFILE_PAGE.base} component={EditProfilePage} />
 
-    <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
-    <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
+    <Route exact path={NEW_ROUTES.SIGN_IN.base} component={SignInPage} />
+    <Route exact path={NEW_ROUTES.SIGN_UP.base} component={SignUpPage} />
 
     {/* project-list */}
-    <Route exact path={ROUTES.PROJECTS_LIST_PAGE} component={ProjectsListPage} />
-    <Route exact path={`${ROUTES.PROJECTS_LIST_PAGE}/${SLUGS.PROJECTS_LIST_PAGE}`} component={ProjectsListPage} />
+    <Route exact path={`/${NEW_ROUTES.PROJECTS_LIST_PAGE.base}`} component={ProjectsListPage} />
+    <Route exact path={`${NEW_ROUTES.PROJECTS_LIST_PAGE.slug}/${NEW_ROUTES.PROJECTS_LIST_PAGE.base}`} component={ProjectsListPage} />
 
-    <Route exact path={ROUTES.PASSWORD_FORGET_PAGE} component={ForgotPasswordPage} />
-    <Route exact path={ROUTES.CHANGE_PASSWORD_PAGE} component={changePasswordPage} />
+    <Route exact path={NEW_ROUTES.PASSWORD_FORGET_PAGE.base} component={ForgotPasswordPage} />
+    <Route exact path={NEW_ROUTES.CHANGE_PASSWORD_PAGE.base} component={changePasswordPage} />
 
-    <Route exact path={`${ROUTES.NEW_RELEASE}/${SLUGS.NEW_RELEASE}/${POST_SLUG.NEW_RELEASE}`} component={CreateNewRelease} />
-    <Route exact path={`${ROUTES.PROJECT_PAGE}/${SLUGS.Project}`} component={ProjectLandingPage} />
-    <Route exact path={`${ROUTES.RELEASE_LIST_PAGE}/${SLUGS.Project}`} component={ReleaseListPage} />
-    {/* <Route exact path={`${ROUTES.PROJECT_PAGE}/${SLUGS.Project}`} component={ReleaseListPage} /> */}
-    <Route exact path={`${ROUTES.EDIT_PROJECT_PAGE}/${SLUGS.Project}`} component={EditProjectPage} />
-    <Route exact path={ROUTES.CREATE_NEW_PROJECT_PAGE} component={CreateNewProjectPage} />
-    <Route exact path={`${ROUTES.PROJECT_REVIEW_PAGE}/${SLUGS.PROJECT_REVIEW_PAGE}`} component={WriteProjectReviewPage} />
-    <Route exact path={`${ROUTES.REVIEW_LIST_PAGE}/${SLUGS.PROJECT_REVIEW_PAGE}`} component={ReviewsListPage} />
-    <Route exact path={`${ROUTES.REPORT_ABUSE_PAGE}/${SLUGS.REPORT_ABUSE_PAGE}`} component={ProjectReportAbusePage} />
+    <Route exact path={`${NEW_ROUTES.CREATE_RELEASE.slug}/${NEW_ROUTES.CREATE_RELEASE.base}`} component={CreateNewRelease} />
+    <Route exact path={`${NEW_ROUTES.PROJECT_PAGE.slug}/${NEW_ROUTES.PROJECT_PAGE.base}`} component={ProjectLandingPage} />
+    <Route exact path={`${NEW_ROUTES.RELEASE_LIST_PAGE.slug}/${NEW_ROUTES.RELEASE_LIST_PAGE.base}`} component={ReleaseListPage} />
+    {/* <Route exact path={`${NEW_ROUTES.PROJECT_PAGE.base}/${SLUGS.Project}`} component={ReleaseListPage} /> */}
+    <Route exact path={`${NEW_ROUTES.EDIT_PROJECT_PAGE.slug}/${NEW_ROUTES.EDIT_PROJECT_PAGE.base}`} component={EditProjectPage} />
+    <Route exact path={NEW_ROUTES.CREATE_NEW_PROJECT_PAGE.base} component={CreateNewProjectPage} />
+    <Route exact path={`${NEW_ROUTES.PROJECT_REVIEW_PAGE.slug}/${NEW_ROUTES.PROJECT_REVIEW_PAGE.base}`} component={WriteProjectReviewPage} />
+    <Route exact path={`${NEW_ROUTES.REVIEW_LIST_PAGE.slug}/${NEW_ROUTES.REVIEW_LIST_PAGE.base}`} component={ReviewsListPage} />
+    <Route exact path={`${NEW_ROUTES.REPORT_ABUSE_PAGE.slug}/${NEW_ROUTES.REPORT_ABUSE_PAGE.base}`} component={ProjectReportAbusePage} />
 
-    <Route exact path={ROUTES.NOT_FOUND} component={NotFoundComponent} />
+    <Route exact path={NEW_ROUTES.NOT_FOUND.base} component={NotFoundComponent} />
   </React.Fragment>
 )
 const StupidPageContainer: any = withRouter(withFirebase(withSnackbar(withMatchParams(PageContainer) as any)));

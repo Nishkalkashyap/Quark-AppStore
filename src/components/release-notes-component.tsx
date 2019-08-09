@@ -2,7 +2,7 @@ import React from 'react'
 import { Typography, Button } from '@material-ui/core';
 import { StandardProperties } from 'csstype';
 import { basePropType } from '../basePropType';
-import { ROUTES } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 
 export function ReleaseNotesComponent(props: { notes: string, style?: StandardProperties } & basePropType) {
     return (
@@ -13,7 +13,7 @@ export function ReleaseNotesComponent(props: { notes: string, style?: StandardPr
             <Typography component="p" style={{ marginBottom: '30px' }}>
                 {props.notes}
             </Typography>
-            <Button variant='outlined' size="small" onClick={() => props.history.push(`${ROUTES.RELEASE_LIST_PAGE}/${props.urlUserId}/${props.urlProjectId}`)}>
+            <Button variant='outlined' size="small" onClick={() => props.history.push(`/${props.urlUserId}/${props.urlProjectId}/${NEW_ROUTES.RELEASE_LIST_PAGE.base}`)}>
                 See all versions
             </Button>
         </ div>

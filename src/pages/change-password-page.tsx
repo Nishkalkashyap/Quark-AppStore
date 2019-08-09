@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { basePropType } from "../basePropType";
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { ROUTES } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 import { useStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
 import { GenericFormData } from '../interfaces';
@@ -33,7 +33,7 @@ class PasswordChangeForm extends Component<basePropType> {
             .then(() => {
                 this.setState({ ...INITIAL_STATE });
                 this.props.enqueueSnackbar('Password changed', { variant: 'success' });
-                this.props.history.push(ROUTES.ACCOUNT_PAGE);
+                this.props.history.push(NEW_ROUTES.ACCOUNT_PAGE.base);
             })
             .catch(error => {
                 this.setState({ error });

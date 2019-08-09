@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import { withFirebase } from '../providers/firebase-provider';
-import { ROUTES } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 import { SignUpLink } from './signup-page';
 import { basePropType } from "../basePropType";
 import { default as MaterialLink } from '@material-ui/core/Link';
@@ -91,7 +91,7 @@ const ForgotPasswordElement = (props: { onSubmit: any, onChange: any, state: typ
 
 const StupidTypescript = MaterialLink as any;
 const PasswordForgetLink = () => (
-    <StupidTypescript variant="body2" to={ROUTES.PASSWORD_FORGET_PAGE} component={Link}>
+    <StupidTypescript variant="body2" to={NEW_ROUTES.PASSWORD_FORGET_PAGE.base} component={Link}>
         Forgot Password?
     </StupidTypescript>
 );

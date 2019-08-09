@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Card, Typography, CardContent, Button, CardActions, ButtonGroup, Chip } from '@material-ui/core';
-import { ROUTES } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import { basePropType } from '../basePropType';
 import { getDocument_userData } from '../data/paths';
-import { handleFirebaseError, COLORS } from '../util';
+import { COLORS } from '../util';
 import { isEqual } from 'lodash';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import { UserProfileInterface } from '../interfaces';
@@ -53,12 +53,12 @@ export default function UserCardComponent(props: basePropType & { userId: string
                         <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <ButtonGroup style={{ flexGrow: 1, justifyContent: 'center' }} size="small" aria-label="small button group" color="inherit">
                                 {(isOwner) &&
-                                    <Button onClick={() => props.history.push(ROUTES.CREATE_NEW_PROJECT_PAGE)}>
+                                    <Button onClick={() => props.history.push(NEW_ROUTES.CREATE_NEW_PROJECT_PAGE.base)}>
                                         <NewReleasesIcon fontSize="small" style={{ marginRight: '10px' }} />
                                         Create new project
                                     </Button>
                                 }
-                                <Button onClick={() => props.history.push(ROUTES.EDIT_PROFILE_PAGE)}>
+                                <Button onClick={() => props.history.push(NEW_ROUTES.EDIT_PROFILE_PAGE.base)}>
                                     <AccountBoxIcon fontSize="small" style={{ marginRight: '10px' }} />
                                     Edit Profile
                                 </Button>

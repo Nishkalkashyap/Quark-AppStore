@@ -6,7 +6,7 @@ import { LinearProgress, Typography, Link } from '@material-ui/core';
 import StarIcon from '@material-ui/icons/Star'
 import Rating from '@material-ui/lab/Rating';
 import { basePropType } from '../basePropType';
-import { ROUTES } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 import { getDocument_stats } from '../data/paths';
 import { isEqual } from 'lodash';
 
@@ -61,7 +61,7 @@ export function RatingsComponent(props: { userId: string, projectId: string } & 
                             {projectStats.numberOfReviews || 0}
                         </Typography>
                     </div>
-                    <Link onClick={() => props.history.push(`${ROUTES.REVIEW_LIST_PAGE}/${props.urlUserId}/${props.urlProjectId}`)} style={{ cursor: 'pointer', display: 'block', textAlign: 'center' }}>See all reviews</Link>
+                    <Link onClick={() => props.history.push(`/${props.urlUserId}/${props.urlProjectId}/${NEW_ROUTES.REVIEW_LIST_PAGE.base}`)} style={{ cursor: 'pointer', display: 'block', textAlign: 'center' }}>See all reviews</Link>
                 </div>
                 <div style={{ flexGrow: 1 }}>
                     {

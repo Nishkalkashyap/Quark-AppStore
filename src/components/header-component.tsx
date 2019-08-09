@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { MessageDialogInterface, FormDialogInterface } from '../interfaces';
 import { MessageDialogComponent } from './message-dialog-component';
 import { FormDialogComponent } from './form-dialog-component';
-import { ROUTES } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 import { withRouter } from 'react-router';
 
 export const progress: {
@@ -108,7 +108,7 @@ class Header extends Component<{ history: basePropType['history'] }> {
         return (
             <React.Fragment>
                 <div style={MainContainerStyle}>
-                    <div style={LeftHeaderStyle} onClick={() => this.props.history.push(ROUTES.LANDING_PAGE)}>
+                    <div style={LeftHeaderStyle} onClick={() => this.props.history.push(NEW_ROUTES.LANDING_PAGE.base)}>
                         <Typography component="h3" id="appbar-title" color="primary" style={{ margin: '0px 10px 0px 10px', verticalAlign: 'middle', fontSize: '1.3rem' }}>
                             Quark
                         </Typography>

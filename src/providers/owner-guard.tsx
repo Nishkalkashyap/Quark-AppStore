@@ -1,6 +1,6 @@
 import React from 'react';
 import { basePropType } from "../basePropType";
-import { MATCH_PARAMS, ROUTES } from '../data/routes';
+import { MATCH_PARAMS, NEW_ROUTES } from '../data/routes';
 
 export const withOriginalOwner = (Component: any) => {
     class WithAuthorization extends React.Component<basePropType> {
@@ -20,7 +20,7 @@ export const withOriginalOwner = (Component: any) => {
             this.listener = this.props.firebase.auth.onAuthStateChanged(
                 (authUser) => {
                     if (authUser!.uid !== userID) {
-                        this.props.history.push(ROUTES.NOT_FOUND);
+                        this.props.history.push(NEW_ROUTES.NOT_FOUND.base);
                         return;
                     } else {
                         this.setState({ isOwner: true })

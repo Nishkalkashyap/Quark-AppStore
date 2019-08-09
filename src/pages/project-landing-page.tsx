@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Container } from '@material-ui/core';
 import { withAllProviders } from '../providers/all-providers';
 import { basePropType } from '../basePropType';
-import { MATCH_PARAMS, ROUTES } from '../data/routes';
+import { MATCH_PARAMS, NEW_ROUTES } from '../data/routes';
 import { getDocument_project, getDocument_release, getDocument_stats, getStorageRef_images, getCollection_releases } from '../data/paths';
 import { handleFirebaseError, downloadFile, scrollToTop } from '../util';
 import { ProjectData, ReleaseItem } from '../interfaces';
@@ -108,7 +108,7 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
                 .delete()
                 .then(() => {
                     self.props.enqueueSnackbar('Project deleted', { variant: 'success' });
-                    self.props.history.push(ROUTES.PROJECTS_LIST_PAGE);
+                    self.props.history.push(NEW_ROUTES.PROJECTS_LIST_PAGE.base);
                 })
                 .catch(err => handleFirebaseError(self.props, err, 'Failed to delete project'))
         }

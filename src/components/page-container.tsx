@@ -17,7 +17,6 @@ import HeaderComponent, { progress } from './header-component';
 import { basePropType } from '../basePropType';
 import { getSidebarItems } from './sidebar-component';
 import { LinearProgress, Button } from '@material-ui/core';
-import { ROUTES, SLUGS } from '../data/routes';
 import { HeaderAvatarComponent } from './header-avatar-component';
 import { SwagBackgroundComponent } from './swag-background-component';
 import { COLORS } from '../util';
@@ -25,6 +24,7 @@ import { matchPath } from 'react-router-dom';
 import { StandardProperties } from 'csstype';
 import { analytics } from '../providers/analytics-provider';
 import { FooterComponent } from './footer-component';
+import { NEW_ROUTES } from '../data/routes';
 
 const drawerWidth = 240;
 
@@ -116,7 +116,7 @@ export function PageContainer(props: basePropType & { children: any }) {
 
                 const match = matchPath(location.pathname, {
                     exact: true,
-                    path: `${ROUTES.PROJECT_PAGE}/${SLUGS.Project}`
+                    path: `${NEW_ROUTES.PROJECT_PAGE.slug}/${NEW_ROUTES.PROJECT_PAGE.base}`
                 });
 
                 if (match) {
@@ -205,7 +205,7 @@ export function PageContainer(props: basePropType & { children: any }) {
                         <Button variant="outlined" size="small" color="primary" style={{ boxShadow: 'none' }} onClick={() => window.open('https://quarkjs.io')}>
                             Go to docs
                         </Button>
-                        {!isAuthenticated && <Button color="inherit" onClick={() => props.history.push(ROUTES.SIGN_IN)}>Login</Button>}
+                        {!isAuthenticated && <Button color="inherit" onClick={() => props.history.push(NEW_ROUTES.SIGN_IN.base)}>Login</Button>}
                         {isAuthenticated && <HeaderAvatarComponent {...props} />}
                     </HeaderComponent>
                 </Toolbar>

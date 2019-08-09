@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { basePropType } from '../basePropType';
-import { MATCH_PARAMS, ROUTES } from '../data/routes';
+import { MATCH_PARAMS, NEW_ROUTES } from '../data/routes';
 import { ProjectData, GenericFormData } from '../interfaces';
 import { cloneDeep } from 'lodash';
 import { getDocument_project, getStorageRef_images } from '../data/paths';
@@ -95,7 +95,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
         this.listeners.push(
             this.props.firebase.getListenerForDocument(this.props.firebase.firestore.doc(getDocument_project(this.state.userId, this.state.projectId)), (snap) => {
                 if (!snap.exists) {
-                    this.props.history.push(ROUTES.NOT_FOUND);
+                    this.props.history.push(NEW_ROUTES.NOT_FOUND.base);
                     return;
                 }
                 this.setState({ projectData: snap.data() });
@@ -120,7 +120,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
             })
             .then(() => {
                 this.props.enqueueSnackbar('Project updated', { variant: 'success' });
-                this.props.history.push(`${ROUTES.PROJECT_PAGE}/${this.props.firebase.auth.currentUser!.uid}/${this.state.projectId}`);
+                this.props.history.push(`/${this.props.firebase.auth.currentUser!.uid}/${this.state.projectId}/${NEW_ROUTES.PROJECT_PAGE.base}`);
             })
             .catch((err) => { handleFirebaseError(this.props, err, 'Failed to update project'); })
 

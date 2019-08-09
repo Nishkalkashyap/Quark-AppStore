@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Container, Button, ButtonGroup, Card } from '@material-ui/core';
 import { basePropType } from '../basePropType';
-import { ROUTES } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 import queryString from 'query-string';
 import { handleFirebaseError, scrollToTop } from '../util';
 import * as firebase from 'firebase';
@@ -65,7 +65,7 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
             const topListener = this.props.firebase.getListenerForDocument(this.props.pagination.getDocRef(), (snap) => {
 
                 if (!snap.exists && !this.props.pagination.isGroupQuery) {
-                    this.props.history.push(ROUTES.NOT_FOUND);
+                    this.props.history.push(NEW_ROUTES.NOT_FOUND.base);
                 }
 
                 const query = this.props.pagination.getCollectionRef(this.goingBackwards)
@@ -75,7 +75,7 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
                 const subListener = this.props.firebase.getListenerForCollection(query, (subSnap) => {
 
                     if (subSnap.docs.length === 0) {
-                        this.props.history.push(ROUTES.NOT_FOUND);
+                        this.props.history.push(NEW_ROUTES.NOT_FOUND.base);
                     }
 
                     const arr = subSnap.docs.map((doc) => doc.data()) as T[];

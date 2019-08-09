@@ -5,7 +5,7 @@ import FiberNewIcon from '@material-ui/icons/FiberNew';
 import { getDocument_project } from '../data/paths';
 import { handleFirebaseError, getRandomId, allProjectCategories } from '../util';
 import firebase from 'firebase';
-import { ROUTES } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 import { useStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
 import { ProjectData, allCategories, GenericFormData } from '../interfaces';
@@ -48,7 +48,7 @@ class LocalComponent extends Component<basePropType, typeof INITIAL_STATE> {
         this.props.firebase.firestore.doc(getDocument_project(this.props.firebase.auth.currentUser!.uid, random)).set(dataToSend).then(() => {
             // this.props.firebase.firestore.doc(getProjectDocPath(this.props.firebase.auth.currentUser!.uid, random)).set({ ...this.state, createdAt, updatedAt: createdAt, projectId: random, numberOfReleases: 0, numberOfDownloads : 0 }).then(() => {
             this.props.enqueueSnackbar('Project created', { variant: 'success' });
-            this.props.history.push(`${ROUTES.PROJECT_PAGE}/${this.props.firebase.auth.currentUser!.uid}/${random}`);
+            this.props.history.push(`/${this.props.firebase.auth.currentUser!.uid}/${random}/${NEW_ROUTES.PROJECT_PAGE.base}`);
         })
             .catch((err) => {
                 handleFirebaseError(this.props, err, 'Failed to create project');

@@ -3,7 +3,7 @@ import { basePropType } from '../basePropType';
 import { ProjectData, ProjectStats, ReleaseItem } from '../interfaces';
 import { Card, Typography, CardContent, Chip, CardActions, ButtonGroup, Button } from '@material-ui/core';
 import CardBgComponent from './main-background-component';
-import { ROUTES, POST_SLUG } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 import Rating from '@material-ui/lab/Rating';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -97,7 +97,7 @@ function LocalComponent(props: basePropType & {
                         {buildFile && <Button variant="outlined" onClick={() => downloadReleaseItem({ ...props, release: latestRelease, filename: buildFile! })} color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%' }}>
                             Download build
                         </Button>}
-                        <Button variant="text" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%' }} onClick={() => props.history.push(`${ROUTES.RELEASE_LIST_PAGE}/${props.urlUserId}/${props.urlProjectId}`)}>
+                        <Button variant="text" color="primary" style={{ margin: '10px 0px', display: 'block', width: '100%' }} onClick={() => props.history.push(`/${props.urlUserId}/${props.urlProjectId}/${NEW_ROUTES.RELEASE_LIST_PAGE.base}`)}>
                             See all releases
                         </Button>
                     </CardContent>}
@@ -113,11 +113,11 @@ function LocalComponent(props: basePropType & {
                 </CardContent>
                 {(isOwner && methods) && <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
-                        <Button onClick={() => props.history.push(`${ROUTES.NEW_RELEASE}/${userId}/${projectData.projectId}/${POST_SLUG.NEW_RELEASE}`)}>
+                        <Button onClick={() => props.history.push(`/${userId}/${projectData.projectId}/${NEW_ROUTES.CREATE_RELEASE.base}`)}>
                             Create new release
                         <NewReleasesIcon fontSize="small" style={{ marginLeft: '10px' }} />
                         </Button>
-                        <Button onClick={() => props.history.push(`${ROUTES.EDIT_PROJECT_PAGE}/${userId}/${projectData.projectId}`)}>
+                        <Button onClick={() => props.history.push(`/${userId}/${projectData.projectId}/${NEW_ROUTES.EDIT_PROJECT_PAGE.base}`)}>
                             Edit Project
                         <EditIcon fontSize="small" style={{ marginLeft: '10px' }} />
                         </Button>
@@ -129,11 +129,11 @@ function LocalComponent(props: basePropType & {
                 </CardActions>}
                 {<CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
-                        <Button onClick={() => history.push(`${ROUTES.PROJECT_REVIEW_PAGE}/${userId}/${projectData.projectId}`)}>
+                        <Button onClick={() => history.push(`/${userId}/${projectData.projectId}/${NEW_ROUTES.PROJECT_REVIEW_PAGE.base}`)}>
                             Write Review
                         <RateReviewIcon fontSize="small" style={{ marginLeft: '10px' }} />
                         </Button>
-                        <Button variant="outlined" color="inherit" style={{ color: COLORS.DANGER }} onClick={() => props.history.push(`${ROUTES.REPORT_ABUSE_PAGE}/${props.urlUserId}/${props.urlProjectId}`)}>
+                        <Button variant="outlined" color="inherit" style={{ color: COLORS.DANGER }} onClick={() => props.history.push(`/${props.urlUserId}/${props.urlProjectId}/${NEW_ROUTES.REPORT_ABUSE_PAGE.base}`)}>
                             Report abuse
                         <ReportIcon fontSize="small" style={{ marginLeft: '10px' }} />
                         </Button>

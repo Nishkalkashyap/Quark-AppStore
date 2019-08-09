@@ -1,10 +1,10 @@
 import './common-styles.css';
 import * as React from 'react';
 import { Link, Button, makeStyles, Typography, Container } from '@material-ui/core';
-import { ROUTES } from '../data/routes';
 import { basePropType } from '../basePropType';
 import { Firebase, withFirebase } from '../providers/firebase-provider';
 import { StandardProperties } from 'csstype';
+import { NEW_ROUTES } from '../data/routes';
 export const UploadButton = () => {
     return (
         <div className="upload-btn-wrapper" style={{ display: 'block' }}>
@@ -32,15 +32,12 @@ export const NotFoundComponent = (props: basePropType) => {
             <Typography variant="body1" style={style}>
                 Looks like we've got some broken links.
             </Typography>
-            <Link style={{ marginTop: '20px', display: 'inline-block', cursor: 'pointer' }} href={ROUTES.LANDING_PAGE}>
+            <Link style={{ marginTop: '20px', display: 'inline-block', cursor: 'pointer' }} href={NEW_ROUTES.LANDING_PAGE.base}>
                 Take me home
             </Link>
         </Container>
     )
 }
-// <Link variant="body2" color="error" href="#" onClick={() => props.history.push(ROUTES.LANDING)} style={{ display: 'block' }}>
-//     404 Not Found
-// </Link>
 
 export const globalStyles = (theme: any) => ({
     '@global': {

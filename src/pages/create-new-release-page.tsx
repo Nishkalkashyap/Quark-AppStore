@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { basePropType } from "../basePropType";
-import { Container, Avatar, Typography, TextField, Button, Card } from '@material-ui/core';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import { useForceUpdate, getRandomId, handleFirebaseError } from '../util';
-import { MATCH_PARAMS, ROUTES } from '../data/routes';
+import { MATCH_PARAMS, NEW_ROUTES } from '../data/routes';
 import firebase from 'firebase';
 import { getDocument_release } from '../data/paths';
 import { ReleaseItem, GenericFormData } from '../interfaces';
@@ -57,7 +56,7 @@ const LocalComponent = (props: basePropType) => {
                     })
                     .catch((err) => handleFirebaseError(props, err, 'Failed to upload files'))
                     .finally(() => {
-                        props.history.push(`${ROUTES.PROJECT_PAGE}/${userId}/${projectId}`);
+                        props.history.push(`/${userId}/${projectId}/${NEW_ROUTES.PROJECT_PAGE.base}`);
                     })
             })
             .catch((err) => {

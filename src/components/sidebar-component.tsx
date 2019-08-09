@@ -1,5 +1,5 @@
 import { basePropType } from "../basePropType";
-import { ROUTES } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 import HomeIcon from '@material-ui/icons/Home';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import AppsIcon from '@material-ui/icons/Apps';
@@ -13,9 +13,9 @@ interface SidebarItems {
 
 export function getSidebarItems(props: basePropType) {
 
-    let path: string = ROUTES.PROJECTS_LIST_PAGE;
+    let path: string = NEW_ROUTES.PROJECTS_LIST_PAGE.base;
     if (props.firebase.auth.currentUser) {
-        path = `${ROUTES.PROJECTS_LIST_PAGE}/${props.firebase.auth.currentUser.uid}`
+        path = `/${props.firebase.auth.currentUser.uid}/${NEW_ROUTES.PROJECTS_LIST_PAGE.base}`
     }
 
     const sidebarItems: SidebarItems[] = [
@@ -23,13 +23,14 @@ export function getSidebarItems(props: basePropType) {
             label: 'Dashboard',
             icon: HomeIcon,
             private: false,
-            clickRoute: ROUTES.DASHBOARD_PAGE
+            clickRoute: NEW_ROUTES.DASHBOARD_PAGE.base
+
         },
         {
             label: 'Account',
             icon: AccountBoxIcon,
             private: true,
-            clickRoute: ROUTES.ACCOUNT_PAGE
+            clickRoute: NEW_ROUTES.ACCOUNT_PAGE.base
         },
         {
             label: 'Projects',

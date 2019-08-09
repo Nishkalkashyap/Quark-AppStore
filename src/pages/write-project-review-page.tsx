@@ -1,14 +1,12 @@
 import React, { Component } from 'react'
-import { Container, Card, Avatar, Typography, TextField, Button, Grid, withStyles } from '@material-ui/core';
-import { PasswordForgetLink } from './forgot-password-page';
+import { Typography, withStyles } from '@material-ui/core';
 import RateReviewIcon from '@material-ui/icons/RateReview'
-import { SignUpLink } from './signup-page';
 import { basePropType } from '../basePropType';
 import { globalStyles } from '../components/common-components';
 import { withAllProviders } from '../providers/all-providers';
-import { MATCH_PARAMS, ROUTES } from '../data/routes';
-import { ProjectData, ProjectReviewInterface, GenericFormData } from '../interfaces';
-import { getDocument_project, getDocument_review } from '../data/paths';
+import { MATCH_PARAMS, NEW_ROUTES } from '../data/routes';
+import { ProjectReviewInterface, GenericFormData } from '../interfaces';
+import { getDocument_review } from '../data/paths';
 import { handleFirebaseError } from '../util';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
@@ -55,7 +53,7 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
             .set(this.state.review)
             .then(() => {
                 this.props.enqueueSnackbar('Submitted review', { variant: 'success' });
-                this.props.history.push(`${ROUTES.PROJECT_PAGE}/${this.props.urlUserId!}/${this.props.urlProjectId!}`);
+                this.props.history.push(`/${this.props.urlUserId!}/${this.props.urlProjectId!}/${NEW_ROUTES.PROJECT_PAGE.base}`);
             })
             .catch((err) => handleFirebaseError(this.props, err, 'Failed to submit review'))
     }

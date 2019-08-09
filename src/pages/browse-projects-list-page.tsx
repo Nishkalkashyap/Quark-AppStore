@@ -2,7 +2,7 @@ import React, { Component, ChangeEvent } from 'react'
 import { PaginationComponent, Pagination, StateType, LocalPaginationComponent } from '../components/pagination-component';
 import { basePropType } from '../basePropType';
 import { getDocument_project } from '../data/paths';
-import { ROUTES } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 import queryString from 'query-string';
 import { SmallProjectCardComponent, smallProjectContainerStyles } from '../components/small-project-card-component';
 import { withAllProviders } from '../providers/all-providers';
@@ -39,7 +39,7 @@ export class LocalComponent extends Component<basePropType & { classes: any }, L
             delete clone.orderBy;
         }
         const str = queryString.stringify(clone);
-        return `${ROUTES.DASHBOARD_PAGE}?`.concat(str);
+        return `${NEW_ROUTES.DASHBOARD_PAGE.base}?`.concat(str);
     }
 
     onChange(e: ChangeEvent<{ name: keyof LocalStateType; value: unknown; }>) {

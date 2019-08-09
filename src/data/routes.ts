@@ -1,10 +1,81 @@
-// type allRoutes = 'login' | 'signup';
+export const MATCH_PARAMS = {
+    USER_ID: 'userId',
+    PROJECT_ID: 'projectId'
+}
 
-// type Route = {
-//     [key :string]: string;
-// }
+export const NEW_ROUTES = {
+    LANDING_PAGE: {
+        base: '/'
+    },
+    DASHBOARD_PAGE: {
+        base: '/dashboard'
+    },
+    SIGN_UP: {
+        base: '/signup'
+    },
+    SIGN_IN: {
+        base: '/signin'
+    },
+    EDIT_PROFILE_PAGE: {
+        base: '/edit-profile'
+    },
+    CHANGE_PASSWORD_PAGE: {
+        base: '/change-password'
+    },
+    PASSWORD_FORGET_PAGE: {
+        base: '/forgot-password'
+    },
+    ACCOUNT_PAGE: {
+        base: '/projects'
+    },
+    CREATE_NEW_PROJECT_PAGE: {
+        base: '/new-project'
+    },
 
-export const ROUTES = {
+
+
+    PROJECT_PAGE: {
+        base: 'project',
+        slug: `/:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`
+    },
+    EDIT_PROJECT_PAGE: {
+        base: 'edit-project',
+        slug: `/:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`
+    },
+    PROJECT_REVIEW_PAGE: {
+        base: 'review',
+        slug: `/:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`
+    },
+    CREATE_RELEASE: {
+        base: 'create-release',
+        slug: `/:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`,
+    },
+    PROJECTS_LIST_PAGE: {
+        base: 'projects',
+        slug: `/:${MATCH_PARAMS.USER_ID}`
+    },
+    REVIEW_LIST_PAGE: {
+        base: 'reviews',
+        slug: `/:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`,
+    },
+    RELEASE_LIST_PAGE: {
+        base: 'releases',
+        slug: `/:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`
+    },
+    REPORT_ABUSE_PAGE: {
+        base: 'report-abuse',
+        slug: `/:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`,
+    },
+
+
+
+
+    NOT_FOUND: {
+        base: '/404'
+    },
+}
+
+const ROUTES = {
     // LANDING_PAGE: '/',
     LANDING_PAGE: '/',
     DASHBOARD_PAGE: '/dashboard',
@@ -13,7 +84,7 @@ export const ROUTES = {
     EDIT_PROFILE_PAGE: '/edit-profile',
     CHANGE_PASSWORD_PAGE: '/change-password',
     PASSWORD_FORGET_PAGE: '/forgot-password',
-    // ACCOUNT_PAGE: '/account',
+
     ACCOUNT_PAGE: '/projects',
     PROJECT_PAGE: '/project',
     PROJECTS_LIST_PAGE: '/projects',
@@ -28,12 +99,7 @@ export const ROUTES = {
     REPORT_ABUSE_PAGE: '/report-abuse',
 }
 
-export const MATCH_PARAMS = {
-    USER_ID: 'userId',
-    PROJECT_ID: 'projectId'
-}
-
-export const SLUGS = {
+const SLUGS = {
     Project: `:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`,
     NEW_RELEASE: `:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`,
 
@@ -42,7 +108,7 @@ export const SLUGS = {
     REPORT_ABUSE_PAGE: `:${MATCH_PARAMS.USER_ID}/:${MATCH_PARAMS.PROJECT_ID}`,
 }
 
-export const POST_SLUG = {
+const POST_SLUG = {
     NEW_RELEASE: 'create-release'
 }
 // type Route = {

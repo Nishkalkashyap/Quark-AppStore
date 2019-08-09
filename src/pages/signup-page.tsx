@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import { ROUTES } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 import { withFirebase } from '../providers/firebase-provider';
 import { default as MaterialLink } from '@material-ui/core/Link';
 
@@ -44,7 +44,7 @@ class SignUpFormBase extends Component<basePropType> {
             .doCreateUserWithEmailAndPassword(email, passwordOne)
             .then(authUser => {
                 this.setState({ ...INITIAL_STATE });
-                this.props.history.push(ROUTES.EDIT_PROFILE_PAGE);
+                this.props.history.push(NEW_ROUTES.EDIT_PROFILE_PAGE.base);
             })
             .catch(error => {
                 this.setState({ error });
@@ -123,7 +123,7 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
             postSubmit={(
                 <Grid container justify="flex-end">
                     <Grid item>
-                        <StupidTypescript variant="body2" to={ROUTES.SIGN_IN} component={Link}>
+                        <StupidTypescript variant="body2" to={NEW_ROUTES.SIGN_IN.base} component={Link}>
                             Already have an account? Sign in
                         </StupidTypescript>
                     </Grid>
@@ -135,7 +135,7 @@ const SignUpComponent = (obj: { onSubmit: any, onChange: any, state: typeof INIT
 
 const StupidTypescript = MaterialLink as any;
 const SignUpLink = () => (
-    <StupidTypescript variant="body2" to={ROUTES.SIGN_UP} component={Link}>
+    <StupidTypescript variant="body2" to={NEW_ROUTES.SIGN_UP.base} component={Link}>
         Don't have an account? Sign Up
     </StupidTypescript>
 );

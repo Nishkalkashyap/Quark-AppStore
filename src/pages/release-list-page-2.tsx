@@ -3,7 +3,7 @@ import { PaginationComponent, Pagination, StateType } from '../components/pagina
 import { basePropType } from '../basePropType';
 import { ReleaseItem } from '../interfaces';
 import { getCollection_releases, getDocument_release } from '../data/paths';
-import { ROUTES } from '../data/routes';
+import { NEW_ROUTES } from '../data/routes';
 import queryString from 'query-string';
 import { withAllProviders } from '../providers/all-providers';
 import { ProjectCardComponent } from '../components/project-card-component';
@@ -23,13 +23,13 @@ export class LocalComponent extends Component<basePropType> {
                 return ref.orderBy('createdAt', StartType);
             },
             getDocRef: () => { return this.firestore.doc(getDocument_release(this.props.urlUserId!, this.props.urlProjectId!, queryString.parse(this.props.history.location.search)['startAfter'] as string)) },
-            getRedirectRoute: (params) => { return `${ROUTES.RELEASE_LIST_PAGE}/${this.props.urlUserId}/${params.projectId}?startAfter=${params.releaseId}` },
+            getRedirectRoute: (params) => { return `${NEW_ROUTES.RELEASE_LIST_PAGE.base}/${this.props.urlUserId}/${params.projectId}?startAfter=${params.releaseId}` },
             loadLimit: 10,
             upperComponent: () => (
                 <ProjectCardComponent {...this.props} userId={this.props.urlUserId!} projectId={this.props.urlProjectId!}>
                     <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">
-                            <Button onClick={() => this.props.history.push(`${ROUTES.PROJECT_PAGE}/${this.props.urlUserId}/${this.props.urlProjectId}`)}>
+                            <Button onClick={() => this.props.history.push(`/${this.props.urlUserId}/${this.props.urlProjectId}/${NEW_ROUTES.PROJECT_PAGE.base}`)}>
                                 Project home
                             </Button>
                         </ButtonGroup>
