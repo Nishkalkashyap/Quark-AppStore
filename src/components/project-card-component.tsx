@@ -16,7 +16,7 @@ import ReportIcon from '@material-ui/icons/Report';
 import UpdateDownloadIcon from '@material-ui/icons/Update';
 import moment from 'moment';
 import { StandardProperties } from 'csstype';
-import { downloadReleaseItem, handleFirebaseError, COLORS } from '../util';
+import { downloadReleaseItem, COLORS } from '../util';
 import { getDocument_project, getDocument_stats } from '../data/paths';
 import { isEqual } from 'lodash';
 
@@ -38,22 +38,19 @@ function LocalComponent(props: basePropType & {
     const [projectStats, setProjectStats] = useState({} as ProjectStats);
 
     useEffect(() => {
-        const listener1 = props.firebase.firestore.doc(getDocument_project(userId, projectId))
-            .onSnapshot((snap) => {
-                const data = (snap.data() || {}) as any;
-                if (!isEqual(projectData, data)) {
-                    setProjectData(data);
-                }
-            }, (err) => handleFirebaseError(props, err, 'Failed to fetch project data'));
+        const listener1 = props.firebase.getListenerForDocument(props.firebase.firestore.doc(getDocument_project(userId, projectId)), (snap) => {
+            const data = (snap.data() || {}) as any;
+            if (!isEqual(projectData, data)) {
+                setProjectData(data);
+            }
+        });
 
-
-        const listener2 = props.firebase.firestore.doc(getDocument_stats(userId, projectId))
-            .onSnapshot((snap) => {
-                const data = (snap.data() || {}) as any;
-                if (!isEqual(projectStats, data)) {
-                    setProjectStats(data);
-                }
-            }, (err) => handleFirebaseError(props, err, 'Failed to fetch project stats'));
+        const listener2 = props.firebase.getListenerForDocument(props.firebase.firestore.doc(getDocument_stats(userId, projectId)), (snap) => {
+            const data = (snap.data() || {}) as any;
+            if (!isEqual(projectStats, data)) {
+                setProjectStats(data);
+            }
+        });
 
         return () => { listener1(); listener2() };
     });

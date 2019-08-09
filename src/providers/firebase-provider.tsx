@@ -17,19 +17,26 @@ const config = {
 
 type DashboardData = Partial<{
     feedback: {
-        email : string;
+        email: string;
         message: string;
     },
     abuseReport: {
-        email : string;
-        subject : string;
-        type : string;
-        description : string;
+        email: string;
+        subject: string;
+        type: string;
+        description: string;
 
-        userId : string;
-        projectId : string;
+        userId: string;
+        projectId: string;
     }
 }>
+
+interface DocListenerInterface {
+    ref: firebase.firestore.DocumentReference;
+    snap: app.firestore.DocumentSnapshot | null;
+    listeners: ((snap: firebase.firestore.DocumentSnapshot) => void)[]
+    _mainListener: () => void;
+}
 
 export class Firebase {
 
@@ -85,6 +92,47 @@ export class Firebase {
         }
         return Promise.resolve();
     }
+
+    private _documentListeners: DocListenerInterface[] = [];
+    getListenerForDocument(ref: firebase.firestore.DocumentReference, onNext: (snapshot: firebase.firestore.DocumentSnapshot) => void) {
+
+        const existingListener = this._documentListeners.find((val) => { return val.ref.path == ref.path; });
+        if (existingListener) {
+            console.log('Using Existing listener');
+            existingListener.listeners.push(onNext);
+            if (existingListener.snap) {
+                onNext(existingListener.snap as any);
+            }
+            return removeListener(existingListener);
+        }
+
+        console.log('Created listeter');
+        const newListener: DocListenerInterface = {
+            ref,
+            listeners: [onNext],
+            snap: null,
+            _mainListener: ref.onSnapshot((snap) => {
+                newListener.snap = snap;
+                newListener.listeners.map((list) => {
+                    list(snap);
+                });
+            }, (err) => console.log(err))
+        };
+
+        this._documentListeners.push(newListener);
+
+        return removeListener(newListener);
+
+        function removeListener(docListener: DocListenerInterface): () => void {
+            return () => {
+                const findIndex = docListener.listeners.findIndex((val) => val == onNext);
+                if (findIndex !== -1) {
+                    const l = docListener.listeners.splice(findIndex, 1);
+                }
+            }
+        }
+    }
+
 }
 
 export const FirebaseContext = React.createContext<Firebase>(null as any);
