@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Button, ButtonGroup } from '@material-ui/core';
+import { Container, Button, ButtonGroup, Card } from '@material-ui/core';
 import { basePropType } from '../basePropType';
 import { ROUTES } from '../data/routes';
 import queryString from 'query-string';
@@ -185,6 +185,13 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
                 <Container maxWidth="lg">
                     {this.props.pagination.upperComponent && <this.props.pagination.upperComponent state={this.state} />}
                     {this.props.pagination.iteratorComponent && <this.props.pagination.iteratorComponent state={this.state} />}
+                </Container>
+                <Container maxWidth="sm">
+                    {(!this.state.paginationArray.length) &&
+                        <blockquote>
+                            No results found.
+                        </blockquote>
+                    }
                 </Container>
                 <Container maxWidth="sm" style={{ marginTop: '100px' }}>
                     <ButtonGroup
