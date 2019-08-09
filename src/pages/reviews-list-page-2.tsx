@@ -17,7 +17,11 @@ export class LocalComponent extends Component<basePropType> {
 
     pagination: Pagination<PaginationType> = {
         pagination: {
-            getCollectionRef: () => { return this.firestore.collection(getCollection_reviews(this.props.urlUserId!, this.props.urlProjectId!)) },
+            getCollectionRef: (goingBackwards) => {
+                const ref = this.firestore.collection(getCollection_reviews(this.props.urlUserId!, this.props.urlProjectId!));
+                const StartType = goingBackwards ? 'asc' : 'desc';
+                return ref.orderBy('createdAt', StartType);
+            },
             getDocRef: () => { return this.firestore.doc(getDocument_review(this.props.urlUserId!, this.props.urlProjectId!, queryString.parse(this.props.history.location.search)['startAfter'] as string)) },
             getRedirectRoute: (params) => { return `${ROUTES.REVIEW_LIST_PAGE}/${this.props.urlUserId}/${this.props.urlProjectId!}?startAfter=${params.userId}` },
             loadLimit: 3,

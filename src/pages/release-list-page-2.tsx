@@ -17,11 +17,15 @@ export class LocalComponent extends Component<basePropType> {
 
     pagination: Pagination<PaginationType> = {
         pagination: {
-            getCollectionRef: () => { return this.firestore.collection(getCollection_releases(this.props.urlUserId!, this.props.urlProjectId!)) },
+            getCollectionRef: (goingBackwards) => {
+                const ref = this.firestore.collection(getCollection_releases(this.props.urlUserId!, this.props.urlProjectId!));
+                const StartType = goingBackwards ? 'asc' : 'desc';
+                return ref.orderBy('createdAt', StartType);
+            },
             getDocRef: () => { return this.firestore.doc(getDocument_release(this.props.urlUserId!, this.props.urlProjectId!, queryString.parse(this.props.history.location.search)['startAfter'] as string)) },
             getRedirectRoute: (params) => { return `${ROUTES.RELEASE_LIST_PAGE}/${this.props.urlUserId}/${params.projectId}?startAfter=${params.releaseId}` },
             loadLimit: 10,
-            upperComponent: (data: { state: StateType<PaginationType> }) => (
+            upperComponent: () => (
                 <ProjectCardComponent {...this.props} userId={this.props.urlUserId!} projectId={this.props.urlProjectId!}>
                     <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <ButtonGroup size="small" aria-label="small outlined button group" color="inherit">

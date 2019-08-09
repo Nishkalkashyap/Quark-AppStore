@@ -43,13 +43,17 @@ export class LocalComponent extends Component<basePropType & { classes: any }, L
     pagination: Pagination<PaginationType> = {
         pagination: {
             isGroupQuery: true,
-            getCollectionRef: () => {
-                return (() => {
-                    if (this.state.category) {
-                        return this.firestore.collectionGroup('projects').where('category', '==', this.state.category!)
-                    }
-                    return this.firestore.collectionGroup('projects');
-                })();
+            getCollectionRef: (goingBackwards) => {
+                let ref = this.firestore.collectionGroup('projects');
+                const StartType = goingBackwards ? 'asc' : 'desc';
+                ref = ref.orderBy('createdAt', StartType);
+
+                if (this.state.category) {
+                    ref = ref.where('category', '==', this.state.category!)
+                    // return this.firestore.collectionGroup('projects').where('category', '==', this.state.category!)
+                }
+                return ref;
+                // return this.firestore.collectionGroup('projects');
             },
             getDocRef: () => {
                 return this.firestore.doc(getDocument_project(this.props.urlProjectId || this.props.firebase.auth.currentUser!.uid, queryString.parse(this.props.history.location.search)['startAfter'] as string))
@@ -60,7 +64,7 @@ export class LocalComponent extends Component<basePropType & { classes: any }, L
                 }
                 return `${ROUTES.DASHBOARD_PAGE}?startAfter=${params.projectId}`
             },
-            loadLimit: 20,
+            loadLimit: 3,
             upperComponent: () => {
                 return (
                     <Card style={{ position: 'relative', margin: '40px 0px', padding: '40px 40px', background: 'transparent', color: COLORS.BACKGROUND }} elevation={4}>
