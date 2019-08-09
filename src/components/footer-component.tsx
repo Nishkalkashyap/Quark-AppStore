@@ -4,6 +4,9 @@ import { COLORS } from '../util';
 import { StandardProperties } from 'csstype';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
+// const color = COLORS.PRIMARY;
+const color = COLORS.SECONDARY;
+
 export function FooterComponent() {
     return (
         <footer style={footerStyle}>
@@ -24,11 +27,11 @@ export function FooterComponent() {
                 <div>
                     <Typography variant="body2">
                         Copyright © 2019
-                    <Link target="_blank" href="mailto:hello@nishkal.in?subject=Hello%20Nishkal" style={{ cursor: 'pointer' }}>&nbsp;Nishkal Kashyap.&nbsp;</Link>
+                    <Link target="_blank" href="mailto:hello@nishkal.in?subject=Hello%20Nishkal" style={{ cursor: 'pointer', color }}>&nbsp;Nishkal Kashyap.&nbsp;</Link>
                         All rights reserved.
                     </Typography>
                 </div>
-                <div onClick={() => window.open('https://quarkjs.io/download/')} style={{ display: 'inline-block', color: COLORS.ON_PRIMARY, marginTop: '50px', padding: '20px 40px', backgroundColor: COLORS.PRIMARY, fontSize: '1.6em', borderRadius: '2px', fontFamily: 'var(--heading-font-family)', cursor: 'pointer' }}>
+                <div onClick={() => window.open('https://quarkjs.io/download/')} style={{ display: 'inline-block', color: COLORS.ON_BACKGROUND, marginTop: '50px', padding: '20px 40px', backgroundColor: color, fontSize: '1.6em', borderRadius: '2px', fontFamily: 'var(--heading-font-family)', cursor: 'pointer' }}>
                     <ArrowDownwardIcon style={{ position: 'relative', top: '4px', marginRight: '10px' }} />
                     Download Quark
                 </div>
@@ -73,5 +76,6 @@ const linksDivStyle: StandardProperties = {
 const linkStyle: StandardProperties = {
     display: 'block',
     cursor: 'pointer',
-    margin: '5px 0px'
+    margin: '5px 0px',
+    color
 }
