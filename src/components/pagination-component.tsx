@@ -34,7 +34,6 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
 
     constructor(props: basePropType & Pagination<T>) {
         super(props);
-        this._setPaginationArray();
     }
 
     state: StateType<T> = {
@@ -42,6 +41,10 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
         nextExists: false,
         previousExists: false,
         goingBackwards: false,
+    }
+
+    componentWillMount() {
+        this._setPaginationArray();
     }
 
     listeners: Function[] = [];
@@ -67,22 +70,23 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
                     }
 
                     const StartType = this.state.goingBackwards ? 'asc' : 'desc';
-                    const subListener = this.props.pagination.getCollectionRef()
+                    const query = this.props.pagination.getCollectionRef()
                         .orderBy('createdAt', StartType)
                         .startAfter(snap)
-                        .limit(this.props.pagination.loadLimit)
-                        .onSnapshot((subSnap) => {
+                        .limit(this.props.pagination.loadLimit);
 
-                            if (subSnap.docs.length === 0) {
-                                this.props.history.push(ROUTES.NOT_FOUND);
-                            }
+                    const subListener = this.props.firebase.getListenerForCollection(query, (subSnap) => {
 
-                            const arr = subSnap.docs.map((doc) => doc.data()) as T[];
-                            scrollToTop();
-                            this.setState({ paginationArray: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: subSnap });
-                            this._fetchNextAndPreviousDocuments();
-                            progress.hideProgressBar();
-                        });
+                        if (subSnap.docs.length === 0) {
+                            this.props.history.push(ROUTES.NOT_FOUND);
+                        }
+
+                        const arr = subSnap.docs.map((doc) => doc.data()) as T[];
+                        scrollToTop();
+                        this.setState({ paginationArray: this.state.goingBackwards ? arr.reverse() : arr, querySnapshot: subSnap });
+                        this._fetchNextAndPreviousDocuments();
+                        progress.hideProgressBar();
+                    })
 
                     this.paginationListeners.push(subListener);
 
@@ -90,17 +94,18 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
 
             this.paginationListeners.push(topListener);
         } else {
+            const query = this.props.pagination.getCollectionRef()
+                .orderBy('createdAt', 'desc')
+                .limit(this.props.pagination.loadLimit);
+
             this.paginationListeners.push(
-                this.props.pagination.getCollectionRef()
-                    .orderBy('createdAt', 'desc')
-                    .limit(this.props.pagination.loadLimit)
-                    .onSnapshot((snap) => {
-                        const arr = snap.docs.map((doc) => doc.data()) as T[];
-                        scrollToTop();
-                        this.setState({ paginationArray: arr, querySnapshot: snap });
-                        this._fetchNextAndPreviousDocuments();
-                        progress.hideProgressBar();
-                    }, (err) => handleFirebaseError(this.props, err, 'Could not fetch document'))
+                this.props.firebase.getListenerForCollection(query, (snap) => {
+                    const arr = snap.docs.map((doc) => doc.data()) as T[];
+                    scrollToTop();
+                    this.setState({ paginationArray: arr, querySnapshot: snap });
+                    this._fetchNextAndPreviousDocuments();
+                    progress.hideProgressBar();
+                })
             );
         }
     }
@@ -125,18 +130,19 @@ export class LocalPaginationComponent<T> extends Component<basePropType & Pagina
         const nextDoc = snap[this.state.paginationArray.length - 1];
         const prevDoc = snap[0];
 
-        const subs1 = (this.props.pagination.getCollectionRef().orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1).onSnapshot((snap) => {
+        const query1 = this.props.pagination.getCollectionRef().orderBy('createdAt', 'desc').startAfter(nextDoc).limit(1);
+        const subs1 = this.props.firebase.getListenerForCollection(query1, (snap) => {
             const nextExists = snap.docs[0] && snap.docs[0].exists;
             this.setState({ nextExists });
             subs1();
-        }));
+        });
 
-        const subs2 = (this.props.pagination.getCollectionRef().orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1).onSnapshot((snap) => {
+        const query2 = this.props.pagination.getCollectionRef().orderBy('createdAt', 'asc').startAfter(prevDoc).limit(1);
+        const subs2 = this.props.firebase.getListenerForCollection(query2, (snap) => {
             const previousExists = snap.docs[0] && snap.docs[0].exists;
             this.setState({ previousExists });
             subs2();
-        }));
-
+        });
     }
 
     goToNextPage() {

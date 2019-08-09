@@ -38,6 +38,13 @@ interface DocListenerInterface {
     _mainListener: () => void;
 }
 
+interface CollectionListenerInterface {
+    query: firebase.firestore.Query;
+    snap: app.firestore.QuerySnapshot | null;
+    listeners: ((snap: firebase.firestore.QuerySnapshot) => void)[]
+    _mainListener: () => void;
+}
+
 export class Firebase {
 
     constructor() {
@@ -93,12 +100,11 @@ export class Firebase {
         return Promise.resolve();
     }
 
-    private _documentListeners: DocListenerInterface[] = [];
-    getListenerForDocument(ref: firebase.firestore.DocumentReference, onNext: (snapshot: firebase.firestore.DocumentSnapshot) => void) {
-
-        const existingListener = this._documentListeners.find((val) => { return val.ref.path == ref.path; });
+    private _collectionListeners: CollectionListenerInterface[] = [];
+    getListenerForCollection(query: firebase.firestore.Query, onNext: (snapshot: firebase.firestore.QuerySnapshot) => void) {
+        const existingListener = this._collectionListeners.find((val) => { return val.query.isEqual(query) });
         if (existingListener) {
-            console.log('Using Existing listener', this._documentListeners.length);
+            console.log('Using Existing collection listener', this._collectionListeners.length);
             existingListener.listeners.push(onNext);
             if (existingListener.snap) {
                 onNext(existingListener.snap as any);
@@ -106,7 +112,45 @@ export class Firebase {
             return removeListener(existingListener);
         }
 
-        console.log('Created listeter');
+        const newListener: CollectionListenerInterface = {
+            query,
+            listeners: [onNext],
+            snap: null,
+            _mainListener: query.onSnapshot((snap) => {
+                newListener.snap = snap;
+                newListener.listeners.map((list) => {
+                    list(snap);
+                });
+            }, (err) => console.log(err))
+        };
+
+        this._collectionListeners.push(newListener);
+        return removeListener(newListener);
+
+        function removeListener(listener: CollectionListenerInterface): () => void {
+            return () => {
+                const findIndex = listener.listeners.findIndex((val) => val == onNext);
+                if (findIndex !== -1) {
+                    listener.listeners.splice(findIndex, 1);
+                }
+            }
+        }
+    }
+
+    private _documentListeners: DocListenerInterface[] = [];
+    getListenerForDocument(ref: firebase.firestore.DocumentReference, onNext: (snapshot: firebase.firestore.DocumentSnapshot) => void) {
+
+        const existingListener = this._documentListeners.find((val) => { return val.ref.path == ref.path; });
+        if (existingListener) {
+            // console.log('Using Existing listener', this._documentListeners.length);
+            existingListener.listeners.push(onNext);
+            if (existingListener.snap) {
+                onNext(existingListener.snap as any);
+            }
+            return removeListener(existingListener);
+        }
+
+        // console.log('Created listeter');
         const newListener: DocListenerInterface = {
             ref,
             listeners: [onNext],
@@ -120,19 +164,18 @@ export class Firebase {
         };
 
         this._documentListeners.push(newListener);
-
         return removeListener(newListener);
 
         function removeListener(docListener: DocListenerInterface): () => void {
             return () => {
                 const findIndex = docListener.listeners.findIndex((val) => val == onNext);
                 if (findIndex !== -1) {
-                    const l = docListener.listeners.splice(findIndex, 1);
+                    docListener.listeners.splice(findIndex, 1);
                 }
             }
         }
-    }
 
+    }
 }
 
 export const FirebaseContext = React.createContext<Firebase>(null as any);
