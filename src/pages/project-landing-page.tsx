@@ -41,8 +41,12 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
 
     constructor(props: basePropType) {
         super(props);
-        this._setInitialState();
-        this._setProjectData();
+        this.state = cloneDeep(this.INITIAL_STATE);
+        const userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
+        const projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
+
+        this.state.userId = userId;
+        this.state.projectId = projectId;
     }
 
     state: StateType = {} as any;
@@ -50,18 +54,14 @@ export default class LocalComponent extends Component<basePropType, Partial<Stat
     listeners: Function[] = [];
     componentWillUnmount() { this.listeners.map((listener) => { listener() }) };
     componentDidMount() {
+        this._setInitialState();
+        this._setProjectData();
         scrollToTop('auto');
     }
 
     private _setInitialState() {
-        const userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
-        const projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
 
-        this.state = cloneDeep(this.INITIAL_STATE);
-        this.state.userId = userId;
-        this.state.projectId = projectId;
-
-        this.props.firebase.storage.ref(getStorageRef_images(userId, projectId)).list()
+        this.props.firebase.storage.ref(getStorageRef_images(this.state.userId, this.state.projectId)).list()
             .then((list) => {
                 const promises = list.items.map((item) => {
                     return item.getDownloadURL()
