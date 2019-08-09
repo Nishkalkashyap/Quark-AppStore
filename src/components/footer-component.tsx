@@ -24,14 +24,7 @@ export function FooterComponent() {
                     You've hit rock bottom. Find an issue?
                 <Link target="_blank" href="https://github.com/Nishkalkashyap/Quark-appstore" style={linkStyle}>Submit a fix on Github</Link>
                 </Typography>
-                <div>
-                    <Typography variant="body2">
-                        Copyright © 2019
-                    <Link target="_blank" href="mailto:hello@nishkal.in?subject=Hello%20Nishkal" style={{ cursor: 'pointer', color }}>&nbsp;Nishkal Kashyap.&nbsp;</Link>
-                        All rights reserved.
-                    </Typography>
-                </div>
-                <div onClick={() => window.open('https://quarkjs.io/download/')} style={{ display: 'inline-block', color: COLORS.ON_BACKGROUND, marginTop: '50px', padding: '20px 40px', backgroundColor: color, fontSize: '1.6em', borderRadius: '2px', fontFamily: 'var(--heading-font-family)', cursor: 'pointer' }}>
+                <div onClick={() => window.open('https://quarkjs.io/download/')} style={{ display: 'inline-block', color: COLORS.ON_BACKGROUND, margin: '20px 0px', padding: '20px 40px', backgroundColor: color, fontSize: '1.6em', borderRadius: '2px', fontFamily: 'var(--heading-font-family)', cursor: 'pointer' }}>
                     <ArrowDownwardIcon style={{ position: 'relative', top: '4px', marginRight: '10px' }} />
                     Download Quark
                 </div>
@@ -45,6 +38,13 @@ export function FooterComponent() {
                 <Link target="_blank" href="https://quarkjs.io/FAQ/terms-of-service.html" style={linkStyle}>Terms of service</Link>
                 <Link target="_blank" href="https://quarkjs.io/FAQ/about.html" style={linkStyle}>About</Link>
                 <Link target="_blank" href="mailto:hello@nishkal.in?subject=Hello%20Nishkal" style={linkStyle}>Contact</Link>
+            </div>
+            <div style={{ minWidth: '100%' }}>
+                <Typography variant="body2">
+                    Copyright © 2019
+                    <Link target="_blank" href="mailto:hello@nishkal.in?subject=Hello%20Nishkal" style={{ cursor: 'pointer', color }}>&nbsp;Nishkal Kashyap.&nbsp;</Link>
+                    All rights reserved.
+                    </Typography>
             </div>
         </footer>
     )
