@@ -2,6 +2,7 @@ import React from 'react'
 import { Typography, Link } from '@material-ui/core';
 import { COLORS } from '../util';
 import { StandardProperties } from 'csstype';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
 export function FooterComponent() {
     return (
@@ -22,12 +23,13 @@ export function FooterComponent() {
                 </Typography>
                 <div>
                     <Typography variant="body2">
-                    Copyright © 2019
-                    <Link target="_blank" href="mailto:hello@nishkal.in?subject=Hello%20Nishkal" style={{cursor : 'pointer'}}>&nbsp;Nishkal Kashyap.&nbsp;</Link>
-                    All rights reserved.
+                        Copyright © 2019
+                    <Link target="_blank" href="mailto:hello@nishkal.in?subject=Hello%20Nishkal" style={{ cursor: 'pointer' }}>&nbsp;Nishkal Kashyap.&nbsp;</Link>
+                        All rights reserved.
                     </Typography>
                 </div>
                 <div onClick={() => window.open('https://quarkjs.io/download/')} style={{ display: 'inline-block', color: COLORS.ON_PRIMARY, marginTop: '50px', padding: '20px 40px', backgroundColor: COLORS.PRIMARY, fontSize: '1.6em', borderRadius: '2px', fontFamily: 'var(--heading-font-family)', cursor: 'pointer' }}>
+                    <ArrowDownwardIcon style={{ position: 'relative', top: '4px', marginRight: '10px' }} />
                     Download Quark
                 </div>
             </div>
@@ -52,9 +54,9 @@ const footerStyle: StandardProperties = {
     borderLeft: `solid 1px ${COLORS.ON_BACKGROUND}33`,
     display: 'flex',
     justifyContent: 'space-between',
-    flexWrap : 'wrap',
+    flexWrap: 'wrap',
     textAlign: 'center',
-    marginTop : '100px'
+    marginTop: '100px'
 }
 
 const centerDivStyle: StandardProperties = {
