@@ -37,12 +37,12 @@ export function FooterComponent() {
                 <Link target="_blank" href="https://quarkjs.io" style={linkStyle}>Documentation</Link>
                 <Link target="_blank" href="https://quarkjs.io/FAQ/terms-of-service.html" style={linkStyle}>Terms of service</Link>
                 <Link target="_blank" href="https://quarkjs.io/FAQ/about.html" style={linkStyle}>About</Link>
-                <Link target="_blank" href="mailto:hello@nishkal.in?subject=Hello%20Nishkal" style={linkStyle}>Contact</Link>
+                <Link target="_blank" href="mailto:hello@nishkal.in?subject=Hey%20Nishkal" style={linkStyle}>Contact</Link>
             </div>
             <div style={{ minWidth: '100%' }}>
                 <Typography variant="body2">
                     Copyright © 2019
-                    <Link target="_blank" href="mailto:hello@nishkal.in?subject=Hello%20Nishkal" style={{ cursor: 'pointer', color }}>&nbsp;Nishkal Kashyap.&nbsp;</Link>
+                    <Link target="_blank" href="mailto:hello@nishkal.in?subject=Hey%20Nishkal" style={{ cursor: 'pointer', color }}>&nbsp;Nishkal Kashyap.&nbsp;</Link>
                     All rights reserved.
                     </Typography>
             </div>
