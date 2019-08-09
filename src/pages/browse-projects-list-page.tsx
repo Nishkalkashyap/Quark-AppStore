@@ -10,10 +10,12 @@ import { ProjectData, allCategories } from '../interfaces';
 import { Typography, Card, FormControl, InputLabel, Select, OutlinedInput, MenuItem } from '@material-ui/core';
 import { allProjectCategories, COLORS } from '../util';
 import CardBgComponent from '../components/main-background-component';
+import { cloneDeep } from 'lodash';
 
 type PaginationType = ProjectData;
 type LocalStateType = {
-    category: allCategories | null
+    category: allCategories | null;
+    orderBy: 'asc' | 'desc';
 }
 
 export class LocalComponent extends Component<basePropType & { classes: any }, LocalStateType> {
@@ -26,15 +28,25 @@ export class LocalComponent extends Component<basePropType & { classes: any }, L
         this.state.category = queryString.parse(this.props.history.location.search)['category'] as any;
     }
 
-    state = {
-        category: null
+    state: LocalStateType = {
+        category: null,
+        orderBy: 'desc'
     }
 
-    onChange(e: ChangeEvent<{ name?: string | undefined; value: unknown; }>) {
-        if (this.state.category !== e.target.value as any) {
-            this.props.history.push(`${ROUTES.DASHBOARD_PAGE}?category=${e.target.value}`);
-            this.setState({ category: e.target.value as any });
+    _getQueryString() {
+        const clone = cloneDeep(this.state);
+        if (clone.orderBy == 'desc') {
+            delete clone.orderBy;
+        }
+        const str = queryString.stringify(clone);
+        return `${ROUTES.DASHBOARD_PAGE}?`.concat(str);
+    }
+
+    onChange(e: ChangeEvent<{ name: keyof LocalStateType; value: unknown; }>) {
+        if ((this.state.category !== e.target.value as any) || this.state.orderBy !== e.target.value) {
+            this.setState({ [e.target.name]: e.target.value } as any);
             setTimeout(() => {
+                this.props.history.push(this._getQueryString());
                 this.child.current!._setPaginationArray();
             }, 100);
         }
@@ -45,22 +57,26 @@ export class LocalComponent extends Component<basePropType & { classes: any }, L
             isGroupQuery: true,
             getCollectionRef: (goingBackwards) => {
                 let ref = this.firestore.collectionGroup('projects');
-                const StartType = goingBackwards ? 'asc' : 'desc';
+
+                let StartType: LocalStateType['orderBy'] = goingBackwards ? 'asc' : 'desc';
+                const reverse = this.state.orderBy === 'asc';
+                if (reverse) {
+                    StartType = StartType == 'asc' ? 'desc' : 'asc';
+                }
+
                 ref = ref.orderBy('createdAt', StartType);
 
                 if (this.state.category) {
                     ref = ref.where('category', '==', this.state.category!)
                 }
+
                 return ref;
             },
             getDocRef: () => {
                 return this.firestore.doc(getDocument_project(this.props.urlProjectId || this.props.firebase.auth.currentUser!.uid, queryString.parse(this.props.history.location.search)['startAfter'] as string))
             },
             getRedirectRoute: (params) => {
-                if (this.state.category) {
-                    return `${ROUTES.DASHBOARD_PAGE}?category=${this.state.category}&startAfter=${params.projectId}`
-                }
-                return `${ROUTES.DASHBOARD_PAGE}?startAfter=${params.projectId}`
+                return this._getQueryString().concat(`&startAfter=${params.projectId}`);
             },
             loadLimit: 20,
             upperComponent: () => {
@@ -81,13 +97,31 @@ export class LocalComponent extends Component<basePropType & { classes: any }, L
                             </InputLabel>
                             <Select
                                 value={this.state.category || ''}
-                                onChange={this.onChange.bind(this)}
-                                style={{ minWidth: '120px' }}
+                                onChange={this.onChange.bind(this) as any}
+                                style={{ minWidth: '120px', marginRight: '20px' }}
                                 input={<OutlinedInput labelWidth={10} name="category" />}
                             >
                                 {
                                     allProjectCategories.map((cat) => (
                                         <MenuItem value={cat} key={cat}>{cat}</MenuItem>
+                                    ))
+                                }
+                            </Select>
+                        </FormControl>
+                        <FormControl variant="outlined" margin="normal">
+                            <InputLabel>
+                                Order By
+                            </InputLabel>
+
+                            <Select
+                                value={this.state.orderBy}
+                                onChange={this.onChange.bind(this) as any}
+                                style={{ minWidth: '120px', marginRight: '20px' }}
+                                input={<OutlinedInput labelWidth={10} name="orderBy" />}
+                            >
+                                {
+                                    (['asc', 'desc'] as LocalStateType['orderBy'][]).map((cat) => (
+                                        <MenuItem value={cat} key={cat}>{cat == 'desc' ? 'Latest' : 'Oldest'}</MenuItem>
                                     ))
                                 }
                             </Select>
