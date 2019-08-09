@@ -30,9 +30,11 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
 
     constructor(props: basePropType) {
         super(props);
-        const userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
-
         progress.showProgressBar();
+    }
+
+    componentWillMount() {
+        const userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
         this.listeners.push(
             this.props.firebase.getListenerForDocument(this.props.firebase.firestore.doc(getDocument_review(userId, this.props.urlProjectId!, this.props.firebase.auth.currentUser!.uid)), (snap) => {
                 this.setState({ review: snap.data() || {} });

@@ -33,7 +33,7 @@ class EditProfileBase extends Component<basePropType, UserProfileInterface> {
     listeners: Function[] = [];
     componentWillUnmount() { this.listeners.map((listener) => { listener() }) };
 
-    componentDidMount() {
+    componentWillMount() {
         const currentUser = this.props.firebase.auth.currentUser!;
         this.listeners.push(
             this.props.firebase.getListenerForDocument(this.props.firebase.firestore.doc(getDocument_userData(currentUser.uid)), (snap) => {

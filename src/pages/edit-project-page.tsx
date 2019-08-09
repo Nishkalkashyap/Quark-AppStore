@@ -42,6 +42,10 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
 
     constructor(props: basePropType) {
         super(props);
+        this.state = cloneDeep(this.INITIAL_STATE);
+    }
+
+    componentWillMount() {
         this._setInitialState();
         this._setProjectData();
     }
@@ -50,7 +54,6 @@ class LocalComponent extends Component<basePropType, Partial<StateType>> {
         const userId = this.props.match.params[MATCH_PARAMS.USER_ID] || this.props.firebase.auth.currentUser!.uid;
         const projectId = this.props.match.params[MATCH_PARAMS.PROJECT_ID];
 
-        this.state = cloneDeep(this.INITIAL_STATE);
         this.state.userId = userId;
         this.state.projectId = projectId;
 
