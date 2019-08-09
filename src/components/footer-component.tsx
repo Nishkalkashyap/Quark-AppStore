@@ -4,8 +4,8 @@ import { COLORS } from '../util';
 import { StandardProperties } from 'csstype';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
-// const color = COLORS.PRIMARY;
-const color = COLORS.SECONDARY;
+const color = COLORS.PRIMARY;
+// const color = COLORS.SECONDARY;
 
 export function FooterComponent() {
     return (
