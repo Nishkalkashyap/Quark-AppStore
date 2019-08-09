@@ -24,6 +24,7 @@ import { COLORS } from '../util';
 import { matchPath } from 'react-router-dom';
 import { StandardProperties } from 'csstype';
 import { analytics } from '../providers/analytics-provider';
+import { FooterComponent } from './footer-component';
 
 const drawerWidth = 240;
 
@@ -85,8 +86,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         content: {
             flexGrow: 1,
-            paddingTop: theme.spacing(3),
-            paddingBottom: theme.spacing(5),
+            paddingTop: theme.spacing(3)
         },
     }),
 );
@@ -256,6 +256,7 @@ export function PageContainer(props: basePropType & { children: any }) {
                 <SwagBackgroundComponent />
                 <div className={classes.toolbar} />
                 {childrenWithProps}
+                <FooterComponent />
             </main>
         </div>
     );
