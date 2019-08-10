@@ -4,6 +4,7 @@ import './index.css';
 import './docs.css';
 import './styles/swag-background.css';
 import './styles/algolia-styles.css';
+import './styles/algolia-node-modules.css';
 import 'instantsearch.css/themes/reset.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';

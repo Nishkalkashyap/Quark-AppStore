@@ -1,0 +1,51 @@
+.ais-Highlight-highlighted,
+.ais-Snippet-highlighted {
+    background-color: #ffc168;
+}
+
+.ais-Pagination-list {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.ais-Pagination-item+.ais-Pagination-item {
+    margin-left: 0.3rem;
+}
+
+.ais-Pagination-link {
+    padding: 0.3rem 0.6rem;
+    display: block;
+    border: 1px solid #c4c8d8;
+    border-radius: 5px;
+    -webkit-transition: background-color 0.2s ease-out;
+    transition: background-color 0.2s ease-out;
+}
+
+.ais-Pagination-link:hover,
+.ais-Pagination-link:focus {
+    background-color: #e3e5ec;
+}
+
+.ais-Pagination-item--disabled .ais-Pagination-link {
+    opacity: 0.6;
+    cursor: not-allowed;
+    color: #a5abc4;
+}
+
+.ais-Pagination-item--disabled .ais-Pagination-link:hover,
+.ais-Pagination-item--disabled .ais-Pagination-link:focus {
+    color: #a5abc4;
+    background-color: #fff;
+}
+
+.ais-Pagination-item--selected .ais-Pagination-link {
+    color: #fff;
+    background-color: #0096db;
+    border-color: #0096db;
+}
+
+.ais-Pagination-item--selected .ais-Pagination-link:hover,
+.ais-Pagination-item--selected .ais-Pagination-link:focus {
+    color: #fff;
+}

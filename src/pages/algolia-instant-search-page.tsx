@@ -1,4 +1,4 @@
-import { InstantSearch, SearchBox, Hits, RefinementList, Configure, Pagination } from 'react-instantsearch-dom';
+import { InstantSearch, SearchBox, Hits, RefinementList, Configure, Pagination, Stats, SortBy } from 'react-instantsearch-dom';
 import algoliasearch from 'algoliasearch/lite';
 import React from 'react'
 import { ProjectData, ProjectStats } from '../interfaces';
@@ -30,6 +30,7 @@ function LocalComponent(props: basePropType) {
             </Card> */}
             <InstantSearch indexName={searchIndexName} searchClient={searchClient}>
                 <SearchBox />
+                <Stats />
                 <Hits hitComponent={(__props) => <Hit baseProps={props} hit={__props.hit as any} />} />
                 <Pagination />
             </InstantSearch>
