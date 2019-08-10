@@ -1,0 +1,10 @@
+ul.ais-Hits-list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    list-style-type: none;
+}
+
+li.ais-Hits-item {
+    display: inline-flex;
+}

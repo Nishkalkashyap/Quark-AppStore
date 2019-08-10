@@ -25,10 +25,6 @@ import { StandardProperties } from 'csstype';
 import { analytics } from '../providers/analytics-provider';
 import { FooterComponent } from './footer-component';
 import { NEW_ROUTES } from '../data/routes';
-import algoliasearch from 'algoliasearch/lite';
-import { InstantSearch, SearchBox, Hits } from 'react-instantsearch-dom';
-const searchClient = algoliasearch(process.env.REACT_APP_ALGOLIA_APPID!, process.env.REACT_APP_ALGOLIA_APIKEY!);
-const searchIndexName = 'QUARK_DASHBOARD';
 
 const drawerWidth = 240;
 
@@ -209,12 +205,6 @@ export function PageContainer(props: basePropType & { children: any }) {
                         <Button variant="outlined" size="small" color="primary" style={{ boxShadow: 'none' }} onClick={() => window.open('https://quarkjs.io')}>
                             Go to docs
                         </Button>
-                        <InstantSearch searchClient={searchClient} indexName={searchIndexName}>
-                            <SearchBox />
-                            <div style={{ position: 'absolute' }}>
-                                <Hits />
-                            </div>
-                        </InstantSearch>
                         {!isAuthenticated && <Button color="inherit" onClick={() => props.history.push(NEW_ROUTES.SIGN_IN.base)}>Login</Button>}
                         {isAuthenticated && <HeaderAvatarComponent {...props} />}
                     </HeaderComponent>

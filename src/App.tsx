@@ -26,12 +26,13 @@ import { withFirebase } from './providers/firebase-provider';
 import { withMatchParams } from './providers/with-url-provider';
 import { withSnackbar } from 'notistack';
 import { ProjectReportAbusePage } from './pages/project-report-abuse-page';
+import { AlgoliaInstantSearchPage } from './pages/algolia-instant-search-page';
 // import { NotFoundComponent } from './components/common';
 
 const Routing = () => (
   <React.Fragment>
     {/* <Route exact path={NEW_ROUTES.LANDING_PAGE.base} component={Landing} /> */}
-    <Route exact path={NEW_ROUTES.LANDING_PAGE.base} component={BrowseProjectsPage} />
+    <Route exact path={NEW_ROUTES.LANDING_PAGE.base} component={AlgoliaInstantSearchPage} />
     <Route exact path={NEW_ROUTES.DASHBOARD_PAGE.base} component={BrowseProjectsPage} />
     <Route exact path={NEW_ROUTES.EDIT_PROFILE_PAGE.base} component={EditProfilePage} />
 
