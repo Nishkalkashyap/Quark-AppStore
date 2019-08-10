@@ -8,3 +8,7 @@ ul.ais-Hits-list {
 li.ais-Hits-item {
     display: inline-flex;
 }
+
+.ais-Highlight-highlighted,
+.ais-Snippet-highlighted {
+  background-color: #ffc168; }

@@ -9,6 +9,7 @@ import { isEqual } from 'lodash';
 import Rating from '@material-ui/lab/Rating';
 import moment from 'moment';
 import { StandardProperties } from 'csstype';
+import { Highlight } from 'react-instantsearch-dom';
 
 const useStyles = makeStyles(
     createStyles({
@@ -27,7 +28,7 @@ export const smallProjectContainerStyles: StandardProperties = {
     flexWrap: 'wrap'
 }
 
-export function SmallProjectCardComponent(props: basePropType & { projectData: ProjectData }) {
+export function SmallProjectCardComponent(props: basePropType & { projectData: ProjectData, isAlgoliaComponent?: boolean }) {
 
     const classes = useStyles();
     const { projectData } = props;
@@ -70,10 +71,12 @@ export function SmallProjectCardComponent(props: basePropType & { projectData: P
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
-                        {projectData.projectName}
+                        {!props.isAlgoliaComponent && projectData.projectName}
+                        {props.isAlgoliaComponent && <Highlight attribute="projectName" hit={projectData}></Highlight>}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        {projectData.description}
+                        {!props.isAlgoliaComponent && projectData.description}
+                        {props.isAlgoliaComponent && <Highlight attribute="description" hit={projectData}></Highlight>}
                     </Typography>
                 </CardContent>
             </CardActionArea>
