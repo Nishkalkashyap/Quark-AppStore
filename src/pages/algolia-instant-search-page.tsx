@@ -1,4 +1,4 @@
-import { InstantSearch, SearchBox, Hits, RefinementList, Configure, Pagination, Stats, SortBy } from 'react-instantsearch-dom';
+import { InstantSearch, Hits, Pagination, Stats, Menu } from 'react-instantsearch-dom';
 import algoliasearch from 'algoliasearch/lite';
 import React from 'react'
 import { ProjectData, ProjectStats } from '../interfaces';
@@ -6,10 +6,7 @@ import { basePropType } from '../basePropType';
 import { withAllProviders } from '../providers/all-providers';
 import { SmallProjectCardComponent } from '../components/small-project-card-component';
 import firebase from 'firebase';
-import { Card, Typography, Container } from '@material-ui/core';
-import { COLORS } from '../util';
-import CardBgComponent from '../components/main-background-component';
-import { orderBy } from 'lodash';
+import { Container, InputBase } from '@material-ui/core';
 
 const searchClient = algoliasearch(process.env.REACT_APP_ALGOLIA_APPID!, process.env.REACT_APP_ALGOLIA_APIKEY!);
 const searchIndexName = 'QUARK_DASHBOARD';
@@ -29,7 +26,13 @@ function LocalComponent(props: basePropType) {
                 </div>
             </Card> */}
             <InstantSearch indexName={searchIndexName} searchClient={searchClient}>
-                <SearchBox />
+                {/* <RefinementList  /> */}
+                <Menu attribute="category" />
+                {/* <SearchBox /> */}
+                <InputBase
+                    placeholder="Search…"
+                    inputProps={{ 'aria-label': 'search' }}
+                />
                 <Stats />
                 <Hits hitComponent={(__props) => <Hit baseProps={props} hit={__props.hit as any} />} />
                 <Pagination />

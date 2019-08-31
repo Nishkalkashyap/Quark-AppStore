@@ -31,8 +31,8 @@ import { AlgoliaInstantSearchPage } from './pages/algolia-instant-search-page';
 
 const Routing = () => (
   <React.Fragment>
-    {/* <Route exact path={NEW_ROUTES.LANDING_PAGE.base} component={Landing} /> */}
-    <Route exact path={NEW_ROUTES.LANDING_PAGE.base} component={AlgoliaInstantSearchPage} />
+    <Route exact path={NEW_ROUTES.LANDING_PAGE.base} component={BrowseProjectsPage} />
+    {/* <Route exact path={NEW_ROUTES.LANDING_PAGE.base} component={AlgoliaInstantSearchPage} /> */}
     <Route exact path={NEW_ROUTES.DASHBOARD_PAGE.base} component={BrowseProjectsPage} />
     <Route exact path={NEW_ROUTES.EDIT_PROFILE_PAGE.base} component={EditProfilePage} />
 
