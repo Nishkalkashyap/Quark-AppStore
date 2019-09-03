@@ -62,7 +62,8 @@ class EditProfileBase extends Component<basePropType, UserProfileInterface> {
 
         Promise.all(promises).then((val) => {
             this.props.enqueueSnackbar('Updated profile', { variant: 'success' });
-            this.props.history.push(`${NEW_ROUTES.ACCOUNT_PAGE.base}`);
+            // this.props.history.push(`${NEW_ROUTES.ACCOUNT_PAGE.base}`);
+            this.props.history.push(`${NEW_ROUTES.DASHBOARD_PAGE.base}`);
         }).catch((err) => {
             console.error(err);
             this.props.enqueueSnackbar('Failed to update profile', { variant: 'error' });
