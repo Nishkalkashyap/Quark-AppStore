@@ -42,7 +42,7 @@ export function FooterComponent() {
             <div style={{ minWidth: '100%' }}>
                 <Typography variant="body2">
                     Copyright © 2019
-                    <Link target="_blank" href="mailto:hello@nishkal.in?subject=Hey%20Nishkal" style={{ cursor: 'pointer', color }}>&nbsp;Nishkal Kashyap.&nbsp;</Link>
+                    <Link target="_blank" href="https://nishkal.in" style={{ cursor: 'pointer', color }}>&nbsp;Nishkal Kashyap.&nbsp;</Link>
                     All rights reserved.
                     </Typography>
             </div>

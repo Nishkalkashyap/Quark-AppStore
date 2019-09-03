@@ -60,6 +60,8 @@ class EditProfileBase extends Component<basePropType, UserProfileInterface> {
             })
         ];
 
+        this.props.enqueueSnackbar('Redirecting to homepage', { variant: 'info' });
+
         Promise.all(promises).then((val) => {
             this.props.enqueueSnackbar('Updated profile', { variant: 'success' });
             // this.props.history.push(`${NEW_ROUTES.ACCOUNT_PAGE.base}`);
