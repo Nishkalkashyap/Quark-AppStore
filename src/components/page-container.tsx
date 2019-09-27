@@ -114,24 +114,18 @@ export function PageContainer(props: basePropType & { children: any }) {
         const listener1 = props.history.listen((location, action) => {
             if (lastValue !== location.pathname) {
 
-                const match = matchPath(location.pathname, {
+                const match_project = matchPath(location.pathname, {
                     exact: true,
                     path: `${NEW_ROUTES.PROJECT_PAGE.slug}/${NEW_ROUTES.PROJECT_PAGE.base}`
                 });
 
-                if (match) {
-                    console.log(match.url, location.pathname);
-                    // location.pathname === match.url (true)
-                    // no need of this in bottom, same as pageview
-                    // ReactGA.event({
-                    //     category: 'project',
-                    //     action: 'view',
-                    //     label: match.url
-                    // });
-                }
+                const match_user = matchPath(location.pathname, {
+                    exact: true,
+                    path: `${NEW_ROUTES.PROJECTS_LIST_PAGE.slug}/${NEW_ROUTES.PROJECTS_LIST_PAGE.base}`
+                });
 
+                if (match_user || match_project) analytics.pageview(location.pathname);
                 setLastValue(location.pathname);
-                analytics.pageview(location.pathname);
             }
         });
 
