@@ -15,8 +15,8 @@ export const COLORS = {
     BACKGROUND: '#020814',
     ON_BACKGROUND: '#ffffff',
 
-    DANGER : '#f04141',
-    ON_DANGER : '#ffffff'
+    DANGER: '#f04141',
+    ON_DANGER: '#ffffff'
 }
 
 export function SetCssVariables() {
@@ -109,4 +109,12 @@ export function downloadReleaseItem(props: basePropType & { release: ReleaseItem
             }
         })
         .catch(err => handleFirebaseError(props, err, 'Failed to fetch download url'));
+}
+
+export async function fetchNumberOfPageviews(pathname: string) {
+    const val = await fetch(`https://us-central1-diy-mechatronics.cloudfunctions.net/GetDashboardStats/page-views/?path=${pathname}`, {
+        // mode: 'cors',
+        // headers: [['Access-Control-Allow-Origin', 'http://localhost:3000'], ['Access-Control-Allow-Credentials', 'true']]
+    });
+    return await val.text();
 }

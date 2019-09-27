@@ -7,6 +7,7 @@ import { getDocument_userData, getDocument_project, getDocument_stats } from '..
 import { StandardProperties } from 'csstype';
 import { isEqual } from 'lodash';
 import { NEW_ROUTES } from '../data/routes';
+import { fetchNumberOfPageviews } from '../util';
 
 export const AdditionalInformationComponent = (LocalComponent);
 
@@ -14,6 +15,7 @@ function LocalComponent(props: { publisherId: string, projectId: string } & base
     const [userData, setUserData] = useState({} as UserProfileInterface);
     const [projectData, setProjectData] = useState({} as ProjectData);
     const [projectStats, setProjectStats] = useState({} as ProjectStats);
+    const [numberOfViews, setNumberOfViews] = useState(0);
 
     const { projectId, publisherId } = props;
 
@@ -38,6 +40,11 @@ function LocalComponent(props: { publisherId: string, projectId: string } & base
                 setUserData(data);
             }
         });
+
+        fetchNumberOfPageviews(props.location.pathname)
+            .then((val) => {
+                setNumberOfViews(Number(val || '0'))
+            }).catch(console.error);
 
         return () => { listener1(); listener2(); listener3() };
     });
@@ -69,7 +76,8 @@ function LocalComponent(props: { publisherId: string, projectId: string } & base
                     <Item heading="Description" content={projectData.description}></Item>
                 </div>
                 <div style={boxStyle}>
-                    <Item heading="Total downloads" content={projectStats.numberOfDownloads! || 0}></Item>
+                    <Item heading="Total views" content={numberOfViews || 0}></Item>
+                    {/* <Item heading="Total downloads" content={projectStats.numberOfDownloads! || 0}></Item> */}
                     <Item heading="Total releases" content={projectData.numberOfReleases! || 0}></Item>
                     <Item heading="Average rating" content={projectStats.averageRating! || 0}></Item>
                 </div>
