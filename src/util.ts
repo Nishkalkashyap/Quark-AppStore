@@ -112,9 +112,10 @@ export function downloadReleaseItem(props: basePropType & { release: ReleaseItem
 }
 
 export async function fetchNumberOfPageviews(pathname: string) {
-    const val = await fetch(`https://us-central1-diy-mechatronics.cloudfunctions.net/GetDashboardStats/page-views/?path=${pathname}`, {
-        // mode: 'cors',
-        // headers: [['Access-Control-Allow-Origin', 'http://localhost:3000'], ['Access-Control-Allow-Credentials', 'true']]
+    const val = await window.fetch(`https://us-central1-diy-mechatronics.cloudfunctions.net/GetDashboardStats/page-views/?path=${pathname}`, {
+        mode: 'cors',
+        headers: [['Access-Control-Allow-Origin', 'http://localhost:3000'], ['Access-Control-Allow-Credentials', 'true']]
     });
-    return await val.text();
+    const text = await val.text();
+    return text;
 }
