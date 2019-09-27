@@ -7,6 +7,7 @@ import { getDocument_userData } from '../data/paths';
 import { COLORS } from '../util';
 import { isEqual } from 'lodash';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
+// import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import { UserProfileInterface } from '../interfaces';
 import CardBgComponent from './main-background-component';
 
@@ -16,6 +17,7 @@ export default function UserCardComponent(props: basePropType & { userId: string
     const { isOwner, userId } = props;
 
     const [userData, setUserData] = useState({} as UserProfileInterface);
+    // const [numberOfViews, setNumberOfViews] = useState(0);
 
     useEffect(() => {
         const listener = props.firebase.getListenerForDocument(props.firebase.firestore.doc(getDocument_userData(userId)), (snap) => {
@@ -24,6 +26,10 @@ export default function UserCardComponent(props: basePropType & { userId: string
                 setUserData(data);
             }
         });
+
+        // fetchNumberOfPageviews(props.location.pathname).then((val) => {
+        //     setNumberOfViews(Number(val || 0));
+        // }).catch(console.error);
 
         return listener;
     });
@@ -43,6 +49,10 @@ export default function UserCardComponent(props: basePropType & { userId: string
                         <Typography component="p" color="inherit" style={{ marginTop: '10px' }}>
                             {userData.location || ''}
                         </Typography>
+                        {/* <Typography component="p" color="inherit" style={{ marginTop: '10px' }}>
+                            <RemoveRedEyeIcon fontSize="small" style={{ marginRight: '10px', marginBottom: '-5px' }} />
+                            <span>Number of views: {numberOfViews || '0'}</span>
+                        </Typography> */}
                         {(userData.site || userData.githubUrl || userData.twitterUrl) &&
                             <div style={{ margin: '10px 0px' }}>
                                 {userData.site && <Chip label="Website" variant="outlined" size="small" onClick={() => window.open(userData.site)} style={{ cursor: 'pointer', marginRight: '10px', color: 'inherit', borderColor: 'inherit' }} />}
